@@ -21,7 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <app.home>/var/lib/tomcat/webapps/rest-gateway/</app.home>
+        <app.home>/var/lib/tomcat/webapps</app.home>
     </properties>
     <dependencies>
         <dependency>
@@ -230,9 +230,7 @@
                             <mappings>
                                 <mapping>
                                     <directory>${app.home}</directory>
-                                    <filemode>440</filemode>
-                                    <username>root</username>
-                                    <groupname>root</groupname>
+                                    <directoryIncluded>false</directoryIncluded>
                                     <sources>
                                         <source>
                                             <location>target/rest-gateway-${project.version}.war</location>
