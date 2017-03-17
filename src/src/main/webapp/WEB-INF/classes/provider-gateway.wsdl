@@ -304,15 +304,15 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>                                        
-            <complexType name="organization">
-                <all>
-                    <element name="id" type="xsd:int" />
-                    <element name="name_fi" type="xsd:string" />
-                    <element name="name_sv" type="xsd:string" />
-                    <element name="name_en" type="xsd:string" />
-                    <element name="data_source_url" type="xsd:string" />
-                </all>
-            </complexType>
+            <xsd:complexType name="organization">
+                <xsd:all>
+                    <xsd:element name="id" type="xsd:int" />
+                    <xsd:element name="name_fi" type="xsd:string" />
+                    <xsd:element name="name_sv" type="xsd:string" />
+                    <xsd:element name="name_en" type="xsd:string" />
+                    <xsd:element name="data_source_url" type="xsd:string" />
+                </xsd:all>
+            </xsd:complexType>
         </xsd:schema>
     </wsdl:types>
 
@@ -338,7 +338,7 @@
         <wsdl:part name="body" element="tns:getOrganizationResponse"/>
     </wsdl:message>
     <wsdl:message name="getLibrary">
-        <wsdl:part name="body" element="getLibrary"/>
+        <wsdl:part name="body" element="tns:getLibrary"/>
     </wsdl:message>
     <wsdl:message name="getLibraryResponse">
         <wsdl:part name="body" element="tns:getLibraryResponse"/>
