@@ -1,6 +1,6 @@
 # Joint X-Road REST Gateway development
 
-This repository will be the home for REST/JSON support solutions in X-Road. Mandate for joint development is based on [MoU which was signed by Katainen and Ansip](https://github.com/educloudalliance/xroad-rest-gateway/blob/master/MoU-Ansip-Katainen.md). The development and repository is shared between Estonia and Finland. Below is list of people who initiated the co-operation in Skype meeting which was held 18.12.2014. 
+This repository will be the home for REST/JSON support solutions in X-Road. Mandate for joint development is based on [MoU which was signed by Katainen and Ansip](https://github.com/educloudalliance/xroad-rest-gateway/blob/master/MoU-Ansip-Katainen.md). The development and repository is shared between Estonia and Finland. Below is list of people who initiated the co-operation in Skype meeting which was held 18.12.2014.
 
 People involved in initiation of co-operation:
 * Andres Kütt (Estonian Information System Authority, RIA, Estonia)
@@ -42,7 +42,7 @@ More detailed usage examples are available in [wiki](https://github.com/educloud
 
 ## Running the Docker Image
 
-REST Gatewat is available as Docker image. 
+REST Gatewat is available as Docker image.
 
 ```
 docker run -p 8080:8080 petkivim/xroad-rest-gateway
@@ -69,6 +69,14 @@ The X-Road was launched in 2001. The data exchange layer X-Road is a technical a
 The X-Road is not only a technical solution, the exchange of data with the databases belonging to the state information system and between the databases belonging to the state information system shall be carried out through the data exchange layer of the state information system. The X-Road allows institutions/people to securely exchange data as well as to ensure people’s access to the data maintained and processed in state databases.
 
 Public and private sector enterprises and institutions can connect their information system with the X-Road. This enables them to use X-Road services in their own electronic environment or offer their e-services via the X-Road. Joining the X-Road enables institutions to save resources, since the data exchange layer already exists. This makes data exchange more effective both inside the state institutions as well as regarding the communication between a citizen and the state.
+
+### DEB Packaging
+
+The X-Road REST Gateway builds DEB package for use with Ubuntu and siblings.
+
+`mvn -f src/pom.xml clean package`
+
+The resulting package depends on tomcat. On installation the war archive is put under Tomcat's webapps directory.
 
 ### RPM Packaging
 
@@ -101,4 +109,3 @@ Running integration tests with encryption configuration enabled:
 * [Requirements for Information Systems and Adapter
 Servers](http://x-road.ee/docs/eng/x-road_service_protocol.pdf)
 * [XRd4J - Java Library for X-Road v6](https://github.com/petkivim/xrd4j)
-
