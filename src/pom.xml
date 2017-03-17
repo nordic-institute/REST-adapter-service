@@ -194,7 +194,7 @@
     </build>
     <profiles>
         <profile>
-            <id>rpm</id>
+            <id>packaging</id>
             <activation>
                 <os>
                     <family>linux</family>
@@ -254,6 +254,30 @@
                                 <fileEncoding>utf-8</fileEncoding>
                             </preremoveScriptlet>
                         </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>jdeb</artifactId>
+                        <groupId>org.vafer</groupId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jdeb</goal>
+                                </goals>
+                                <configuration>
+                                    <controlDir>${basedir}/deb/control</controlDir>
+                                    <verbose>true</verbose>
+                                    <dataSet>
+                                        <data>
+                                            <src>target/rest-gateway-${project.version}.war</src>
+                                            <dst>/var/lib/tomcat7/webapps/rest-gateway-${project.version}.war</dst>
+                                            <type>file</type>
+                                        </data>
+                                    </dataSet>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
