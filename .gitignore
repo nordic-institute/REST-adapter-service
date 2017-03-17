@@ -26,7 +26,8 @@ hs_err_pid*
 .LSOverride
 
 # Icon must ends with two \r.
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -58,3 +59,5 @@ $RECYCLE.BIN/
 src/target/
 src/.extract/
 
+.idea
+src/rest-gateway.iml
