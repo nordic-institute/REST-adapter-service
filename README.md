@@ -74,7 +74,7 @@ Public and private sector enterprises and institutions can connect their informa
 
 The X-Road REST Gateway also builds RPMs for use with RHEL (or derivatives) and Apache Tomcat.
 
-```mvn -f src/pom.xml -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true {clean,package}```
+```mvn -f src/pom.xml clean package```
 
 The resulting rest-gateway package depends on tomcat that needs to be preinstalled. Installing the rest-gateway RPM package puts rest-gateway WAR under Tomcat's webapps directory.
 
