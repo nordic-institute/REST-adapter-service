@@ -42,7 +42,7 @@ More detailed usage examples are available in [wiki](https://github.com/educloud
 
 ## Running the Docker Image
 
-REST Gatewat is available as Docker image.
+REST Gateway is available as Docker image.
 
 ```
 docker run -p 8080:8080 petkivim/xroad-rest-gateway
@@ -82,7 +82,9 @@ The resulting package depends on tomcat. On installation the war archive is put 
 
 The X-Road REST Gateway also builds RPMs for use with RHEL (or derivatives) and Apache Tomcat.
 
-    $ mvn -f src/pom.xml -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true {clean,package}
+```mvn -f src/pom.xml clean package```
+
+The resulting rest-gateway package depends on tomcat that needs to be preinstalled. Installing the rest-gateway RPM package puts rest-gateway WAR under Tomcat's webapps directory.
 
 ### Encryption of Message Content
 
