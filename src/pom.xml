@@ -264,7 +264,7 @@
                                     <goal>jdeb</goal>
                                 </goals>
                                 <configuration>
-                                    <controlDir>${basedir}/deb/control</controlDir>
+                                    <controlDir>${basedir}/src/main/deb/control</controlDir>
                                     <verbose>true</verbose>
                                     <dataSet>
                                         <data>
