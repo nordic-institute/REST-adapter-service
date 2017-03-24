@@ -70,6 +70,14 @@ The X-Road is not only a technical solution, the exchange of data with the datab
 
 Public and private sector enterprises and institutions can connect their information system with the X-Road. This enables them to use X-Road services in their own electronic environment or offer their e-services via the X-Road. Joining the X-Road enables institutions to save resources, since the data exchange layer already exists. This makes data exchange more effective both inside the state institutions as well as regarding the communication between a citizen and the state.
 
+### DEB Packaging
+
+The X-Road REST Gateway builds DEB package for use with Ubuntu and siblings.
+
+`mvn -f src/pom.xml clean package`
+
+The resulting package depends on tomcat. On installation the war archive is put under Tomcat's webapps directory.
+
 ### RPM Packaging
 
 The X-Road REST Gateway also builds RPMs for use with RHEL (or derivatives) and Apache Tomcat.
