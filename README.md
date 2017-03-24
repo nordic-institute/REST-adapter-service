@@ -1,6 +1,6 @@
 # Joint X-Road REST Gateway development
 
-This repository will be the home for REST/JSON support solutions in X-Road. Mandate for joint development is based on [MoU which was signed by Katainen and Ansip](https://github.com/educloudalliance/xroad-rest-gateway/blob/master/MoU-Ansip-Katainen.md). The development and repository is shared between Estonia and Finland. Below is list of people who initiated the co-operation in Skype meeting which was held 18.12.2014. 
+This repository will be the home for REST/JSON support solutions in X-Road. Mandate for joint development is based on [MoU which was signed by Katainen and Ansip](https://github.com/educloudalliance/xroad-rest-gateway/blob/master/MoU-Ansip-Katainen.md). The development and repository is shared between Estonia and Finland. Below is list of people who initiated the co-operation in Skype meeting which was held 18.12.2014.
 
 People involved in initiation of co-operation:
 * Andres Kütt (Estonian Information System Authority, RIA, Estonia)
@@ -42,7 +42,7 @@ More detailed usage examples are available in [wiki](https://github.com/educloud
 
 ## Running the Docker Image
 
-REST Gatewat is available as Docker image. 
+REST Gateway is available as Docker image.
 
 ```
 docker run -p 8080:8080 petkivim/xroad-rest-gateway
@@ -74,7 +74,9 @@ Public and private sector enterprises and institutions can connect their informa
 
 The X-Road REST Gateway also builds RPMs for use with RHEL (or derivatives) and Apache Tomcat.
 
-    $ mvn -f src/pom.xml -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true {clean,package}
+```mvn -f src/pom.xml clean package```
+
+The resulting rest-gateway package depends on tomcat that needs to be preinstalled. Installing the rest-gateway RPM package puts rest-gateway WAR under Tomcat's webapps directory.
 
 ### Encryption of Message Content
 
@@ -101,4 +103,3 @@ Running integration tests with encryption configuration enabled:
 * [Requirements for Information Systems and Adapter
 Servers](http://x-road.ee/docs/eng/x-road_service_protocol.pdf)
 * [XRd4J - Java Library for X-Road v6](https://github.com/petkivim/xrd4j)
-
