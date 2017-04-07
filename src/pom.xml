@@ -196,7 +196,17 @@
                     <skipExistingHeaders>true</skipExistingHeaders>
                     <includes>
                         <include>**/*.java</include>
+                        <include>**/*.properties</include>
+                        <include>**/*.dtd</include>
+                        <include>**/*.xml</include>
+                        <include>**/*.wsdl</include>
+                        <include>**/*.jsp</include>
+                        <include>**/control</include>
                     </includes>
+                    <mapping>
+                        <control>SCRIPT_STYLE</control>
+                        <wsdl>XML_STYLE</wsdl>
+                    </mapping>
                 </configuration>
                 <executions>
                     <execution>
