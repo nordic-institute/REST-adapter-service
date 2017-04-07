@@ -226,10 +226,14 @@
                         <include>**/*.wsdl</include>
                         <include>**/*.jsp</include>
                         <include>**/control</include>
+                        <include>**/postinstall</include>
+                        <include>**/preremove</include>
                     </includes>
                     <mapping>
                         <control>SCRIPT_STYLE</control>
                         <wsdl>XML_STYLE</wsdl>
+                        <postinstall>SCRIPT_STYLE</postinstall>
+                        <preremove>SCRIPT_STYLE</preremove>
                     </mapping>
                 </configuration>
                 <executions>
