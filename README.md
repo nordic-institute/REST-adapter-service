@@ -78,7 +78,7 @@ The build uses [license-maven-plugin](https://github.com/mycila/license-maven-pl
 
 ### DEB Packaging
 
-The X-Road REST Gateway builds DEB package for use with Ubuntu and siblings.
+The X-Road REST Gateway builds DEB package for use with Ubuntu and siblings using the [jdeb Maven plugin](https://github.com/tcurdt/jdeb).
 
 `mvn -f src/pom.xml clean package`
 
@@ -86,7 +86,7 @@ The resulting package depends on tomcat. On installation the war archive is put 
 
 ### RPM Packaging
 
-The X-Road REST Gateway also builds RPMs for use with RHEL (or derivatives) and Apache Tomcat.
+The X-Road REST Gateway also builds RPMs for use with RHEL (or derivatives) and Apache Tomcat using the [rpm-maven-plugin](https://github.com/mojohaus/rpm-maven-plugin).
 
 ```mvn -f src/pom.xml clean package```
 
