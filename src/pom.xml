@@ -261,6 +261,7 @@
                                     <sources>
                                         <source>
                                             <location>target/rest-gateway-${project.version}.war</location>
+                                            <destination>rest-gateway.war</destination>
                                         </source>
                                     </sources>
                                 </mapping>
@@ -296,7 +297,7 @@
                                     <dataSet>
                                         <data>
                                             <src>target/rest-gateway-${project.version}.war</src>
-                                            <dst>/var/lib/tomcat7/webapps/rest-gateway-${project.version}.war</dst>
+                                            <dst>/var/lib/tomcat7/webapps/rest-gateway.war</dst>
                                             <type>file</type>
                                         </data>
                                     </dataSet>
