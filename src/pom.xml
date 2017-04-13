@@ -245,7 +245,6 @@
                             <license>MIT License</license>
                             <distribution>RHEL</distribution>
                             <!-- version comes from above -->
-                            <release>SNAPSHOT</release>
                             <group>System Environment/Libraries</group>
                             <packager>Petteri Kivimäki</packager>
                             <defineStatements>
