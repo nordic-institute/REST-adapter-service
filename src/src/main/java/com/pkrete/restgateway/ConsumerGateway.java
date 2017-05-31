@@ -22,34 +22,29 @@
  */
 package com.pkrete.restgateway;
 
+import com.pkrete.restgateway.endpoint.ConsumerEndpoint;
+import com.pkrete.restgateway.util.Constants;
+import com.pkrete.restgateway.util.ConsumerGatewayUtil;
+import com.pkrete.restgateway.util.RESTGatewayUtil;
 import com.pkrete.xrd4j.client.SOAPClient;
 import com.pkrete.xrd4j.client.SOAPClientImpl;
 import com.pkrete.xrd4j.client.deserializer.AbstractResponseDeserializer;
 import com.pkrete.xrd4j.client.deserializer.ServiceResponseDeserializer;
 import com.pkrete.xrd4j.client.serializer.AbstractServiceRequestSerializer;
 import com.pkrete.xrd4j.client.serializer.ServiceRequestSerializer;
+import com.pkrete.xrd4j.common.exception.XRd4JException;
 import com.pkrete.xrd4j.common.message.ErrorMessage;
 import com.pkrete.xrd4j.common.message.ServiceRequest;
 import com.pkrete.xrd4j.common.message.ServiceResponse;
+import com.pkrete.xrd4j.common.security.Decrypter;
+import com.pkrete.xrd4j.common.security.Encrypter;
 import com.pkrete.xrd4j.common.util.MessageHelper;
 import com.pkrete.xrd4j.common.util.PropertiesUtil;
 import com.pkrete.xrd4j.common.util.SOAPHelper;
 import com.pkrete.xrd4j.rest.converter.XMLToJSONConverter;
-import com.pkrete.restgateway.endpoint.ConsumerEndpoint;
-import com.pkrete.restgateway.util.Constants;
-import com.pkrete.restgateway.util.ConsumerGatewayUtil;
-import com.pkrete.restgateway.util.RESTGatewayUtil;
-import com.pkrete.xrd4j.common.exception.XRd4JException;
-import com.pkrete.xrd4j.common.security.Decrypter;
-import com.pkrete.xrd4j.common.security.Encrypter;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -60,8 +55,14 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * This class implements a Servlet which functionality can be configured through
@@ -89,11 +90,11 @@ public class ConsumerGateway extends HttpServlet {
         super.init();
         logger.debug("Starting to initialize Consumer REST Gateway.");
         logger.debug("Reading Consumer and ConsumerGateway properties");
-        String propertiesDirectoryParameter = System.getProperty(Constants.PROPERTIES_DIR_PARAM_NAME);
+        String propertiesDirectory = RESTGatewayUtil.getPropertiesDirectory();
         Properties endpointProps;
-        if (propertiesDirectoryParameter != null) {
-            endpointProps = PropertiesUtil.getInstance().load(propertiesDirectoryParameter + Constants.PROPERTIES_FILE_CONSUMERS, false);
-            this.props = PropertiesUtil.getInstance().load(propertiesDirectoryParameter + Constants.PROPERTIES_FILE_CONSUMER_GATEWAY, false);
+        if (propertiesDirectory != null) {
+            endpointProps = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_CONSUMERS, false);
+            this.props = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_CONSUMER_GATEWAY, false);
         } else {
             endpointProps = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_CONSUMERS);
             this.props = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_CONSUMER_GATEWAY);
@@ -436,7 +437,7 @@ public class ConsumerGateway extends HttpServlet {
         // attachments, the response must be converted
         if (response.getContentType().startsWith(Constants.APPLICATION_JSON)) {
             logger.debug("Convert response from XML to JSON.");
-            // Remove response tag and its namespace prefixes 
+            // Remove response tag and its namespace prefixes
             String tmp = ConsumerGatewayUtil.removeResponseTag(responseStr);
             return new XMLToJSONConverter().convert(tmp);
         } else if (response.getContentType().startsWith(Constants.TEXT_XML)) {
@@ -720,7 +721,7 @@ public class ConsumerGateway extends HttpServlet {
                 Encrypter symmetricEncrypter = RESTGatewayUtil.createSymmetricEncrypter(this.keyLength);
                 // Process request parameters
                 handleBody(request, payload);
-                // Process request body 
+                // Process request body
                 if (this.requestBody != null && !this.requestBody.isEmpty()) {
                     handleAttachment(request, payload, envelope, symmetricEncrypter.encrypt(this.requestBody));
                 }
@@ -833,8 +834,8 @@ public class ConsumerGateway extends HttpServlet {
             // and the actual response. After the modification all the response
             // elements are directly under response.
             SOAPHelper.moveChildren(encryptionWrapper, (SOAPElement) responseNode, !this.omitNamespace);
-            // Clone response node because removing namespace from the original 
-            // node causes null pointer exception in AbstractResponseDeserializer 
+            // Clone response node because removing namespace from the original
+            // node causes null pointer exception in AbstractResponseDeserializer
             // when wrappers are not used. Cloning the original node, removing
             // namespace from the clone and returning the clone prevents the
             // problem to occur.

@@ -106,6 +106,11 @@ public class Constants {
      */
     public static final String PROPERTIES_DIR_PARAM_NAME = "propertiesDirectory";
     /**
+     * Properties default directory name
+     */
+    public static final String PROPERTIES_DIR_NAME = "xroad-rest-gateway";
+
+    /**
      * HTTP error messages
      */
     public static final String ERROR_404 = "404 Not Found";
@@ -133,7 +138,6 @@ public class Constants {
      */
     public static final String LOG_STRING_FOR_SETTINGS = "\"{}\" setting found. Value : \"{}\".";
     public static final String LOG_STRING_FOR_HEADERS = "{} : {}";
-
     /**
      * Constructs and initializes a new Constants object. Should never be used.
      */

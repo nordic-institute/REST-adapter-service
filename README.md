@@ -32,11 +32,17 @@ The Provider WSDL description is accessible at:
 http://localhost:8080/rest-gateway-0.0.10/Provider?wsdl
 ```
 
-Executable JAR version supports ```propertiesDirectory``` command line variable that makes it possible to load REST Gateway configuration files from defined directory outside of the JAR file. Otherwise the default configuration shipped with the JAR is used. For example
+### Configuration files location
 
-```
-java -jar -DpropertiesDirectory=/my/custom/path rest-gateway.jar
-```
+REST gateway tries to load configuration files from the following locations
+
+* The directory specified by the system property ```properiesDirectory```
+    ```
+    java -jar -DpropertiesDirectory=/my/custom/path rest-gateway.jar
+    ```
+* The direcrory xroad-rest-gateway in the user home directory (if it exists)
+* The directory /etc/xroad-rest-gateway (if it exists, Linux only)
+* As a fallback, the default configuration shipped with the JAR/WAR (classpath)
 
 More detailed usage examples are available in [wiki](https://github.com/educloudalliance/xroad-rest-gateway/wiki/REST-Gateway-0.0.10#usage).
 
