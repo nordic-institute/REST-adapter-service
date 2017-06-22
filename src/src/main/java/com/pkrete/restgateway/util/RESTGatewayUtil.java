@@ -31,17 +31,21 @@ import com.pkrete.xrd4j.common.security.Encrypter;
 import com.pkrete.xrd4j.common.security.SymmetricDecrypter;
 import com.pkrete.xrd4j.common.security.SymmetricEncrypter;
 import com.pkrete.xrd4j.common.util.MessageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Key;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
 import java.util.Properties;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class provides utility methods for REST Gateway implementation.
@@ -314,5 +318,28 @@ public class RESTGatewayUtil {
         msg.addChildElement(Constants.PARAM_KEY).addTextNode(asymmetricEncrypter.encrypt(sessionKey));
         // Add base 64 IV to the message
         msg.addChildElement(Constants.PARAM_IV).addTextNode(CryptoHelper.encodeBase64(((SymmetricEncrypter) symmetricEncrypter).getIv()));
+    }
+
+    public static String getPropertiesDirectory() {
+        final String os = System.getProperty("os.name", "generic").toLowerCase();
+        String dir = System.getProperty(Constants.PROPERTIES_DIR_PARAM_NAME);
+        if ( dir != null ) {
+            //if defined by the property, it will be an error if the directory does not exist
+            return dir;
+        }
+
+        Path p = Paths.get(System.getProperty("user.home"),Constants.PROPERTIES_DIR_NAME);
+        if ( Files.exists(p) ) {
+            return p.toString();
+        }
+
+        if (os.startsWith("linux")) {
+            p = Paths.get("/etc", Constants.PROPERTIES_DIR_NAME);
+            if ( Files.exists(p) ) {
+                return p.toString();
+            }
+        }
+
+        return null;
     }
 }

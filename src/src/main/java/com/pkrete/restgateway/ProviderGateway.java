@@ -22,10 +22,16 @@
  */
 package com.pkrete.restgateway;
 
+import com.pkrete.restgateway.endpoint.ProviderEndpoint;
+import com.pkrete.restgateway.util.Constants;
+import com.pkrete.restgateway.util.ProviderGatewayUtil;
+import com.pkrete.restgateway.util.RESTGatewayUtil;
 import com.pkrete.xrd4j.common.exception.XRd4JException;
 import com.pkrete.xrd4j.common.message.ErrorMessage;
 import com.pkrete.xrd4j.common.message.ServiceRequest;
 import com.pkrete.xrd4j.common.message.ServiceResponse;
+import com.pkrete.xrd4j.common.security.Decrypter;
+import com.pkrete.xrd4j.common.security.Encrypter;
 import com.pkrete.xrd4j.common.util.PropertiesUtil;
 import com.pkrete.xrd4j.common.util.SOAPHelper;
 import com.pkrete.xrd4j.rest.ClientResponse;
@@ -36,26 +42,21 @@ import com.pkrete.xrd4j.server.deserializer.AbstractCustomRequestDeserializer;
 import com.pkrete.xrd4j.server.deserializer.CustomRequestDeserializer;
 import com.pkrete.xrd4j.server.serializer.AbstractServiceResponseSerializer;
 import com.pkrete.xrd4j.server.serializer.ServiceResponseSerializer;
-import com.pkrete.restgateway.endpoint.ProviderEndpoint;
-import com.pkrete.restgateway.util.Constants;
-import com.pkrete.restgateway.util.ProviderGatewayUtil;
-import com.pkrete.restgateway.util.RESTGatewayUtil;
-import com.pkrete.xrd4j.common.security.Decrypter;
-import com.pkrete.xrd4j.common.security.Encrypter;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.Node;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * This class implements a Servlet which functionality can be configured through
@@ -82,11 +83,11 @@ public class ProviderGateway extends AbstractAdapterServlet {
         super.init();
         logger.debug("Starting to initialize Provider REST Gateway.");
         logger.debug("Reading Provider and ProviderGateway properties");
-        String propertiesDirectoryParameter = System.getProperty(Constants.PROPERTIES_DIR_PARAM_NAME);
+        String propertiesDirectory = RESTGatewayUtil.getPropertiesDirectory();
         Properties endpointProps;
-        if (propertiesDirectoryParameter != null) {
-            this.props = PropertiesUtil.getInstance().load(propertiesDirectoryParameter + Constants.PROPERTIES_FILE_PROVIDER_GATEWAY, false);
-            endpointProps = PropertiesUtil.getInstance().load(propertiesDirectoryParameter + Constants.PROPERTIES_FILE_PROVIDERS, false);
+        if (propertiesDirectory != null) {
+            this.props = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_PROVIDER_GATEWAY, false);
+            endpointProps = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_PROVIDERS, false);
         } else {
             this.props = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_PROVIDER_GATEWAY);
             endpointProps = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_PROVIDERS);
