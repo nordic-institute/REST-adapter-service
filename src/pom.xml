@@ -5,11 +5,9 @@
     <groupId>com.pkrete</groupId>
     <artifactId>rest-gateway</artifactId>
     <version>0.0.11-SNAPSHOT</version>
-    <name>REST Gateway</name>
+    <name>REST Adapter Service</name>
     <description>
-        This is a REST Gateway component that sits between X-Road security
-        server and a REST service. REST Gateway supports X-Road version
-        6.4 and above.
+        REST Adapter Service component translates between X-Road and REST protocols. X-Road versions 6.4 and above are supported.
     </description>
     <inceptionYear>2017</inceptionYear>
     <url>https://github.com/vrk-kpa/REST-adapter-service</url>
@@ -91,6 +89,15 @@
         <url>git@github.com:vrk-kpa/REST-adapter-service.git</url>
     </scm>
     <developers>
+        <developer>
+            <id>vrk</id>
+            <name>Population Register Centre (VRK)</name>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
         <developer>
             <id>petkivim</id>
             <name>Petteri Kivimäki</name>
@@ -265,7 +272,7 @@
                             <distribution>RHEL</distribution>
                             <!-- version comes from above -->
                             <group>System Environment/Libraries</group>
-                            <packager>Petteri Kivimäki</packager>
+                            <packager>Population Register Centre (VRK)</packager>
                             <defineStatements>
                                 <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
                             </defineStatements>
@@ -293,11 +300,6 @@
                                     </sources>
                                 </mapping>
                             </mappings>
-                            <!--
-                            <preinstallScriptlet>
-                                <script>echo "installing now"</script>
-                            </preinstallScriptlet>
-                            -->
                             <postinstallScriptlet>
                                 <scriptFile>src/main/scripts/postinstall</scriptFile>
                                 <fileEncoding>utf-8</fileEncoding>
