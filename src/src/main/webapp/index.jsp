@@ -6,8 +6,8 @@
         <title></title>
     </head>
     <body>
-        <h3>REST Gateway</h3>
-        <p>REST Gateway on <a href="https://github.com/educloudalliance/xroad-rest-gateway" target="new">GitHub</a>.</p>
+        <h3>REST Adapter Service</h3>
+        <p>REST Adapter Service on <a href="https://github.com/vrk-kpa/REST-adapter-service" target="new">GitHub</a>.</p>
         <p><b>Consumer</b></p>
         <p>Consumer endpoint: <a href="${pageContext.request.requestURL}Consumer">${pageContext.request.requestURL}Consumer</a></p>
         <div>

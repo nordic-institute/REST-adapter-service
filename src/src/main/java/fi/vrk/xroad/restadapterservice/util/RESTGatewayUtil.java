@@ -20,9 +20,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.pkrete.restgateway.util;
+package fi.vrk.xroad.restadapterservice.util;
 
-import com.pkrete.restgateway.endpoint.AbstractEndpoint;
+import fi.vrk.xroad.restadapterservice.endpoint.AbstractEndpoint;
 import com.pkrete.xrd4j.common.security.AsymmetricDecrypter;
 import com.pkrete.xrd4j.common.security.AsymmetricEncrypter;
 import com.pkrete.xrd4j.common.security.CryptoHelper;

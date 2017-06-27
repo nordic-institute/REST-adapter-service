@@ -2,8 +2,8 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.pkrete</groupId>
-    <artifactId>rest-gateway</artifactId>
+    <groupId>fi.vrk</groupId>
+    <artifactId>rest-adapter-service</artifactId>
     <version>0.0.11-SNAPSHOT</version>
     <name>REST Adapter Service</name>
     <description>
@@ -244,7 +244,7 @@
                                     <goal>copy-resources</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${basedir}/target/config/etc/xroad-rest-gateway</outputDirectory>
+                                    <outputDirectory>${basedir}/target/config/etc/rest-adapter-service</outputDirectory>
                                     <resources>
                                         <resource>
                                             <directory>src/main/profiles/plaintext</directory>
@@ -285,17 +285,17 @@
                                     <directoryIncluded>false</directoryIncluded>
                                     <sources>
                                         <source>
-                                            <location>target/rest-gateway-${project.version}.war</location>
-                                            <destination>rest-gateway.war</destination>
+                                            <location>target/rest-adapter-service-${project.version}.war</location>
+                                            <destination>rest-adapter-service.war</destination>
                                         </source>
                                     </sources>
                                 </mapping>
                                 <mapping>
-                                    <directory>/etc/xroad-rest-gateway</directory>
+                                    <directory>/etc/rest-adapter-service</directory>
                                     <configuration>noreplace</configuration>
                                     <sources>
                                         <source>
-                                            <location>target/config/etc/xroad-rest-gateway</location>
+                                            <location>target/config/etc/rest-adapter-service</location>
                                         </source>
                                     </sources>
                                 </mapping>
@@ -326,8 +326,8 @@
                                     <snapshotExpand>true</snapshotExpand>
                                     <dataSet>
                                         <data>
-                                            <src>target/rest-gateway-${project.version}.war</src>
-                                            <dst>/var/lib/tomcat7/webapps/rest-gateway.war</dst>
+                                            <src>target/rest-adapter-service-${project.version}.war</src>
+                                            <dst>/var/lib/tomcat7/webapps/rest-adapter-service.war</dst>
                                             <type>file</type>
                                         </data>
                                         <data>

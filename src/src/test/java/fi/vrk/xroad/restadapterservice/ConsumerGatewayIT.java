@@ -20,9 +20,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.pkrete.restgateway;
+package fi.vrk.xroad.restadapterservice;
 
-import com.pkrete.restgateway.util.Constants;
+import fi.vrk.xroad.restadapterservice.util.Constants;
 import com.pkrete.xrd4j.rest.ClientResponse;
 import com.pkrete.xrd4j.rest.client.RESTClient;
 import com.pkrete.xrd4j.rest.client.RESTClientFactory;

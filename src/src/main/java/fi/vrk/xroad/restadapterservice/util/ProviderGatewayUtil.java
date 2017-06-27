@@ -20,12 +20,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.pkrete.restgateway.util;
+package fi.vrk.xroad.restadapterservice.util;
 
 import com.pkrete.xrd4j.common.message.ServiceRequest;
 import com.pkrete.xrd4j.common.util.MessageHelper;
 import com.pkrete.xrd4j.rest.converter.JSONToXMLConverter;
-import com.pkrete.restgateway.endpoint.ProviderEndpoint;
+import fi.vrk.xroad.restadapterservice.endpoint.ProviderEndpoint;
 import com.pkrete.xrd4j.common.security.Decrypter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

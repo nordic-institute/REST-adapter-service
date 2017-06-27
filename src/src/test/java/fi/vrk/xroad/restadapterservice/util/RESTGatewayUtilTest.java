@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.pkrete.restgateway.util;
+package fi.vrk.xroad.restadapterservice.util;
 
 import junit.framework.TestCase;
 

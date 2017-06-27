@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.pkrete.restgateway.endpoint;
+package fi.vrk.xroad.restadapterservice.endpoint;
 
 /**
  * This class represents provider endpoint and holds all the information that is

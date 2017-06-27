@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.pkrete.restgateway.filter;
+package fi.vrk.xroad.restadapterservice.filter;
 
 import java.io.IOException;
 import javax.servlet.Filter;

@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.pkrete.restgateway.util;
+package fi.vrk.xroad.restadapterservice.util;
 
 /**
  * REST Gateway constants.
@@ -108,7 +108,7 @@ public class Constants {
     /**
      * Properties default directory name
      */
-    public static final String PROPERTIES_DIR_NAME = "xroad-rest-gateway";
+    public static final String PROPERTIES_DIR_NAME = "rest-adapter-service";
 
     /**
      * HTTP error messages

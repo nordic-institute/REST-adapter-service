@@ -20,13 +20,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.pkrete.restgateway.util;
+package fi.vrk.xroad.restadapterservice.util;
 
 import com.pkrete.xrd4j.common.exception.XRd4JException;
 import com.pkrete.xrd4j.common.member.ConsumerMember;
 import com.pkrete.xrd4j.common.member.ProducerMember;
 import com.pkrete.xrd4j.common.message.ServiceRequest;
-import com.pkrete.restgateway.endpoint.ProviderEndpoint;
+import fi.vrk.xroad.restadapterservice.endpoint.ProviderEndpoint;
 import java.util.Map;
 import java.util.Properties;
 import junit.framework.TestCase;
