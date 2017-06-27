@@ -1,33 +1,33 @@
 ### Table of contents
 
-* [Principle of Operation](Rest-Adapter-Service-principles#principle-of-operation)
-  * [Consumer Gateway](Rest-Adapter-Service-principles#consumer-gateway)
-  * [Provider Gateway](Rest-Adapter-Service-principles#provider-gateway)
-* [Software Requirements](Rest-Adapter-Service-principles#software-requirements)
-* [Installation](Rest-Adapter-Service-principles#installation)
-  * [Consumer Gateway](Rest-Adapter-Service-principles#consumer-gateway-1)
-  * [Provider Gateway](Rest-Adapter-Service-principles#provider-gateway-1)
-* [Consumer Gateway Configuration](Rest-Adapter-Service-principles#consumer-gateway-configuration)
-* [Provider Gateway Configuration](Rest-Adapter-Service-principles#provider-gateway-configuration)
-* [Usage Examples](Rest-Adapter-Service-principles#usage)
-  * [REST API for City of Helsinki Service Map - List of Organizations](Rest-Adapter-Service-principles#rest-api-for-city-of-helsinki-service-map---list-of-organizations)
-    * [Consumer Gateway](Rest-Adapter-Service-principles#consumer-gateway-2)
-    * [Provider Gateway](Rest-Adapter-Service-principles#provider-gateway-2)
-  * [REST API for City of Helsinki Service Map - Single Organization](Rest-Adapter-Service-principles#rest-api-for-city-of-helsinki-service-map---single-organization)
-    * [Consumer Gateway](Rest-Adapter-Service-principles#consumer-gateway-3)
-    * [Provider Gateway](Rest-Adapter-Service-principles#provider-gateway-3)
-  * [Finnish Library Directory](Rest-Adapter-Service-principles#library-directory)
-    * [Consumer Gateway](Rest-Adapter-Service-principles#consumer-gateway-4)
-    * [Provider Gateway](Rest-Adapter-Service-principles#provider-gateway-4)
-  * [Finnish Patent and Registration Office - Business Information Search](Rest-Adapter-Service-principles#finnish-patent-and-registration-office---business-information-search)
-    * [Consumer Gateway](Rest-Adapter-Service-principles#consumer-gateway-5)
-    * [Provider Gateway](Rest-Adapter-Service-principles#provider-gateway-5)
-  * [Finnish Patent and Registration Office - Get Company](Rest-Adapter-Service-principles#finnish-patent-and-registration-office---get-company)
-    * [Consumer Gateway](Rest-Adapter-Service-principles#consumer-gateway-6)
-    * [Provider Gateway](Rest-Adapter-Service-principles#provider-gateway-6)
-  * [Finto : Finnish Thesaurus and Ontology Service - Search](Rest-Adapter-Service-principles#finto--finnish-thesaurus-and-ontology-service---search)
-    * [Consumer Gateway](Rest-Adapter-Service-principles#consumer-gateway-7)
-    * [Provider Gateway](Rest-Adapter-Service-principles#provider-gateway-7)
+* [Principle of Operation](Rest-Adapter-Service-principles.md#principle-of-operation)
+  * [Consumer Gateway](Rest-Adapter-Service-principles.md#consumer-gateway)
+  * [Provider Gateway](Rest-Adapter-Service-principles.md#provider-gateway)
+* [Software Requirements](Rest-Adapter-Service-principles.md#software-requirements)
+* [Installation](Rest-Adapter-Service-principles.md#installation)
+  * [Consumer Gateway](Rest-Adapter-Service-principles.md#consumer-gateway-1)
+  * [Provider Gateway](Rest-Adapter-Service-principles.md#provider-gateway-1)
+* [Consumer Gateway Configuration](Rest-Adapter-Service-principles.md#consumer-gateway-configuration)
+* [Provider Gateway Configuration](Rest-Adapter-Service-principles.md#provider-gateway-configuration)
+* [Usage Examples](Rest-Adapter-Service-principles.md#usage)
+  * [REST API for City of Helsinki Service Map - List of Organizations](Rest-Adapter-Service-principles.md#rest-api-for-city-of-helsinki-service-map---list-of-organizations)
+    * [Consumer Gateway](Rest-Adapter-Service-principles.md#consumer-gateway-2)
+    * [Provider Gateway](Rest-Adapter-Service-principles.md#provider-gateway-2)
+  * [REST API for City of Helsinki Service Map - Single Organization](Rest-Adapter-Service-principles.md#rest-api-for-city-of-helsinki-service-map---single-organization)
+    * [Consumer Gateway](Rest-Adapter-Service-principles.md#consumer-gateway-3)
+    * [Provider Gateway](Rest-Adapter-Service-principles.md#provider-gateway-3)
+  * [Finnish Library Directory](Rest-Adapter-Service-principles.md#library-directory)
+    * [Consumer Gateway](Rest-Adapter-Service-principles.md#consumer-gateway-4)
+    * [Provider Gateway](Rest-Adapter-Service-principles.md#provider-gateway-4)
+  * [Finnish Patent and Registration Office - Business Information Search](Rest-Adapter-Service-principles.md#finnish-patent-and-registration-office---business-information-search)
+    * [Consumer Gateway](Rest-Adapter-Service-principles.md#consumer-gateway-5)
+    * [Provider Gateway](Rest-Adapter-Service-principles.md#provider-gateway-5)
+  * [Finnish Patent and Registration Office - Get Company](Rest-Adapter-Service-principles.md#finnish-patent-and-registration-office---get-company)
+    * [Consumer Gateway](Rest-Adapter-Service-principles.md#consumer-gateway-6)
+    * [Provider Gateway](Rest-Adapter-Service-principles.md#provider-gateway-6)
+  * [Finto : Finnish Thesaurus and Ontology Service - Search](Rest-Adapter-Service-principles.md#finto--finnish-thesaurus-and-ontology-service---search)
+    * [Consumer Gateway](Rest-Adapter-Service-principles.md#consumer-gateway-7)
+    * [Provider Gateway](Rest-Adapter-Service-principles.md#provider-gateway-7)
 
 ### Principle of Operation
 
@@ -596,7 +596,7 @@ REST services are configured through ```WEB-INF/classes/providers.properties``` 
 
 Rest Adapter Service is shipped with configuration that includes 6 ready-to-use REST services. By default Consumer Gateway is configured to call Provider Gateway directly, and both Gateways have the same services configured ([diagram](https://raw.githubusercontent.com/educloudalliance/xroad-rest-gateway/master/images/default_configuration-rest-gateway-0.0.4.png)). In this way it's possible to test both Gateways without access to X-Road. In addition, it's possible to call Provider Gateway directly using SOAP without Consumer Gateway in the middle ([diagram](https://raw.githubusercontent.com/educloudalliance/xroad-rest-gateway/master/images/provider_call-rest-gateway-0.0.4.png)).
 
-The preconfigured Consumer Gateway services must be called using HTTP GET and Accept header can be set to ```text/xml``` or ```application/json```. Provider Gateway services must be called using HTTP POST and Content-Type must be set to ```text/xml```.[REST Client plugin](https://addons.mozilla.org/fi/firefox/addon/restclient/) for Firefox can be used for testing purposes.
+The preconfigured Consumer Gateway services must be called using HTTP GET and Accept header can be set to ```text/xml``` or ```application/json```. Provider Gateway services must be called using HTTP POST and Content-Type must be set to ```text/xml```. [REST Client plugin](https://addons.mozilla.org/fi/firefox/addon/restclient/) for Firefox can be used for testing purposes.
 
 #### REST API for City of Helsinki Service Map - List of Organizations
 

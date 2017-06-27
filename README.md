@@ -52,7 +52,7 @@ Rest Adapter Service tries to load configuration files from the following locati
 * The directory /etc/rest-adapter-service (if it exists, Linux only)
 * As a fallback, the default configuration shipped with the JAR/WAR (classpath)
 
-More detailed usage examples are available in [wiki](https://github.com/educloudalliance/xroad-rest-gateway/wiki/REST-Gateway-0.0.10#usage).
+More detailed usage examples are available in [documentation](documentation/Rest-Adapter-Service-principles.md#usage).
 
 ## Running the Docker Image
 
@@ -100,7 +100,7 @@ The resulting rest-adapter-service package depends on tomcat that needs to be pr
 
 ## Encryption of Message Content
 
-Starting from version 0.0.10 Rest Adapter Service supports encryption/decryption of message content. More information and instructions for configuration can be found in [wiki](https://github.com/educloudalliance/xroad-rest-gateway/wiki/Encryption).
+Starting from version 0.0.10 Rest Adapter Service supports encryption/decryption of message content. More information and instructions for configuration can be found in [documentation](documentation/Encryption.md).
 
 By default plaintext configuration is enabled. The software can be built with encryption configuration enabled using the command below.
 

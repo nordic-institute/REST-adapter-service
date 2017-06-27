@@ -77,8 +77,8 @@ Below there are the default URLs of Provider and Consumer endpoints if the appli
 **N.B.!** If ```rest-adapter-service-xxx.war``` file is manually copied in Tomcat's ```webapp``` folder, then the application can be accessed at:
 
 * Consumer
-  * [http://localhost:8080/rest-adapter-service-xxx/Consumer](http://localhost:8080/rest-adapter-service-xxx/Consumer)
+  * [http://localhost:8080/rest-adapter-service/Consumer](http://localhost:8080/rest-adapter-service-xxx/Consumer)
 * Provider
-  * [http://localhost:8080/rest-adapter-service-xxx/Provider](http://localhost:8080/rest-adapter-service-xxx/Provider)
+  * [http://localhost:8080/rest-adapter-service/Provider](http://localhost:8080/rest-adapter-service-xxx/Provider)
 
 If you want to test the application by sending requests from Consumer to Provider inside a single instance, then you must update the ```ss.url``` property in ```src/main/resources/consumer-gateway.properties``` file, if the application URL is not ```http://localhost:8080/RESTGateway```. ```ss.url``` property defines the URL where Consumer sends the requests and by default its value is ```http://localhost:8080/RESTGateway/Provider```.
