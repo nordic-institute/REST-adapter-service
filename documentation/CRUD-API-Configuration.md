@@ -1,8 +1,8 @@
-This example explains how to configure REST Gateway for a CRUD API. REST Gateway version 0.0.4 or later is required for this example.
+This example explains how to configure Rest Adapter Service for a CRUD API.
 
 ### CRUD API
 
-In this example a simple imaginary CRUD API is used for demonstrating the configuration of REST Gateway. The CRUD API has five operations that accept and return JSON:
+In this example a simple imaginary CRUD API is used for demonstrating the configuration of Rest Adapter Service. The CRUD API has five operations that accept and return JSON:
 
 * list bands
   * ``` [GET]  http://www.api.com/bands```
@@ -83,7 +83,7 @@ All the five CRUP API operations must be added to ```WEB-INF/classes/consumers.p
 
 ```
 id.client=FI_PILOT.GOV.0245437-2.TestSystem
-ss.url=http://localhost:8080/rest-gateway-0.0.4/Provider
+ss.url=http://localhost:8080/rest-adapter-service/Provider
 # Namespace for ServiceRequest
 namespace.serialize=http://test.x-road.fi/producer
 namespace.prefix.serialize=ts1
@@ -99,26 +99,26 @@ namespace.deserialize=http://test.x-road.fi/producer
 Let's assume that Consumer Gateway is accessed at:
 
 ```
-http://localhost:8080/rest-gateway-0.0.4/Consumer
+http://localhost:8080/rest-adapter-service/Consumer
 ```
 
 And Provider Gateway is accessed at:
 
 ```
-http://localhost:8080/rest-gateway-0.0.4/Provider
+http://localhost:8080/rest-adapter-service/Provider
 ```
 
 Using the services through Consumer Gateway:
 
 * list bands
-  * ``` [GET]  http://localhost:8080/rest-gateway-0.0.4/Consumer/bands```
+  * ``` [GET]  http://localhost:8080/rest-adapter-service/Consumer/bands```
 * get band
-  * ``` [GET]  http://localhost:8080/rest-gateway-0.0.4/Consumer/bands/{bandId}```
+  * ``` [GET]  http://localhost:8080/rest-adapter-service/Consumer/bands/{bandId}```
 * add band
-  * ``` [POST]  http://localhost:8080/rest-gateway-0.0.4/Consumer/bands```
+  * ``` [POST]  http://localhost:8080/rest-adapter-service/Consumer/bands```
   * Request body: ```{"name":"Guns N' Roses"}```
 * update band
-  * ``` [PUT]  http://localhost:8080/rest-gateway-0.0.4/Consumer/bands/1```
+  * ``` [PUT]  http://localhost:8080/rest-adapter-service/Consumer/bands/1```
   * Request body: ```{"id":1,"name":"Guns N' Roses"}```
 * delete band
-  * ``` [DELETE]  http://localhost:8080/rest-gateway-0.0.4/Consumer/bands/1```
+  * ``` [DELETE]  http://localhost:8080/rest-adapter-service/Consumer/bands/1```

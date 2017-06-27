@@ -1,6 +1,6 @@
 ### Prerequisites
 
-Before configuring REST Gateway Provider for X-Road the following conditions must be met:
+Before configuring Rest Adapter Service Provider for X-Road the following conditions must be met:
 
 * organization must be registered as X-Road member
 * Security Server installation must be completed
@@ -125,7 +125,7 @@ Services provided through Provider Gateway are published to X-Road by adding the
 
 WSDL description URL:
 ```
-http://myserver.com/rest-gateway-x.x.x/Provider?wsdl
+http://myserver.com/rest-adapter-service/Provider?wsdl
 ```
 ### Example
 
@@ -142,8 +142,8 @@ namespace.deserialize=http://test.x-road.fi/producer
 
 WSDL description at ```WEB-INF/classes/provider-gateway.wsdl```:
 ```
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
-                  xmlns:tns="http://test.x-road.fi/producer" 
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://test.x-road.fi/producer"
                   .
                   .
                   name="vrk-testService" targetNamespace="http://test.x-road.fi/producer">
