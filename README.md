@@ -114,6 +114,18 @@ Running integration tests with encryption configuration enabled:
 
 ```mvn clean install -P itest -P encrypted```
 
+### Additional documentation
+
+* [Requirements](documentation/Requirements.md)
+* [Setting up Development Environment](documentation/Setting-up-Development-Environment.md)
+* [Setting up SSL on Tomcat](documentation/Setting-up-SSL-on-Tomcat.md)
+* [Import a Certificate as a Trusted Certificate](documentation/Import-a-Certificate-as-a-Trusted-Certificate.md)
+* [Encryption](documentation/Encryption.md)
+* [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md)
+* Examples
+  * [Configuring Rest Adapter Service provider](documentation/Configuring-Rest-Adapter-Service-provider.md)
+  * [CRUD API Configuration](documentation/CRUD-API-Configuration.md)
+
 ### Links to material
 
 * [Data Exchange Layer X-Road](https://www.ria.ee/x-road/)
