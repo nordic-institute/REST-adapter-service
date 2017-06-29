@@ -2,14 +2,12 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.pkrete</groupId>
-    <artifactId>rest-gateway</artifactId>
+    <groupId>fi.vrk</groupId>
+    <artifactId>rest-adapter-service</artifactId>
     <version>0.0.11-SNAPSHOT</version>
-    <name>REST Gateway</name>
+    <name>REST Adapter Service</name>
     <description>
-        This is a REST Gateway component that sits between X-Road security
-        server and a REST service. REST Gateway supports X-Road version
-        6.4 and above.
+        REST Adapter Service component translates between X-Road and REST protocols. X-Road versions 6.4 and above are supported.
     </description>
     <inceptionYear>2017</inceptionYear>
     <url>https://github.com/vrk-kpa/REST-adapter-service</url>
@@ -91,6 +89,15 @@
         <url>git@github.com:vrk-kpa/REST-adapter-service.git</url>
     </scm>
     <developers>
+        <developer>
+            <id>vrk</id>
+            <name>Population Register Centre (VRK)</name>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
         <developer>
             <id>petkivim</id>
             <name>Petteri Kivimäki</name>
@@ -237,7 +244,7 @@
                                     <goal>copy-resources</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${basedir}/target/config/etc/xroad-rest-gateway</outputDirectory>
+                                    <outputDirectory>${basedir}/target/config/etc/rest-adapter-service</outputDirectory>
                                     <resources>
                                         <resource>
                                             <directory>src/main/profiles/plaintext</directory>
@@ -265,7 +272,7 @@
                             <distribution>RHEL</distribution>
                             <!-- version comes from above -->
                             <group>System Environment/Libraries</group>
-                            <packager>Petteri Kivimäki</packager>
+                            <packager>Population Register Centre (VRK)</packager>
                             <defineStatements>
                                 <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
                             </defineStatements>
@@ -278,26 +285,21 @@
                                     <directoryIncluded>false</directoryIncluded>
                                     <sources>
                                         <source>
-                                            <location>target/rest-gateway-${project.version}.war</location>
-                                            <destination>rest-gateway.war</destination>
+                                            <location>target/rest-adapter-service-${project.version}.war</location>
+                                            <destination>rest-adapter-service.war</destination>
                                         </source>
                                     </sources>
                                 </mapping>
                                 <mapping>
-                                    <directory>/etc/xroad-rest-gateway</directory>
+                                    <directory>/etc/rest-adapter-service</directory>
                                     <configuration>noreplace</configuration>
                                     <sources>
                                         <source>
-                                            <location>target/config/etc/xroad-rest-gateway</location>
+                                            <location>target/config/etc/rest-adapter-service</location>
                                         </source>
                                     </sources>
                                 </mapping>
                             </mappings>
-                            <!--
-                            <preinstallScriptlet>
-                                <script>echo "installing now"</script>
-                            </preinstallScriptlet>
-                            -->
                             <postinstallScriptlet>
                                 <scriptFile>src/main/scripts/postinstall</scriptFile>
                                 <fileEncoding>utf-8</fileEncoding>
@@ -324,8 +326,8 @@
                                     <snapshotExpand>true</snapshotExpand>
                                     <dataSet>
                                         <data>
-                                            <src>target/rest-gateway-${project.version}.war</src>
-                                            <dst>/var/lib/tomcat7/webapps/rest-gateway.war</dst>
+                                            <src>target/rest-adapter-service-${project.version}.war</src>
+                                            <dst>/var/lib/tomcat7/webapps/rest-adapter-service.war</dst>
                                             <type>file</type>
                                         </data>
                                         <data>

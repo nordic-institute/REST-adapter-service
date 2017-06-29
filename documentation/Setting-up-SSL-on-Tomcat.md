@@ -7,7 +7,7 @@ The set up consists of 4 basic steps:
 
 #### 1. Create a keystore
 
-Use ```keytool``` command to create a self-signed certificate. The below command creates a ```mykeystore``` keysore in the current working directory.
+Use ```keytool``` command to create a self-signed certificate. The below command creates a ```mykeystore``` keystore in the current working directory.
 
 ```
 keytool -genkey -alias mycert -keyalg RSA -keystore mykeystore
@@ -33,13 +33,13 @@ What is the two-letter country code for this unit?
   [Unknown]:  FI
 Is CN=mydomain.com, OU=My Unit, O=My Organization, L=Helsinki, ST=Uusimaa, C=FI correct?
   [no]:  yes
- 
+
 Enter key password for
     (RETURN if same as keystore password):  password
 Re-enter new password: password
 ```
 
-This will create a ```mykeystore``` file in the current working directory. 
+This will create a ```mykeystore``` file in the current working directory.
 
 ##### Certificate Details
 
@@ -55,7 +55,7 @@ Keystore provider: SUN
 Your keystore contains 1 entry
 
 mycert, 22.2.2015, PrivateKeyEntry,
-Certificate fingerprint (MD5): 52:13:B6:5F:59:28:98:D1:AE:41:E0:96:59:7E:1F:0B 
+Certificate fingerprint (MD5): 52:13:B6:5F:59:28:98:D1:AE:41:E0:96:59:7E:1F:0B
 ```
 
 #### 2. Configure Tomcat
@@ -80,7 +80,7 @@ Uncomment it and make the following changes.
     secure="true" sslProtocol="TLS" />
 ```
 
-```keystoreFile``` and ```keystorePass``` declarations were added, and the ```protocol``` declaration was changed. 
+```keystoreFile``` and ```keystorePass``` declarations were added, and the ```protocol``` declaration was changed.
 
 **N.B.** ```keystorePass="password"``` is the password you assigned to your keystore via ```keytool``` command.
 
@@ -88,7 +88,7 @@ Uncomment it and make the following changes.
 
 #### 3. Test it
 
-Start Tomcat and try to access ```https://localhost:8443```. The default ```8080``` port is still working too ```http://localhost:8080```. 
+Start Tomcat and try to access ```https://localhost:8443```. The default ```8080``` port is still working too ```http://localhost:8080```.
 
 #### 4. How to configure web applications for SSL
 

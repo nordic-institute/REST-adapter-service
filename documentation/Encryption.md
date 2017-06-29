@@ -1,4 +1,4 @@
-REST Gateway supports message level encryption. The use of encryption requires that service provider and consumer exchange their public keys (provider => ```SPPUB```, consumer => ```SCPUB```) as REST Gateway does not currently offer any mechanism for that. The encryption/decryption process is explained below.
+Rest Adapter Service supports message level encryption. The use of encryption requires that service provider and consumer exchange their public keys (provider => ```SPPUB```, consumer => ```SCPUB```) as Rest Adapter Service does not currently offer any mechanism for that. The encryption/decryption process is explained below.
 
 * Consumer Gateway generates one time symmetric AES-128 key ```K1``` that's used for encrypting the message payload.
 * ```K1``` is then encrypted using service provider's public key ```SPPUB```.

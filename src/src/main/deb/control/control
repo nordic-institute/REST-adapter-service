@@ -21,13 +21,13 @@
 # THE SOFTWARE.
 #
 #
-Package: xroad-rest-gateway
+Package: rest-adapter-service
 Version: 0.0.11
 Section: misc
 Priority: optional
 Architecture: all
 Depends: jdk (>= 1.7)
 Maintainer: Ilkka Seppälä <ilkka.seppala@gofore.com>
-Description: X-Road REST Gateway
+Description: REST Adapter Service
 Distribution: development
 Depends: tomcat7

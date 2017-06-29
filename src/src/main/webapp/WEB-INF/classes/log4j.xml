@@ -8,13 +8,13 @@
         </layout>
     </appender>
     <appender name="file" class="org.apache.log4j.FileAppender">
-        <param name="File" value="${catalina.base}/logs/rest-gateway.log"/>
+        <param name="File" value="${catalina.base}/logs/rest-adapter-service.log"/>
         <param name="Append" value="true"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{dd.MM.yyyy HH:mm:ss} %-5p %c{1} : %m%n"/>
         </layout>
     </appender>
-    <logger name="com.pkrete.restgateway" additivity="false">
+    <logger name="fi.vrk.xroad.restadapterservice" additivity="false">
         <level value="ALL"/>
         <appender-ref ref="console"/>
     </logger>
