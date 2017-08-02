@@ -680,28 +680,16 @@ public class ConsumerGateway extends HttpServlet {
                 if (CONFIGURATION_TRANSLATE_JSON_POST_TO_XML) {
                     String json = this.requestBody;
                     logger.debug("converting json: {}", json);
-                    String converted = new JSONToXMLConverter().convert(json);
+                    // create a json wrapper root property
+                    StringBuffer buffer = new StringBuffer();
+                    buffer.append("{ \"jsonWrapperProperty\": ");
+                    buffer.append(json);
+                    buffer.append("}");
+                    String wrapped = buffer.toString();
+                    String converted = new JSONToXMLConverter().convert(wrapped);
                     logger.debug("converted json as xml: {}", converted);
-//                    // Set wrapper tag's name
-//                    String wrapper = "request";
-//                    // Return data inside wrapper element
-//                    String wrapped = "<" + wrapper + ">" + converted + "</" + wrapper + ">";
-//                    logger.debug("wrapped: {}", wrapped);
                     SOAPElement convertedElement = SOAPHelper.xmlStrToSOAPElement(converted);
-                    String serviceName = soapRequest.getLocalName();
-                    String jsonRootPropertyName = convertedElement.getLocalName();
-                    if (!serviceName.equals(jsonRootPropertyName)) {
-                        throw new SOAPException("JSON message needs to have root property "
-                        + "with same name as the service. JSON root property \""
-                        + jsonRootPropertyName
-                        + "\" does not match service name \""
-                        + serviceName
-                        + "\"");
-                    }
                     SOAPHelper.moveChildren(convertedElement, soapRequest,true);
-//                    soapRequest.addChildElement(convertedElement);
-//                    request.setRequestData(SOAPHelper.xmlStrToSOAPElement(wrapped));
-//                    throw new RuntimeException("nothing implemented yet");
                 } else {
                     handleAttachment(request, soapRequest, envelope, this.requestBody);
                 }
