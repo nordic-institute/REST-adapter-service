@@ -22,6 +22,7 @@
  */
 package fi.vrk.xroad.restadapterservice;
 
+import com.pkrete.xrd4j.rest.converter.JSONToXMLConverter;
 import fi.vrk.xroad.restadapterservice.endpoint.ConsumerEndpoint;
 import fi.vrk.xroad.restadapterservice.util.Constants;
 import fi.vrk.xroad.restadapterservice.util.ConsumerGatewayUtil;
@@ -666,13 +667,47 @@ public class ConsumerGateway extends HttpServlet {
             logger.debug("New RequestSerializer created.");
         }
 
+        // TODO: add proper configuration parameter
+        // true: consumer gateway translates incoming POST JSON message to XML payload
+        // false: POST body is sent as an attachment
+        private static final boolean CONFIGURATION_TRANSLATE_JSON_POST_TO_XML = true;
+
+
         @Override
         protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
             handleBody(request, soapRequest);
             if (this.requestBody != null && !this.requestBody.isEmpty()) {
-                handleAttachment(request, soapRequest, envelope, this.requestBody);
+                if (CONFIGURATION_TRANSLATE_JSON_POST_TO_XML) {
+                    String json = this.requestBody;
+                    logger.debug("converting json: {}", json);
+                    String converted = new JSONToXMLConverter().convert(json);
+                    logger.debug("converted json as xml: {}", converted);
+//                    // Set wrapper tag's name
+//                    String wrapper = "request";
+//                    // Return data inside wrapper element
+//                    String wrapped = "<" + wrapper + ">" + converted + "</" + wrapper + ">";
+//                    logger.debug("wrapped: {}", wrapped);
+                    SOAPElement convertedElement = SOAPHelper.xmlStrToSOAPElement(converted);
+                    String serviceName = soapRequest.getLocalName();
+                    String jsonRootPropertyName = convertedElement.getLocalName();
+                    if (!serviceName.equals(jsonRootPropertyName)) {
+                        throw new SOAPException("JSON message needs to have root property "
+                        + "with same name as the service. JSON root property \""
+                        + jsonRootPropertyName
+                        + "\" does not match service name \""
+                        + serviceName
+                        + "\"");
+                    }
+                    SOAPHelper.moveChildren(convertedElement, soapRequest,true);
+//                    soapRequest.addChildElement(convertedElement);
+//                    request.setRequestData(SOAPHelper.xmlStrToSOAPElement(wrapped));
+//                    throw new RuntimeException("nothing implemented yet");
+                } else {
+                    handleAttachment(request, soapRequest, envelope, this.requestBody);
+                }
             }
         }
+
 
         protected void handleBody(ServiceRequest request, SOAPElement soapRequest) throws SOAPException {
             if (this.resourceId != null && !this.resourceId.isEmpty()) {
