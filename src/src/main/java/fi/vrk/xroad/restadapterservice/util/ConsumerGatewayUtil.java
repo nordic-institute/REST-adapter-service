@@ -148,6 +148,13 @@ public class ConsumerGatewayUtil {
             endpoint.setModifyUrl(MessageHelper.strToBool(value));
             logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.CONSUMER_PROPS_MOD_URL, value);
         }
+        // Convert POST JSON messages
+        if (endpoints.containsKey(key + "." + Constants.CONSUMER_PROPS_CONVERT_POST)) {
+            String value = endpoints.getProperty(key + "." + Constants.CONSUMER_PROPS_CONVERT_POST);
+            endpoint.setConvertPost(MessageHelper.strToBool(value));
+            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.CONSUMER_PROPS_CONVERT_POST, value);
+        }
+
     }
 
     /**
@@ -187,6 +194,9 @@ public class ConsumerGatewayUtil {
         endpoint.setPrefix(gatewayProperties.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE));
         if (gatewayProperties.containsKey(Constants.ENDPOINT_PROPS_WRAPPERS)) {
             endpoint.setProcessingWrappers(MessageHelper.strToBool(gatewayProperties.getProperty(Constants.ENDPOINT_PROPS_WRAPPERS)));
+        }
+        if (gatewayProperties.containsKey(Constants.CONSUMER_PROPS_CONVERT_POST)) {
+            endpoint.setConvertPost(MessageHelper.strToBool(gatewayProperties.getProperty(Constants.CONSUMER_PROPS_CONVERT_POST)));
         }
 
         // Set default HTTP verb

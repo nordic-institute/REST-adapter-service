@@ -279,9 +279,9 @@ public class ConsumerGateway extends HttpServlet {
             if (asymmetricEncrypter == null) {
                 throw new XRd4JException("No public key found when encryption is required.");
             }
-            return new EncryptingRequestSerializer(endpoint.getResourceId(), requestBody, contentType, asymmetricEncrypter, this.keyLength);
+            return new EncryptingRequestSerializer(endpoint.getResourceId(), requestBody, contentType, asymmetricEncrypter, this.keyLength, endpoint.isConvertPost());
         } else {
-            return new RequestSerializer(endpoint.getResourceId(), requestBody, contentType);
+            return new RequestSerializer(endpoint.getResourceId(), requestBody, contentType, endpoint.isConvertPost());
         }
     }
 
@@ -659,45 +659,61 @@ public class ConsumerGateway extends HttpServlet {
         protected final String resourceId;
         protected final String requestBody;
         protected final String contentType;
+        protected final boolean convertPost;
 
-        public RequestSerializer(String resourceId, String requestBody, String contentType) {
+        public RequestSerializer(String resourceId, String requestBody, String contentType, boolean convertPost) {
             this.resourceId = resourceId;
             this.requestBody = requestBody;
             this.contentType = contentType;
+            this.convertPost = convertPost;
             logger.debug("New RequestSerializer created.");
         }
 
-        // TODO: add proper configuration parameter
-        // true: consumer gateway translates incoming POST JSON message to XML payload
-        // false: POST body is sent as an attachment
-        private static final boolean CONFIGURATION_TRANSLATE_JSON_POST_TO_XML = true;
-
-
         @Override
         protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
-            handleBody(request, soapRequest);
+            writeGetParametersToBody(request, soapRequest);
             if (this.requestBody != null && !this.requestBody.isEmpty()) {
-                if (CONFIGURATION_TRANSLATE_JSON_POST_TO_XML) {
-                    String json = this.requestBody;
-                    logger.debug("converting json: {}", json);
-                    // create a json wrapper root property
-                    StringBuffer buffer = new StringBuffer();
-                    buffer.append("{ \"jsonWrapperProperty\": ");
-                    buffer.append(json);
-                    buffer.append("}");
-                    String wrapped = buffer.toString();
-                    String converted = new JSONToXMLConverter().convert(wrapped);
-                    logger.debug("converted json as xml: {}", converted);
-                    SOAPElement convertedElement = SOAPHelper.xmlStrToSOAPElement(converted);
-                    SOAPHelper.moveChildren(convertedElement, soapRequest,true);
+                if (convertPost) {
+                    convertJsonToXmlAndWriteToSoap(this.requestBody, soapRequest);
                 } else {
+                    // send HTTP POST as an attachment
                     handleAttachment(request, soapRequest, envelope, this.requestBody);
                 }
             }
         }
 
+        /**
+         * Takes a JSON string, converts it to XML,
+         * and writes the result as a request element in
+         * output SOAP element body
+         * @param json
+         * @param outputSoapRequest
+         * @throws SOAPException
+         */
+        void convertJsonToXmlAndWriteToSoap(String json, SOAPElement outputSoapRequest) throws SOAPException {
+            logger.debug("converting json: {}", json);
+            // create a json wrapper root property
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("{ \"jsonWrapperProperty\": ");
+            buffer.append(json);
+            buffer.append("}");
+            String wrapped = buffer.toString();
+            String converted = new JSONToXMLConverter().convert(wrapped);
+            if (converted == null || converted.equals("")) {
+                throw new SOAPException("could not convert http body from json to xml");
+            }
+            logger.debug("converted json as xml: {}", converted);
+            SOAPElement convertedElement = SOAPHelper.xmlStrToSOAPElement(converted);
+            SOAPHelper.moveChildren(convertedElement, outputSoapRequest,true);
+        }
 
-        protected void handleBody(ServiceRequest request, SOAPElement soapRequest) throws SOAPException {
+        /**
+         * Copies resourceId and GET params (if any) coming from the GET URL to the SOAP request body
+         * @param request
+         * @param soapRequest
+         * @throws SOAPException
+         */
+        protected void writeGetParametersToBody(ServiceRequest request, SOAPElement soapRequest) throws SOAPException {
             if (this.resourceId != null && !this.resourceId.isEmpty()) {
                 logger.debug("Add resourceId : \"{}\".", this.resourceId);
                 soapRequest.addChildElement("resourceId").addTextNode(this.resourceId);
@@ -729,8 +745,9 @@ public class ConsumerGateway extends HttpServlet {
         private final Encrypter asymmetricEncrypter;
         private final int keyLength;
 
-        public EncryptingRequestSerializer(String resourceId, String requestBody, String contentType, Encrypter asymmetricEncrypter, int keyLength) {
-            super(resourceId, requestBody, contentType);
+        public EncryptingRequestSerializer(String resourceId, String requestBody, String contentType,
+                                           Encrypter asymmetricEncrypter, int keyLength, boolean convertPost) {
+            super(resourceId, requestBody, contentType, convertPost);
             this.asymmetricEncrypter = asymmetricEncrypter;
             this.keyLength = keyLength;
             logger.debug("New EncryptingRequestSerializer created.");
@@ -743,10 +760,15 @@ public class ConsumerGateway extends HttpServlet {
                 // Create new symmetric encrypter using of defined key length
                 Encrypter symmetricEncrypter = RESTGatewayUtil.createSymmetricEncrypter(this.keyLength);
                 // Process request parameters
-                handleBody(request, payload);
+                writeGetParametersToBody(request, payload);
                 // Process request body
                 if (this.requestBody != null && !this.requestBody.isEmpty()) {
-                    handleAttachment(request, payload, envelope, symmetricEncrypter.encrypt(this.requestBody));
+                    if (convertPost) {
+                        convertJsonToXmlAndWriteToSoap(this.requestBody, soapRequest);
+                    } else {
+                        // send HTTP POST as an attachment
+                        handleAttachment(request, payload, envelope, symmetricEncrypter.encrypt(this.requestBody));
+                    }
                 }
                 // Encrypt message with symmetric AES encryption
                 String encryptedData = symmetricEncrypter.encrypt(SOAPHelper.toString(payload));

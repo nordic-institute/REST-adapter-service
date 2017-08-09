@@ -68,6 +68,7 @@ public class Constants {
     public static final String CONSUMER_PROPS_SECURITY_SERVER_URL = "ss.url";
     public static final String CONSUMER_PROPS_MOD_URL = "response.modurl";
     public static final String CONSUMER_PROPS_SVC_CALLS_BY_XRD_SVC_ID_ENABLED = "serviceCallsByXRdServiceId.enabled";
+    public static final String CONSUMER_PROPS_CONVERT_POST = "convertPost";
     /**
      * Encryption properties
      */
