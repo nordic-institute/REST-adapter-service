@@ -134,6 +134,7 @@ Content-ID: RESTGatewayRequestBody
 
 ##### Converting the body to XML
 
+This JSON message in HTTP POST request body
 ```
 {   
   "sender": "Some Name",
@@ -170,14 +171,15 @@ would be translated into e.g.
 </some-ns:sendMessage>
 ```
 
-Request element's name, namespace prefix and namespace URI are determined by the configuration.
+Request element's name `sendMessage`, namespace prefix `some-ns` and namespace URI `http://com.example/some-namespace` come from the configuration.
 
 JSON -> XML conversion has some limitations
 * Consumer Gateway only understands a single namespace for the request element and it's children. 
 * Gateway can't produce XML attributes from the JSON source. 
-* It's not possible to produce XML with mixed content or elements, and element ordering is unspecified.
+* It's not possible to produce XML with mixed content or elements.
 * Gateway produces XML with unspecified child element ordering. 
-In the example, subject, attachment, messageId and text elements could appear in any order.
+
+In this example, subject, attachment, messageId and text elements could appear in any order.
 In short, current implementation can convert only relatively simple messages.
 
 ##### Using Consumer Gateway 
