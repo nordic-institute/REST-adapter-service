@@ -33,7 +33,7 @@
 
 This is Rest Adapter Service component that sits between X-Road security server and a REST client or service ([diagram](https://github.com/vrk-kpa/REST-adapter-service/raw/master/images/message-sequence_rest-gateway-0.0.4.png)). The component implements X-Road v4.0 [SOAP profile](https://confluence.csc.fi/download/attachments/50873043/X-Road_protocol_for_adapter_server_messaging_4.0.0.pdf) and it's compatible with X-Road v6.4 and above. 
 
-Rest Adapter has two parts: _Consumer Gateway_ and _Producer Gateway._ It is possible to use either only Consumer Gateway, only Producer Gateway, or both.
+Rest Adapter has two parts: _Consumer Gateway_ and _Provider Gateway._ It is possible to use either only Consumer Gateway, only Provider Gateway, or both.
 
 ![different adapter usage scenarios](../images/restgw-use-cases.png "Different adapter usage scenarios")
 
@@ -42,7 +42,7 @@ Rest Adapter has two parts: _Consumer Gateway_ and _Producer Gateway._ It is pos
   * when end to end encryption is needed
 * (B) using only Consumer Gateway
   * when the service is SOAP/XML, but a client needs to access it through REST/JSON
-* (C) using only Producer Gateway
+* (C) using only Provider Gateway
   * when a REST/JSON service needs to be published in X-Road for SOAP/XML clients
 
 The component is tested with X-Road v6.4 and it includes the following features:
