@@ -35,7 +35,7 @@ This is Rest Adapter Service component that sits between X-Road security server 
 
 Rest Adapter has two parts: _Consumer Gateway_ and _Producer Gateway._ It is possible to use either only Consumer Gateway, only Producer Gateway, or both.
 
-![different adapter usage scenarios](../restgw-use-cases.png "Different adapter usage scenarios")
+![different adapter usage scenarios](../images/restgw-use-cases.png "Different adapter usage scenarios")
 
 * (A) using both Consumer and Provider Gateways
   * when both the client and the server are REST/JSON, but the messages need to go through X-Road
