@@ -31,7 +31,21 @@
 
 ### Principle of Operation
 
-This is Rest Adapter Service component that sits between X-Road security server and a REST service ([diagram](https://github.com/vrk-kpa/REST-adapter-service/raw/master/images/message-sequence_rest-gateway-0.0.4.png)). The component implements X-Road v4.0 [SOAP profile](https://confluence.csc.fi/download/attachments/50873043/X-Road_protocol_for_adapter_server_messaging_4.0.0.pdf) and it's compatible with X-Road v6.4 and above. The component is tested with X-Road v6.4 and it includes the following features:
+This is Rest Adapter Service component that sits between X-Road security server and a REST client or service ([diagram](https://github.com/vrk-kpa/REST-adapter-service/raw/master/images/message-sequence_rest-gateway-0.0.4.png)). The component implements X-Road v4.0 [SOAP profile](https://confluence.csc.fi/download/attachments/50873043/X-Road_protocol_for_adapter_server_messaging_4.0.0.pdf) and it's compatible with X-Road v6.4 and above. 
+
+Rest Adapter has two parts: _Consumer Gateway_ and _Producer Gateway._ It is possible to use either only Consumer Gateway, only Producer Gateway, or both.
+
+![different adapter usage scenarios](../restgw-use-cases.png "Different adapter usage scenarios")
+
+* (A) using both Consumer and Provider Gateways
+  * when both the client and the server are REST/JSON, but the messages need to go through X-Road
+  * when end to end encryption is needed
+* (B) using only Consumer Gateway
+  * when the service is SOAP/XML, but a client needs to access it through REST/JSON
+* (C) using only Producer Gateway
+  * when a REST/JSON service needs to be published in X-Road for SOAP/XML clients
+
+The component is tested with X-Road v6.4 and it includes the following features:
 
 * **Provider Gateway** : access REST services (JSON, XML) via WSDL defined X-Road services
   * supported HTTP verbs: ```GET```, ```POST```, ```PUT``` and ```DELETE```
@@ -40,7 +54,7 @@ This is Rest Adapter Service component that sits between X-Road security server 
   * X-Road SOAP-headers are passed via HTTP headers (X-XRd-Client, X-XRd-Service, X-XRd-UserId, X-XRd-MessageId)
 * **Consumer Gateway** : access WSDL defined X-Road services in a RESTful manner
   * full support for services published through Provider Gateway
-  * limited support for legacy services (only services which requests don't contain nested elements - all the request parameters are ```request``` element's children)
+  * limited support for other SOAP/XML services. See [Consumer Gateway](#consumer-gateway) for details
   * supported HTTP verbs: ```GET```, ```POST```, ```PUT``` and ```DELETE```
   * reformatting of resource links
   * response's content type is given using Accept header (```text/xml```, ```application/json```)
@@ -52,6 +66,7 @@ This is Rest Adapter Service component that sits between X-Road security server 
 * automatic conversions: JSON -> XML, XML -> JSON, JSON-LD -> XML, XML -> JSON-LD
   * [Round-trip](http://en.wikipedia.org/wiki/Round-trip_format_conversion) JSON-XML-JSON conversion
   * support for JSON-LD
+  * JSON -> XML conversion (for requests and responses) produces XML with undefined child element ordering. If client or service is strict about ordering (maybe because it validates the messages against the schema), this may be a problem.
 * use of ```<request>``` / ```<response>``` wrapper tags can be configured for each service
   * service provider decides whether to use wrappers or not, consumer end must be configured accordingly
 * support for encryption/decryption of message content. More information and instructions for configuration can be found in [encryption documentation](Encryption.md).
@@ -59,11 +74,19 @@ This is Rest Adapter Service component that sits between X-Road security server 
 
 #### Consumer Gateway
 
-Consumer Gateway accepts HTTP GET, POST, PUT and DELETE requests, and it translates them to SOAP messages following the X-Road v6 SOAP profile. For example:
+Consumer Gateway accepts HTTP GET, POST, PUT and DELETE requests, and it translates them to SOAP messages following the X-Road v6 SOAP profile. 
+Gateway can produce flat XML elements (all children on same hierarchy level) from HTTP GET request,
+non-flat XML elements from HTTP POST requests containing JSON data,
+or write HTTP POST request body as-is into a SOAP attachment.
+
+For example this GET-request:
 
 ```
 [GET] http://www.example.com/rest-adapter-service/Consumer/www.restservice.com/id?param1=value1&param2=value2
 ```
+
+produces this request element (inside the X-Road SOAP envelope)
+
 ```
 <request>
     <resourceId>id</resourceId>
@@ -72,7 +95,16 @@ Consumer Gateway accepts HTTP GET, POST, PUT and DELETE requests, and it transla
 </request>
 ```
 
-If HTTP request (POST / PUT / DELETE) contains a request body, the body is passed as a SOAP attachment using the format in which it is received from the client. No conversions are applied to the request body, which means that the client must send the body in the format required by the service provider. An empty ```RESTGatewayRequestBody``` element is added to the SOAP request to indicate that the request body is passed as an attachment. For example:
+If HTTP request (POST / PUT / DELETE) contains a request body, there are two options:
+
+1. the body is passed unmodified as a SOAP attachment
+2. the body is converted to XML
+
+The choice depends on the `convertPost` configuration parameter.
+
+##### Sending the body as a SOAP attachment
+
+the body is passed as a SOAP attachment using the format in which it is received from the client. No conversions are applied to the request body, which means that the client must send the body in the format required by the service provider. An empty ```RESTGatewayRequestBody``` element is added to the SOAP request to indicate that the request body is passed as an attachment. For example:
 
 ```
 Content-Type: application/json
@@ -100,7 +132,57 @@ Content-ID: RESTGatewayRequestBody
 ------=_Part_1_1325547227.1416893406358--
 ```
 
- Response messages's content type is given using Accept header. Supported values are ```text/xml``` and ```application/json```. However, if Provider Gateway returns the response as SOAP attachment, the value of HTTP Accept header is ignored and the response is returned in its original format.
+##### Converting the body to XML
+
+```
+{   
+  "sender": "Some Name",
+  "message": {
+    "messageId": "12345678",
+    "subject": "some text",
+    "text": "more text",
+    "attachments": [
+      {
+        "attachmentId": "100",
+        "name": "attachment-1",
+        "mediaType": "application/pdf"
+      }
+    ]
+  }
+}
+```
+
+would be translated into e.g.
+
+```
+<some-ns:sendMessage xmlns:some-ns="http://com.example/some-namespace">
+    <some-ns:sender>Some Name</some-ns:sender>
+    <some-ns:message>
+        <some-ns:subject>some text</some-ns:subject>
+        <some-ns:attachments>
+            <some-ns:name>attachment-1</some-ns:name>
+            <some-ns:mediaType>application/pdf</some-ns:mediaType>
+            <some-ns:attachmentId>100</some-ns:attachmentId>
+        </some-ns:attachments>
+        <some-ns:messageId>12345678</some-ns:messageId>
+        <some-ns:text>more text</some-ns:text>
+    </some-ns:message>
+</some-ns:sendMessage>
+```
+
+Request element's name, namespace prefix and namespace URI are determined by the configuration.
+
+JSON -> XML conversion has some limitations
+* Consumer Gateway only understands a single namespace for the request element and it's children. 
+* Gateway can't produce XML attributes from the JSON source. 
+* It's not possible to produce XML with mixed content or elements, and element ordering is unspecified.
+* Gateway produces XML with unspecified child element ordering. 
+In the example, subject, attachment, messageId and text elements could appear in any order.
+In short, current implementation can convert only relatively simple messages.
+
+##### Using Consumer Gateway 
+
+Response messages's content type is given using Accept header. Supported values are ```text/xml``` and ```application/json```. However, if Provider Gateway returns the response as SOAP attachment, the value of HTTP Accept header is ignored and the response is returned in its original format.
 
 Consumer Gateway receives HTTP GET, POST, PUT and DELETE request from information system, converts the request to SOAP message, sends the SOAP message to the Security Server, receives the SOAP response from the security server, converts the response according to the value of the request's Accept header and returns the response to the information system. User id and message id that are required by X-Road can passed via HTTP headers (X-XRd-UserId, X-XRd-MessageId) or URL parameters. If X-XRd-UserId header is missing from the request, "anonymous" is set as user id. If X-XRd-MessageId is missing from the request, unique id is generated automatically. Both headers are included in the response message.
 
@@ -280,6 +362,12 @@ General settings are configured through ```WEB-INF/classes/consumer-gateway.prop
               <td>-</td>
               <td>Password of the private key.</td>
             </tr>				
+			<tr>
+              <td>convertPost</td>
+              <td></td>
+              <td>false</td>
+              <td>If true, POST requests are converted from JSON to XML and sent in the SOAP request inline. If false, POST requests are sent as SOAP attachments.</td>
+            </tr>
 	</tbody>
 </table>
 
@@ -359,6 +447,12 @@ Individual services are configured through ```WEB-INF/classes/consumers.properti
               <td>false</td>
               <td>If set to true, expects response to be encrypted. If value is true, all the settings related to encryption must be defined in consumer-gateway.properties file.</td>
             </tr>			
+			<tr>
+              <td>convertPost</td>
+              <td></td>
+              <td>false</td>
+              <td>If true, POST requests are converted from JSON to XML and sent in the SOAP request inline. If false, POST requests are sent as SOAP attachments. If defined, also overrides setting from consumer-gateway.properties.</td>
+            </tr>
 </tbody>
 </table>
 
