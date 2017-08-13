@@ -86,26 +86,10 @@ public class ConsumerGateway extends HttpServlet {
     private String publicKeyFilePassword;
     private int keyLength;
 
-    protected static class GatewayProperties {
-        private Properties endpointProps;
-        private Properties consumerGatewayProps;
-
-        public GatewayProperties(Properties endpointProps,
-                                 Properties consumerGatewayProps) {
-            this.endpointProps = endpointProps;
-            this.consumerGatewayProps = consumerGatewayProps;
-        }
-
-        public Properties getEndpointProps() {
-            return endpointProps;
-        }
-
-        public Properties getConsumerGatewayProps() {
-            return consumerGatewayProps;
-        }
-
-    }
-
+    /**
+     * Reads properties (overridden is tests)
+     * @return
+     */
     protected GatewayProperties readGatewayProperties() {
         logger.debug("Reading Consumer and ConsumerGateway properties");
         String propertiesDirectory = RESTGatewayUtil.getPropertiesDirectory();
@@ -132,7 +116,7 @@ public class ConsumerGateway extends HttpServlet {
         logger.debug("Setting Consumer and ConsumerGateway properties");
         String serviceCallsByXRdServiceIdStr = this.props.getProperty(Constants.CONSUMER_PROPS_SVC_CALLS_BY_XRD_SVC_ID_ENABLED);
         this.serviceCallsByXRdServiceId = serviceCallsByXRdServiceIdStr == null ? false : "true".equalsIgnoreCase(serviceCallsByXRdServiceIdStr);
-        logger.debug("Security server URL : \"{}\".", getSecurityServerUrl());
+        logger.debug("Security server URL : \"{}\".", props.getProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL));
         logger.debug("Default client id : \"{}\".", this.props.getProperty(Constants.CONSUMER_PROPS_ID_CLIENT));
         logger.debug("Default namespace for incoming ServiceResponses : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE));
         logger.debug("Default namespace for outgoing ServiceRequests : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE));
@@ -188,11 +172,7 @@ public class ConsumerGateway extends HttpServlet {
 
         if (resourcePath == null) {
             // No resource path was defined -> return 404
-            responseStr = this.generateError(Constants.ERROR_404, accept);
-            response.setStatus(404);
-            // Send response
-            this.writeResponse(response, responseStr);
-            // Quit processing
+            writeError404(response, accept);
             return;
         }
 
@@ -215,10 +195,7 @@ public class ConsumerGateway extends HttpServlet {
         // If endpoint is still null, return error message
         if (endpoint == null) {
             // No endpoint was found -> return 404
-            responseStr = this.generateError(Constants.ERROR_404, accept);
-            response.setStatus(404);
-            // Send response
-            this.writeResponse(response, responseStr);
+            writeError404(response, accept);
             // Quit processing
             return;
         }
@@ -244,9 +221,9 @@ public class ConsumerGateway extends HttpServlet {
             ServiceResponseDeserializer deserializer = getResponseDeserializer(endpoint, omitNamespace);
             // SOAP client that makes the service call
             SOAPClient client = new SOAPClientImpl();
-            logger.info("Send request ({}) to the security server. URL : \"{}\".", messageId, getSecurityServerUrl());
+            logger.info("Send request ({}) to the security server. URL : \"{}\".", messageId, props.getProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL));
             // Make the service call that returns the service response
-            ServiceResponse serviceResponse = client.send(serviceRequest, getSecurityServerUrl(), serializer, deserializer);
+            ServiceResponse serviceResponse = client.send(serviceRequest, props.getProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL), serializer, deserializer);
             logger.info("Received response ({}) from the security server.", messageId);
             // Set response wrapper processing
             if (endpoint.isProcessingWrappers() != null) {
@@ -274,6 +251,15 @@ public class ConsumerGateway extends HttpServlet {
 
         // Send response
         this.writeResponse(response, responseStr);
+    }
+
+    private void writeError404(HttpServletResponse response, String accept) {
+        String responseStr;
+        responseStr = this.generateError(Constants.ERROR_404, accept);
+        response.setStatus(404);
+        // Send response
+        this.writeResponse(response, responseStr);
+        // Quit processing
     }
 
     /**
@@ -921,30 +907,23 @@ public class ConsumerGateway extends HttpServlet {
         }
     }
 
+    protected static class GatewayProperties {
+        private Properties endpointProps;
+        private Properties consumerGatewayProps;
 
-    /**
-     * Override in tests - TODO: remove, not needed since we are
-     * overriding the properties anyway
-     * @return
-     */
-    String getSecurityServerUrl() {
-        return props.getProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL);
+        public GatewayProperties(Properties endpointProps,
+                                 Properties consumerGatewayProps) {
+            this.endpointProps = endpointProps;
+            this.consumerGatewayProps = consumerGatewayProps;
+        }
+
+        public Properties getEndpointProps() {
+            return endpointProps;
+        }
+
+        public Properties getConsumerGatewayProps() {
+            return consumerGatewayProps;
+        }
+
     }
-
-    /**
-     * For tests
-     * @param props
-     */
-    protected void setGatewayProperties(Properties props) {
-        this.props = props;
-    }
-
-    /**
-     * For tests
-     * @param endpoints
-     */
-    protected void setEndpoints(Map<String, ConsumerEndpoint> endpoints) {
-        this.endpoints = endpoints;
-    }
-
 }

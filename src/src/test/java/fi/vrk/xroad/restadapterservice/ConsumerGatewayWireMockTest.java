@@ -49,7 +49,7 @@ public class ConsumerGatewayWireMockTest extends TestCase {
 
     private static final Logger logger = LoggerFactory.getLogger(ConsumerGatewayWireMockTest.class);
 
-    WireMockServer wireMockServer;
+    private WireMockServer wireMockServer;
 
     private int wireMockPort;
 
