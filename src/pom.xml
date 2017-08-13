@@ -489,15 +489,6 @@
             <name>CSC's Maven repository</name>
             <url>https://maven.csc.fi/repository/internal/</url>
         </repository>
-        <!--<repository>-->
-            <!--<id>central</id>-->
-            <!--<name>Maven Repository Switchboard</name>-->
-            <!--<layout>default</layout>-->
-            <!--<url>http://repo1.maven.org/maven2</url>-->
-            <!--<snapshots>-->
-                <!--<enabled>false</enabled>-->
-            <!--</snapshots>-->
-        <!--</repository>-->
     </repositories>
     <reporting>
         <plugins>
