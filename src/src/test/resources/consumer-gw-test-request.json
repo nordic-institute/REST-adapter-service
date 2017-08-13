@@ -1,0 +1,15 @@
+{
+  "sender": "Some Name",
+  "message": {
+    "messageId": "12345678",
+    "subject": "some text",
+    "text": "more text",
+    "attachments": [
+      {
+        "attachmentId": "100",
+        "name": "attachment-1",
+        "mediaType": "application/pdf"
+      }
+    ]
+  }
+}

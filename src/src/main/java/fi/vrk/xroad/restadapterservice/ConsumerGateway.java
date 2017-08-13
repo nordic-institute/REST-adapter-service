@@ -86,24 +86,53 @@ public class ConsumerGateway extends HttpServlet {
     private String publicKeyFilePassword;
     private int keyLength;
 
+    protected static class GatewayProperties {
+        private Properties endpointProps;
+        private Properties consumerGatewayProps;
+
+        public GatewayProperties(Properties endpointProps,
+                                 Properties consumerGatewayProps) {
+            this.endpointProps = endpointProps;
+            this.consumerGatewayProps = consumerGatewayProps;
+        }
+
+        public Properties getEndpointProps() {
+            return endpointProps;
+        }
+
+        public Properties getConsumerGatewayProps() {
+            return consumerGatewayProps;
+        }
+
+    }
+
+    protected GatewayProperties readGatewayProperties() {
+        logger.debug("Reading Consumer and ConsumerGateway properties");
+        String propertiesDirectory = RESTGatewayUtil.getPropertiesDirectory();
+        Properties readEndpointProps;
+        Properties readConsumerGatewayProps;
+        if (propertiesDirectory != null) {
+            readEndpointProps = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_CONSUMERS, false);
+            readConsumerGatewayProps = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_CONSUMER_GATEWAY, false);
+        } else {
+            readEndpointProps = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_CONSUMERS);
+            readConsumerGatewayProps = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_CONSUMER_GATEWAY);
+        }
+        return new GatewayProperties(readEndpointProps, readConsumerGatewayProps);
+    }
+
     @Override
     public void init() throws ServletException {
         super.init();
         logger.debug("Starting to initialize Consumer REST Gateway.");
-        logger.debug("Reading Consumer and ConsumerGateway properties");
-        String propertiesDirectory = RESTGatewayUtil.getPropertiesDirectory();
-        Properties endpointProps;
-        if (propertiesDirectory != null) {
-            endpointProps = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_CONSUMERS, false);
-            this.props = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_CONSUMER_GATEWAY, false);
-        } else {
-            endpointProps = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_CONSUMERS);
-            this.props = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_CONSUMER_GATEWAY);
-        }
+        GatewayProperties gatewayProperties = readGatewayProperties();
+        this.props = gatewayProperties.getConsumerGatewayProps();
+        Properties endpointProps = gatewayProperties.getEndpointProps();
+
         logger.debug("Setting Consumer and ConsumerGateway properties");
         String serviceCallsByXRdServiceIdStr = this.props.getProperty(Constants.CONSUMER_PROPS_SVC_CALLS_BY_XRD_SVC_ID_ENABLED);
         this.serviceCallsByXRdServiceId = serviceCallsByXRdServiceIdStr == null ? false : "true".equalsIgnoreCase(serviceCallsByXRdServiceIdStr);
-        logger.debug("Security server URL : \"{}\".", this.props.getProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL));
+        logger.debug("Security server URL : \"{}\".", getSecurityServerUrl());
         logger.debug("Default client id : \"{}\".", this.props.getProperty(Constants.CONSUMER_PROPS_ID_CLIENT));
         logger.debug("Default namespace for incoming ServiceResponses : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE));
         logger.debug("Default namespace for outgoing ServiceRequests : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE));
@@ -215,9 +244,9 @@ public class ConsumerGateway extends HttpServlet {
             ServiceResponseDeserializer deserializer = getResponseDeserializer(endpoint, omitNamespace);
             // SOAP client that makes the service call
             SOAPClient client = new SOAPClientImpl();
-            logger.info("Send request ({}) to the security server. URL : \"{}\".", messageId, props.getProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL));
+            logger.info("Send request ({}) to the security server. URL : \"{}\".", messageId, getSecurityServerUrl());
             // Make the service call that returns the service response
-            ServiceResponse serviceResponse = client.send(serviceRequest, props.getProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL), serializer, deserializer);
+            ServiceResponse serviceResponse = client.send(serviceRequest, getSecurityServerUrl(), serializer, deserializer);
             logger.info("Received response ({}) from the security server.", messageId);
             // Set response wrapper processing
             if (endpoint.isProcessingWrappers() != null) {
@@ -891,4 +920,31 @@ public class ConsumerGateway extends HttpServlet {
             return SOAPHelper.toString(modifiedResponseNode);
         }
     }
+
+
+    /**
+     * Override in tests - TODO: remove, not needed since we are
+     * overriding the properties anyway
+     * @return
+     */
+    String getSecurityServerUrl() {
+        return props.getProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL);
+    }
+
+    /**
+     * For tests
+     * @param props
+     */
+    protected void setGatewayProperties(Properties props) {
+        this.props = props;
+    }
+
+    /**
+     * For tests
+     * @param endpoints
+     */
+    protected void setEndpoints(Map<String, ConsumerEndpoint> endpoints) {
+        this.endpoints = endpoints;
+    }
+
 }
