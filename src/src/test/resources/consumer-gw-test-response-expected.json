@@ -1,0 +1,9 @@
+{
+  "sender": "Some Name",
+  "result": {
+    "code": "OK",
+    "child": {
+      "someText": "some text"
+    }
+  }
+}

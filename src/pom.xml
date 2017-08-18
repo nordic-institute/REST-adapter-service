@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fi.vrk</groupId>
     <artifactId>rest-adapter-service</artifactId>
-    <version>0.0.11-SNAPSHOT</version>
+    <version>0.0.12-SNAPSHOT</version>
     <name>REST Adapter Service</name>
     <description>
         REST Adapter Service component translates between X-Road and REST protocols. X-Road versions 6.4 and above are supported.
@@ -21,6 +21,7 @@
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <app.home>/var/lib/tomcat/webapps</app.home>
+        <wiremock.server.port>7777</wiremock.server.port>
     </properties>
     <dependencies>
         <dependency>
@@ -43,6 +44,7 @@
             <artifactId>rest</artifactId>
             <version>${xrd4j.version}</version>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -76,6 +78,44 @@
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <!-- spring 4 dropped support for servlet 2.5 -->
+            <version>3.2.18.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>1.58</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.skyscreamer/jsonassert -->
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
+            <version>1.5.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-core</artifactId>
+            <version>2.2.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-matchers</artifactId>
+            <version>2.2.1</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
     <licenses>
         <license>
@@ -147,6 +187,10 @@
                         <property>
                             <name>log4j.configuration</name>
                             <value>test-log4j.xml</value>
+                        </property>
+                        <property>
+                            <name>wiremock.server.port</name>
+                            <value>${wiremock.server.port}</value>
                         </property>
                     </systemProperties>
                 </configuration>

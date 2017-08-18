@@ -1,0 +1,39 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+                   xmlns:xro="http://x-road.eu/xsd/xroad.xsd"
+                   xmlns:iden="http://x-road.eu/xsd/identifiers"
+                   >
+    <SOAP-ENV:Header>
+        <xro:protocolVersion>4.0</xro:protocolVersion>
+        <xro:id>predefined-message-id</xro:id>
+        <xro:userId>anonymous</xro:userId>
+        <xro:service iden:objectType="SERVICE" >
+            <iden:xRoadInstance>FI</iden:xRoadInstance>
+            <iden:memberClass>GOV</iden:memberClass>
+            <iden:memberCode>1002</iden:memberCode>
+            <iden:subsystemCode>SS1</iden:subsystemCode>
+            <iden:serviceCode>sendMessage</iden:serviceCode>
+            <iden:serviceVersion>v1</iden:serviceVersion>
+        </xro:service>
+        <xro:client iden:objectType="SUBSYSTEM" >
+            <iden:xRoadInstance>FI</iden:xRoadInstance>
+            <iden:memberClass>GOV</iden:memberClass>
+            <iden:memberCode>1945065-0</iden:memberCode>
+            <iden:subsystemCode>REST-GW-CONSUMERS</iden:subsystemCode>
+        </xro:client>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body>
+        <some-ns:sendMessage xmlns:some-ns="http://com.example/some-namespace">
+            <some-ns:sender>Some Name</some-ns:sender>
+            <some-ns:message>
+                <some-ns:messageId>12345678</some-ns:messageId>
+                <some-ns:subject>some text</some-ns:subject>
+                <some-ns:text>more text</some-ns:text>
+                <some-ns:attachments>
+                    <some-ns:attachmentId>100</some-ns:attachmentId>
+                    <some-ns:name>attachment-1</some-ns:name>
+                    <some-ns:mediaType>application/pdf</some-ns:mediaType>
+                </some-ns:attachments>
+            </some-ns:message>
+        </some-ns:sendMessage>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

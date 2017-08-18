@@ -22,6 +22,7 @@
  */
 package fi.vrk.xroad.restadapterservice;
 
+import com.pkrete.xrd4j.rest.converter.JSONToXMLConverter;
 import fi.vrk.xroad.restadapterservice.endpoint.ConsumerEndpoint;
 import fi.vrk.xroad.restadapterservice.util.Constants;
 import fi.vrk.xroad.restadapterservice.util.ConsumerGatewayUtil;
@@ -85,24 +86,37 @@ public class ConsumerGateway extends HttpServlet {
     private String publicKeyFilePassword;
     private int keyLength;
 
+    /**
+     * Reads properties (overridden is tests)
+     * @return
+     */
+    protected GatewayProperties readGatewayProperties() {
+        logger.debug("Reading Consumer and ConsumerGateway properties");
+        String propertiesDirectory = RESTGatewayUtil.getPropertiesDirectory();
+        Properties readEndpointProps;
+        Properties readConsumerGatewayProps;
+        if (propertiesDirectory != null) {
+            readEndpointProps = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_CONSUMERS, false);
+            readConsumerGatewayProps = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_CONSUMER_GATEWAY, false);
+        } else {
+            readEndpointProps = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_CONSUMERS);
+            readConsumerGatewayProps = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_CONSUMER_GATEWAY);
+        }
+        return new GatewayProperties(readEndpointProps, readConsumerGatewayProps);
+    }
+
     @Override
     public void init() throws ServletException {
         super.init();
         logger.debug("Starting to initialize Consumer REST Gateway.");
-        logger.debug("Reading Consumer and ConsumerGateway properties");
-        String propertiesDirectory = RESTGatewayUtil.getPropertiesDirectory();
-        Properties endpointProps;
-        if (propertiesDirectory != null) {
-            endpointProps = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_CONSUMERS, false);
-            this.props = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_CONSUMER_GATEWAY, false);
-        } else {
-            endpointProps = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_CONSUMERS);
-            this.props = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_CONSUMER_GATEWAY);
-        }
+        GatewayProperties gatewayProperties = readGatewayProperties();
+        this.props = gatewayProperties.getConsumerGatewayProps();
+        Properties endpointProps = gatewayProperties.getEndpointProps();
+
         logger.debug("Setting Consumer and ConsumerGateway properties");
         String serviceCallsByXRdServiceIdStr = this.props.getProperty(Constants.CONSUMER_PROPS_SVC_CALLS_BY_XRD_SVC_ID_ENABLED);
         this.serviceCallsByXRdServiceId = serviceCallsByXRdServiceIdStr == null ? false : "true".equalsIgnoreCase(serviceCallsByXRdServiceIdStr);
-        logger.debug("Security server URL : \"{}\".", this.props.getProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL));
+        logger.debug("Security server URL : \"{}\".", props.getProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL));
         logger.debug("Default client id : \"{}\".", this.props.getProperty(Constants.CONSUMER_PROPS_ID_CLIENT));
         logger.debug("Default namespace for incoming ServiceResponses : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE));
         logger.debug("Default namespace for outgoing ServiceRequests : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE));
@@ -158,11 +172,7 @@ public class ConsumerGateway extends HttpServlet {
 
         if (resourcePath == null) {
             // No resource path was defined -> return 404
-            responseStr = this.generateError(Constants.ERROR_404, accept);
-            response.setStatus(404);
-            // Send response
-            this.writeResponse(response, responseStr);
-            // Quit processing
+            writeError404(response, accept);
             return;
         }
 
@@ -185,10 +195,7 @@ public class ConsumerGateway extends HttpServlet {
         // If endpoint is still null, return error message
         if (endpoint == null) {
             // No endpoint was found -> return 404
-            responseStr = this.generateError(Constants.ERROR_404, accept);
-            response.setStatus(404);
-            // Send response
-            this.writeResponse(response, responseStr);
+            writeError404(response, accept);
             // Quit processing
             return;
         }
@@ -246,6 +253,15 @@ public class ConsumerGateway extends HttpServlet {
         this.writeResponse(response, responseStr);
     }
 
+    private void writeError404(HttpServletResponse response, String accept) {
+        String responseStr;
+        responseStr = this.generateError(Constants.ERROR_404, accept);
+        response.setStatus(404);
+        // Send response
+        this.writeResponse(response, responseStr);
+        // Quit processing
+    }
+
     /**
      * Returns a new ServiceRequestSerializer that converts the request to SOAP.
      * The implementation of the ServiceRequestSerializer is decided based on
@@ -278,9 +294,9 @@ public class ConsumerGateway extends HttpServlet {
             if (asymmetricEncrypter == null) {
                 throw new XRd4JException("No public key found when encryption is required.");
             }
-            return new EncryptingRequestSerializer(endpoint.getResourceId(), requestBody, contentType, asymmetricEncrypter, this.keyLength);
+            return new EncryptingRequestSerializer(endpoint.getResourceId(), requestBody, contentType, asymmetricEncrypter, this.keyLength, endpoint.isConvertPost());
         } else {
-            return new RequestSerializer(endpoint.getResourceId(), requestBody, contentType);
+            return new RequestSerializer(endpoint.getResourceId(), requestBody, contentType, endpoint.isConvertPost());
         }
     }
 
@@ -658,23 +674,61 @@ public class ConsumerGateway extends HttpServlet {
         protected final String resourceId;
         protected final String requestBody;
         protected final String contentType;
+        protected final boolean convertPost;
 
-        public RequestSerializer(String resourceId, String requestBody, String contentType) {
+        public RequestSerializer(String resourceId, String requestBody, String contentType, boolean convertPost) {
             this.resourceId = resourceId;
             this.requestBody = requestBody;
             this.contentType = contentType;
+            this.convertPost = convertPost;
             logger.debug("New RequestSerializer created.");
         }
 
         @Override
         protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
-            handleBody(request, soapRequest);
+            writeGetParametersToBody(request, soapRequest);
             if (this.requestBody != null && !this.requestBody.isEmpty()) {
-                handleAttachment(request, soapRequest, envelope, this.requestBody);
+                if (convertPost) {
+                    convertJsonToXmlAndWriteToSoap(this.requestBody, soapRequest);
+                } else {
+                    // send HTTP POST as an attachment
+                    handleAttachment(request, soapRequest, envelope, this.requestBody);
+                }
             }
         }
 
-        protected void handleBody(ServiceRequest request, SOAPElement soapRequest) throws SOAPException {
+        /**
+         * Takes a JSON string, converts it to XML,
+         * and writes the result as a request element in
+         * output SOAP element body
+         * @param json
+         * @param outputSoapRequest
+         * @throws SOAPException
+         */
+        void convertJsonToXmlAndWriteToSoap(String json, SOAPElement outputSoapRequest) throws SOAPException {
+            logger.debug("converting json: {}", json);
+            // create a json wrapper root property
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("{ \"jsonWrapperProperty\": ");
+            buffer.append(json);
+            buffer.append("}");
+            String wrapped = buffer.toString();
+            String converted = new JSONToXMLConverter().convert(wrapped);
+            if (converted == null || converted.equals("")) {
+                throw new SOAPException("could not convert http body from json to xml");
+            }
+            logger.debug("converted json as xml: {}", converted);
+            SOAPElement convertedElement = SOAPHelper.xmlStrToSOAPElement(converted);
+            SOAPHelper.moveChildren(convertedElement, outputSoapRequest,true);
+        }
+
+        /**
+         * Copies resourceId and GET params (if any) coming from the GET URL to the SOAP request body
+         * @param request
+         * @param soapRequest
+         * @throws SOAPException
+         */
+        protected void writeGetParametersToBody(ServiceRequest request, SOAPElement soapRequest) throws SOAPException {
             if (this.resourceId != null && !this.resourceId.isEmpty()) {
                 logger.debug("Add resourceId : \"{}\".", this.resourceId);
                 soapRequest.addChildElement("resourceId").addTextNode(this.resourceId);
@@ -706,8 +760,9 @@ public class ConsumerGateway extends HttpServlet {
         private final Encrypter asymmetricEncrypter;
         private final int keyLength;
 
-        public EncryptingRequestSerializer(String resourceId, String requestBody, String contentType, Encrypter asymmetricEncrypter, int keyLength) {
-            super(resourceId, requestBody, contentType);
+        public EncryptingRequestSerializer(String resourceId, String requestBody, String contentType,
+                                           Encrypter asymmetricEncrypter, int keyLength, boolean convertPost) {
+            super(resourceId, requestBody, contentType, convertPost);
             this.asymmetricEncrypter = asymmetricEncrypter;
             this.keyLength = keyLength;
             logger.debug("New EncryptingRequestSerializer created.");
@@ -720,10 +775,15 @@ public class ConsumerGateway extends HttpServlet {
                 // Create new symmetric encrypter using of defined key length
                 Encrypter symmetricEncrypter = RESTGatewayUtil.createSymmetricEncrypter(this.keyLength);
                 // Process request parameters
-                handleBody(request, payload);
+                writeGetParametersToBody(request, payload);
                 // Process request body
                 if (this.requestBody != null && !this.requestBody.isEmpty()) {
-                    handleAttachment(request, payload, envelope, symmetricEncrypter.encrypt(this.requestBody));
+                    if (convertPost) {
+                        convertJsonToXmlAndWriteToSoap(this.requestBody, soapRequest);
+                    } else {
+                        // send HTTP POST as an attachment
+                        handleAttachment(request, payload, envelope, symmetricEncrypter.encrypt(this.requestBody));
+                    }
                 }
                 // Encrypt message with symmetric AES encryption
                 String encryptedData = symmetricEncrypter.encrypt(SOAPHelper.toString(payload));
@@ -845,5 +905,25 @@ public class ConsumerGateway extends HttpServlet {
             // Return the response
             return SOAPHelper.toString(modifiedResponseNode);
         }
+    }
+
+    protected static class GatewayProperties {
+        private Properties endpointProps;
+        private Properties consumerGatewayProps;
+
+        public GatewayProperties(Properties endpointProps,
+                                 Properties consumerGatewayProps) {
+            this.endpointProps = endpointProps;
+            this.consumerGatewayProps = consumerGatewayProps;
+        }
+
+        public Properties getEndpointProps() {
+            return endpointProps;
+        }
+
+        public Properties getConsumerGatewayProps() {
+            return consumerGatewayProps;
+        }
+
     }
 }

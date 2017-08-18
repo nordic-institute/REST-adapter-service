@@ -1,0 +1,35 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+                   xmlns:xro="http://x-road.eu/xsd/xroad.xsd"
+                   xmlns:iden="http://x-road.eu/xsd/identifiers"
+                   >
+    <SOAP-ENV:Header>
+        <xro:protocolVersion>?</xro:protocolVersion>
+        <xro:id>1</xro:id>
+        <xro:userId>1</xro:userId>
+        <xro:service iden:objectType="SERVICE" >
+            <iden:xRoadInstance>1</iden:xRoadInstance>
+            <iden:memberClass>1</iden:memberClass>
+            <iden:memberCode>1</iden:memberCode>
+            <iden:subsystemCode>1</iden:subsystemCode>
+            <iden:serviceCode>sendMessage</iden:serviceCode>
+            <iden:serviceVersion>1</iden:serviceVersion>
+        </xro:service>
+        <xro:client iden:objectType="SUBSYSTEM" >
+            <iden:xRoadInstance>1</iden:xRoadInstance>
+            <iden:memberClass>1</iden:memberClass>
+            <iden:memberCode>1</iden:memberCode>
+            <iden:subsystemCode>1</iden:subsystemCode>
+        </xro:client>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body>
+        <some-ns:sendMessageResponse xmlns:some-ns="http://com.example/some-namespace">
+            <some-ns:sender>Some Name</some-ns:sender>
+            <some-ns:result>
+                <some-ns:code>OK</some-ns:code>
+                <some-ns:child>
+                    <some-ns:someText>some text</some-ns:someText>
+                </some-ns:child>
+            </some-ns:result>
+        </some-ns:sendMessageResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

@@ -75,6 +75,12 @@ public class ConsumerEndpoint extends AbstractEndpoint {
     private boolean modifyUrl;
 
     /**
+     * Boolean value that indicates if request body (if any) should
+     * be converted from JSON to XML.
+     */
+    private boolean convertPost;
+
+    /**
      * Constructs and initializes a new ProviderEndpoint object.
      * @param serviceId unique ID of the service to be called
      * @param clientId client id of this ConsumerEndpoint
@@ -183,5 +189,13 @@ public class ConsumerEndpoint extends AbstractEndpoint {
      */
     public void setModifyUrl(boolean modifyUrl) {
         this.modifyUrl = modifyUrl;
+    }
+
+    public boolean isConvertPost() {
+        return convertPost;
+    }
+
+    public void setConvertPost(boolean convertPost) {
+        this.convertPost = convertPost;
     }
 }
