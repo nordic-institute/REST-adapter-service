@@ -22,7 +22,7 @@
 #
 #
 Package: rest-adapter-service
-Version: 0.0.12
+Version: 0.0.12-0.1
 Section: misc
 Priority: optional
 Architecture: all
