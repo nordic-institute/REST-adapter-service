@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fi.vrk</groupId>
     <artifactId>rest-adapter-service</artifactId>
-    <version>0.0.13.1-SNAPSHOT</version>
+    <version>0.0.13.2-SNAPSHOT</version>
     <name>REST Adapter Service</name>
     <description>
         REST Adapter Service component translates between X-Road and REST protocols. X-Road versions 6.4 and above are supported.
