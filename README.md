@@ -1,4 +1,4 @@
-# Joint X-Road Rest Adapter Service development 
+# Joint X-Road Rest Adapter Service development  
  
 This repository will be the home of REST/JSON support solutions for [X-Road](https://github.com/ria-ee/X-Road). Mandate for joint development is based on [MoU which was signed by Katainen and Ansip](https://github.com/vrk-kpa/REST-adapter-service/blob/master/MoU-Ansip-Katainen.md). The development and repository is shared between Estonia and Finland. Below is list of people who initiated the co-operation in Skype meeting which was held 18.12.2014.
 
