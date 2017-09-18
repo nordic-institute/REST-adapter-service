@@ -28,6 +28,6 @@ Priority: optional
 Architecture: all
 Depends: jdk (>= 1.7)
 Maintainer: Ilkka Seppälä <ilkka.seppala@gofore.com>
-Description: REST Adapter Service
+Description: rest-adapter-service
 Distribution: development
 Depends: tomcat7
