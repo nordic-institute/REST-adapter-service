@@ -21,13 +21,13 @@
 # THE SOFTWARE.
 #
 #
-Package: [[name]]
+Package: rest-adapter-service
 Version: [[version]]
 Section: misc
 Priority: optional
 Architecture: all
 Depends: jdk (>= 1.7)
 Maintainer: Ilkka Seppälä <ilkka.seppala@gofore.com>
-Description: rest-adapter-service
+Description: REST Adapter Service
 Distribution: development
 Depends: tomcat7
