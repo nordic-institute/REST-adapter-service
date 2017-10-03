@@ -25,29 +25,20 @@ package fi.vrk.xroad.restadapterservice;
 import fi.vrk.xroad.restadapterservice.filter.ConsumerURIFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.DispatcherType;
 import java.util.Arrays;
 import java.util.EnumSet;
 
-@RestController
-@EnableAutoConfiguration
 @Configuration
 @Slf4j
+@SpringBootApplication
 public class Application {
-
-    @RequestMapping("/hello")
-    String home() {
-        return "Hello World!";
-    }
-
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Application.class, args);
     }
