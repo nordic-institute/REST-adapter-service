@@ -30,6 +30,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,21 +43,21 @@ import org.slf4j.LoggerFactory;
  *
  * @author Petteri Kivimäki
  */
+@Slf4j
 public class ConsumerURIFilter implements Filter {
-
-    private static final Logger logger = LoggerFactory.getLogger(ConsumerURIFilter.class);
 
     @Override
     public void init(FilterConfig fc) throws ServletException {
-        logger.info("Consumer URI filter initialized.");
+        log.info("Consumer URI filter initialized.");
     }
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain fc) throws IOException, ServletException {
+        log.info("***** filter processing request");
         HttpServletRequest request = (HttpServletRequest) req;
         String servletName = "Consumer";
         String oldURI = request.getRequestURI().substring(request.getContextPath().length() + 1);
-        logger.debug("Incoming request : \"{}\"", oldURI);
+        log.debug("Incoming request : \"{}\"", oldURI);
 
         if (oldURI.length() > servletName.length()) {
             String resourcePath = oldURI.substring(oldURI.indexOf('/'));
@@ -64,13 +66,13 @@ public class ConsumerURIFilter implements Filter {
                 if (!resourcePath.endsWith("/")) {
                     resourcePath += "/";
                 }
-                logger.debug("Resource path : \"{}\"", resourcePath);
+                log.debug("Resource path : \"{}\"", resourcePath);
                 request.setAttribute("resourcePath", resourcePath);
             } else {
-                logger.trace("Found resource path \"{}\" is not valid.", resourcePath);
+                log.trace("Found resource path \"{}\" is not valid.", resourcePath);
             }
         } else {
-            logger.trace("No resource path found.");
+            log.trace("No resource path found.");
         }
         req.getRequestDispatcher("Consumer").forward(req, res);
     }
