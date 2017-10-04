@@ -117,6 +117,8 @@ public class ProviderGateway extends AbstractAdapterServlet {
     protected String getWSDLPath() {
         String path = this.props.getProperty("wsdl.path");
         logger.debug("WSDL path : \"" + path + "\".");
+        String debugPath = this.getServletContext().getRealPath("/WEB-INF/classes/") + "/" + path;
+        logger.info("saying that wsdl is actually in path {}", debugPath);
         return path;
     }
 
