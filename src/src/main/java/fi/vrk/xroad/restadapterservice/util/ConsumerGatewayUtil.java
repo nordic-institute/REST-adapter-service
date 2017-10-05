@@ -22,12 +22,12 @@
  */
 package fi.vrk.xroad.restadapterservice.util;
 
-import com.pkrete.xrd4j.common.member.ConsumerMember;
-import com.pkrete.xrd4j.common.member.ProducerMember;
-import com.pkrete.xrd4j.common.util.ConfigurationHelper;
-import com.pkrete.xrd4j.common.util.MessageHelper;
+import fi.vrk.xrd4j.common.member.ConsumerMember;
+import fi.vrk.xrd4j.common.member.ProducerMember;
+import fi.vrk.xrd4j.common.util.ConfigurationHelper;
+import fi.vrk.xrd4j.common.util.MessageHelper;
 import fi.vrk.xroad.restadapterservice.endpoint.ConsumerEndpoint;
-import com.pkrete.xrd4j.common.security.Encrypter;
+import fi.vrk.xrd4j.common.security.Encrypter;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;

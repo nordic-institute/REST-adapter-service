@@ -23,14 +23,14 @@
 package fi.vrk.xroad.restadapterservice.util;
 
 import fi.vrk.xroad.restadapterservice.endpoint.AbstractEndpoint;
-import com.pkrete.xrd4j.common.security.AsymmetricDecrypter;
-import com.pkrete.xrd4j.common.security.AsymmetricEncrypter;
-import com.pkrete.xrd4j.common.security.CryptoHelper;
-import com.pkrete.xrd4j.common.security.Decrypter;
-import com.pkrete.xrd4j.common.security.Encrypter;
-import com.pkrete.xrd4j.common.security.SymmetricDecrypter;
-import com.pkrete.xrd4j.common.security.SymmetricEncrypter;
-import com.pkrete.xrd4j.common.util.MessageHelper;
+import fi.vrk.xrd4j.common.security.AsymmetricDecrypter;
+import fi.vrk.xrd4j.common.security.AsymmetricEncrypter;
+import fi.vrk.xrd4j.common.security.CryptoHelper;
+import fi.vrk.xrd4j.common.security.Decrypter;
+import fi.vrk.xrd4j.common.security.Encrypter;
+import fi.vrk.xrd4j.common.security.SymmetricDecrypter;
+import fi.vrk.xrd4j.common.security.SymmetricEncrypter;
+import fi.vrk.xrd4j.common.util.MessageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

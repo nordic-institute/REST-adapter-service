@@ -22,8 +22,8 @@
  */
 package fi.vrk.xroad.restadapterservice.endpoint;
 
-import com.pkrete.xrd4j.common.member.ConsumerMember;
-import com.pkrete.xrd4j.common.member.ProducerMember;
+import fi.vrk.xrd4j.common.member.ConsumerMember;
+import fi.vrk.xrd4j.common.member.ProducerMember;
 
 /**
  * This class represents consumer endpoint and holds all the information that

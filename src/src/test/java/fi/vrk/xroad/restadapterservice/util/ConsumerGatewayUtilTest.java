@@ -22,10 +22,10 @@
  */
 package fi.vrk.xroad.restadapterservice.util;
 
-import com.pkrete.xrd4j.common.exception.XRd4JException;
-import com.pkrete.xrd4j.common.member.ConsumerMember;
-import com.pkrete.xrd4j.common.member.ProducerMember;
-import com.pkrete.xrd4j.common.util.SOAPHelper;
+import fi.vrk.xrd4j.common.exception.XRd4JException;
+import fi.vrk.xrd4j.common.member.ConsumerMember;
+import fi.vrk.xrd4j.common.member.ProducerMember;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
 import fi.vrk.xroad.restadapterservice.endpoint.ConsumerEndpoint;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;

@@ -22,11 +22,11 @@
  */
 package fi.vrk.xroad.restadapterservice.util;
 
-import com.pkrete.xrd4j.common.message.ServiceRequest;
-import com.pkrete.xrd4j.common.util.MessageHelper;
-import com.pkrete.xrd4j.rest.converter.JSONToXMLConverter;
+import fi.vrk.xrd4j.common.message.ServiceRequest;
+import fi.vrk.xrd4j.common.util.MessageHelper;
+import fi.vrk.xrd4j.rest.converter.JSONToXMLConverter;
 import fi.vrk.xroad.restadapterservice.endpoint.ProviderEndpoint;
-import com.pkrete.xrd4j.common.security.Decrypter;
+import fi.vrk.xrd4j.common.security.Decrypter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

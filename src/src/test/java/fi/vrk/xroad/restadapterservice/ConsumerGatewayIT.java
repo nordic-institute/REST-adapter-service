@@ -23,9 +23,9 @@
 package fi.vrk.xroad.restadapterservice;
 
 import fi.vrk.xroad.restadapterservice.util.Constants;
-import com.pkrete.xrd4j.rest.ClientResponse;
-import com.pkrete.xrd4j.rest.client.RESTClient;
-import com.pkrete.xrd4j.rest.client.RESTClientFactory;
+import fi.vrk.xrd4j.rest.ClientResponse;
+import fi.vrk.xrd4j.rest.client.RESTClient;
+import fi.vrk.xrd4j.rest.client.RESTClientFactory;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -22,10 +22,10 @@
  */
 package fi.vrk.xroad.restadapterservice.util;
 
-import com.pkrete.xrd4j.common.exception.XRd4JException;
-import com.pkrete.xrd4j.common.member.ConsumerMember;
-import com.pkrete.xrd4j.common.member.ProducerMember;
-import com.pkrete.xrd4j.common.message.ServiceRequest;
+import fi.vrk.xrd4j.common.exception.XRd4JException;
+import fi.vrk.xrd4j.common.member.ConsumerMember;
+import fi.vrk.xrd4j.common.member.ProducerMember;
+import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xroad.restadapterservice.endpoint.ProviderEndpoint;
 import java.util.Map;
 import java.util.Properties;
@@ -173,7 +173,7 @@ public class ProviderGatewayUtilTest extends TestCase {
     /**
      * Test generation of HTTP headers. Only X-Road headers.
      *
-     * @throws com.pkrete.xrd4j.common.exception.XRd4JException
+     * @throws fi.vrk.xrd4j.common.exception.XRd4JException
      */
     public void testGenerateHtmlHeaders1() throws XRd4JException {
         ConsumerMember consumer = new ConsumerMember("FI_PILOT", "GOV", "0245437-2", "ConsumerService");
@@ -192,7 +192,7 @@ public class ProviderGatewayUtilTest extends TestCase {
     /**
      * Test generation of HTTP headers. No X-Road headers.
      *
-     * @throws com.pkrete.xrd4j.common.exception.XRd4JException
+     * @throws fi.vrk.xrd4j.common.exception.XRd4JException
      */
     public void testGenerateHtmlHeaders2() throws XRd4JException {
         ConsumerMember consumer = new ConsumerMember("FI_PILOT", "GOV", "0245437-2", "ConsumerService");
