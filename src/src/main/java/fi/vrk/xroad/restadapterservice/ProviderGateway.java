@@ -42,6 +42,7 @@ import fi.vrk.xrd4j.server.deserializer.AbstractCustomRequestDeserializer;
 import fi.vrk.xrd4j.server.deserializer.CustomRequestDeserializer;
 import fi.vrk.xrd4j.server.serializer.AbstractServiceResponseSerializer;
 import fi.vrk.xrd4j.server.serializer.ServiceResponseSerializer;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,11 +68,11 @@ import java.util.Properties;
  *
  * @author Petteri Kivimäki
  */
+@Slf4j
 public class ProviderGateway extends AbstractAdapterServlet {
 
     private Properties props;
     private Map<String, ProviderEndpoint> endpoints;
-    private static final Logger logger = LoggerFactory.getLogger(ProviderGateway.class);
     private Decrypter asymmetricDecrypter;
     private final Map<String, Encrypter> asymmetricEncrypterCache = new HashMap<>();
     private int keyLength;
@@ -81,8 +82,8 @@ public class ProviderGateway extends AbstractAdapterServlet {
     @Override
     public void init() {
         super.init();
-        logger.debug("Starting to initialize Provider REST Gateway.");
-        logger.debug("Reading Provider and ProviderGateway properties");
+        log.debug("Starting to initialize Provider REST Gateway.");
+        log.debug("Reading Provider and ProviderGateway properties");
         String propertiesDirectory = RESTGatewayUtil.getPropertiesDirectory();
         Properties endpointProps;
         if (propertiesDirectory != null) {
@@ -92,20 +93,20 @@ public class ProviderGateway extends AbstractAdapterServlet {
             this.props = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_PROVIDER_GATEWAY);
             endpointProps = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_PROVIDERS);
         }
-        logger.debug("Default namespace for incoming ServiceRequests : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE));
-        logger.debug("Default namespace for outgoing ServiceResponses : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE));
-        logger.debug("Default namespace prefix for outgoing ServiceResponses : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE));
+        log.debug("Default namespace for incoming ServiceRequests : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE));
+        log.debug("Default namespace for outgoing ServiceResponses : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE));
+        log.debug("Default namespace prefix for outgoing ServiceResponses : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE));
         this.publicKeyFile = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE);
         this.publicKeyFilePassword = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE_PASSWORD);
         this.keyLength = RESTGatewayUtil.getKeyLength(props);
-        logger.debug("Symmetric key length : \"{}\".", this.keyLength);
-        logger.debug("Setting Provider and ProviderGateway properties");
+        log.debug("Symmetric key length : \"{}\".", this.keyLength);
+        log.debug("Setting Provider and ProviderGateway properties");
         this.endpoints = ProviderGatewayUtil.extractProviders(endpointProps, this.props);
         // Check encryption properties
         if (ProviderGatewayUtil.checkPrivateKeyProperties(props, endpoints)) {
             this.asymmetricDecrypter = RESTGatewayUtil.checkPrivateKey(props);
         }
-        logger.debug("Provider REST Gateway initialized.");
+        log.debug("Provider REST Gateway initialized.");
     }
 
     /**
@@ -116,7 +117,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
     @Override
     protected String getWSDLPath() {
         String path = this.props.getProperty("wsdl.path");
-        logger.debug("WSDL path : \"" + path + "\".");
+        log.debug("WSDL path : \"" + path + "\".");
         return path;
     }
 
@@ -135,13 +136,13 @@ public class ProviderGateway extends AbstractAdapterServlet {
 
         // Check if an endpoint that matches the given service ID exists
         if (!this.endpoints.containsKey(serviceId)) {
-            logger.warn("No endpoint matching the given service id found: \"{}\".", serviceId);
+            log.warn("No endpoint matching the given service id found: \"{}\".", serviceId);
             return response;
         }
 
         // Get the endpoint
         ProviderEndpoint endpoint = this.endpoints.get(serviceId);
-        logger.info("Process \"{}\" service.", serviceId);
+        log.info("Process \"{}\" service.", serviceId);
 
         // Set request and response wrapper processing
         if (endpoint.isProcessingWrappers() != null) {
@@ -156,13 +157,13 @@ public class ProviderGateway extends AbstractAdapterServlet {
         // Set producer namespace URI and prefix before processing
         response.getProducer().setNamespaceUrl(endpoint.getNamespaceSerialize());
         response.getProducer().setNamespacePrefix(endpoint.getPrefix());
-        logger.debug("Do message processing...");
+        log.debug("Do message processing...");
 
         // Create response serializer
         ServiceResponseSerializer serializer = getResponseSerializer(endpoint, request.getConsumer().toString());
 
         if (request.getRequestData() == null) {
-            logger.warn("No request data was found. Return a non-techinal error message.");
+            log.warn("No request data was found. Return a non-techinal error message.");
             ErrorMessage error = new ErrorMessage("422", Constants.ERROR_422);
             response.setErrorMessage(error);
             serializer.serialize(response, request);
@@ -174,7 +175,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
 
         // Get HTTP headers for the request
         Map<String, String> headers = ProviderGatewayUtil.generateHttpHeaders(request, endpoint);
-        logger.debug("Fetch data from service...");
+        log.debug("Fetch data from service...");
         // Create a REST client, endpoint's HTTP verb defines the type
         // of the client that's returned
         RESTClient restClient = RESTClientFactory.createRESTClient(endpoint.getHttpVerb());
@@ -182,7 +183,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
         String requestBody = ProviderGatewayUtil.getRequestBody((Map<String, List<String>>) request.getRequestData());
         // Send request to the service endpoint
         ClientResponse restResponse = restClient.send(endpoint.getUrl(), requestBody, (Map<String, List<String>>) request.getRequestData(), headers);
-        logger.debug("...done!");
+        log.debug("...done!");
 
         String data = restResponse.getData();
         String contentType = restResponse.getContentType();
@@ -190,12 +191,12 @@ public class ProviderGateway extends AbstractAdapterServlet {
         // Content-type must be "text/xml", "application/xml" or
         // "application/json"
         if (!RESTGatewayUtil.isValidContentType(contentType)) {
-            logger.warn("Response's content type is not \"{}\", \"{}\" or \"{}\".", Constants.TEXT_XML, Constants.APPLICATION_XML, Constants.APPLICATION_JSON);
+            log.warn("Response's content type is not \"{}\", \"{}\" or \"{}\".", Constants.TEXT_XML, Constants.APPLICATION_XML, Constants.APPLICATION_JSON);
             if (restResponse.getStatusCode() == 200) {
-                logger.warn("Response's status code is 200. Return generic 404 error.");
+                log.warn("Response's status code is 200. Return generic 404 error.");
                 response.setErrorMessage(new ErrorMessage("404", Constants.ERROR_404));
             } else {
-                logger.warn("Response's status code is {}. Reason phrase is : \"{}\".", restResponse.getStatusCode(), restResponse.getReasonPhrase());
+                log.warn("Response's status code is {}. Reason phrase is : \"{}\".", restResponse.getStatusCode(), restResponse.getReasonPhrase());
                 response.setErrorMessage(new ErrorMessage(Integer.toString(restResponse.getStatusCode()), restResponse.getReasonPhrase()));
             }
             serializer.serialize(response, request);
@@ -217,7 +218,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
         } else {
             // If data is not XML, it must be converted
             if (!RESTGatewayUtil.isXml(contentType)) {
-                logger.debug("Convert response to XML.");
+                log.debug("Convert response to XML.");
                 // Convert service endpoint's response to XML
                 data = ProviderGatewayUtil.fromJSONToXML(data);
             } else {
@@ -228,7 +229,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
             response.setResponseData(SOAPHelper.xmlStrToSOAPElement(data));
         }
 
-        logger.debug("Message prosessing done!");
+        log.debug("Message prosessing done!");
 
         // Serialize the response
         serializer.serialize(response, request);
@@ -271,18 +272,18 @@ public class ProviderGateway extends AbstractAdapterServlet {
      */
     private ServiceResponseSerializer getResponseSerializer(ProviderEndpoint endpoint, String consumerIdentifier) throws XRd4JException {
         if (endpoint.isResponseEncrypted()) {
-            logger.debug("Endpoint requires that response is encrypted.");
+            log.debug("Endpoint requires that response is encrypted.");
             Encrypter asymmetricEncrypter;
             // Check if encrypter already exists in cache
             if (this.asymmetricEncrypterCache.containsKey(consumerIdentifier)) {
                 asymmetricEncrypter = this.asymmetricEncrypterCache.get(consumerIdentifier);
-                logger.trace("Asymmetric encrypter for consumer \"{}\" loaded from cache.", consumerIdentifier);
+                log.trace("Asymmetric encrypter for consumer \"{}\" loaded from cache.", consumerIdentifier);
             } else {
                 // Create new encrypter if it does not exist yet
                 asymmetricEncrypter = RESTGatewayUtil.getEncrypter(this.publicKeyFile, this.publicKeyFilePassword, consumerIdentifier);
                 // Add new encrypter to the cache
                 this.asymmetricEncrypterCache.put(consumerIdentifier, asymmetricEncrypter);
-                logger.trace("Asymmetric encrypter for consumer \"{}\" not found from cache. New ecrypter created.", consumerIdentifier);
+                log.trace("Asymmetric encrypter for consumer \"{}\" not found from cache. New ecrypter created.", consumerIdentifier);
             }
             if (asymmetricEncrypter == null) {
                 throw new XRd4JException("No public key found when encryption is required.");
@@ -302,7 +303,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
         @Override
         protected Map deserializeRequest(Node requestNode, SOAPMessage message) throws SOAPException {
             if (requestNode == null) {
-                logger.warn("\"requestNode\" is null. Null is returned.");
+                log.warn("\"requestNode\" is null. Null is returned.");
                 return null;
             }
             // Convert all the elements under request to key - value list pairs.
@@ -318,7 +319,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
             // If message has attachments, use the first attachment as
             // request body
             if (message.countAttachments() > 0 && map.containsKey(Constants.PARAM_REQUEST_BODY)) {
-                logger.debug("SOAP attachment detected. Use attachment as request body.", Constants.PARAM_REQUEST_BODY);
+                log.debug("SOAP attachment detected. Use attachment as request body.", Constants.PARAM_REQUEST_BODY);
                 List<String> values = new ArrayList<>();
                 values.add(SOAPHelper.toString((AttachmentPart) message.getAttachments().next()));
                 map.put(Constants.PARAM_REQUEST_BODY, values);
@@ -336,13 +337,13 @@ public class ProviderGateway extends AbstractAdapterServlet {
 
         public DecryptingReqToMapRequestDeserializerImpl(Decrypter asymmetricDecrypter) {
             this.asymmetricDecrypter = asymmetricDecrypter;
-            logger.debug("New DecryptingReqToMapRequestDeserializerImpl created.");
+            log.debug("New DecryptingReqToMapRequestDeserializerImpl created.");
         }
 
         @Override
         protected Map deserializeRequest(Node requestNode, SOAPMessage message) throws SOAPException {
             if (requestNode == null) {
-                logger.warn("\"requestNode\" is null. Null is returned.");
+                log.warn("\"requestNode\" is null. Null is returned.");
                 return null;
             }
             Map<String, String> nodes = SOAPHelper.nodesToMap(requestNode.getChildNodes());
@@ -402,7 +403,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
         protected void handleBody(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
             SOAPElement responseElem = (SOAPElement) response.getResponseData();
             if ("response".equals(responseElem.getLocalName())) {
-                logger.debug("Additional \"response\" wrapper detected. Remove the wrapper.");
+                log.debug("Additional \"response\" wrapper detected. Remove the wrapper.");
                 for (int i = 0; i < responseElem.getChildNodes().getLength(); i++) {
                     Node importNode = (Node) soapResponse.getOwnerDocument().importNode(responseElem.getChildNodes().item(i), true);
                     soapResponse.appendChild(importNode);
@@ -429,7 +430,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
         public EncryptingXMLServiceResponseSerializer(Encrypter asymmetricEncrypter, int keyLength) {
             this.asymmetricEncrypter = asymmetricEncrypter;
             this.keyLength = keyLength;
-            logger.debug("New EncryptingXMLServiceResponseSerializer created.");
+            log.debug("New EncryptingXMLServiceResponseSerializer created.");
         }
 
         @Override
@@ -467,7 +468,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
                 // encrypted session key and IV
                 RESTGatewayUtil.buildEncryptedBody(symmetricEncrypter, asymmetricEncrypter, soapResponse, encryptedData);
             } catch (NoSuchAlgorithmException ex) {
-                logger.error(ex.getMessage(), ex);
+                log.error(ex.getMessage(), ex);
                 throw new SOAPException("Encrypting SOAP request failed.", ex);
             }
         }

@@ -23,17 +23,28 @@
 package fi.vrk.xroad.restadapterservice.util;
 
 import junit.framework.TestCase;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test cases for RESTGatewayUtil class.
  *
  * @author Petteri Kivimäki
  */
-public class RESTGatewayUtilTest extends TestCase {
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@Slf4j
+public class RESTGatewayUtilTest {
 
     /**
      * Test for null value.
      */
+    @Test
     public void testIsXml1() {
         assertEquals(false, RESTGatewayUtil.isXml(null));
     }
@@ -41,6 +52,7 @@ public class RESTGatewayUtilTest extends TestCase {
     /**
      * Test for an empty string.
      */
+    @Test
     public void testIsXml2() {
         assertEquals(false, RESTGatewayUtil.isXml(""));
     }
@@ -48,6 +60,7 @@ public class RESTGatewayUtilTest extends TestCase {
     /**
      * Test for "string/xml".
      */
+    @Test
     public void testIsXml3() {
         assertEquals(true, RESTGatewayUtil.isXml("text/xml"));
     }
@@ -55,6 +68,7 @@ public class RESTGatewayUtilTest extends TestCase {
     /**
      * Test for "application/json".
      */
+    @Test
     public void testIsXml4() {
         assertEquals(false, RESTGatewayUtil.isXml("application/json"));
     }
@@ -62,6 +76,7 @@ public class RESTGatewayUtilTest extends TestCase {
     /**
      * Test for "application/XML". Wrong case.
      */
+    @Test
     public void testIsXml5() {
         assertEquals(false, RESTGatewayUtil.isXml("application/XML"));
     }
@@ -69,6 +84,7 @@ public class RESTGatewayUtilTest extends TestCase {
     /**
      * Test for "text/html".
      */
+    @Test
     public void testIsXml6() {
         assertEquals(false, RESTGatewayUtil.isXml("text/html"));
     }

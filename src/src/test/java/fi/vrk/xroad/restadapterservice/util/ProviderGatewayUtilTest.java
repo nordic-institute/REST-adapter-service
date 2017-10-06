@@ -30,13 +30,24 @@ import fi.vrk.xroad.restadapterservice.endpoint.ProviderEndpoint;
 import java.util.Map;
 import java.util.Properties;
 import junit.framework.TestCase;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test cases for ProviderGatewayUtil class.
  *
  * @author Petteri Kivimäki
  */
-public class ProviderGatewayUtilTest extends TestCase {
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@Slf4j
+public class ProviderGatewayUtilTest {
 
     private Map<String, ProviderEndpoint> map;
 
@@ -45,9 +56,8 @@ public class ProviderGatewayUtilTest extends TestCase {
      *
      * @throws Exception
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         Properties props = new Properties();
         Properties endpoints = new Properties();
         // Set up default properties
@@ -89,6 +99,7 @@ public class ProviderGatewayUtilTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
+    @Test
     public void testExtractConsumer0() throws XRd4JException {
         ProviderEndpoint temp = this.map.get("FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1");
         assertEquals(false, temp == null);
@@ -111,6 +122,7 @@ public class ProviderGatewayUtilTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
+    @Test
     public void testExtractConsumer1() throws XRd4JException {
         ProviderEndpoint temp = this.map.get("FI_PILOT.GOV.1019125-0.getOrganization.v1");
         assertEquals(false, temp == null);
@@ -133,6 +145,7 @@ public class ProviderGatewayUtilTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
+    @Test
     public void testExtractConsumer3() throws XRd4JException {
         ProviderEndpoint temp = this.map.get("FI_PILOT.GOV.1019125-0.Demo2Service.getWeather.v1");
         assertEquals(false, temp == null);
@@ -155,6 +168,7 @@ public class ProviderGatewayUtilTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
+    @Test
     public void testExtractConsumer4() throws XRd4JException {
         ProviderEndpoint temp = this.map.get("FI_PILOT.GOV.1019125-0.getWeather");
         assertEquals(true, temp == null);
@@ -165,6 +179,7 @@ public class ProviderGatewayUtilTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
+    @Test
     public void testExtractConsumer5() throws XRd4JException {
         ProviderEndpoint temp = this.map.get("FI_PILOT.GOV.1019125-0.Demo2Service.testService.v1");
         assertEquals(true, temp == null);
@@ -175,6 +190,7 @@ public class ProviderGatewayUtilTest extends TestCase {
      *
      * @throws fi.vrk.xrd4j.common.exception.XRd4JException
      */
+    @Test
     public void testGenerateHtmlHeaders1() throws XRd4JException {
         ConsumerMember consumer = new ConsumerMember("FI_PILOT", "GOV", "0245437-2", "ConsumerService");
         ProducerMember producer = new ProducerMember("FI_PILOT", "GOV", "1019125-0", "Demo2Service", "getOrganizationList", "v1");
@@ -194,6 +210,7 @@ public class ProviderGatewayUtilTest extends TestCase {
      *
      * @throws fi.vrk.xrd4j.common.exception.XRd4JException
      */
+    @Test
     public void testGenerateHtmlHeaders2() throws XRd4JException {
         ConsumerMember consumer = new ConsumerMember("FI_PILOT", "GOV", "0245437-2", "ConsumerService");
         ProducerMember producer = new ProducerMember("FI_PILOT", "GOV", "1019125-0", "Demo2Service", "getWeather", "v1");

@@ -22,17 +22,10 @@
  */
 package fi.vrk.xroad.restadapterservice.util;
 
-import fi.vrk.xroad.restadapterservice.endpoint.AbstractEndpoint;
-import fi.vrk.xrd4j.common.security.AsymmetricDecrypter;
-import fi.vrk.xrd4j.common.security.AsymmetricEncrypter;
-import fi.vrk.xrd4j.common.security.CryptoHelper;
-import fi.vrk.xrd4j.common.security.Decrypter;
-import fi.vrk.xrd4j.common.security.Encrypter;
-import fi.vrk.xrd4j.common.security.SymmetricDecrypter;
-import fi.vrk.xrd4j.common.security.SymmetricEncrypter;
+import fi.vrk.xrd4j.common.security.*;
 import fi.vrk.xrd4j.common.util.MessageHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import fi.vrk.xroad.restadapterservice.endpoint.AbstractEndpoint;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
@@ -52,9 +45,8 @@ import java.util.Properties;
  *
  * @author Petteri Kivimäki
  */
+@Slf4j
 public class RESTGatewayUtil {
-
-    private static final Logger logger = LoggerFactory.getLogger(RESTGatewayUtil.class);
 
     /**
      * Constructs and initializes a new RESTGatewayUtil object. Should never be
@@ -102,37 +94,37 @@ public class RESTGatewayUtil {
         if (endpoints.containsKey(key + "." + Constants.ENDPOINT_PROPS_WRAPPERS)) {
             String value = endpoints.getProperty(key + "." + Constants.ENDPOINT_PROPS_WRAPPERS);
             endpoint.setProcessingWrappers(MessageHelper.strToBool(value));
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_WRAPPERS, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_WRAPPERS, value);
         }
         // ServiceRequest namespace
         if (endpoints.containsKey(key + "." + Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE)) {
             String value = endpoints.getProperty(key + "." + Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE);
             endpoint.setNamespaceDeserialize(value);
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE, value);
         }
         // ServiceResponse namespace
         if (endpoints.containsKey(key + "." + Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE)) {
             String value = endpoints.getProperty(key + "." + Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE);
             endpoint.setNamespaceSerialize(value);
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE, value);
         }
         // ServiceResponse namespace prefix
         if (endpoints.containsKey(key + "." + Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE)) {
             String value = endpoints.getProperty(key + "." + Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE);
             endpoint.setPrefix(value);
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE, value);
         }
         // Is request encrypted
         if (endpoints.containsKey(key + "." + Constants.ENDPOINT_PROPS_REQUEST_ENCRYPTED)) {
             String value = endpoints.getProperty(key + "." + Constants.ENDPOINT_PROPS_REQUEST_ENCRYPTED);
             endpoint.setRequestEncrypted(MessageHelper.strToBool(value));
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_REQUEST_ENCRYPTED, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_REQUEST_ENCRYPTED, value);
         }
         // Is response encrypted
         if (endpoints.containsKey(key + "." + Constants.ENDPOINT_PROPS_RESPONSE_ENCRYPTED)) {
             String value = endpoints.getProperty(key + "." + Constants.ENDPOINT_PROPS_RESPONSE_ENCRYPTED);
             endpoint.setResponseEncrypted(MessageHelper.strToBool(value));
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_RESPONSE_ENCRYPTED, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_RESPONSE_ENCRYPTED, value);
         }
     }
 
@@ -175,20 +167,20 @@ public class RESTGatewayUtil {
      */
     public static Decrypter getDecrypter(String privateKeyFile, String privateKeyFilePassword, String privateKeyAlias, String privateKeyPassword) {
         try {
-            logger.debug("Read private key \"{}\" from keystore.", privateKeyAlias);
+            log.debug("Read private key \"{}\" from keystore.", privateKeyAlias);
             Decrypter decrypter = new AsymmetricDecrypter(privateKeyFile, privateKeyFilePassword, privateKeyAlias, privateKeyPassword);
-            logger.info("Access to private key \"{}\" checked.", privateKeyAlias);
+            log.info("Access to private key \"{}\" checked.", privateKeyAlias);
             return decrypter;
         } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException | UnrecoverableEntryException ex) {
-            logger.error(ex.getMessage(), ex);
-            logger.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_FILE, privateKeyFile);
-            logger.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_FILE_PASSWORD, privateKeyFilePassword.replaceAll(".*", "*"));
-            logger.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_ALIAS, privateKeyAlias);
-            logger.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_PASSWORD, privateKeyPassword.replaceAll(".*", "*"));
+            log.error(ex.getMessage(), ex);
+            log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_FILE, privateKeyFile);
+            log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_FILE_PASSWORD, privateKeyFilePassword.replaceAll(".*", "*"));
+            log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_ALIAS, privateKeyAlias);
+            log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_PASSWORD, privateKeyPassword.replaceAll(".*", "*"));
             return null;
         } catch (java.lang.NullPointerException ex) {
-            logger.error(ex.getMessage(), ex);
-            logger.error("\"{}\" property value is invalid. No private key was found with the given alias value: \"{}\".", Constants.ENCRYPTION_PROPS_PRIVATE_KEY_ALIAS, privateKeyAlias);
+            log.error(ex.getMessage(), ex);
+            log.error("\"{}\" property value is invalid. No private key was found with the given alias value: \"{}\".", Constants.ENCRYPTION_PROPS_PRIVATE_KEY_ALIAS, privateKeyAlias);
             return null;
         }
     }
@@ -221,17 +213,17 @@ public class RESTGatewayUtil {
     public static Encrypter getEncrypter(String publicKeyFile, String publicKeyFilePassword, String serviceId) {
         try {
             Encrypter encrypter = new AsymmetricEncrypter(publicKeyFile, publicKeyFilePassword, serviceId);
-            logger.info("Public key \"{}\" checked and OK.", serviceId);
+            log.info("Public key \"{}\" checked and OK.", serviceId);
             return encrypter;
         } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException ex) {
-            logger.error(ex.getMessage(), ex);
-            logger.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE, publicKeyFile);
-            logger.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE_PASSWORD, publicKeyFilePassword.replaceAll(".*", "*"));
-            logger.debug("Service ID is used as public key alias: \"{}\"", serviceId);
+            log.error(ex.getMessage(), ex);
+            log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE, publicKeyFile);
+            log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE_PASSWORD, publicKeyFilePassword.replaceAll(".*", "*"));
+            log.debug("Service ID is used as public key alias: \"{}\"", serviceId);
             return null;
         } catch (java.lang.NullPointerException ex) {
-            logger.error("No public key was found for the alias \"{}\".", serviceId);
-            logger.error(ex.getMessage(), ex);
+            log.error("No public key was found for the alias \"{}\".", serviceId);
+            log.error(ex.getMessage(), ex);
             return null;
         }
     }
@@ -249,8 +241,8 @@ public class RESTGatewayUtil {
             try {
                 return Integer.parseInt(keyLengthStr);
             } catch (NumberFormatException ex) {
-                logger.error(ex.getMessage(), ex);
-                logger.warn("Invalid value for \"{}\" property. Use default 128.", Constants.ENCRYPTION_PROPS_KEY_LENGTH);
+                log.error(ex.getMessage(), ex);
+                log.warn("Invalid value for \"{}\" property. Use default 128.", Constants.ENCRYPTION_PROPS_KEY_LENGTH);
                 return 128;
             }
         }
@@ -265,7 +257,7 @@ public class RESTGatewayUtil {
      * @throws NoSuchAlgorithmException
      */
     public static Encrypter createSymmetricEncrypter(int keyLength) throws NoSuchAlgorithmException {
-        logger.debug("Create a new symmetric encrypter.");
+        log.debug("Create a new symmetric encrypter.");
         // Create new symmetric AES key that's used for encrypting
         // the message payload
         Key key = CryptoHelper.generateAESKey(keyLength);
@@ -286,7 +278,7 @@ public class RESTGatewayUtil {
      * @return Decrypter created using encrypted AES key and VI
      */
     public static Decrypter getSymmetricDecrypter(Decrypter asymmetricDecrypter, String encryptedKey, String encodedIV) {
-        logger.debug("Decrypt symmetric session key.");
+        log.debug("Decrypt symmetric session key.");
         // Decrypt session key using the private key
         String decryptedSessionKey = asymmetricDecrypter.decrypt(encryptedKey);
         // Convert the decrypted session key from string to key
@@ -309,7 +301,7 @@ public class RESTGatewayUtil {
      * @throws SOAPException
      */
     public static void buildEncryptedBody(Encrypter symmetricEncrypter, Encrypter asymmetricEncrypter, SOAPElement msg, String encryptedData) throws SOAPException {
-        logger.debug("Build message body with encrypted data, encrypted session key and encoded IV.");
+        log.debug("Build message body with encrypted data, encrypted session key and encoded IV.");
         // Get base 64 encoded version of the key
         String sessionKey = CryptoHelper.encodeBase64(((SymmetricEncrypter) symmetricEncrypter).getKey().getEncoded());
         // Add enrypted data to message

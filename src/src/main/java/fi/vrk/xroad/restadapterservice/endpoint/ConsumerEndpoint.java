@@ -24,6 +24,7 @@ package fi.vrk.xroad.restadapterservice.endpoint;
 
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This class represents consumer endpoint and holds all the information that
@@ -42,6 +43,7 @@ import fi.vrk.xrd4j.common.member.ProducerMember;
  *
  * @author Petteri Kivimäki
  */
+@Slf4j
 public class ConsumerEndpoint extends AbstractEndpoint {
 
     /**

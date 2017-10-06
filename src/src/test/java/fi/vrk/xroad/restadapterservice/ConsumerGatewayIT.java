@@ -26,6 +26,7 @@ import fi.vrk.xrd4j.rest.ClientResponse;
 import fi.vrk.xrd4j.rest.client.RESTClient;
 import fi.vrk.xrd4j.rest.client.RESTClientFactory;
 import fi.vrk.xroad.restadapterservice.util.Constants;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +50,7 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@Slf4j
 public class ConsumerGatewayIT {
 
     private static final String CONTENT_TYPE_XML = Constants.TEXT_XML + ";" + Constants.CHARSET_UTF8;
@@ -65,7 +67,6 @@ public class ConsumerGatewayIT {
     @Before
     public void setUp() {
         String buildPath = servletContextPath;
-//        String buildPath = System.getProperty("consumerPath"); // TODO: remove consumerPath property
         String baseUrl = "http://localhost:" + port + "/" + buildPath + "/Consumer/";
 
         // Set up test case 1
