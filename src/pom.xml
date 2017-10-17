@@ -166,6 +166,28 @@
                 </executions>
             </plugin>
             <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/config/etc/rest-adapter-service</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/profiles/plaintext</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
                 <version>3.0</version>
@@ -202,36 +224,9 @@
     </build>
     <profiles>
         <profile>
-            <id>packaging</id>
-            <activation>
-                <os>
-                    <family>linux</family>
-                </os>
-            </activation>
+            <id>package-rpm</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <version>3.0.2</version>
-                        <executions>
-                            <execution>
-                                <id>copy-resources</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${basedir}/target/config/etc/rest-adapter-service</outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>src/main/profiles/plaintext</directory>
-                                            <filtering>true</filtering>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>rpm-maven-plugin</artifactId>
@@ -246,7 +241,7 @@
                         </executions>
                         <configuration>
                             <license>MIT License</license>
-                            <distribution>RHEL</distribution> -->
+                            <distribution>RHEL</distribution>
                             <!-- version comes from above -->
                             <group>System Environment/Libraries</group>
                             <packager>Population Register Centre (VRK)</packager>
@@ -261,7 +256,8 @@
                                     <directory>/usr/lib/rest-adapter-service</directory>
                                     <filemode>755</filemode>
                                     <username>rest-adapter-service</username>
-                                    <groupname>rest-adapter-service</groupname>                                    <directoryIncluded>false</directoryIncluded>
+                                    <groupname>rest-adapter-service</groupname>
+                                    <directoryIncluded>false</directoryIncluded>
                                     <sources>
                                         <source>
                                             <location>target/rest-adapter-service-${project.version}.war</location>
@@ -274,7 +270,8 @@
                                     <directoryIncluded>false</directoryIncluded>
                                     <filemode>644</filemode>
                                     <username>root</username>
-                                    <groupname>root</groupname>                                    <directoryIncluded>false</directoryIncluded>
+                                    <groupname>root</groupname>
+                                    <directoryIncluded>false</directoryIncluded>
                                     <sources>
                                         <source>
                                             <location>src/main/rhel/rest-adapter-service.service</location>
@@ -285,7 +282,8 @@
                                     <directory>/etc/rest-adapter-service</directory>
                                     <filemode>755</filemode>
                                     <username>rest-adapter-service</username>
-                                    <groupname>rest-adapter-service</groupname>                                    <directoryIncluded>false</directoryIncluded>
+                                    <groupname>rest-adapter-service</groupname>
+                                    <directoryIncluded>false</directoryIncluded>
                                     <configuration>noreplace</configuration>
                                     <sources>
                                         <source>
@@ -309,6 +307,13 @@
                             </postremoveScriptlet>
                         </configuration>
                     </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>package-deb</id>
+            <build>
+                <plugins>
                     <plugin>
                         <artifactId>jdeb</artifactId>
                         <groupId>org.vafer</groupId>

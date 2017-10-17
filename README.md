@@ -86,17 +86,29 @@ The build uses [license-maven-plugin](https://github.com/mycila/license-maven-pl
 
 The Rest Adapter Service builds DEB package for use with Ubuntu and siblings using the [jdeb Maven plugin](https://github.com/tcurdt/jdeb).
 
-`mvn -f src/pom.xml clean package`
+`mvn -f src/pom.xml clean package -P package-deb`
 
-The resulting package depends on tomcat. On installation the war archive is put under Tomcat's webapps directory. Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
+Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
 
 ## RPM Packaging
 
-The Rest Adapter Service also builds RPMs for use with RHEL (or derivatives) and Apache Tomcat using the [rpm-maven-plugin](https://github.com/mojohaus/rpm-maven-plugin).
+The Rest Adapter Service also builds RPMs for use with RHEL (or derivatives) using the [rpm-maven-plugin](https://github.com/mojohaus/rpm-maven-plugin).
+RPM package build works only when done on RHEL platform.
 
-```mvn -f src/pom.xml clean package```
+```mvn -f src/pom.xml clean package -P package-rpm```
 
-The resulting rest-adapter-service package depends on tomcat that needs to be preinstalled. Installing the rest-adapter-service RPM package puts rest-adapter-service WAR under Tomcat's webapps directory. Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
+Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
+
+## RPM Packaging on a Non-RedHat Platform
+
+It is possible to build RPM packages even if running on a non-RedHat platform. A docker container can be used for the build.
+
+```shell
+# (in the directory which contains pom.xml)
+$ mvn clean package
+$ docker build -t rest-adapter-rpm src/main/docker
+$ ./build-rpm-in-docker.sh
+```
 
 ## Encryption of Message Content
 
