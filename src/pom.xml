@@ -254,7 +254,7 @@
                             <mappings>
                                 <mapping>
                                     <directory>/usr/lib/rest-adapter-service</directory>
-                                    <filemode>755</filemode>
+                                    <filemode>744</filemode>
                                     <username>rest-adapter-service</username>
                                     <groupname>rest-adapter-service</groupname>
                                     <directoryIncluded>false</directoryIncluded>
@@ -265,6 +265,19 @@
                                         </source>
                                     </sources>
                                 </mapping>
+                                <mapping>
+                                    <directory>/usr/bin</directory>
+                                    <filemode>744</filemode>
+                                    <username>rest-adapter-service</username>
+                                    <groupname>rest-adapter-service</groupname>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <sources>
+                                        <source>
+                                            <location>src/main/rhel/rest-adapter-service</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+
                                 <mapping>
                                     <directory>%{_unitdir}</directory>
                                     <directoryIncluded>false</directoryIncluded>
@@ -278,6 +291,7 @@
                                         </source>
                                     </sources>
                                 </mapping>
+
                                 <mapping>
                                     <directory>/etc/rest-adapter-service</directory>
                                     <filemode>755</filemode>

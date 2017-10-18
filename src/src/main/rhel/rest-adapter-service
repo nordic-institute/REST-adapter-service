@@ -1,0 +1,4 @@
+#!/bin/sh
+set -x
+exec ${JAVA_HOME}/bin/java -DpropertiesDirectory=/etc/rest-adapter-service -jar /usr/lib/rest-adapter-service/rest-adapter-service.war
+

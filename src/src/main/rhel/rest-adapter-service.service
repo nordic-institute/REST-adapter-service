@@ -1,0 +1,15 @@
+[Unit]
+Description=REST Adapter Service
+Wants=
+After=network.target
+
+[Service]
+PermissionsStartOnly=true
+User=rest-adapter-service
+Group=rest-adapter-service
+ExecStart=/usr/bin/rest-adapter-service
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
