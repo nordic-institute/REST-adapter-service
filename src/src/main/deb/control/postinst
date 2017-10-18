@@ -6,7 +6,7 @@ if ! id rest-adapter-service > /dev/null 2>&1 ; then
                 --group --disabled-password --shell /bin/false \
                 rest-adapter-service
 fi
-chmod 750 /usr/lib/rest-adapter-service/rest-adapter-service-[[project.version]].war
+chmod 750 /usr/lib/rest-adapter-service/rest-adapter-service.war
 chmod 750 /etc/rest-adapter-service/*.properties
 chown -R rest-adapter-service:rest-adapter-service /usr/lib/rest-adapter-service
 chown -R rest-adapter-service:rest-adapter-service /etc/rest-adapter-service
