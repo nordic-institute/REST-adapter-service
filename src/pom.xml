@@ -254,7 +254,7 @@
                             <mappings>
                                 <mapping>
                                     <directory>/usr/lib/rest-adapter-service</directory>
-                                    <filemode>744</filemode>
+                                    <filemode>640</filemode>
                                     <username>rest-adapter-service</username>
                                     <groupname>rest-adapter-service</groupname>
                                     <directoryIncluded>false</directoryIncluded>
@@ -267,13 +267,13 @@
                                 </mapping>
                                 <mapping>
                                     <directory>/usr/bin</directory>
-                                    <filemode>744</filemode>
+                                    <filemode>740</filemode>
                                     <username>rest-adapter-service</username>
                                     <groupname>rest-adapter-service</groupname>
                                     <directoryIncluded>false</directoryIncluded>
                                     <sources>
                                         <source>
-                                            <location>src/main/rhel/rest-adapter-service</location>
+                                            <location>src/main/systemd/rest-adapter-service</location>
                                         </source>
                                     </sources>
                                 </mapping>
@@ -281,20 +281,20 @@
                                 <mapping>
                                     <directory>%{_unitdir}</directory>
                                     <directoryIncluded>false</directoryIncluded>
-                                    <filemode>644</filemode>
+                                    <filemode>640</filemode>
                                     <username>root</username>
                                     <groupname>root</groupname>
                                     <directoryIncluded>false</directoryIncluded>
                                     <sources>
                                         <source>
-                                            <location>src/main/rhel/rest-adapter-service.service</location>
+                                            <location>src/main/systemd/rest-adapter-service.service</location>
                                         </source>
                                     </sources>
                                 </mapping>
 
                                 <mapping>
                                     <directory>/etc/rest-adapter-service</directory>
-                                    <filemode>755</filemode>
+                                    <filemode>640</filemode>
                                     <username>rest-adapter-service</username>
                                     <groupname>rest-adapter-service</groupname>
                                     <directoryIncluded>false</directoryIncluded>
@@ -307,7 +307,7 @@
                                 </mapping>
                             </mappings>
                             <preinstallScriptlet>
-                                <scriptFile>src/main/rhel/preinstall</scriptFile>
+                                <scriptFile>src/main/systemd/preinstall</scriptFile>
                                 <fileEncoding>utf-8</fileEncoding>
                             </preinstallScriptlet>
                             <postinstallScriptlet>
@@ -325,7 +325,7 @@
             </build>
         </profile>
         <profile>
-            <id>package-deb</id>
+            <id>package-deb14</id>
             <build>
                 <plugins>
                     <plugin>
@@ -347,11 +347,23 @@
                                             <src>target/rest-adapter-service-${project.version}.war</src>
                                             <dst>/usr/lib/rest-adapter-service/rest-adapter-service.war</dst>
                                             <type>file</type>
+                                            <mapper>
+                                                <type>perm</type>
+                                                <filemode>640</filemode>
+                                                <user>rest-adapter-service</user>
+                                                <group>rest-adapter-service</group>
+                                            </mapper>
                                         </data>
                                         <data>
                                             <src>target/config</src>
                                             <type>directory</type>
                                             <conffile>true</conffile>
+                                            <mapper>
+                                                <type>perm</type>
+                                                <filemode>640</filemode>
+                                                <user>rest-adapter-service</user>
+                                                <group>rest-adapter-service</group>
+                                            </mapper>
                                         </data>
                                         <data>
                                             <src>src/main/deb/upstart/${project.artifactId}.conf</src>
@@ -359,7 +371,7 @@
                                             <mapper>
                                                 <type>perm</type>
                                                 <prefix>/etc/init</prefix>
-                                                <filemode>644</filemode>
+                                                <filemode>640</filemode>
                                                 <user>root</user>
                                                 <group>root</group>
                                             </mapper>
@@ -397,9 +409,8 @@
                                             <dst>/usr/lib/rest-adapter-service/rest-adapter-service.war</dst>
                                             <type>file</type>
                                             <mapper>
-                                                <!-- TODO: fix mappers also for ubuntu14 -->
                                                 <type>perm</type>
-                                                <filemode>755</filemode>
+                                                <filemode>640</filemode>
                                                 <user>rest-adapter-service</user>
                                                 <group>rest-adapter-service</group>
                                             </mapper>
@@ -410,40 +421,29 @@
                                             <conffile>true</conffile>
                                             <mapper>
                                                 <type>perm</type>
-                                                <filemode>755</filemode>
+                                                <filemode>640</filemode>
                                                 <user>rest-adapter-service</user>
                                                 <group>rest-adapter-service</group>
                                             </mapper>
                                         </data>
                                         <data>
-                                            <src>src/main/rhel/rest-adapter-service</src>
+                                            <src>src/main/systemd/rest-adapter-service</src>
                                             <type>file</type>
                                             <mapper>
                                                 <type>perm</type>
                                                 <prefix>/usr/bin</prefix>
-                                                <filemode>744</filemode>
+                                                <filemode>740</filemode>
                                                 <user>rest-adapter-service</user>
                                                 <group>rest-adapter-service</group>
                                             </mapper>
                                         </data>
                                         <data>
-                                            <src>src/main/rhel/rest-adapter-service.service</src>
+                                            <src>src/main/systemd/rest-adapter-service.service</src>
                                             <type>file</type>
                                             <mapper>
                                                 <type>perm</type>
                                                 <prefix>/usr/lib/systemd/system</prefix>
-                                                <filemode>644</filemode>
-                                                <user>root</user>
-                                                <group>root</group>
-                                            </mapper>
-                                        </data>
-                                        <data>
-                                            <src>src/main/rhel/rest-adapter-service.service</src>
-                                            <type>file</type>
-                                            <mapper>
-                                                <type>perm</type>
-                                                <prefix>/usr/lib/systemd/system</prefix>
-                                                <filemode>644</filemode>
+                                                <filemode>640</filemode>
                                                 <user>root</user>
                                                 <group>root</group>
                                             </mapper>
