@@ -273,7 +273,7 @@
                                     <directoryIncluded>false</directoryIncluded>
                                     <sources>
                                         <source>
-                                            <location>src/main/systemd/rest-adapter-service</location>
+                                            <location>src/main/packages/systemd/rest-adapter-service</location>
                                         </source>
                                     </sources>
                                 </mapping>
@@ -287,7 +287,7 @@
                                     <directoryIncluded>false</directoryIncluded>
                                     <sources>
                                         <source>
-                                            <location>src/main/systemd/rest-adapter-service.service</location>
+                                            <location>src/main/packages/systemd/rest-adapter-service.service</location>
                                         </source>
                                     </sources>
                                 </mapping>
@@ -307,7 +307,7 @@
                                 </mapping>
                             </mappings>
                             <preinstallScriptlet>
-                                <scriptFile>src/main/systemd/preinstall</scriptFile>
+                                <scriptFile>src/main/packages/systemd/preinstall</scriptFile>
                                 <fileEncoding>utf-8</fileEncoding>
                             </preinstallScriptlet>
                             <postinstallScriptlet>
@@ -339,7 +339,7 @@
                                     <goal>jdeb</goal>
                                 </goals>
                                 <configuration>
-                                    <controlDir>${basedir}/src/main/deb/control</controlDir>
+                                    <controlDir>${basedir}/src/main/packages/deb/control</controlDir>
                                     <verbose>true</verbose>
                                     <snapshotExpand>true</snapshotExpand>
                                     <dataSet>
@@ -366,7 +366,7 @@
                                             </mapper>
                                         </data>
                                         <data>
-                                            <src>src/main/deb/upstart/${project.artifactId}.conf</src>
+                                            <src>src/main/packages/deb/upstart/${project.artifactId}.conf</src>
                                             <type>file</type>
                                             <mapper>
                                                 <type>perm</type>
@@ -400,7 +400,7 @@
                                     <goal>jdeb</goal>
                                 </goals>
                                 <configuration>
-                                    <controlDir>${basedir}/src/main/deb/control</controlDir>
+                                    <controlDir>${basedir}/src/main/packages/deb/control</controlDir>
                                     <verbose>true</verbose>
                                     <snapshotExpand>true</snapshotExpand>
                                     <dataSet>
@@ -427,7 +427,7 @@
                                             </mapper>
                                         </data>
                                         <data>
-                                            <src>src/main/systemd/rest-adapter-service</src>
+                                            <src>src/main/packages/systemd/rest-adapter-service</src>
                                             <type>file</type>
                                             <mapper>
                                                 <type>perm</type>
@@ -438,7 +438,7 @@
                                             </mapper>
                                         </data>
                                         <data>
-                                            <src>src/main/systemd/rest-adapter-service.service</src>
+                                            <src>src/main/packages/systemd/rest-adapter-service.service</src>
                                             <type>file</type>
                                             <mapper>
                                                 <type>perm</type>
