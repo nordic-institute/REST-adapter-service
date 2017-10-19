@@ -6,9 +6,11 @@ if ! id rest-adapter-service > /dev/null 2>&1 ; then
                 --group --disabled-password --shell /bin/false \
                 rest-adapter-service
 fi
+# remove these, and set correct chmod & chwon using jdeb mappers????
 chmod 750 /usr/lib/rest-adapter-service/rest-adapter-service.war
 chmod 750 /etc/rest-adapter-service/*.properties
 chown -R rest-adapter-service:rest-adapter-service /usr/lib/rest-adapter-service
 chown -R rest-adapter-service:rest-adapter-service /etc/rest-adapter-service
 
+# remove this from ubuntu 16???
 invoke-rc.d rest-adapter-service start
