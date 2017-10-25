@@ -1,0 +1,4 @@
+#!/bin/sh
+
+systemctl preset rest-adapter-service
+systemctl start rest-adapter-service

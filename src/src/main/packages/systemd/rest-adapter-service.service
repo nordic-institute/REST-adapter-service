@@ -1,6 +1,5 @@
 [Unit]
 Description=REST Adapter Service
-Wants=
 After=network.target
 
 [Service]

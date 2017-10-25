@@ -6,5 +6,3 @@ if ! id rest-adapter-service > /dev/null 2>&1 ; then
                 --group --disabled-password --shell /bin/false \
                 rest-adapter-service
 fi
-
-invoke-rc.d rest-adapter-service start

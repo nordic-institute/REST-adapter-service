@@ -170,7 +170,27 @@
                 <version>3.0.2</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <id>copy-control-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/packages/deb/control</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/packages/deb/control</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>src/main/packages/deb/${deb-version-specific-control-directory}</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-config-resources</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -255,7 +275,7 @@
                                 <mapping>
                                     <directory>/usr/lib/rest-adapter-service</directory>
                                     <filemode>640</filemode>
-                                    <username>rest-adapter-service</username>
+                                    <username>root</username>
                                     <groupname>rest-adapter-service</groupname>
                                     <directoryIncluded>false</directoryIncluded>
                                     <sources>
@@ -267,9 +287,9 @@
                                 </mapping>
                                 <mapping>
                                     <directory>/usr/bin</directory>
-                                    <filemode>740</filemode>
-                                    <username>rest-adapter-service</username>
-                                    <groupname>rest-adapter-service</groupname>
+                                    <filemode>755</filemode>
+                                    <username>root</username>
+                                    <groupname>root</groupname>
                                     <directoryIncluded>false</directoryIncluded>
                                     <sources>
                                         <source>
@@ -281,7 +301,7 @@
                                 <mapping>
                                     <directory>%{_unitdir}</directory>
                                     <directoryIncluded>false</directoryIncluded>
-                                    <filemode>640</filemode>
+                                    <filemode>644</filemode>
                                     <username>root</username>
                                     <groupname>root</groupname>
                                     <directoryIncluded>false</directoryIncluded>
@@ -295,7 +315,7 @@
                                 <mapping>
                                     <directory>/etc/rest-adapter-service</directory>
                                     <filemode>640</filemode>
-                                    <username>rest-adapter-service</username>
+                                    <username>root</username>
                                     <groupname>rest-adapter-service</groupname>
                                     <directoryIncluded>false</directoryIncluded>
                                     <configuration>noreplace</configuration>
@@ -326,6 +346,9 @@
         </profile>
         <profile>
             <id>package-deb14</id>
+            <properties>
+                <deb-version-specific-control-directory>control-deb14</deb-version-specific-control-directory>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -339,7 +362,7 @@
                                     <goal>jdeb</goal>
                                 </goals>
                                 <configuration>
-                                    <controlDir>${basedir}/src/main/packages/deb/control</controlDir>
+                                    <controlDir>${basedir}/target/packages/deb/control</controlDir>
                                     <verbose>true</verbose>
                                     <snapshotExpand>true</snapshotExpand>
                                     <dataSet>
@@ -350,7 +373,7 @@
                                             <mapper>
                                                 <type>perm</type>
                                                 <filemode>640</filemode>
-                                                <user>rest-adapter-service</user>
+                                                <user>root</user>
                                                 <group>rest-adapter-service</group>
                                             </mapper>
                                         </data>
@@ -361,7 +384,7 @@
                                             <mapper>
                                                 <type>perm</type>
                                                 <filemode>640</filemode>
-                                                <user>rest-adapter-service</user>
+                                                <user>root</user>
                                                 <group>rest-adapter-service</group>
                                             </mapper>
                                         </data>
@@ -371,7 +394,7 @@
                                             <mapper>
                                                 <type>perm</type>
                                                 <prefix>/etc/init</prefix>
-                                                <filemode>640</filemode>
+                                                <filemode>644</filemode>
                                                 <user>root</user>
                                                 <group>root</group>
                                             </mapper>
@@ -387,6 +410,9 @@
 
         <profile>
             <id>package-deb16</id>
+            <properties>
+                <deb-version-specific-control-directory>control-deb16</deb-version-specific-control-directory>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -400,7 +426,7 @@
                                     <goal>jdeb</goal>
                                 </goals>
                                 <configuration>
-                                    <controlDir>${basedir}/src/main/packages/deb/control</controlDir>
+                                    <controlDir>${basedir}/target/packages/deb/control</controlDir>
                                     <verbose>true</verbose>
                                     <snapshotExpand>true</snapshotExpand>
                                     <dataSet>
@@ -411,7 +437,7 @@
                                             <mapper>
                                                 <type>perm</type>
                                                 <filemode>640</filemode>
-                                                <user>rest-adapter-service</user>
+                                                <user>root</user>
                                                 <group>rest-adapter-service</group>
                                             </mapper>
                                         </data>
@@ -422,7 +448,7 @@
                                             <mapper>
                                                 <type>perm</type>
                                                 <filemode>640</filemode>
-                                                <user>rest-adapter-service</user>
+                                                <user>root</user>
                                                 <group>rest-adapter-service</group>
                                             </mapper>
                                         </data>
@@ -432,9 +458,9 @@
                                             <mapper>
                                                 <type>perm</type>
                                                 <prefix>/usr/bin</prefix>
-                                                <filemode>740</filemode>
-                                                <user>rest-adapter-service</user>
-                                                <group>rest-adapter-service</group>
+                                                <filemode>755</filemode>
+                                                <user>root</user>
+                                                <group>root</group>
                                             </mapper>
                                         </data>
                                         <data>
@@ -443,7 +469,7 @@
                                             <mapper>
                                                 <type>perm</type>
                                                 <prefix>/usr/lib/systemd/system</prefix>
-                                                <filemode>640</filemode>
+                                                <filemode>644</filemode>
                                                 <user>root</user>
                                                 <group>root</group>
                                             </mapper>
