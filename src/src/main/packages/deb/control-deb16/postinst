@@ -1,4 +1,8 @@
 #!/bin/sh
 
-systemctl preset rest-adapter-service
-systemctl start rest-adapter-service
+# only change to preset enabled/disabled value when installing,
+# do not modify setting when upgrading
+# detection based on https://askubuntu.com/a/102128
+if [ -z "$2" ]; then
+  systemctl preset rest-adapter-service.service >/dev/null 2>&1 || :
+fi

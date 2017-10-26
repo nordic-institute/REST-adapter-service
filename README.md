@@ -110,6 +110,63 @@ $ docker build -t rest-adapter-rpm src/main/docker
 $ ./build-rpm-in-docker.sh
 ```
 
+## Installing 
+
+### Ubuntu 14
+
+Rest Adapter Service requires `java8-runtime-headless` dependency. 
+Configure openjdk package repository, which provides that:
+```shell
+$ apt-add-repository -y ppa:openjdk-r/ppa
+$ apt-get update
+```
+Install Rest Adapter Service package
+```shell
+$ apt-get install rest-adapter-service (TODO: check with actual repos)
+```
+Configure Rest Adapter Service using property files, see xxx (TODO). 
+Service will automatically start during boot.
+Start the service:
+```shell
+$ service rest-adapter-service start
+```
+
+### Ubuntu 16
+
+Rest Adapter Service requires `java8-runtime-headless` dependency. 
+If there are multiple available packages satisfying that, you first need to manually install one of those.
+For example:
+```shell
+$ apt-get install openjdk-8-jre-headless
+```
+Install Rest Adapter Service package
+```shell
+$ apt-get install rest-adapter-service (TODO: check with actual repos)
+```
+Configure Rest Adapter Service using property files, see xxx (TODO). 
+Service is enabled or disabled using system presets, which means that on a default Ubuntu 16 it be enabled (and start during boots).
+Start the service:
+```shell
+$ service rest-adapter-service start
+```
+
+### RHEL 7
+
+Install Rest Adapter Service package
+```shell
+$ yum install rest-adapter-service (TODO: check with actual repos)
+```
+Configure Rest Adapter Service using property files, see xxx (TODO). 
+Service is enabled or disabled using system presets, which means that on a default RHEL 7 it be disabled (and not start during boots).
+Enable the service (to start automatically during boots):
+```shell
+$ systemctl enable rest-adapter-service
+```
+Start the service:
+```shell
+$ service rest-adapter-service start
+```
+
 ## Encryption of Message Content
 
 Starting from version 0.0.10 Rest Adapter Service supports encryption/decryption of message content. More information and instructions for configuration can be found in [documentation](documentation/Encryption.md).
