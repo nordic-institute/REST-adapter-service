@@ -1,11 +1,11 @@
 # Base java:8
 FROM java:8
 
-# Add Rest Gateway jar to container
-ADD src/target/rest-adapter-service-*.jar rest-adapter-service.jar
+# Add Rest Gateway war to container
+ADD src/target/rest-adapter-service-*.war rest-adapter-service.war
 
 # Entry with exec
-ENTRYPOINT exec java $JAVA_OPTS -jar /rest-adapter-service.jar
+ENTRYPOINT exec java $JAVA_OPTS -jar /rest-adapter-service.war
 
-# Expose Tomcat
+# Expose default port
 EXPOSE 8080

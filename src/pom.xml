@@ -484,7 +484,13 @@
         </profile>
 
         <profile>
-            <id>encrypted</id>
+            <id>encryptedProfile</id>
+            <!-- use -Dsecure to activate this profile -->
+            <activation>
+                <property>
+                    <name>secure</name>
+                </property>
+            </activation>
             <build>
                 <resources>
                     <resource>
@@ -499,9 +505,13 @@
             </build>
         </profile>
         <profile>
-            <id>plaintext</id>
+            <id>plaintextProfile</id>
+            <!-- profile is active unless -Dsecure is used -->
             <activation>
                 <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!secure</name>
+                </property>
             </activation>
             <build>
                 <resources>

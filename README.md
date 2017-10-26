@@ -56,7 +56,7 @@ More detailed usage examples are available in [documentation](documentation/Rest
 
 ## Running the Docker Image
 
-Rest Adapter Service is available as Docker image.
+Rest Adapter Service is available as Docker image. TODO: Note that this is an older version (0.0.10).
 
 ```
 docker run -p 8080:8080 petkivim/xroad-rest-gateway
@@ -173,15 +173,15 @@ Starting from version 0.0.10 Rest Adapter Service supports encryption/decryption
 
 By default plaintext configuration is enabled. The software can be built with encryption configuration enabled using the command below.
 
-```mvn clean install -P encrypted```
+```mvn clean install -Dencrypted```
 
 Running integration tests with plaintext configuration enabled:
 
-```mvn clean install -P itest -P plaintext```
+```mvn clean install -P itest```
 
 Running integration tests with encryption configuration enabled:
 
-```mvn clean install -P itest -P encrypted```
+```mvn clean install -P itest -Dencrypted```
 
 ### Additional documentation
 
