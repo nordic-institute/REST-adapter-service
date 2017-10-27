@@ -166,6 +166,13 @@ Start the service:
 ```shell
 $ service rest-adapter-service start
 ```
+## Changing the port
+To change the port, modify configuration file `/etc/rest-adapter-service/application.properties`
+```shell
+# change this to customize port
+server.port=8080
+```
+
 
 ## Encryption of Message Content
 

@@ -1,4 +1,4 @@
 #!/bin/sh
 set -x
-exec java -DpropertiesDirectory=/etc/rest-adapter-service -jar /usr/lib/rest-adapter-service/rest-adapter-service.war
+exec java -DpropertiesDirectory=/etc/rest-adapter-service -jar /usr/lib/rest-adapter-service/rest-adapter-service.war --spring.config.location=/etc/rest-adapter-service/
 
