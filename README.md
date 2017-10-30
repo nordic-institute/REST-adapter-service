@@ -24,20 +24,20 @@ First aim is to get first practical REST API integrated to X-Road, document the 
 
 In parallel with the technical development we will collect more use cases from Finland about REST/JSON APIs that need to be integrated with X-Road. Aim is not to make automated solution which covers 100% of cases. We will cheer loudly if 80% coverage is achieved.
 
-## Try It Out
+## Try It Out / Running the Docker Image
 
-The fastest and easiest way to try out the application is to [download](https://github.com/educloudalliance/xroad-rest-gateway/releases/download/v0.0.10/rest-gateway-0.0.10.jar) the executable jar version (```rest-gateway-0.0.10.jar```) and run it: ```java -jar rest-gateway-0.0.10.jar```. The application is accessible at:
+The fastest and easiest way to try out the application is using Docker.
 
-```
-http://localhost:8080/rest-gateway-0.0.10/Provider
-
-http://localhost:8080/rest-gateway-0.0.10/Consumer
-```
-
-The Provider WSDL description is accessible at:
+Rest Adapter Service is available as Docker image. TODO: Note that `petkivim/xroad-rest-gateway` is currently an older version (0.0.10).
 
 ```
-http://localhost:8080/rest-gateway-0.0.10/Provider?wsdl
+docker run -p 8080:8080 petkivim/xroad-rest-gateway
+```
+
+If customized properties are used, the host directory containing the properties files must be mounted as a data directory. In addition, the directory containing the properties files inside the container must be set using ```JAVA_OPTS``` and```propertiesDirectory``` property.
+
+```
+docker run -p 8080:8080 -v /host/dir/conf:/my/conf -e "JAVA_OPTS=-DpropertiesDirectory=/my/conf"  petkivim/xroad-rest-gateway
 ```
 
 ## Configuration files location
@@ -59,20 +59,6 @@ Scanned directories:
 4. As a fallback, the default configuration shipped with the WAR (classpath)
 
 More detailed usage examples are available in [documentation](documentation/Rest-Adapter-Service-principles.md#usage).
-
-## Running the Docker Image
-
-Rest Adapter Service is available as Docker image. TODO: Note that this is an older version (0.0.10).
-
-```
-docker run -p 8080:8080 petkivim/xroad-rest-gateway
-```
-
-If customized properties are used, the host directory containing the properties files must be mounted as a data directory. In addition, the directory containing the properties files inside the container must be set using ```JAVA_OPTS``` and```propertiesDirectory``` property.
-
-```
-docker run -p 8080:8080 -v /host/dir/conf:/my/conf -e "JAVA_OPTS=-DpropertiesDirectory=/my/conf"  petkivim/xroad-rest-gateway
-```
 
 ## Building the Docker Image
 
