@@ -42,15 +42,21 @@ http://localhost:8080/rest-gateway-0.0.10/Provider?wsdl
 
 ## Configuration files location
 
-Rest Adapter Service tries to load configuration files from the following locations
+Rest Adapter Service tries to load configuration files from the following locations, 
+in the following order. 
 
-* The directory specified by the system property ```propertiesDirectory```
+If the listed directory exists, all configuration files
+need to exist in that directory, otherwise an error occurs. Configuration 
+directory scanning stops once the first matching directory is located.
+
+Scanned directories:
+1. The directory specified by the system property ```propertiesDirectory```
     ```
     java -jar -DpropertiesDirectory=/my/custom/path rest-adapter-service.jar
     ```
-* The directory rest-adapter-service in the user home directory (if it exists)
-* The directory /etc/rest-adapter-service (if it exists, Linux only)
-* As a fallback, the default configuration shipped with the JAR/WAR (classpath)
+2. The directory `rest-adapter-service` in the users home directory
+3. The directory `/etc/rest-adapter-service` (Linux only)
+4. As a fallback, the default configuration shipped with the WAR (classpath)
 
 More detailed usage examples are available in [documentation](documentation/Rest-Adapter-Service-principles.md#usage).
 
