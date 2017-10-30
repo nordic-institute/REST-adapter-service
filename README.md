@@ -58,6 +58,13 @@ Scanned directories:
 3. The directory `/etc/rest-adapter-service` (Linux only)
 4. As a fallback, the default configuration shipped with the WAR (classpath)
 
+Alternative configuration locations are mostly relevant only when 
+starting the executable war from command line,
+deploying war into a standalone container, 
+or running the docker image. 
+When Rest Adapter Service is installed from a deb or rpm package, 
+it explicitly sets `/etc/rest-adapter-service` as the configuration directory.
+
 More detailed usage examples are available in [documentation](documentation/Rest-Adapter-Service-principles.md#usage).
 
 ## Building the Docker Image
