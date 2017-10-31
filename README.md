@@ -104,8 +104,7 @@ It is possible to build RPM packages even if running on a non-RedHat platform. A
 
 ```shell
 # (in the directory which contains pom.xml)
-$ mvn clean package
-$ docker build -t rest-adapter-rpm src/main/docker
+$ docker build -t rest-adapter-rpm src/main/packages/docker
 $ ./build-rpm-in-docker.sh
 ```
 
