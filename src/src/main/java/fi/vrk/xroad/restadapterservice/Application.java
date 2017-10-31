@@ -28,6 +28,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -38,7 +39,7 @@ import java.util.EnumSet;
 @Configuration
 @Slf4j
 @SpringBootApplication
-public class Application {
+public class Application extends SpringBootServletInitializer {
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Application.class, args);
     }
