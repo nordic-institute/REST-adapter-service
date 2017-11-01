@@ -118,6 +118,12 @@ Configure openjdk package repository, which provides that:
 $ apt-add-repository -y ppa:openjdk-r/ppa
 $ apt-get update
 ```
+Install Java 8:
+```shell
+$ apt-get install openjdk-8-jre-headless
+```
+Do not install Java 9, as Rest Adapter does not yet support it.
+
 Install Rest Adapter Service package
 TODO: install correct repo and key
 ```shell
@@ -133,13 +139,12 @@ $ service rest-adapter-service start
 ### Ubuntu 16
 
 Rest Adapter Service requires `java8-runtime-headless` dependency. 
-If there are multiple available packages satisfying that, you first need to manually install one of those.
-TODO: currently installs jdk 9, which does not work
-TODO: install correct repo and key
-For example:
+Install Java 8:
 ```shell
 $ apt-get install openjdk-8-jre-headless
 ```
+Do not install Java 9, as Rest Adapter does not yet support it.
+
 Install Rest Adapter Service package
 ```shell
 $ apt-get install rest-adapter-service 

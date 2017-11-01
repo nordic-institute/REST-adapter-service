@@ -29,5 +29,4 @@ Architecture: all
 Maintainer: Ilkka Seppälä <ilkka.seppala@gofore.com>
 Description: REST Adapter Service
 Distribution: development
-# TODO: testaa toimiiko asennus ja ajaminen tällä, vai tarviiko jdk:n? (oletus: tarvii)
 Depends: java8-runtime-headless
