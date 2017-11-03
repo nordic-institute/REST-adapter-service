@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ -z "$2" ]; then
+  echo removing package
+  if ( initctl status rest-adapter-service | grep start ); then
+    initctl stop rest-adapter-service
+  fi
+fi

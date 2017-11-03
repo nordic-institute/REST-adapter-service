@@ -489,10 +489,10 @@
 
         <profile>
             <id>encryptedProfile</id>
-            <!-- use -Dsecure to activate this profile -->
+            <!-- use -Dencrypted to activate this profile -->
             <activation>
                 <property>
-                    <name>secure</name>
+                    <name>encrypted</name>
                 </property>
             </activation>
             <build>
@@ -510,11 +510,11 @@
         </profile>
         <profile>
             <id>plaintextProfile</id>
-            <!-- profile is active unless -Dsecure is used -->
+            <!-- profile is active unless -Dencrypted is used -->
             <activation>
                 <activeByDefault>true</activeByDefault>
                 <property>
-                    <name>!secure</name>
+                    <name>!encrypted</name>
                 </property>
             </activation>
             <build>

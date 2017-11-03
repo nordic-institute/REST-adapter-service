@@ -24,20 +24,22 @@ First aim is to get first practical REST API integrated to X-Road, document the 
 
 In parallel with the technical development we will collect more use cases from Finland about REST/JSON APIs that need to be integrated with X-Road. Aim is not to make automated solution which covers 100% of cases. We will cheer loudly if 80% coverage is achieved.
 
-## Try It Out / Running the Docker Image
+## Try It Out 
 
-The fastest and easiest way to try out the application is using Docker.
+The fastest and easiest way to try out the application is by using the Spring Boot Maven plugin.
+To do this, you need to have a working installation of [Maven](https://maven.apache.org/md).
 
-Rest Adapter Service is available as Docker image. TODO: Note that `petkivim/xroad-rest-gateway` is currently an older version (0.0.10).
-
-```
-docker run -p 8080:8080 petkivim/xroad-rest-gateway
-```
-
-If customized properties are used, the host directory containing the properties files must be mounted as a data directory. In addition, the directory containing the properties files inside the container must be set using ```JAVA_OPTS``` and```propertiesDirectory``` property.
 
 ```
-docker run -p 8080:8080 -v /host/dir/conf:/my/conf -e "JAVA_OPTS=-DpropertiesDirectory=/my/conf"  petkivim/xroad-rest-gateway
+cd src
+mvn spring-boot:run
+```
+After that you can access `http://localhost:8080/rest-adapter-service-0.0.12/` to see the Rest Adapter landing page.
+
+If customized properties are used, directory containing the property files must be mounted as a data directory. In addition, the directory containing the properties files inside the container must be set using ```propertiesDirectory``` property.
+
+```
+mvn spring-boot:run -Drun.jvmArguments="-DpropertiesDirectory=/my/conf"
 ```
 
 ## Configuration files location
@@ -186,6 +188,8 @@ server.port=8080
 Starting from version 0.0.10 Rest Adapter Service supports encryption/decryption of message content. More information and instructions for configuration can be found in [documentation](documentation/Encryption.md).
 
 By default plaintext configuration is enabled. The software can be built with encryption configuration enabled using the command below.
+This setting only affects the default configuration bundled inside the war file. External configuration, in `/etc/rest-adapter-service`
+or elsewhere, is not affected.
 
 ```mvn clean install -Dencrypted```
 
@@ -217,4 +221,4 @@ Running integration tests with encryption configuration enabled:
 * [Palveluväylä kehitysympäristö (Finnish only)](http://palveluvayla.fi)
 * [Requirements for Information Systems and Adapter
 Servers](http://x-road.ee/docs/eng/x-road_service_protocol.pdf)
-* [XRd4J - Java Library for X-Road v6](https://github.com/petkivim/xrd4j)
+* [XRd4J - Java Library for X-Road v6](https://github.com/vrk-kpa/xrd4j)
