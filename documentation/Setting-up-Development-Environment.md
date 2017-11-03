@@ -54,9 +54,9 @@ Import CSC's Maven repository's certificate as a trusted certificate into ```cac
 
 The project can be imported into different IDEs. 
 Required steps vary depending on the chosen IDE. 
-Simple steps are described for IntelliJ IDEA. 
+Simple quick start is described for IntelliJ IDEA. 
 
-#### Intellij IDEA
+#### IntelliJ IDEA
 
 Opening the project in IDEA.
 
@@ -67,5 +67,4 @@ Opening the project in IDEA.
 
 Once started up, Rest Adapter landing page can be found at
 `http://localhost:8080/rest-adapter-service/`
-
 and will contain links to Consumer and Provider endpoints in addition to the Provider wsdl.
