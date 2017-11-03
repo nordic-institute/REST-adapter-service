@@ -34,7 +34,7 @@ To do this, you need to have a working installation of [Maven](https://maven.apa
 cd src
 mvn spring-boot:run
 ```
-After that you can access `http://localhost:8080/rest-adapter-service-0.0.12/` to see the Rest Adapter landing page.
+After that you can access `http://localhost:8080/rest-adapter-service/` to see the Rest Adapter landing page.
 
 If customized properties are used, directory containing the property files must be mounted as a data directory. In addition, the directory containing the properties files inside the container must be set using ```propertiesDirectory``` property.
 
