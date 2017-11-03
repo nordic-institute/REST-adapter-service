@@ -27,7 +27,7 @@ In parallel with the technical development we will collect more use cases from F
 ## Try It Out 
 
 The fastest and easiest way to try out the application is by using the Spring Boot Maven plugin.
-To do this, you need to have a working installation of [Maven](https://maven.apache.org/md).
+To do this, you need to have a working installation of [Maven](https://maven.apache.org/).
 
 
 ```
@@ -36,8 +36,7 @@ mvn spring-boot:run
 ```
 After that you can access `http://localhost:8080/rest-adapter-service/` to see the Rest Adapter landing page.
 
-If customized properties are used, directory containing the property files must be mounted as a data directory. In addition, the directory containing the properties files inside the container must be set using ```propertiesDirectory``` property.
-
+If customized properties are used, use the following syntax to define properties directory.
 ```
 mvn spring-boot:run -Drun.jvmArguments="-DpropertiesDirectory=/my/conf"
 ```
@@ -47,14 +46,14 @@ mvn spring-boot:run -Drun.jvmArguments="-DpropertiesDirectory=/my/conf"
 Rest Adapter Service tries to load configuration files from the following locations, 
 in the following order. 
 
-If a matching directory exists, all configuration files
+If a matching directory exists, all the configuration files
 need to exist in that directory, otherwise an error occurs. Configuration 
 directory scanning stops once the first matching directory is located.
 
 Scanned directories:
 1. The directory specified by the system property ```propertiesDirectory```
     ```
-    java -jar -DpropertiesDirectory=/my/custom/path rest-adapter-service.jar
+    java -jar -DpropertiesDirectory=/my/custom/path rest-adapter-service.war
     ```
 2. The directory `rest-adapter-service` in the users home directory (for example `/home/rest-adapter-service/rest-adapter-service`)
 3. The directory `/etc/rest-adapter-service` (Linux only)
@@ -69,48 +68,14 @@ it explicitly sets `/etc/rest-adapter-service` as the configuration directory.
 
 More detailed usage examples are available in [documentation](documentation/Rest-Adapter-Service-principles.md#usage).
 
-## Building the Docker Image
+# Installing Rest Adapter Service
 
-While you are in the project root directory, build the image using the docker build command. The ```-t``` parameter gives your image a tag, so you can run it more easily later. Don’t forget the ```.``` command, which tells the docker build command to look in the current directory for a file called Dockerfile.
+Some of the ways to install Rest Adapter Service are
+* Using package manager to install .deb or .rpm packages
+* Deploying `rest-adapter-service.war` into a web container such as Tomcat
+* Using Docker to run Rest Adapter Service
 
-```
-docker build -t rest-adapter-service .
-```
-
-## Source code license headers
-
-The build uses [license-maven-plugin](https://github.com/mycila/license-maven-plugin) to generate proper license headers for the source code files.
-
-`mvn license:format` generates the license headers where they are missing. More details can be found from the plugin documentation.
-
-## DEB Packaging
-
-The Rest Adapter Service builds DEB package for use with Ubuntu and siblings using the [jdeb Maven plugin](https://github.com/tcurdt/jdeb).
-
-`mvn -f src/pom.xml clean package -P package-deb`
-
-Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
-
-## RPM Packaging
-
-The Rest Adapter Service also builds RPMs for use with RHEL (or derivatives) using the [rpm-maven-plugin](https://github.com/mojohaus/rpm-maven-plugin).
-RPM package build works only when done on RHEL platform.
-
-```mvn -f src/pom.xml clean package -P package-rpm```
-
-Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
-
-## RPM Packaging on a Non-RedHat Platform
-
-It is possible to build RPM packages even if running on a non-RedHat platform. A docker container can be used for the build.
-
-```shell
-# (in the directory which contains pom.xml)
-$ docker build -t rest-adapter-rpm src/main/packages/docker
-$ ./build-rpm-in-docker.sh
-```
-
-## Installing 
+## Using package manager to install Rest Adapter
 
 ### Ubuntu 14
 
@@ -175,11 +140,80 @@ Start the service:
 ```shell
 $ service rest-adapter-service start
 ```
-## Changing the port
+### Changing the port
 To change the port, modify configuration file `/etc/rest-adapter-service/application.properties`
 ```shell
 # change this to customize port
 server.port=8080
+```
+
+## Deploying rest-adapter-service into a container
+
+You can either build `rest-adapter-service.war` yourself (built war appears in `target/` directory)
+
+```shell
+$ mvn clean install
+...
+$ ls -la target/rest-adapter-service-0.0.12-SNAPSHOT.war
+-rw-rw-r-- 1 janne janne 22459828 marra  3 16:45 target/rest-adapter-service-0.0.12-SNAPSHOT.war
+```
+
+or extract war file from a .deb or .rpm package which has been downloaded from the packet repository.
+
+
+## Using Docker
+
+While you are in the project root directory, build the image using the docker build command. The ```-t``` parameter gives your image a tag, so you can run it more easily later. Don’t forget the ```.``` command, which tells the docker build command to look in the current directory for a file called Dockerfile.
+
+```
+docker build -t rest-adapter-service .
+```
+After building the image, you can run Rest Adapter using it.
+
+```
+docker run -p 8080:8080 rest-adapter-service
+```
+
+If customized properties are used, the host directory containing the properties files must be mounted as a data directory. 
+In addition, the directory containing the properties files inside the container must be set using JAVA_OPTS andpropertiesDirectory property.
+
+```
+docker run -p 8080:8080 -v /host/dir/conf:/my/conf -e "JAVA_OPTS=-DpropertiesDirectory=/my/conf"  rest-adapter-service
+```
+
+# Building and packaging
+
+## Source code license headers
+
+The build uses [license-maven-plugin](https://github.com/mycila/license-maven-plugin) to generate proper license headers for the source code files.
+
+`mvn license:format` generates the license headers where they are missing. More details can be found from the plugin documentation.
+
+## DEB Packaging
+
+The Rest Adapter Service builds DEB package for use with Ubuntu and siblings using the [jdeb Maven plugin](https://github.com/tcurdt/jdeb).
+
+`mvn -f src/pom.xml clean package -P package-deb`
+
+Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
+
+## RPM Packaging
+
+The Rest Adapter Service also builds RPMs for use with RHEL (or derivatives) using the [rpm-maven-plugin](https://github.com/mojohaus/rpm-maven-plugin).
+RPM package build works only when done on RHEL platform.
+
+```mvn -f src/pom.xml clean package -P package-rpm```
+
+Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
+
+## RPM Packaging on a Non-RedHat Platform
+
+It is possible to build RPM packages even if running on a non-RedHat platform. A docker container can be used for the build.
+
+```shell
+# (in the directory which contains pom.xml)
+$ docker build -t rest-adapter-rpm src/main/packages/docker
+$ ./build-rpm-in-docker.sh
 ```
 
 
