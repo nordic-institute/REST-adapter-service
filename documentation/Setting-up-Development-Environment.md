@@ -3,8 +3,7 @@ This document describes how a developer's workstation can be setup.
 ### Software Requirements
 
 * Linux or Windows
-* Java 7
-* Tomcat 6 or 7 or 8
+* Java 8
 * Maven 3.x
 
 ### Getting the code
@@ -53,32 +52,20 @@ Import CSC's Maven repository's certificate as a trusted certificate into ```cac
 
 ### IDE Setup
 
-The project can be imported into different IDEs, but currently this section covers only Netbeans. However, some modifications are required regardless of the IDE that's being used.
+The project can be imported into different IDEs. 
+Required steps vary depending on the chosen IDE. 
+Simple steps are described for IntelliJ IDEA. 
 
-#### Netbeans
+#### Intellij IDEA
 
-Opening the project in Netbeans.
+Opening the project in IDEA.
 
-* File -> Open Project -> path of the src folder -> Click Open Project button
+* Install Lombok plugin and Maven integration plugin, if you have not done it yet
+* File -> New project from existing sources -> Choose pom.xml
+* Rest of the options can be left at defaults
+* Run maven task spring-boot:run to start up Rest Adapter
 
-Adding a new Tomcat server.
+Once started up, Rest Adapter landing page can be found at
+`http://localhost:8080/rest-adapter-service/`
 
-* Tools -> Servers -> Add Server
-
-### Running the application
-
-Below there are the default URLs of Provider and Consumer endpoints if the application is run in Netbeans (Run -> Run Project).
-
-* Consumer
-  * [http://localhost:8080/RESTGateway/Consumer](http://localhost:8080/RESTGateway/Consumer)
-* Provider
-  * [http://localhost:8080/RESTGateway/Provider](http://localhost:8080/RESTGateway/Provider)
-
-**N.B.!** If ```rest-adapter-service-xxx.war``` file is manually copied in Tomcat's ```webapp``` folder, then the application can be accessed at:
-
-* Consumer
-  * [http://localhost:8080/rest-adapter-service/Consumer](http://localhost:8080/rest-adapter-service-xxx/Consumer)
-* Provider
-  * [http://localhost:8080/rest-adapter-service/Provider](http://localhost:8080/rest-adapter-service-xxx/Provider)
-
-If you want to test the application by sending requests from Consumer to Provider inside a single instance, then you must update the ```ss.url``` property in ```src/main/resources/consumer-gateway.properties``` file, if the application URL is not ```http://localhost:8080/RESTGateway```. ```ss.url``` property defines the URL where Consumer sends the requests and by default its value is ```http://localhost:8080/RESTGateway/Provider```.
+and will contain links to Consumer and Provider endpoints in addition to the Provider wsdl.

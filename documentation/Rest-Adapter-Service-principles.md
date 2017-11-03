@@ -3,7 +3,6 @@
 * [Principle of Operation](Rest-Adapter-Service-principles.md#principle-of-operation)
   * [Consumer Gateway](Rest-Adapter-Service-principles.md#consumer-gateway)
   * [Provider Gateway](Rest-Adapter-Service-principles.md#provider-gateway)
-* [Software Requirements](Rest-Adapter-Service-principles.md#software-requirements)
 * [Installation](Rest-Adapter-Service-principles.md#installation)
   * [Consumer Gateway](Rest-Adapter-Service-principles.md#consumer-gateway-1)
   * [Provider Gateway](Rest-Adapter-Service-principles.md#provider-gateway-1)
@@ -240,16 +239,9 @@ Request body: {"id":1,"name":"Test name"}
 
 Provider Gateway receives SOAP request from Security Server, translates the request to REST service request, sends the request to a REST service, converts the response to XML (if needed), wraps the response in SOAP message and returns the SOAP response to the security server. X-Road SOAP-headers are passed via HTTP headers (X-XRd-Client, X-XRd-Service, X-XRd-UserId, X-XRd-MessageId).
 
-### Software Requirements
-
-* Java 8 or later
-* Tomcat 8 or later
-
 ### Installation
 
-* Build or download the ```rest-adapter-service.war``` file.
-* Copy the file ```tomcat.home/webapps``` folder.
-* Start/restart Tomcat. The application is now accessible at:
+See [README](../README.md) for description of installation options.
 
 #### Consumer Gateway
 
@@ -270,7 +262,8 @@ http://localhost:8080/rest-adapter-service/Provider?wsdl
 ```
 ### Consumer Gateway Configuration
 
-General settings are configured through ```WEB-INF/classes/consumer-gateway.properties``` configuration file. All the general properties are mandatory.
+General settings are configured through ```consumer-gateway.properties``` configuration file. 
+All the general properties are mandatory.
 
 <table>
           <tbody>
@@ -373,7 +366,7 @@ General settings are configured through ```WEB-INF/classes/consumer-gateway.prop
 	</tbody>
 </table>
 
-Individual services are configured through ```WEB-INF/classes/consumers.properties``` configuration file. Each service has 8 properties of which 3 are mandatory. Each property must be prefixed with the number of the service, e.g. ```0.id```, ```0.path```, ```0.verb```. The numbering starts from zero.
+Individual services are configured through ```consumers.properties``` configuration file. Each service has 8 properties of which 3 are mandatory. Each property must be prefixed with the number of the service, e.g. ```0.id```, ```0.path```, ```0.verb```. The numbering starts from zero.
 
 <table>
           <tbody>
@@ -488,7 +481,7 @@ http://anotherapi.prh.fi/opendata/bis/v1/2659636-7
 
 ### Provider Gateway Configuration
 
-General settings are configured through ```WEB-INF/classes/provider-gateway.properties``` configuration file. All the general properties are mandatory.
+General settings are configured through ```provider-gateway.properties``` configuration file. All the general properties are mandatory.
 
 <table>
           <tbody>
@@ -502,7 +495,11 @@ General settings are configured through ```WEB-INF/classes/provider-gateway.prop
               <td>wsdl.path</td>
               <td>&#42;</td>
               <td>-</td>
-              <td>Path or filename of the WSDL file. If only filename is given, the file must be located in WEB-INF/classes folder.</td>
+              <td>Path or filename of the WSDL file. 
+              File reading is first attempted from WEB-INF/classes directory 
+              (either inside packaged war, or in exploded war directory),
+              and then from filesystem using the provided filename or path.
+              </td>
             </tr>
             <tr>
               <td>namespace.deserialize</td>
@@ -573,7 +570,7 @@ General settings are configured through ```WEB-INF/classes/provider-gateway.prop
 </tbody>
 </table>
 
-REST services are configured through ```WEB-INF/classes/providers.properties``` configuration file. Each service has 10 properties of which 2 are mandatory. Each property must be prefixed with the number of the service, e.g. ```0.id```, ```0.url```. The numbering starts from zero.
+REST services are configured through ```providers.properties``` configuration file. Each service has 10 properties of which 2 are mandatory. Each property must be prefixed with the number of the service, e.g. ```0.id```, ```0.url```. The numbering starts from zero.
 
 <table>
           <tbody>

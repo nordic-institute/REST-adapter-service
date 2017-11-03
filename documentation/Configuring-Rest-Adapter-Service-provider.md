@@ -9,7 +9,7 @@ Before configuring Rest Adapter Service Provider for X-Road the following condit
 
 ### Configuration
 
-General settings are configured through ```WEB-INF/classes/provider-gateway.properties``` configuration file. All the general properties are mandatory.
+General settings are configured through ```provider-gateway.properties``` configuration file. All the general properties are mandatory.
 
 <table>
           <tbody>
@@ -23,7 +23,9 @@ General settings are configured through ```WEB-INF/classes/provider-gateway.prop
               <td>wsdl.path</td>
               <td>&#42;</td>
               <td>-</td>
-              <td>Path or filename of the WSDL file. If only filename is given, the file must be located in WEB-INF/classes folder.</td>
+              <td>File reading is first attempted from WEB-INF/classes directory 
+                                (either inside packaged war, or in exploded war directory),
+                                and then from filesystem using the provided filename or path.</td>
             </tr>
             <tr>
               <td>namespace.deserialize</td>
@@ -46,7 +48,7 @@ General settings are configured through ```WEB-INF/classes/provider-gateway.prop
 </tbody>
 </table>
 
-REST services to be published are configured through ```WEB-INF/classes/providers.properties``` configuration file. Each service has 10 properties of which 2 are mandatory. Each property must be prefixed with the number of the service, e.g. ```0.id```, ```0.url```. The numbering starts from zero.
+REST services to be published are configured through ```providers.properties``` configuration file. Each service has 10 properties of which 2 are mandatory. Each property must be prefixed with the number of the service, e.g. ```0.id```, ```0.url```. The numbering starts from zero.
 
 <table>
           <tbody>
@@ -129,7 +131,7 @@ http://myserver.com/rest-adapter-service/Provider?wsdl
 ```
 ### Example
 
-General configuration at ```WEB-INF/classes/provider-gateway.properties```:
+General configuration at ```provider-gateway.properties```:
 
 ```
 wsdl.path=provider-gateway.wsdl
@@ -140,7 +142,7 @@ namespace.prefix.serialize=ts1
 namespace.deserialize=http://test.x-road.fi/producer
 ```
 
-WSDL description at ```WEB-INF/classes/provider-gateway.wsdl```:
+WSDL description at ```provider-gateway.wsdl```:
 ```
 <wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:tns="http://test.x-road.fi/producer"
@@ -187,7 +189,7 @@ Service version: v1
 Service URL: http://example.com/service/endpoint
 ```
 
-Configuration at ```WEB-INF/classes/providers.properties```:
+Configuration at ```providers.properties```:
 
 ```
 0.id=FI-DEV.GOV.123456-7.TestSystem.getRandom.v1
