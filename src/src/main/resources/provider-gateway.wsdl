@@ -623,7 +623,7 @@
 
     <wsdl:service name="provider-gateway">
         <wsdl:port binding="tns:xRoadBinding" name="xRoadServicePort">
-            <soap:address location="http://localhost:8080/@project.build.finalName@/Provider"/>
+            <soap:address location="http://localhost:8080/rest-adapter-service/Provider"/>
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>
