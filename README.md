@@ -82,25 +82,25 @@ Some of the ways to install Rest Adapter Service are
 Rest Adapter Service requires `java8-runtime-headless` dependency. 
 Configure openjdk package repository, which provides that:
 ```shell
-$ apt-add-repository -y ppa:openjdk-r/ppa
-$ apt-get update
+apt-add-repository -y ppa:openjdk-r/ppa
+apt-get update
 ```
 Install Java 8:
 ```shell
-$ apt-get install openjdk-8-jre-headless
+apt-get install openjdk-8-jre-headless
 ```
 Do not install Java 9, as Rest Adapter does not yet support it.
 
 Install Rest Adapter Service package
 TODO: install correct repo and key
 ```shell
-$ apt-get install rest-adapter-service
+apt-get install rest-adapter-service
 ```
 Configure Rest Adapter Service using property files, see xxx (TODO). 
 Service will automatically start during boot.
 Start the service:
 ```shell
-$ service rest-adapter-service start
+service rest-adapter-service start
 ```
 
 ### Ubuntu 16
@@ -108,19 +108,19 @@ $ service rest-adapter-service start
 Rest Adapter Service requires `java8-runtime-headless` dependency. 
 Install Java 8:
 ```shell
-$ apt-get install openjdk-8-jre-headless
+apt-get install openjdk-8-jre-headless
 ```
 Do not install Java 9, as Rest Adapter does not yet support it.
 
 Install Rest Adapter Service package
 ```shell
-$ apt-get install rest-adapter-service 
+apt-get install rest-adapter-service 
 ```
 Configure Rest Adapter Service using property files, see xxx (TODO). 
 Service is enabled or disabled using system presets, which means that on a default Ubuntu 16 it be enabled (and start during boots).
 Start the service:
 ```shell
-$ service rest-adapter-service start
+service rest-adapter-service start
 ```
 
 ### RHEL 7
@@ -128,17 +128,17 @@ $ service rest-adapter-service start
 Install Rest Adapter Service package
 TODO: install correct repo and key
 ```shell
-$ yum install rest-adapter-service
+yum install rest-adapter-service
 ```
 Configure Rest Adapter Service using property files, see xxx (TODO). 
 Service is enabled or disabled using system presets, which means that on a default RHEL 7 it be disabled (and not start during boots).
 Enable the service (to start automatically during boots):
 ```shell
-$ systemctl enable rest-adapter-service
+systemctl enable rest-adapter-service
 ```
 Start the service:
 ```shell
-$ service rest-adapter-service start
+service rest-adapter-service start
 ```
 ### Changing the port
 To change the port, modify configuration file `/etc/rest-adapter-service/application.properties`
@@ -152,9 +152,9 @@ server.port=8080
 You can either build `rest-adapter-service.war` yourself (built war appears in `target/` directory)
 
 ```shell
-$ mvn clean install
+mvn clean install
 ...
-$ ls -la target/rest-adapter-service-0.0.12-SNAPSHOT.war
+ls -la target/rest-adapter-service-0.0.12-SNAPSHOT.war
 -rw-rw-r-- 1 janne janne 22459828 marra  3 16:45 target/rest-adapter-service-0.0.12-SNAPSHOT.war
 ```
 
@@ -213,8 +213,8 @@ It is possible to build RPM packages even if running on a non-RedHat platform. A
 
 ```shell
 # (in the directory which contains pom.xml)
-$ docker build -t rest-adapter-rpm src/main/packages/docker
-$ ./build-rpm-in-docker.sh
+docker build -t rest-adapter-rpm src/main/packages/docker
+./build-rpm-in-docker.sh
 ```
 
 
