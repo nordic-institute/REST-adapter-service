@@ -92,11 +92,11 @@ apt-get install openjdk-8-jre-headless
 Do not install Java 9, as Rest Adapter does not yet support it.
 
 Install Rest Adapter Service package
-TODO: install correct repo and key
+TODO: install correct repo and key, these are not known at this time.
 ```shell
 apt-get install rest-adapter-service
 ```
-Configure Rest Adapter Service using property files, see xxx (TODO). 
+Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md). 
 Service will automatically start during boot.
 Start the service:
 ```shell
@@ -116,7 +116,7 @@ Install Rest Adapter Service package
 ```shell
 apt-get install rest-adapter-service 
 ```
-Configure Rest Adapter Service using property files, see xxx (TODO). 
+Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md).
 Service is enabled or disabled using system presets, which means that on a default Ubuntu 16 it be enabled (and start during boots).
 Start the service:
 ```shell
@@ -130,7 +130,7 @@ TODO: install correct repo and key
 ```shell
 yum install rest-adapter-service
 ```
-Configure Rest Adapter Service using property files, see xxx (TODO). 
+Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md).
 Service is enabled or disabled using system presets, which means that on a default RHEL 7 it be disabled (and not start during boots).
 Enable the service (to start automatically during boots):
 ```shell
