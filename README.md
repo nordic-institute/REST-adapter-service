@@ -147,7 +147,7 @@ To change the port, modify configuration file `/etc/rest-adapter-service/applica
 server.port=8080
 ```
 
-## Deploying rest-adapter-service into a container
+## Deploying rest-adapter-service web application into a container
 
 You can either build `rest-adapter-service.war` yourself (built war appears in `target/` directory)
 
@@ -160,6 +160,7 @@ $ ls -la target/rest-adapter-service-0.0.12-SNAPSHOT.war
 
 or extract war file from a .deb or .rpm package which has been downloaded from the packet repository.
 
+To set configuration files location, you need to specify `propertiesDirectory` system property using a container-specific method.
 
 ## Using Docker
 
