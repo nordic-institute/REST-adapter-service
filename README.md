@@ -147,6 +147,20 @@ To change the port, modify configuration file `/etc/rest-adapter-service/applica
 server.port=8080
 ```
 
+### Logs
+
+On Ubuntu 16 and RHEL, you can follow the logs using e.g. `journalctl`
+
+```shell
+journalctl -fu rest-adapter-service
+```
+
+On Ubuntu 14 the same can be done using
+
+```shell
+tail -f /var/log/upstart/rest-adapter-service.log
+```
+
 ## Deploying rest-adapter-service web application into a container
 
 You can either build `rest-adapter-service.war` yourself (built war appears in `target/` directory)
@@ -223,7 +237,8 @@ docker build -t rest-adapter-rpm src/main/packages/docker
 Starting from version 0.0.10 Rest Adapter Service supports encryption/decryption of message content. More information and instructions for configuration can be found in [documentation](documentation/Encryption.md).
 
 By default plaintext configuration is enabled. The software can be built with encryption configuration enabled using the command below.
-This setting only affects the default configuration bundled inside the war file. External configuration, in `/etc/rest-adapter-service`
+This setting only affects the default configuration bundled inside the war file, and the integration tests. 
+External configuration, in `/etc/rest-adapter-service`
 or elsewhere, is not affected.
 
 ```mvn clean install -Dencrypted```
