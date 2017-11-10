@@ -22,15 +22,23 @@
  */
 package fi.vrk.xroad.restadapterservice.util;
 
-import com.pkrete.xrd4j.common.exception.XRd4JException;
-import com.pkrete.xrd4j.common.member.ConsumerMember;
-import com.pkrete.xrd4j.common.member.ProducerMember;
-import com.pkrete.xrd4j.common.util.SOAPHelper;
+import fi.vrk.xrd4j.common.exception.XRd4JException;
+import fi.vrk.xrd4j.common.member.ConsumerMember;
+import fi.vrk.xrd4j.common.member.ProducerMember;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
 import fi.vrk.xroad.restadapterservice.endpoint.ConsumerEndpoint;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Properties;
 import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import static junit.framework.TestCase.fail;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test cases for ConsumerGatewayUtil class.
@@ -43,7 +51,9 @@ import junit.framework.TestCase;
  *
  * @author Petteri Kivimäki
  */
-public class ConsumerGatewayUtilTest extends TestCase {
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class ConsumerGatewayUtilTest {
 
     private String servletUrl;
     private Map<String, ConsumerEndpoint> map;
@@ -53,9 +63,8 @@ public class ConsumerGatewayUtilTest extends TestCase {
      *
      * @throws Exception
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         this.servletUrl = "http://localhost:8080/RESTGateway/Consumer/";
         Properties props = new Properties();
         Properties endpoints = new Properties();
@@ -102,6 +111,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
+    @Test
     public void testParseConsumer1() throws XRd4JException {
         String clientId = "FI_PILOT.GOV.0245437-2";
         ConsumerEndpoint consumerEndpoint = new ConsumerEndpoint(null, clientId, null);
@@ -139,6 +149,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
+    @Test
     public void testParseProducer1() throws XRd4JException {
         String serviceId = "FI_PILOT.GOV.0245437-2.ConsumerService.getOrganizationList.v1";
         ConsumerEndpoint consumerEndpoint = new ConsumerEndpoint(serviceId, null, null);
@@ -279,6 +290,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
+    @Test
     public void testExtractConsumer0() throws XRd4JException {
         ConsumerEndpoint temp = ConsumerGatewayUtil.findMatch("GET /www.hel.fi/palvelukarttaws/rest/v2/organization/", map);
         assertEquals(false, temp == null);
@@ -301,6 +313,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
+    @Test
     public void testExtractConsumer1() throws XRd4JException {
         ConsumerEndpoint temp = ConsumerGatewayUtil.findMatch("GET /www.hel.fi/palvelukarttaws/rest/v2/organization/49/", map);
         assertEquals(false, temp == null);
@@ -346,6 +359,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
+    @Test
     public void testExtractConsumer4() throws XRd4JException {
         ConsumerEndpoint temp = ConsumerGatewayUtil.findMatch("GET /test.com/api/", map);
         assertEquals(false, temp == null);
@@ -371,6 +385,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
+    @Test
     public void testExtractConsumer5() throws XRd4JException {
         ConsumerEndpoint temp = ConsumerGatewayUtil.findMatch("GET /example.com/api/", map);
         assertEquals(true, temp == null);
@@ -379,6 +394,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
     /**
      * Modify JSON string containing URLs beginning with http. No resourceId.
      */
+    @Test
     public void testModifyUrl1() {
         String responseCorrect = "{\"urls\":[\"http://localhost:8080/RESTGateway/Consumer/example.com/second\", \"http://localhost:8080/RESTGateway/Consumer/example.com/second/\", \"http://localhost:8080/RESTGateway/Consumer/example.com/second?param1=value1\", \"http://localhost:8080/RESTGateway/Consumer/example.com/second/?param1=value1\", \"http://localhost:8080/RESTGateway/Consumer/example.com/second/12345\", \"http://localhost:8080/RESTGateway/Consumer/example.com/second/12345?param1=value1\", \"http://localhost:8080/RESTGateway/Consumer/example.com/second/12345/\", \"http://localhost:8080/RESTGateway/Consumer/example.com/second/12345/?param1=value1\"]}";
         String resourcePath = "/example.com/second/";
@@ -391,6 +407,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * Modify JSON string containing URLs beginning with http. ResourceId is
      * defined.
      */
+    @Test
     public void testModifyUrl2() {
         String responseCorrect = "{\"urls\":[\"http://localhost:8080/RESTGateway/Consumer/example.com/second\", \"http://localhost:8080/RESTGateway/Consumer/example.com/second/\", \"http://localhost:8080/RESTGateway/Consumer/example.com/second?param1=value1\", \"http://localhost:8080/RESTGateway/Consumer/example.com/second/?param1=value1\", \"http://localhost:8080/RESTGateway/Consumer/example.com/second/12345\", \"http://localhost:8080/RESTGateway/Consumer/example.com/second/12345?param1=value1\", \"http://localhost:8080/RESTGateway/Consumer/example.com/second/12345/\", \"http://localhost:8080/RESTGateway/Consumer/example.com/second/12345/?param1=value1\"]}";
         String resourcePath = "/example.com/second/{resourceId}/";
@@ -402,6 +419,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
     /**
      * Modify JSON string containing URLs beginning with https.
      */
+    @Test
     public void testModifyUrl3() {
         String responseCorrect = "{\"urls\":[\"https://localhost:8080/RESTGateway/Consumer/example.com/second\", \"https://localhost:8080/RESTGateway/Consumer/example.com/second/\", \"https://localhost:8080/RESTGateway/Consumer/example.com/second?param1=value1\", \"https://localhost:8080/RESTGateway/Consumer/example.com/second/?param1=value1\", \"https://localhost:8080/RESTGateway/Consumer/example.com/second/12345\", \"https://localhost:8080/RESTGateway/Consumer/example.com/second/12345?param1=value1\", \"https://localhost:8080/RESTGateway/Consumer/example.com/second/12345/\", \"https://localhost:8080/RESTGateway/Consumer/example.com/second/12345/?param1=value1\"]}";
         String resourcePath = "/example.com/second/";
@@ -415,6 +433,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * Modify JSON string containing URLs beginning with https. ResourceId is
      * defined.
      */
+    @Test
     public void testModifyUrl4() {
         String responseCorrect = "{\"urls\":[\"https://localhost:8080/RESTGateway/Consumer/example.com/second\", \"https://localhost:8080/RESTGateway/Consumer/example.com/second/\", \"https://localhost:8080/RESTGateway/Consumer/example.com/second?param1=value1\", \"https://localhost:8080/RESTGateway/Consumer/example.com/second/?param1=value1\", \"https://localhost:8080/RESTGateway/Consumer/example.com/second/12345\", \"https://localhost:8080/RESTGateway/Consumer/example.com/second/12345?param1=value1\", \"https://localhost:8080/RESTGateway/Consumer/example.com/second/12345/\", \"https://localhost:8080/RESTGateway/Consumer/example.com/second/12345/?param1=value1\"]}";
         String resourcePath = "/example.com/second/{resourceId}/";
@@ -427,6 +446,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
     /**
      * Modify XML string containing URLs beginning with http. No resourceId.
      */
+    @Test
     public void testModifyUrl5() {
         String responseCorrect = "<urls><url>http://localhost:8080/RESTGateway/Consumer/example.com/second</url><url>http://localhost:8080/RESTGateway/Consumer/example.com/second/</url><url>http://localhost:8080/RESTGateway/Consumer/example.com/second?param1=value1</url><url>http://localhost:8080/RESTGateway/Consumer/example.com/second/?param1=value1</url><url>http://localhost:8080/RESTGateway/Consumer/example.com/second/12345</url><url>http://localhost:8080/RESTGateway/Consumer/example.com/second/12345?param1=value1</url><url>http://localhost:8080/RESTGateway/Consumer/example.com/second/12345/</url><url>http://localhost:8080/RESTGateway/Consumer/example.com/second/12345/?param1=value1</url></urls>";
         String resourcePath = "/example.com/second/";
@@ -439,6 +459,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * Modify XML string containing URLs beginning with http. ResourceId is
      * defined.
      */
+    @Test
     public void testModifyUrl6() {
         String responseCorrect = "<urls><url>http://localhost:8080/RESTGateway/Consumer/example.com/second</url><url>http://localhost:8080/RESTGateway/Consumer/example.com/second/</url><url>http://localhost:8080/RESTGateway/Consumer/example.com/second?param1=value1</url><url>http://localhost:8080/RESTGateway/Consumer/example.com/second/?param1=value1</url><url>http://localhost:8080/RESTGateway/Consumer/example.com/second/12345</url><url>http://localhost:8080/RESTGateway/Consumer/example.com/second/12345?param1=value1</url><url>http://localhost:8080/RESTGateway/Consumer/example.com/second/12345/</url><url>http://localhost:8080/RESTGateway/Consumer/example.com/second/12345/?param1=value1</url></urls>";
         String resourcePath = "/example.com/second/{resourceId}/";
@@ -450,6 +471,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
     /**
      * Modify XML string containing URLs beginning with https.
      */
+    @Test
     public void testModifyUrl7() {
         String responseCorrect = "<urls><url>https://localhost:8080/RESTGateway/Consumer/example.com/second</url><url>https://localhost:8080/RESTGateway/Consumer/example.com/second/</url><url>https://localhost:8080/RESTGateway/Consumer/example.com/second?param1=value1</url><url>https://localhost:8080/RESTGateway/Consumer/example.com/second/?param1=value1</url><url>https://localhost:8080/RESTGateway/Consumer/example.com/second/12345</url><url>https://localhost:8080/RESTGateway/Consumer/example.com/second/12345?param1=value1</url><url>https://localhost:8080/RESTGateway/Consumer/example.com/second/12345/</url><url>https://localhost:8080/RESTGateway/Consumer/example.com/second/12345/?param1=value1</url></urls>";
         String resourcePath = "/example.com/second/";
@@ -463,6 +485,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * Modify XML string containing URLs beginning with https. ResourceId is
      * defined.
      */
+    @Test
     public void testModifyUrl8() {
         String responseCorrect = "<urls><url>https://localhost:8080/RESTGateway/Consumer/example.com/second</url><url>https://localhost:8080/RESTGateway/Consumer/example.com/second/</url><url>https://localhost:8080/RESTGateway/Consumer/example.com/second?param1=value1</url><url>https://localhost:8080/RESTGateway/Consumer/example.com/second/?param1=value1</url><url>https://localhost:8080/RESTGateway/Consumer/example.com/second/12345</url><url>https://localhost:8080/RESTGateway/Consumer/example.com/second/12345?param1=value1</url><url>https://localhost:8080/RESTGateway/Consumer/example.com/second/12345/</url><url>https://localhost:8080/RESTGateway/Consumer/example.com/second/12345/?param1=value1</url></urls>";
         String resourcePath = "/example.com/second/{resourceId}/";
@@ -475,6 +498,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
     /**
      * Remove response tag and namespace prefix. No namespace.
      */
+    @Test
     public void testRemoveResponseTag1() {
         String source = "<response><param1>value1</param1><param2>value2</param2></response>";
         String result = "<param1>value1</param1><param2>value2</param2>";
@@ -485,6 +509,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
     /**
      * Remove response tag and namespace prefix. With namespace, no prefix.
      */
+    @Test
     public void testRemoveResponseTag2() {
         String source = "<response xmlns:ts1=\"http://test.com/ns\"><param1>value1</param1><param2>value2</param2></response>";
         String result = "<param1>value1</param1><param2>value2</param2>";
@@ -495,6 +520,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
     /**
      * Remove response tag and namespace prefix. With namespace and prefix.
      */
+    @Test
     public void testRemoveResponseTag3() {
         String source = "<ts1:response xmlns:ts1=\"http://test.com/ns\"><ts1:param1>value1</ts1:param1><ts1:param2>value2</ts1:param2></ts1:response>";
         String result = "<param1>value1</param1><param2>value2</param2>";
@@ -506,6 +532,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * Remove response tag and namespace prefix. Only response tag has namespace
      * and prefix.
      */
+    @Test
     public void testRemoveResponseTag4() {
         String source = "<ts1:response xmlns:ts1=\"http://test.com/ns\"><param1>value1</param1><param2>value2</param2></ts1:response>";
         String result = "<param1>value1</param1><param2>value2</param2>";
@@ -517,6 +544,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * Remove response tag and namespace prefix. Response tag has namespace and
      * prefix, one child has the same prefix.
      */
+    @Test
     public void testRemoveResponseTag5() {
         String source = "<ts1:response xmlns:ts1=\"http://test.com/ns\"><ts1:param1>value1</ts1:param1><param2>value2</param2></ts1:response>";
         String result = "<param1>value1</param1><param2>value2</param2>";
@@ -528,6 +556,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * Remove response tag and namespace prefix. Response tag has namespace and
      * prefix, one child has another namespace and prefix.
      */
+    @Test
     public void testRemoveResponseTag6() {
         String source = "<ts1:response xmlns:ts1=\"http://test.com/ns\"><ts2:param1 xmlns:ts2=\"http://test.com/ns2\">value1</ts2:param1><param2>value2</param2></ts1:response>";
         String result = "<ts2:param1 xmlns:ts2=\"http://test.com/ns2\">value1</ts2:param1><param2>value2</param2>";
@@ -540,6 +569,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * prefix, one child has another namespace and prefix, and another child has
      * reponse's namespace prefix.
      */
+    @Test
     public void testRemoveResponseTag7() {
         String source = "<ts1:response xmlns:ts1=\"http://test.com/ns\"><ts2:param1 xmlns:ts2=\"http://test.com/ns2\">value1</ts2:param1><ts1:param2>value2</ts1:value2></ts1:response>";
         String result = "<ts2:param1 xmlns:ts2=\"http://test.com/ns2\">value1</ts2:param1><param2>value2</value2>";
@@ -551,6 +581,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * Remove response tag and namespace prefix. Response tag has no namespace,
      * one child has namespace and prefix.
      */
+    @Test
     public void testRemoveResponseTag8() {
         String source = "<response><ts2:param1 xmlns:ts2=\"http://test.com/ns2\">value1</ts2:param1><param2>value2</param2></response>";
         String result = "<ts2:param1 xmlns:ts2=\"http://test.com/ns2\">value1</ts2:param1><param2>value2</param2>";
@@ -562,6 +593,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * Remove response tag and namespace prefix. Response tag has no namespace,
      * children are under another element that has namespace.
      */
+    @Test
     public void testRemoveResponseTag9() {
         String source = "<response><ts2:param1 xmlns:ts2=\"http://test.com/ns2\"><ts2:param2>value2</ts2:param2><param3>value3</param3></ts2:param1></response>";
         String result = "<ts2:param1 xmlns:ts2=\"http://test.com/ns2\"><ts2:param2>value2</ts2:param2><param3>value3</param3></ts2:param1>";
@@ -575,6 +607,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * Remove response tag and namespace prefix. Response tag has namespace and
      * prefix, children are under another element that has namespace.
      */
+    @Test
     public void testRemoveResponseTag10() {
         String source = "<ts1:response xmlns:ts1=\"http://test.com/ns\"><ts2:param1 xmlns:ts2=\"http://test.com/ns2\"><ts2:param2>value2</ts2:param2><ts1:param3>value3</ts1:param3></ts2:param1></ts1:response>";
         String result = "<ts2:param1 xmlns:ts2=\"http://test.com/ns2\"><ts2:param2>value2</ts2:param2><param3>value3</param3></ts2:param1>";
@@ -588,6 +621,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * Remove response tag and namespace prefix. Response tag has namespace and
      * no prefix, children are under another element that has namespace.
      */
+    @Test
     public void testRemoveResponseTag11() {
         String source = "<response xmlns=\"http://test.com/ns\"><ts2:param1 xmlns:ts2=\"http://test.com/ns2\"><ts2:param2>value2</ts2:param2><param3>value3</param3></ts2:param1></response>";
         String result = "<ts2:param1 xmlns:ts2=\"http://test.com/ns2\"><ts2:param2>value2</ts2:param2><param3>value3</param3></ts2:param1>";
@@ -601,6 +635,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * Remove response tag and namespace prefix. No namespace. XML uses
      * ISO-8859-1 character set.
      */
+    @Test
     public void testRemoveResponseTag12() throws UnsupportedEncodingException {
         String source = new String("<response><wrapper><param1>value1</param1><param2>ÄÖÅäöå</param2></wrapper></response>".getBytes(), "ISO-8859-1");
         String result = new String("<wrapper><param1>value1</param1><param2>ÄÖÅäöå</param2></wrapper>".getBytes(), "ISO-8859-1");
@@ -613,6 +648,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
     /**
      * Remove {serviceName}response tag and namespace prefix. No namespace.
      */
+    @Test
     public void testRemoveResponseTag13() {
         String source = "<testServiceResponse><wrapper><param1>value1</param1><param2>value2</param2></wrapper></testServiceResponse>";
         String result = "<wrapper><param1>value1</param1><param2>value2</param2></wrapper>";
@@ -627,6 +663,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * namespace and no prefix, children are under another element that has
      * namespace and prefix.
      */
+    @Test
     public void testRemoveResponseTag14() {
         String source = "<testServiceResponse xmlns=\"http://test.com/ns\"><ts1:wrapper xmlns:ts1=\"http://test.com/ns2\"><ts1:param1>value1</ts1:param1><ts1:param2>value2</ts1:param2></ts1:wrapper></testServiceResponse>";
         String result = "<ts1:wrapper xmlns:ts1=\"http://test.com/ns2\"><ts1:param1>value1</ts1:param1><ts1:param2>value2</ts1:param2></ts1:wrapper>";
@@ -641,6 +678,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
      * namespace and no prefix, children are under another element that has
      * namespace and prefix.
      */
+    @Test
     public void testRemoveResponseTag15() {
         String source = "<ts0:testServiceResponse xmlns:ts0=\"http://test.com/ns\"><ts1:wrapper xmlns:ts1=\"http://test.com/ns2\"><ts1:param1>value1</ts1:param1><ts1:param2>value2</ts1:param2></ts1:wrapper></ts0:testServiceResponse>";
         String result = "<ts1:wrapper xmlns:ts1=\"http://test.com/ns2\"><ts1:param1>value1</ts1:param1><ts1:param2>value2</ts1:param2></ts1:wrapper>";
@@ -653,6 +691,7 @@ public class ConsumerGatewayUtilTest extends TestCase {
     /**
      * Remove {serviceName}response tag and namespace prefix.
      */
+    @Test
     public void testRemoveResponseTag16() {
         String source = "<ts0:testServiceResponse xmlns:ts0=\"http://test.com/ns\"><wrapper><param1>value1</param1><param2>value2</param2></wrapper></ts0:testServiceResponse>";
         String result = "<wrapper><param1>value1</param1><param2>value2</param2></wrapper>";

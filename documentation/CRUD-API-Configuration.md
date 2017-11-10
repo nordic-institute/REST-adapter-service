@@ -23,7 +23,7 @@ A band object has only two properties: ```id``` and ```name```.
 
 ### Provider Gateway
 
-All the five CRUP API operations must be added to ```WEB-INF/classes/providers.properties``` file.
+All the five CRUP API operations must be added to ```providers.properties``` file.
 
 ```
 0.id=FI_PILOT.GOV.1019125-0.Demo2Service.getBands.v1
@@ -45,7 +45,7 @@ All the five CRUP API operations must be added to ```WEB-INF/classes/providers.p
 4.verb=delete
 ```
 
-```WEB-INF/classes/provider-gateway.properties``` file should look like this:
+```provider-gateway.properties``` file should look like this:
 
 ```
 wsdl.path=provider-gateway.wsdl
@@ -56,10 +56,10 @@ namespace.prefix.serialize=ts1
 namespace.deserialize=http://test.x-road.fi/producer
 ```
 
-**N.B.** As long as Provider Gateway is not accessed through X-Road security server there's no need to pay attention to the WSDL file (```WEB-INF/classes/provider-gateway.wsdl```). The WSDL file is only for the security server and it's not needed by the Consumer Gateway.
+**N.B.** As long as Provider Gateway is not accessed through X-Road security server there's no need to pay attention to the WSDL file (```provider-gateway.wsdl```). The WSDL file is only for the security server and it's not needed by the Consumer Gateway.
 ### Consumer Gateway
 
-All the five CRUP API operations must be added to ```WEB-INF/classes/consumers.properties``` file as well.
+All the five CRUP API operations must be added to ```consumers.properties``` file as well.
 
 ```
 6.id=FI_PILOT.GOV.1019125-0.Demo2Service.getBands.v1
@@ -79,7 +79,7 @@ All the five CRUP API operations must be added to ```WEB-INF/classes/consumers.p
 10.verb=delete
 ```
 
-```WEB-INF/classes/consumer-gateway.properties``` file should look like this:
+```consumer-gateway.properties``` file should look like this:
 
 ```
 id.client=FI_PILOT.GOV.0245437-2.TestSystem

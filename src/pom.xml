@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fi.vrk</groupId>
     <artifactId>rest-adapter-service</artifactId>
-    <version>0.0.12-SNAPSHOT</version>
+    <version>0.0.13-SNAPSHOT</version>
     <name>REST Adapter Service</name>
     <description>
         REST Adapter Service component translates between X-Road and REST protocols. X-Road versions 6.4 and above are supported.
@@ -12,79 +12,73 @@
     <inceptionYear>2017</inceptionYear>
     <url>https://github.com/vrk-kpa/REST-adapter-service</url>
     <packaging>war</packaging>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.7.RELEASE</version>
+    </parent>
     <properties>
-        <xrd4j.version>0.0.17</xrd4j.version>
+        <xrd4j.version>0.2.0-SNAPSHOT</xrd4j.version>
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.16</log4j.version>
+        <java.version>1.8</java.version>
         <jdk.version>1.8</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <app.home>/var/lib/tomcat/webapps</app.home>
-        <wiremock.server.port>7777</wiremock.server.port>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.pkrete.xrd4j</groupId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- To compile JSP files -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fi.vrk.xrd4j</groupId>
             <artifactId>common</artifactId>
             <version>${xrd4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.pkrete.xrd4j</groupId>
+            <groupId>fi.vrk.xrd4j</groupId>
             <artifactId>client</artifactId>
             <version>${xrd4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.pkrete.xrd4j</groupId>
+            <groupId>fi.vrk.xrd4j</groupId>
             <artifactId>server</artifactId>
             <version>${xrd4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.pkrete.xrd4j</groupId>
+            <groupId>fi.vrk.xrd4j</groupId>
             <artifactId>rest</artifactId>
             <version>${xrd4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Logging API: SLF4J -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <!-- Logging -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <!-- spring 4 dropped support for servlet 2.5 -->
-            <version>3.2.18.RELEASE</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -151,69 +145,8 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <webResources>
-                        <resource>
-                            <filtering>true</filtering>
-                            <directory>src/main/webapp</directory>
-                            <includes>
-                                <include>**/META-INF/context.xml</include>
-                                <include>**/WEB-INF/classes/provider-gateway.wsdl</include>
-                            </includes>
-                        </resource>
-                    </webResources>
-                    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.18.1</version>
-                <configuration>
-                    <systemProperties>
-                        <property>
-                            <name>log4j.configuration</name>
-                            <value>test-log4j.xml</value>
-                        </property>
-                        <property>
-                            <name>wiremock.server.port</name>
-                            <value>${wiremock.server.port}</value>
-                        </property>
-                    </systemProperties>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.1</version>
-                <executions>
-                    <execution>
-                        <id>tomcat-run</id>
-                        <goals>
-                            <goal>exec-war-only</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <path>/${project.artifactId}-${project.version}</path>
-                    <enableNaming>false</enableNaming>
-                    <finalName>${project.artifactId}-${project.version}.jar</finalName>
-                    <charset>utf-8</charset>
-                </configuration>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.owasp</groupId>
@@ -229,6 +162,52 @@
                         <goals>
                             <goal>check</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-control-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/packages/deb/control</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/packages/deb/control</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>src/main/packages/deb/${deb-version-specific-control-directory}</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-config-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/config/etc/rest-adapter-service</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/profiles/plaintext</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>src/main/packages/config</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -269,40 +248,13 @@
     </build>
     <profiles>
         <profile>
-            <id>packaging</id>
-            <activation>
-                <os>
-                    <family>linux</family>
-                </os>
-            </activation>
+            <id>package-rpm</id>
             <build>
                 <plugins>
                     <plugin>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <version>3.0.2</version>
-                        <executions>
-                            <execution>
-                                <id>copy-resources</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${basedir}/target/config/etc/rest-adapter-service</outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>src/main/profiles/plaintext</directory>
-                                            <filtering>true</filtering>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>rpm-maven-plugin</artifactId>
-                        <version>2.1.2</version>
+                        <version>2.1.5</version>
                         <executions>
                             <execution>
                                 <id>generate-rpm</id>
@@ -321,11 +273,14 @@
                                 <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
                             </defineStatements>
                             <requires>
-                                <require>tomcat</require>
+                                <require>jre-1.8.0-headless</require>
                             </requires>
                             <mappings>
                                 <mapping>
-                                    <directory>${app.home}</directory>
+                                    <directory>/usr/lib/rest-adapter-service</directory>
+                                    <filemode>640</filemode>
+                                    <username>root</username>
+                                    <groupname>rest-adapter-service</groupname>
                                     <directoryIncluded>false</directoryIncluded>
                                     <sources>
                                         <source>
@@ -335,7 +290,38 @@
                                     </sources>
                                 </mapping>
                                 <mapping>
+                                    <directory>/usr/bin</directory>
+                                    <filemode>755</filemode>
+                                    <username>root</username>
+                                    <groupname>root</groupname>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <sources>
+                                        <source>
+                                            <location>src/main/packages/systemd/rest-adapter-service</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+
+                                <mapping>
+                                    <directory>%{_unitdir}</directory>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <filemode>644</filemode>
+                                    <username>root</username>
+                                    <groupname>root</groupname>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <sources>
+                                        <source>
+                                            <location>src/main/packages/systemd/rest-adapter-service.service</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+
+                                <mapping>
                                     <directory>/etc/rest-adapter-service</directory>
+                                    <filemode>640</filemode>
+                                    <username>root</username>
+                                    <groupname>rest-adapter-service</groupname>
+                                    <directoryIncluded>false</directoryIncluded>
                                     <configuration>noreplace</configuration>
                                     <sources>
                                         <source>
@@ -344,16 +330,31 @@
                                     </sources>
                                 </mapping>
                             </mappings>
-                            <postinstallScriptlet>
-                                <scriptFile>src/main/scripts/postinstall</scriptFile>
+                            <preinstallScriptlet>
+                                <scriptFile>src/main/packages/systemd/preinstall</scriptFile>
                                 <fileEncoding>utf-8</fileEncoding>
+                            </preinstallScriptlet>
+                            <postinstallScriptlet>
+                                <script>%systemd_post %{name}.service</script>
                             </postinstallScriptlet>
                             <preremoveScriptlet>
-                                <scriptFile>src/main/scripts/preremove</scriptFile>
-                                <fileEncoding>utf-8</fileEncoding>
+                                <script>%systemd_preun %{name}.service</script>
                             </preremoveScriptlet>
+                            <postremoveScriptlet>
+                                <script>%systemd_postun_with_restart %{name}.service</script>
+                            </postremoveScriptlet>
                         </configuration>
                     </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>package-deb14</id>
+            <properties>
+                <deb-version-specific-control-directory>control-deb14</deb-version-specific-control-directory>
+            </properties>
+            <build>
+                <plugins>
                     <plugin>
                         <artifactId>jdeb</artifactId>
                         <groupId>org.vafer</groupId>
@@ -365,19 +366,42 @@
                                     <goal>jdeb</goal>
                                 </goals>
                                 <configuration>
-                                    <controlDir>${basedir}/src/main/deb/control</controlDir>
+                                    <controlDir>${basedir}/target/packages/deb/control</controlDir>
                                     <verbose>true</verbose>
                                     <snapshotExpand>true</snapshotExpand>
                                     <dataSet>
                                         <data>
                                             <src>target/rest-adapter-service-${project.version}.war</src>
-                                            <dst>/var/lib/tomcat7/webapps/rest-adapter-service.war</dst>
+                                            <dst>/usr/lib/rest-adapter-service/rest-adapter-service.war</dst>
                                             <type>file</type>
+                                            <mapper>
+                                                <type>perm</type>
+                                                <filemode>640</filemode>
+                                                <user>root</user>
+                                                <group>rest-adapter-service</group>
+                                            </mapper>
                                         </data>
                                         <data>
                                             <src>target/config</src>
                                             <type>directory</type>
                                             <conffile>true</conffile>
+                                            <mapper>
+                                                <type>perm</type>
+                                                <filemode>640</filemode>
+                                                <user>root</user>
+                                                <group>rest-adapter-service</group>
+                                            </mapper>
+                                        </data>
+                                        <data>
+                                            <src>src/main/packages/deb/upstart/${project.artifactId}.conf</src>
+                                            <type>file</type>
+                                            <mapper>
+                                                <type>perm</type>
+                                                <prefix>/etc/init</prefix>
+                                                <filemode>644</filemode>
+                                                <user>root</user>
+                                                <group>root</group>
+                                            </mapper>
                                         </data>
                                     </dataSet>
                                 </configuration>
@@ -387,8 +411,90 @@
                 </plugins>
             </build>
         </profile>
+
         <profile>
-            <id>encrypted</id>
+            <id>package-deb16</id>
+            <properties>
+                <deb-version-specific-control-directory>control-deb16</deb-version-specific-control-directory>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>jdeb</artifactId>
+                        <groupId>org.vafer</groupId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jdeb</goal>
+                                </goals>
+                                <configuration>
+                                    <controlDir>${basedir}/target/packages/deb/control</controlDir>
+                                    <verbose>true</verbose>
+                                    <snapshotExpand>true</snapshotExpand>
+                                    <dataSet>
+                                        <data>
+                                            <src>target/rest-adapter-service-${project.version}.war</src>
+                                            <dst>/usr/lib/rest-adapter-service/rest-adapter-service.war</dst>
+                                            <type>file</type>
+                                            <mapper>
+                                                <type>perm</type>
+                                                <filemode>640</filemode>
+                                                <user>root</user>
+                                                <group>rest-adapter-service</group>
+                                            </mapper>
+                                        </data>
+                                        <data>
+                                            <src>target/config</src>
+                                            <type>directory</type>
+                                            <conffile>true</conffile>
+                                            <mapper>
+                                                <type>perm</type>
+                                                <filemode>640</filemode>
+                                                <user>root</user>
+                                                <group>rest-adapter-service</group>
+                                            </mapper>
+                                        </data>
+                                        <data>
+                                            <src>src/main/packages/systemd/rest-adapter-service</src>
+                                            <type>file</type>
+                                            <mapper>
+                                                <type>perm</type>
+                                                <prefix>/usr/bin</prefix>
+                                                <filemode>755</filemode>
+                                                <user>root</user>
+                                                <group>root</group>
+                                            </mapper>
+                                        </data>
+                                        <data>
+                                            <src>src/main/packages/systemd/rest-adapter-service.service</src>
+                                            <type>file</type>
+                                            <mapper>
+                                                <type>perm</type>
+                                                <prefix>/usr/lib/systemd/system</prefix>
+                                                <filemode>644</filemode>
+                                                <user>root</user>
+                                                <group>root</group>
+                                            </mapper>
+                                        </data>
+                                    </dataSet>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>encryptedProfile</id>
+            <!-- use -Dencrypted to activate this profile -->
+            <activation>
+                <property>
+                    <name>encrypted</name>
+                </property>
+            </activation>
             <build>
                 <resources>
                     <resource>
@@ -403,9 +509,13 @@
             </build>
         </profile>
         <profile>
-            <id>plaintext</id>
+            <id>plaintextProfile</id>
+            <!-- profile is active unless -Dencrypted is used -->
             <activation>
                 <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!encrypted</name>
+                </property>
             </activation>
             <build>
                 <resources>
@@ -451,34 +561,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <groupId>org.apache.tomcat.maven</groupId>
-                        <artifactId>tomcat7-maven-plugin</artifactId>
-                        <version>2.0</version>
-                        <executions>
-                            <execution>
-                                <id>start-tomcat</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <fork>true</fork>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>stop-tomcat</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>shutdown</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <path>/${project.build.finalName}</path>
-                            <charset>utf-8</charset>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -488,6 +570,11 @@
             <id>csc-repo</id>
             <name>CSC's Maven repository</name>
             <url>https://maven.csc.fi/repository/internal/</url>
+        </repository>
+        <repository>
+            <id>csc-snapshot-repo</id>
+            <name>CSC's snapshot Maven repository</name>
+            <url>https://maven.csc.fi/repository/snapshots/</url>
         </repository>
     </repositories>
     <reporting>

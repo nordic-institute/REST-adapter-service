@@ -1,3 +1,5 @@
+The guide is relevant if you are deploying Rest Adapter Service web application into a separate Tomcat web container.
+
 The set up consists of 4 basic steps:
 
 1. Create a keystore file using Java

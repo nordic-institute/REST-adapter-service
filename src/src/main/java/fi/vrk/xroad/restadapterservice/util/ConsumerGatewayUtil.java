@@ -22,28 +22,27 @@
  */
 package fi.vrk.xroad.restadapterservice.util;
 
-import com.pkrete.xrd4j.common.member.ConsumerMember;
-import com.pkrete.xrd4j.common.member.ProducerMember;
-import com.pkrete.xrd4j.common.util.ConfigurationHelper;
-import com.pkrete.xrd4j.common.util.MessageHelper;
+import fi.vrk.xrd4j.common.member.ConsumerMember;
+import fi.vrk.xrd4j.common.member.ProducerMember;
+import fi.vrk.xrd4j.common.security.Encrypter;
+import fi.vrk.xrd4j.common.util.ConfigurationHelper;
+import fi.vrk.xrd4j.common.util.MessageHelper;
 import fi.vrk.xroad.restadapterservice.endpoint.ConsumerEndpoint;
-import com.pkrete.xrd4j.common.security.Encrypter;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class provides utility methods for Consumer Gateway implementation.
  *
  * @author Petteri Kivimäki
  */
+@Slf4j
 public class ConsumerGatewayUtil {
-
-    private static final Logger logger = LoggerFactory.getLogger(ConsumerGatewayUtil.class);
 
     /**
      * This a utility class providing only static methods which is why it should
@@ -64,9 +63,9 @@ public class ConsumerGatewayUtil {
      */
     public static Map<String, ConsumerEndpoint> extractConsumers(Properties endpoints, Properties gatewayProperties) {
         Map<String, ConsumerEndpoint> results = new TreeMap<>();
-        logger.info("Start extracting consumer endpoints from properties.");
+        log.info("Start extracting consumer endpoints from properties.");
         if (endpoints == null || endpoints.isEmpty()) {
-            logger.warn("No endpoints were founds. The list was null or empty.");
+            log.warn("No endpoints were founds. The list was null or empty.");
             return results;
         }
 
@@ -81,7 +80,7 @@ public class ConsumerGatewayUtil {
             String path = endpoints.getProperty(key + "." + Constants.CONSUMER_PROPS_PATH);
 
             if (RESTGatewayUtil.isNullOrEmpty(serviceId) || RESTGatewayUtil.isNullOrEmpty(path)) {
-                logger.warn("ID or path is null or empty. Consumer endpoint skipped.");
+                log.warn("ID or path is null or empty. Consumer endpoint skipped.");
                 key = Integer.toString(++i);
                 continue;
             }
@@ -90,7 +89,7 @@ public class ConsumerGatewayUtil {
                 path += "/";
             }
 
-            logger.info("New consumer endpoint found. ID : \"{}\", path : \"{}\".", serviceId, path);
+            log.info("New consumer endpoint found. ID : \"{}\", path : \"{}\".", serviceId, path);
 
             // Create a new ConsumerEndpoint and set default values
             ConsumerEndpoint endpoint = new ConsumerEndpoint(serviceId, clientId, path);
@@ -113,7 +112,7 @@ public class ConsumerGatewayUtil {
             key = Integer.toString(++i);
         }
 
-        logger.info("{} consumer endpoints extracted from properties.", results.size());
+        log.info("{} consumer endpoints extracted from properties.", results.size());
         return ((TreeMap) results).descendingMap();
     }
 
@@ -131,7 +130,7 @@ public class ConsumerGatewayUtil {
         if (endpoints.containsKey(key + "." + Constants.CONSUMER_PROPS_ID_CLIENT)) {
             String value = endpoints.getProperty(key + "." + Constants.CONSUMER_PROPS_ID_CLIENT);
             endpoint.setClientId(value);
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.CONSUMER_PROPS_ID_CLIENT, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.CONSUMER_PROPS_ID_CLIENT, value);
         }
         // HTTP verb
         if (endpoints.containsKey(key + "." + Constants.ENDPOINT_PROPS_VERB)) {
@@ -140,19 +139,19 @@ public class ConsumerGatewayUtil {
                 value = value.toUpperCase();
             }
             endpoint.setHttpVerb(value);
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_VERB, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_VERB, value);
         }
         // Modify URLs
         if (endpoints.containsKey(key + "." + Constants.CONSUMER_PROPS_MOD_URL)) {
             String value = endpoints.getProperty(key + "." + Constants.CONSUMER_PROPS_MOD_URL);
             endpoint.setModifyUrl(MessageHelper.strToBool(value));
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.CONSUMER_PROPS_MOD_URL, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.CONSUMER_PROPS_MOD_URL, value);
         }
         // Convert POST JSON messages
         if (endpoints.containsKey(key + "." + Constants.CONSUMER_PROPS_CONVERT_POST)) {
             String value = endpoints.getProperty(key + "." + Constants.CONSUMER_PROPS_CONVERT_POST);
             endpoint.setConvertPost(MessageHelper.strToBool(value));
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.CONSUMER_PROPS_CONVERT_POST, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.CONSUMER_PROPS_CONVERT_POST, value);
         }
 
     }
@@ -171,11 +170,11 @@ public class ConsumerGatewayUtil {
     protected static boolean setConsumerAndProducer(ConsumerEndpoint endpoint) {
         // Create ProducerMember object
         if (!ConsumerGatewayUtil.setProducerMember(endpoint)) {
-            logger.warn("Creating producer member failed. Consumer endpoint skipped.");
+            log.warn("Creating producer member failed. Consumer endpoint skipped.");
             return false;
         } // Create ConsumerMember object
         if (!ConsumerGatewayUtil.setConsumerMember(endpoint)) {
-            logger.warn("Creating consumer member failed. Consumer endpoint skipped.");
+            log.warn("Creating consumer member failed. Consumer endpoint skipped.");
             return false;
         }
         return true;
@@ -214,22 +213,22 @@ public class ConsumerGatewayUtil {
      */
     public static ConsumerEndpoint findMatch(String serviceId, Map<String, ConsumerEndpoint> endpoints) {
         if (endpoints.containsKey(serviceId)) {
-            logger.debug("Found match by service id : \"{}\".", serviceId);
+            log.debug("Found match by service id : \"{}\".", serviceId);
             return endpoints.get(serviceId);
         }
         for (Map.Entry<String, ConsumerEndpoint> entry : endpoints.entrySet()) {
             String key = entry.getKey();
             String keyMod = key.replaceAll("\\{" + Constants.PARAM_RESOURCE_ID + "\\}", "([\\\\w\\\\-]+?)");
-            logger.trace("Modified key used for comparison : \"{}\".", keyMod);
+            log.trace("Modified key used for comparison : \"{}\".", keyMod);
             if (serviceId.matches(keyMod)) {
-                logger.debug("Found partial match by service id. Request value : \"{}\", matching value : \"{}\".", serviceId, key);
+                log.debug("Found partial match by service id. Request value : \"{}\", matching value : \"{}\".", serviceId, key);
                 ConsumerEndpoint endpoint = entry.getValue();
                 // Parse resource id and set it to endpoint
                 parseResourceId(key, endpoint, serviceId);
                 return endpoint;
             }
         }
-        logger.debug("No match by service id was found. Service id : \"{}\".", serviceId);
+        log.debug("No match by service id was found. Service id : \"{}\".", serviceId);
         return null;
     }
 
@@ -254,7 +253,7 @@ public class ConsumerGatewayUtil {
                 resourceId = resourceId.substring(0, resourceId.length() - 1);
             }
             endpoint.setResourceId(resourceId);
-            logger.trace("Set resource id : \"{}\"", resourceId);
+            log.trace("Set resource id : \"{}\"", resourceId);
         }
     }
 
@@ -268,19 +267,19 @@ public class ConsumerGatewayUtil {
      * @return modified response
      */
     public static String rewriteUrl(String servletUrl, String pathToResource, String responseStr) {
-        logger.debug("Rewrite URLs in the response to point Consumer Gateway.");
-        logger.debug("Consumer Gateway URL : \"{}\".", servletUrl);
+        log.debug("Rewrite URLs in the response to point Consumer Gateway.");
+        log.debug("Consumer Gateway URL : \"{}\".", servletUrl);
         try {
             // Remove "/{resourceId}" from resource path, and omit
             // first and last slash ('/') character
             String resourcePath = pathToResource.substring(1, pathToResource.length() - 1).replaceAll("/\\{" + Constants.PARAM_RESOURCE_ID + "\\}", "");
-            logger.debug("Resourse URL that's replaced with Consumer Gateway URL : \"http(s)://{}\".", resourcePath);
-            logger.debug("New resource URL : \"{}{}\".", servletUrl, resourcePath);
+            log.debug("Resourse URL that's replaced with Consumer Gateway URL : \"http(s)://{}\".", resourcePath);
+            log.debug("New resource URL : \"{}{}\".", servletUrl, resourcePath);
             // Modify the response
             return responseStr.replaceAll("http(s|):\\/\\/" + resourcePath, servletUrl + resourcePath);
         } catch (Exception ex) {
-            logger.error("Rewriting the URLs failed!");
-            logger.error(ex.getMessage(), ex);
+            log.error("Rewriting the URLs failed!");
+            log.error(ex.getMessage(), ex);
             return responseStr;
         }
     }
@@ -297,11 +296,11 @@ public class ConsumerGatewayUtil {
     protected static boolean setConsumerMember(ConsumerEndpoint endpoint) {
         ConsumerMember consumer = ConfigurationHelper.parseConsumerMember(endpoint.getClientId());
         if (consumer == null) {
-            logger.warn("ConsumerMember not found.");
+            log.warn("ConsumerMember not found.");
             return false;
         }
         endpoint.setConsumer(consumer);
-        logger.debug("ConsumerMember id : \"{}\".", consumer.toString());
+        log.debug("ConsumerMember id : \"{}\".", consumer.toString());
         return true;
     }
 
@@ -317,11 +316,11 @@ public class ConsumerGatewayUtil {
     protected static boolean setProducerMember(ConsumerEndpoint endpoint) {
         ProducerMember producer = ConfigurationHelper.parseProducerMember(endpoint.getServiceId());
         if (producer == null) {
-            logger.warn("ProducerMember not found.");
+            log.warn("ProducerMember not found.");
             return false;
         }
         endpoint.setProducer(producer);
-        logger.debug("ProducerMember id : \"{}\".", producer.toString());
+        log.debug("ProducerMember id : \"{}\".", producer.toString());
         return true;
     }
 
@@ -336,7 +335,7 @@ public class ConsumerGatewayUtil {
      * @return ConsumerEndpoint object
      */
     public static ConsumerEndpoint createUnconfiguredEndpoint(Properties props, String pathToResource) {
-        logger.debug("Create a consumer endpoint that points to a service defined by resource path.");
+        log.debug("Create a consumer endpoint that points to a service defined by resource path.");
         String resourceId = null;
         String resourcePath;
         // Check if a resource id is present in the resource path.
@@ -348,7 +347,7 @@ public class ConsumerGatewayUtil {
         if (m.find()) {
             resourcePath = m.group(1);
             resourceId = m.group(2).substring(0, m.group(2).length() - 1);
-            logger.info("Resource id detected. Resource path : \"{}\". Resource id : \"{}\".", resourcePath, resourceId);
+            log.info("Resource id detected. Resource path : \"{}\". Resource id : \"{}\".", resourcePath, resourceId);
         } else {
             // Remove slashes, they're not part of service id
             resourcePath = pathToResource.replaceAll("/", "");
@@ -392,9 +391,9 @@ public class ConsumerGatewayUtil {
         if (matcher.find()) {
             if (matcher.group(1) != null) {
                 responsePrefix = matcher.group(1);
-                logger.debug("Response tag's prefix is \"{}\".", responsePrefix);
+                log.debug("Response tag's prefix is \"{}\".", responsePrefix);
             } else {
-                logger.debug("No namespace prefix was found for response tag.");
+                log.debug("No namespace prefix was found for response tag.");
             }
         }
         // If content type is XML the message doesn't have to
@@ -426,7 +425,7 @@ public class ConsumerGatewayUtil {
      * more keys and/or private key is was not checked.
      */
     public static boolean checkEncryptionProperties(Properties props, Map<String, ConsumerEndpoint> endpoints, Map<String, Encrypter> asymmetricEncrypterCache) {
-        logger.info("Check encryption properties.");
+        log.info("Check encryption properties.");
         boolean result = true;
         boolean mustCheckPrivateKey = false;
         // Loop through all the endpoints
@@ -438,12 +437,12 @@ public class ConsumerGatewayUtil {
                 String producerId = endpoint.getProducer().toString();
                 Encrypter encrypter = RESTGatewayUtil.checkPublicKey(props, producerId);
                 if (encrypter == null) {
-                    logger.error("The endpoint \"{}\" does not support encryption of request messages.", producerId);
+                    log.error("The endpoint \"{}\" does not support encryption of request messages.", producerId);
                     result = false;
                 } else {
                     // Add encrypter to cache
                     asymmetricEncrypterCache.put(endpoint.getProducer().toString(), encrypter);
-                    logger.trace("Asymmetric encrypter for producer \"{}\" was added to cache.", producerId);
+                    log.trace("Asymmetric encrypter for producer \"{}\" was added to cache.", producerId);
                 }
             }
             // If response is encrypted, decryption is done using the private
@@ -455,10 +454,10 @@ public class ConsumerGatewayUtil {
         }
         // If access to private key is required, check it
         if (mustCheckPrivateKey && RESTGatewayUtil.checkPrivateKey(props) == null) {
-            logger.error("None of the endpoints support deccryption of response messages.");
+            log.error("None of the endpoints support deccryption of response messages.");
             result = false;
         }
-        logger.info("Encryption properties checked.");
+        log.info("Encryption properties checked.");
         return result && mustCheckPrivateKey;
     }
 }

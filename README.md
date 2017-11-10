@@ -24,57 +24,179 @@ First aim is to get first practical REST API integrated to X-Road, document the 
 
 In parallel with the technical development we will collect more use cases from Finland about REST/JSON APIs that need to be integrated with X-Road. Aim is not to make automated solution which covers 100% of cases. We will cheer loudly if 80% coverage is achieved.
 
-## Try It Out
+## Try It Out 
 
-The fastest and easiest way to try out the application is to [download](https://github.com/educloudalliance/xroad-rest-gateway/releases/download/v0.0.10/rest-gateway-0.0.10.jar) the executable jar version (```rest-gateway-0.0.10.jar```) and run it: ```java -jar rest-gateway-0.0.10.jar```. The application is accessible at:
+The fastest and easiest way to try out the application is by using the Spring Boot Maven plugin.
+To do this, you need to have a working installation of [Maven](https://maven.apache.org/).
 
-```
-http://localhost:8080/rest-gateway-0.0.10/Provider
-
-http://localhost:8080/rest-gateway-0.0.10/Consumer
-```
-
-The Provider WSDL description is accessible at:
 
 ```
-http://localhost:8080/rest-gateway-0.0.10/Provider?wsdl
+cd src
+mvn spring-boot:run
+```
+After that you can access `http://localhost:8080/rest-adapter-service/` to see the Rest Adapter landing page.
+
+If customized properties are used, use the following syntax to define properties directory.
+```
+mvn spring-boot:run -Drun.jvmArguments="-DpropertiesDirectory=/my/conf"
 ```
 
 ## Configuration files location
 
-Rest Adapter Service tries to load configuration files from the following locations
+Rest Adapter Service tries to load configuration files from the following locations, 
+in the following order. 
 
-* The directory specified by the system property ```propertiesDirectory```
+If a matching directory exists, all the configuration files
+need to exist in that directory, otherwise an error occurs. Configuration 
+directory scanning stops once the first matching directory is located.
+
+Scanned directories:
+1. The directory specified by the system property ```propertiesDirectory```
     ```
-    java -jar -DpropertiesDirectory=/my/custom/path rest-adapter-service.jar
+    java -jar -DpropertiesDirectory=/my/custom/path rest-adapter-service.war
     ```
-* The directory rest-adapter-service in the user home directory (if it exists)
-* The directory /etc/rest-adapter-service (if it exists, Linux only)
-* As a fallback, the default configuration shipped with the JAR/WAR (classpath)
+2. The directory `rest-adapter-service` in the users home directory (for example `/home/rest-adapter-service/rest-adapter-service`)
+3. The directory `/etc/rest-adapter-service` (Linux only)
+4. As a fallback, the default configuration shipped with the WAR (classpath)
+
+Alternative configuration locations are mostly relevant only when 
+starting the executable war from command line,
+deploying war into a standalone container, 
+or running the docker image. 
+When Rest Adapter Service is installed from a deb or rpm package, 
+it explicitly sets `/etc/rest-adapter-service` as the configuration directory.
 
 More detailed usage examples are available in [documentation](documentation/Rest-Adapter-Service-principles.md#usage).
 
-## Running the Docker Image
+# Installing Rest Adapter Service
 
-Rest Adapter Service is available as Docker image.
+Some of the ways to install Rest Adapter Service are
+* Using package manager to install .deb or .rpm packages
+* Deploying `rest-adapter-service.war` into a web container such as Tomcat
+* Using Docker to run Rest Adapter Service
 
+## Using package manager to install Rest Adapter
+
+### Ubuntu 14
+
+Rest Adapter Service requires `java8-runtime-headless` dependency. 
+Configure openjdk package repository, which provides that:
+```shell
+apt-add-repository -y ppa:openjdk-r/ppa
+apt-get update
 ```
-docker run -p 8080:8080 petkivim/xroad-rest-gateway
+Install Java 8:
+```shell
+apt-get install openjdk-8-jre-headless
+```
+Do not install Java 9, as Rest Adapter does not yet support it.
+
+Install Rest Adapter Service package
+TODO: install correct repo and key, these are not known at this time.
+```shell
+apt-get install rest-adapter-service
+```
+Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md). 
+Service will automatically start during boot.
+Start the service:
+```shell
+service rest-adapter-service start
 ```
 
-If customized properties are used, the host directory containing the properties files must be mounted as a data directory. In addition, the directory containing the properties files inside the container must be set using ```JAVA_OPTS``` and```propertiesDirectory``` property.
+### Ubuntu 16
 
+Rest Adapter Service requires `java8-runtime-headless` dependency. 
+Install Java 8:
+```shell
+apt-get install openjdk-8-jre-headless
 ```
-docker run -p 8080:8080 -v /host/dir/conf:/my/conf -e "JAVA_OPTS=-DpropertiesDirectory=/my/conf"  petkivim/xroad-rest-gateway
+Do not install Java 9, as Rest Adapter does not yet support it.
+
+Install Rest Adapter Service package
+```shell
+apt-get install rest-adapter-service 
+```
+Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md).
+Service is enabled or disabled using system presets, which means that on a default Ubuntu 16 it be enabled (and start during boots).
+Start the service:
+```shell
+service rest-adapter-service start
 ```
 
-## Building the Docker Image
+### RHEL 7
+
+Install Rest Adapter Service package
+TODO: install correct repo and key
+```shell
+yum install rest-adapter-service
+```
+Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md).
+Service is enabled or disabled using system presets, which means that on a default RHEL 7 it be disabled (and not start during boots).
+Enable the service (to start automatically during boots):
+```shell
+systemctl enable rest-adapter-service
+```
+Start the service:
+```shell
+service rest-adapter-service start
+```
+### Changing the port
+To change the port, modify configuration file `/etc/rest-adapter-service/application.properties`
+```shell
+# change this to customize port
+server.port=8080
+```
+
+### Logs
+
+On Ubuntu 16 and RHEL, you can follow the logs using e.g. `journalctl`
+
+```shell
+journalctl -fu rest-adapter-service
+```
+
+On Ubuntu 14 the same can be done using
+
+```shell
+tail -f /var/log/upstart/rest-adapter-service.log
+```
+
+## Deploying rest-adapter-service web application into a container
+
+You can either build `rest-adapter-service.war` yourself (built war appears in `target/` directory)
+
+```shell
+mvn clean install
+...
+ls -la target/rest-adapter-service-0.0.12-SNAPSHOT.war
+-rw-rw-r-- 1 janne janne 22459828 marra  3 16:45 target/rest-adapter-service-0.0.12-SNAPSHOT.war
+```
+
+or extract war file from a .deb or .rpm package which has been downloaded from the packet repository.
+
+To set configuration files location, you need to specify `propertiesDirectory` system property using a container-specific method.
+
+## Using Docker
 
 While you are in the project root directory, build the image using the docker build command. The ```-t``` parameter gives your image a tag, so you can run it more easily later. Don’t forget the ```.``` command, which tells the docker build command to look in the current directory for a file called Dockerfile.
 
 ```
 docker build -t rest-adapter-service .
 ```
+After building the image, you can run Rest Adapter using it.
+
+```
+docker run -p 8080:8080 rest-adapter-service
+```
+
+If customized properties are used, the host directory containing the properties files must be mounted as a data directory. 
+In addition, the directory containing the properties files inside the container must be set using JAVA_OPTS andpropertiesDirectory property.
+
+```
+docker run -p 8080:8080 -v /host/dir/conf:/my/conf -e "JAVA_OPTS=-DpropertiesDirectory=/my/conf"  rest-adapter-service
+```
+
+# Building and packaging
 
 ## Source code license headers
 
@@ -86,33 +208,48 @@ The build uses [license-maven-plugin](https://github.com/mycila/license-maven-pl
 
 The Rest Adapter Service builds DEB package for use with Ubuntu and siblings using the [jdeb Maven plugin](https://github.com/tcurdt/jdeb).
 
-`mvn -f src/pom.xml clean package`
+`mvn -f src/pom.xml clean package -P package-deb`
 
-The resulting package depends on tomcat. On installation the war archive is put under Tomcat's webapps directory. Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
+Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
 
 ## RPM Packaging
 
-The Rest Adapter Service also builds RPMs for use with RHEL (or derivatives) and Apache Tomcat using the [rpm-maven-plugin](https://github.com/mojohaus/rpm-maven-plugin).
+The Rest Adapter Service also builds RPMs for use with RHEL (or derivatives) using the [rpm-maven-plugin](https://github.com/mojohaus/rpm-maven-plugin).
+RPM package build works only when done on RHEL platform.
 
-```mvn -f src/pom.xml clean package```
+```mvn -f src/pom.xml clean package -P package-rpm```
 
-The resulting rest-adapter-service package depends on tomcat that needs to be preinstalled. Installing the rest-adapter-service RPM package puts rest-adapter-service WAR under Tomcat's webapps directory. Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
+Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
+
+## RPM Packaging on a Non-RedHat Platform
+
+It is possible to build RPM packages even if running on a non-RedHat platform. A docker container can be used for the build.
+
+```shell
+# (in the directory which contains pom.xml)
+docker build -t rest-adapter-rpm src/main/packages/docker
+./build-rpm-in-docker.sh
+```
+
 
 ## Encryption of Message Content
 
 Starting from version 0.0.10 Rest Adapter Service supports encryption/decryption of message content. More information and instructions for configuration can be found in [documentation](documentation/Encryption.md).
 
 By default plaintext configuration is enabled. The software can be built with encryption configuration enabled using the command below.
+This setting only affects the default configuration bundled inside the war file, and the integration tests. 
+External configuration, in `/etc/rest-adapter-service`
+or elsewhere, is not affected.
 
-```mvn clean install -P encrypted```
+```mvn clean install -Dencrypted```
 
 Running integration tests with plaintext configuration enabled:
 
-```mvn clean install -P itest -P plaintext```
+```mvn clean install -P itest```
 
 Running integration tests with encryption configuration enabled:
 
-```mvn clean install -P itest -P encrypted```
+```mvn clean install -P itest -Dencrypted```
 
 ### Additional documentation
 
@@ -134,4 +271,4 @@ Running integration tests with encryption configuration enabled:
 * [Palveluväylä kehitysympäristö (Finnish only)](http://palveluvayla.fi)
 * [Requirements for Information Systems and Adapter
 Servers](http://x-road.ee/docs/eng/x-road_service_protocol.pdf)
-* [XRd4J - Java Library for X-Road v6](https://github.com/petkivim/xrd4j)
+* [XRd4J - Java Library for X-Road v6](https://github.com/vrk-kpa/xrd4j)

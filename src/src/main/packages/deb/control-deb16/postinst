@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# only change to preset enabled/disabled value when installing,
+# do not modify setting when upgrading
+# detection logic from https://askubuntu.com/a/102128
+if [ -z "$2" ]; then
+  systemctl preset rest-adapter-service.service >/dev/null 2>&1 || :
+fi
+systemctl daemon-reload

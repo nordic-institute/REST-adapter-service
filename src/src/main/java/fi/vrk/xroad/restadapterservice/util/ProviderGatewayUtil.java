@@ -22,11 +22,11 @@
  */
 package fi.vrk.xroad.restadapterservice.util;
 
-import com.pkrete.xrd4j.common.message.ServiceRequest;
-import com.pkrete.xrd4j.common.util.MessageHelper;
-import com.pkrete.xrd4j.rest.converter.JSONToXMLConverter;
+import fi.vrk.xrd4j.common.message.ServiceRequest;
+import fi.vrk.xrd4j.common.util.MessageHelper;
+import fi.vrk.xrd4j.rest.converter.JSONToXMLConverter;
 import fi.vrk.xroad.restadapterservice.endpoint.ProviderEndpoint;
-import com.pkrete.xrd4j.common.security.Decrypter;
+import fi.vrk.xrd4j.common.security.Decrypter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,24 +35,21 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This class provides utility methods for Provider Gateway implementation.
  *
  * @author Petteri Kivimäki
  */
+@Slf4j
 public class ProviderGatewayUtil {
-
-    private static final Logger logger = LoggerFactory.getLogger(ProviderGatewayUtil.class);
 
     /**
      * This a utility class providing only static methods which is why it should
      * not be initiated.
      */
     private ProviderGatewayUtil() {
-
     }
 
     /**
@@ -66,9 +63,9 @@ public class ProviderGatewayUtil {
      */
     public static Map<String, ProviderEndpoint> extractProviders(Properties endpoints, Properties gatewayProperties) {
         Map<String, ProviderEndpoint> results = new HashMap<>();
-        logger.info("Start extracting provider endpoints from properties.");
+        log.info("Start extracting provider endpoints from properties.");
         if (endpoints == null || endpoints.isEmpty()) {
-            logger.warn("No endpoints were founds. The list was null or empty.");
+            log.warn("No endpoints were founds. The list was null or empty.");
             return results;
         }
 
@@ -82,7 +79,7 @@ public class ProviderGatewayUtil {
             String url = endpoints.getProperty(key + "." + Constants.PROVIDER_PROPS_URL);
 
             if (RESTGatewayUtil.isNullOrEmpty(id) || RESTGatewayUtil.isNullOrEmpty(url)) {
-                logger.warn("ID or URL is null or empty. Provider endpoint skipped.");
+                log.warn("ID or URL is null or empty. Provider endpoint skipped.");
                 key = Integer.toString(++i);
                 continue;
             }
@@ -90,7 +87,7 @@ public class ProviderGatewayUtil {
             ProviderEndpoint endpoint = new ProviderEndpoint(id, url);
             setDefaultValues(endpoint, gatewayProperties);
 
-            logger.info("New provider endpoint found. ID : \"{}\", URL : \"{}\".", id, url);
+            log.info("New provider endpoint found. ID : \"{}\", URL : \"{}\".", id, url);
 
             // HTTP verb, content-Type HTTP header, accept HTTP header,
             // attachment, X-Road headers, request parameter name filter 
@@ -108,7 +105,7 @@ public class ProviderGatewayUtil {
             // Increase counter by one and update key
             key = Integer.toString(++i);
         }
-        logger.info("{} provider endpoints extracted from properties.", results.size());
+        log.info("{} provider endpoints extracted from properties.", results.size());
         return results;
     }
 
@@ -125,55 +122,55 @@ public class ProviderGatewayUtil {
         if (endpoints.containsKey(key + "." + Constants.ENDPOINT_PROPS_VERB)) {
             String value = endpoints.getProperty(key + "." + Constants.ENDPOINT_PROPS_VERB);
             endpoint.setHttpVerb(value);
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_VERB, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_VERB, value);
         }
         // Content-Type HTTP header
         if (endpoints.containsKey(key + "." + Constants.PROVIDER_PROPS_CONTENT_TYPE)) {
             String value = endpoints.getProperty(key + "." + Constants.PROVIDER_PROPS_CONTENT_TYPE);
             endpoint.setContentType(value);
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_CONTENT_TYPE, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_CONTENT_TYPE, value);
         }
         // Accept HTTP header
         if (endpoints.containsKey(key + "." + Constants.PROVIDER_PROPS_ACCEPT)) {
             String value = endpoints.getProperty(key + "." + Constants.PROVIDER_PROPS_ACCEPT);
             endpoint.setAccept(value);
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_ACCEPT, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_ACCEPT, value);
         }
         // Attachment
         if (endpoints.containsKey(key + "." + Constants.PROVIDER_PROPS_ATTACHMENT)) {
             String value = endpoints.getProperty(key + "." + Constants.PROVIDER_PROPS_ATTACHMENT);
             endpoint.setAttachment(MessageHelper.strToBool(value));
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_ATTACHMENT, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_ATTACHMENT, value);
         }
         // X-Road headers
         if (endpoints.containsKey(key + "." + Constants.PROVIDER_PROPS_SEND_XRD_HEADERS)) {
             String value = endpoints.getProperty(key + "." + Constants.PROVIDER_PROPS_SEND_XRD_HEADERS);
             endpoint.setSendXrdHeaders(MessageHelper.strToBool(value));
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_SEND_XRD_HEADERS, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_SEND_XRD_HEADERS, value);
         }
         // Request parameter name filter condition
         if (endpoints.containsKey(key + "." + Constants.PROVIDER_PROPS_REQUEST_PARAM_NAME_FILTER_CONDITION)) {
             String value = endpoints.getProperty(key + "." + Constants.PROVIDER_PROPS_REQUEST_PARAM_NAME_FILTER_CONDITION);
             endpoint.setReqParamNameFilterCondition(value);
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_REQUEST_PARAM_NAME_FILTER_CONDITION, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_REQUEST_PARAM_NAME_FILTER_CONDITION, value);
         }
         // Request parameter name filter operation
         if (endpoints.containsKey(key + "." + Constants.PROVIDER_PROPS_REQUEST_PARAM_NAME_FILTER_OPERATION)) {
             String value = endpoints.getProperty(key + "." + Constants.PROVIDER_PROPS_REQUEST_PARAM_NAME_FILTER_OPERATION);
             endpoint.setReqParamNameFilterOperation(value);
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_REQUEST_PARAM_NAME_FILTER_OPERATION, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_REQUEST_PARAM_NAME_FILTER_OPERATION, value);
         }
         // Request parameter value filter condition
         if (endpoints.containsKey(key + "." + Constants.PROVIDER_PROPS_REQUEST_PARAM_VALUE_FILTER_CONDITION)) {
             String value = endpoints.getProperty(key + "." + Constants.PROVIDER_PROPS_REQUEST_PARAM_VALUE_FILTER_CONDITION);
             endpoint.setReqParamValueFilterCondition(value);
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_REQUEST_PARAM_VALUE_FILTER_CONDITION, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_REQUEST_PARAM_VALUE_FILTER_CONDITION, value);
         }
         // Request parameter value filter operation
         if (endpoints.containsKey(key + "." + Constants.PROVIDER_PROPS_REQUEST_PARAM_VALUE_FILTER_OPERATION)) {
             String value = endpoints.getProperty(key + "." + Constants.PROVIDER_PROPS_REQUEST_PARAM_VALUE_FILTER_OPERATION);
             endpoint.setReqParamValueFilterOperation(value);
-            logger.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_REQUEST_PARAM_VALUE_FILTER_OPERATION, value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.PROVIDER_PROPS_REQUEST_PARAM_VALUE_FILTER_OPERATION, value);
         }
     }
 
@@ -205,32 +202,32 @@ public class ProviderGatewayUtil {
      * @return Map containing HTTP headers
      */
     public static Map<String, String> generateHttpHeaders(ServiceRequest request, ProviderEndpoint endpoint) {
-        logger.info("Generate HTTP headers.");
+        log.info("Generate HTTP headers.");
         Map<String, String> headers = new HashMap<>();
         if (endpoint.isSendXrdHeaders()) {
-            logger.debug("Generate X-Road specific headers.");
+            log.debug("Generate X-Road specific headers.");
             headers.put(Constants.XRD_HEADER_CLIENT, request.getConsumer().toString());
             headers.put(Constants.XRD_HEADER_SERVICE, request.getProducer().toString());
             headers.put(Constants.XRD_HEADER_MESSAGE_ID, request.getId());
-            logger.debug(Constants.LOG_STRING_FOR_HEADERS, Constants.XRD_HEADER_CLIENT, request.getConsumer().toString());
-            logger.debug(Constants.LOG_STRING_FOR_HEADERS, Constants.XRD_HEADER_SERVICE, request.getProducer().toString());
-            logger.debug(Constants.LOG_STRING_FOR_HEADERS, Constants.XRD_HEADER_MESSAGE_ID, request.getId());
+            log.debug(Constants.LOG_STRING_FOR_HEADERS, Constants.XRD_HEADER_CLIENT, request.getConsumer().toString());
+            log.debug(Constants.LOG_STRING_FOR_HEADERS, Constants.XRD_HEADER_SERVICE, request.getProducer().toString());
+            log.debug(Constants.LOG_STRING_FOR_HEADERS, Constants.XRD_HEADER_MESSAGE_ID, request.getId());
             if (request.getUserId() != null && !request.getUserId().isEmpty()) {
-                logger.debug(Constants.LOG_STRING_FOR_HEADERS, Constants.XRD_HEADER_USER_ID, request.getUserId());
+                log.debug(Constants.LOG_STRING_FOR_HEADERS, Constants.XRD_HEADER_USER_ID, request.getUserId());
                 headers.put(Constants.XRD_HEADER_USER_ID, request.getUserId());
             }
         } else {
-            logger.debug("Generation of X-Road specific headers is disabled.");
+            log.debug("Generation of X-Road specific headers is disabled.");
         }
         if (endpoint.getContentType() != null && !endpoint.getContentType().isEmpty()) {
-            logger.debug(Constants.LOG_STRING_FOR_HEADERS, Constants.HTTP_HEADER_CONTENT_TYPE, endpoint.getContentType());
+            log.debug(Constants.LOG_STRING_FOR_HEADERS, Constants.HTTP_HEADER_CONTENT_TYPE, endpoint.getContentType());
             headers.put(Constants.HTTP_HEADER_CONTENT_TYPE, endpoint.getContentType());
         }
         if (endpoint.getAccept() != null && !endpoint.getAccept().isEmpty()) {
-            logger.debug(Constants.LOG_STRING_FOR_HEADERS, Constants.HTTP_HEADER_ACCEPT, endpoint.getAccept());
+            log.debug(Constants.LOG_STRING_FOR_HEADERS, Constants.HTTP_HEADER_ACCEPT, endpoint.getAccept());
             headers.put(Constants.HTTP_HEADER_ACCEPT, endpoint.getAccept());
         }
-        logger.info("HTTP headers were succesfully generated.");
+        log.info("HTTP headers were succesfully generated.");
         return headers;
     }
 
@@ -265,7 +262,7 @@ public class ProviderGatewayUtil {
      */
     public static String getRequestBody(Map<String, List<String>> params) {
         if (params.containsKey(Constants.PARAM_REQUEST_BODY)) {
-            logger.trace("\"{}\" key found.", Constants.PARAM_REQUEST_BODY);
+            log.trace("\"{}\" key found.", Constants.PARAM_REQUEST_BODY);
             // Get value matching the key
             String requestBody = params.get(Constants.PARAM_REQUEST_BODY).get(0);
             // Remove the key-value pair from the map
@@ -273,7 +270,7 @@ public class ProviderGatewayUtil {
             // Return the value
             return requestBody;
         }
-        logger.trace("\"{}\" key not found.", Constants.PARAM_REQUEST_BODY);
+        log.trace("\"{}\" key not found.", Constants.PARAM_REQUEST_BODY);
         // No key-value pair found, return null
         return null;
 
@@ -289,7 +286,7 @@ public class ProviderGatewayUtil {
      * @param endpoint endpoint that contains the rules for filtering
      */
     public static void filterRequestParameters(ServiceRequest request, ProviderEndpoint endpoint) {
-        logger.debug("Start filtering request parameters.");
+        log.debug("Start filtering request parameters.");
         // Get a list of keys in the parameters map
         List<String> keys = new ArrayList<>(((Map<String, String>) request.getRequestData()).keySet());
         // Loop through request parameters
@@ -299,10 +296,10 @@ public class ProviderGatewayUtil {
             if (!orgKey.equals(Constants.PARAM_REQUEST_BODY) && !orgKey.equals(Constants.PARAM_RESOURCE_ID)) {
                 processReqParamFilters(request, endpoint, orgKey);
             } else {
-                logger.trace("Skip \"{}\" and \"{}\" parameters.", Constants.PARAM_REQUEST_BODY, Constants.PARAM_RESOURCE_ID);
+                log.trace("Skip \"{}\" and \"{}\" parameters.", Constants.PARAM_REQUEST_BODY, Constants.PARAM_RESOURCE_ID);
             }
         }
-        logger.debug("Filtering request parameters done.");
+        log.debug("Filtering request parameters done.");
     }
 
     /**
@@ -324,12 +321,12 @@ public class ProviderGatewayUtil {
 
         // Check if request parameter name filter has been defined
         if (endpoint.getReqParamNameFilterCondition() != null && endpoint.getReqParamNameFilterOperation() != null) {
-            logger.trace("Request parameter name: \"{}\". Filter condition: \"{}\"", orgKey, endpoint.getReqParamNameFilterCondition());
+            log.trace("Request parameter name: \"{}\". Filter condition: \"{}\"", orgKey, endpoint.getReqParamNameFilterCondition());
             Pattern regex = Pattern.compile(endpoint.getReqParamNameFilterCondition());
             Matcher m = regex.matcher(orgKey);
             if (m.find()) {
                 key = m.replaceAll(endpoint.getReqParamNameFilterOperation());
-                logger.trace("Filter condition: true. Filter operation: \"{}\". Parameter name: \"{}\" => \"{}\"", endpoint.getReqParamNameFilterOperation(), orgKey, key);
+                log.trace("Filter condition: true. Filter operation: \"{}\". Parameter name: \"{}\" => \"{}\"", endpoint.getReqParamNameFilterOperation(), orgKey, key);
                 update = true;
             }
         }
@@ -338,12 +335,12 @@ public class ProviderGatewayUtil {
             // Loop through the values
             for (int i = 0; i < values.size(); i++) {
                 String orgValue = values.get(i);
-                logger.trace("Request parameter value: \"{}\". Filter condition: \"{}\"", orgValue, endpoint.getReqParamValueFilterCondition());
+                log.trace("Request parameter value: \"{}\". Filter condition: \"{}\"", orgValue, endpoint.getReqParamValueFilterCondition());
                 Pattern regex = Pattern.compile(endpoint.getReqParamValueFilterCondition());
                 Matcher m = regex.matcher(orgValue);
                 if (m.find()) {
                     String value = m.replaceAll(endpoint.getReqParamValueFilterOperation());
-                    logger.trace("Filter condition: true. Filter operation: \"{}\". Parameter name: \"{}\" => \"{}\"", endpoint.getReqParamValueFilterOperation(), orgValue, value);
+                    log.trace("Filter condition: true. Filter operation: \"{}\". Parameter name: \"{}\" => \"{}\"", endpoint.getReqParamValueFilterOperation(), orgValue, value);
                     values.set(i, value);
                     update = true;
                 }
@@ -371,7 +368,7 @@ public class ProviderGatewayUtil {
      * private key or the private key is not needed
      */
     public static boolean checkPrivateKeyProperties(Properties props, Map<String, ProviderEndpoint> endpoints) {
-        logger.info("Check private key encryption properties.");
+        log.info("Check private key encryption properties.");
         // Loop through all the endpoints
         for (Map.Entry<String, ProviderEndpoint> entry : endpoints.entrySet()) {
             ProviderEndpoint endpoint = entry.getValue();
@@ -384,7 +381,7 @@ public class ProviderGatewayUtil {
                     // Private key props are OK
                     return true;
                 } else {
-                    logger.error("None of the services support deccryption of request messages.");
+                    log.error("None of the services support deccryption of request messages.");
                     return false;
                 }
             }
@@ -394,7 +391,7 @@ public class ProviderGatewayUtil {
         // it's not possible to check the public keys, because we don't know
         // the ID's of the service consumers
 
-        logger.info("Private key encryption properties checked.");
+        log.info("Private key encryption properties checked.");
         // Private key is not needed so return false
         return false;
     }

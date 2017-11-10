@@ -70,7 +70,7 @@ Import Service Provider's certificate to Service Consumer's trust store. Certifi
 keytool -import -file provider.cer -alias FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1 -keystore consumertruststore.jks
 ```
 
-```WEB-INF/classes/consumer-gateway.properties``` file must contain the properties below.
+```consumer-gateway.properties``` file must contain the properties below.
 
 ```
 # Key length (in bits) of symmetric key. Default is 128 bits.
@@ -91,7 +91,7 @@ privateKeyAlias=consumerpri
 privateKeyPassword=consumer
 ```
 
-Enabling encryption of sent messages and decryption of received responses for each service is enabled in the ```WEB-INF/classes/consumers.properties``` file.
+Enabling encryption of sent messages and decryption of received responses for each service is enabled in the ```consumers.properties``` file.
 
 ```
 0.id=FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1
@@ -116,7 +116,7 @@ Import Service Consumer's public key to Service Provider's trust store. Certific
 keytool -import -file consumer.cer -alias FI_PILOT.GOV.0245437-2.ConsumerTest -keystore producertruststore.jks
 ```
 
-```WEB-INF/classes/provider-gateway.properties``` file must contain the properties below.
+```provider-gateway.properties``` file must contain the properties below.
 
 ```
 # Key length (in bits) of symmetric key. Default is 128 bits.
@@ -137,7 +137,7 @@ privateKeyAlias=providerpri
 privateKeyPassword=provider
 ```
 
-Enabling decryption of received requests and encryption of returned responses for each service is enabled in the ```WEB-INF/classes/providers.properties``` file.
+Enabling decryption of received requests and encryption of returned responses for each service is enabled in the ```providers.properties``` file.
 
 ```
 0.id=FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1

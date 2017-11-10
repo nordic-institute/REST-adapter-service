@@ -28,14 +28,22 @@ import com.github.tomakehurst.wiremock.matching.RequestPattern;
 import com.github.tomakehurst.wiremock.verification.FindRequestsResult;
 import fi.vrk.xroad.restadapterservice.util.Constants;
 import junit.framework.TestCase;
+import lombok.extern.slf4j.Slf4j;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -44,43 +52,33 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
 
-public class ConsumerGatewayWireMockTest extends TestCase {
-
-    private static final Logger logger = LoggerFactory.getLogger(ConsumerGatewayWireMockTest.class);
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@Slf4j
+public class ConsumerGatewayWireMockTest {
 
     private WireMockServer wireMockServer;
 
+    @Value("${wiremock.server.port}")
     private int wireMockPort;
 
-    static final private int DEFAULT_WIREMOCK_PORT = 8089;
-
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        String wireMockPortS = System.getProperty("wiremock.server.port");
-        if (wireMockPortS != null) {
-            wireMockPort = Integer.parseInt(wireMockPortS);
-        } else {
-            wireMockPort = DEFAULT_WIREMOCK_PORT;
-        }
-
+    @Before
+    public void setUp() throws Exception {
         // set up mock http server for ss
         wireMockServer = new WireMockServer(new WireMockConfiguration().port(wireMockPort));
         wireMockServer.start();
-
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
+    @After
+    public void tearDown() throws Exception {
         wireMockServer.stop();
     }
 
+    @Test
     public void testJsonConversion() throws Exception {
-
         String json = readFile("consumer-gw-test-request.json");
         String xml = readFile("consumer-gw-test-response.xml");
 
@@ -134,19 +132,19 @@ public class ConsumerGatewayWireMockTest extends TestCase {
         // 1
         String requestBodyFromWireMock = findOneRequestFromWireMock();
         String expectedRequestXml = readFile("consumer-gw-test-request-expected.xml");;
-        logger.debug("request received by wiremock: {}", requestBodyFromWireMock);
-        logger.debug("expected result xml: {}", expectedRequestXml);
+        log.debug("request received by wiremock: {}", requestBodyFromWireMock);
+        log.debug("expected result xml: {}", expectedRequestXml);
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = new Diff(requestBodyFromWireMock, expectedRequestXml);
-        logger.debug("diff: {}", diff);
+        log.debug("diff: {}", diff);
         // diff is "similar" (not identical) even if namespace prefixes and element ordering differ
         assertTrue(diff.similar());
 
         // 2
         String expectedResponseJson = readFile("consumer-gw-test-response-expected.json");;
         String actualResponseJson = response.getContentAsString();
-        logger.debug("json response: {}", actualResponseJson);
-        logger.debug("expected json response: {}", expectedResponseJson);
+        log.debug("json response: {}", actualResponseJson);
+        log.debug("expected json response: {}", expectedResponseJson);
         JSONAssert.assertEquals(expectedResponseJson, actualResponseJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
@@ -154,7 +152,7 @@ public class ConsumerGatewayWireMockTest extends TestCase {
     private String findOneRequestFromWireMock() {
         FindRequestsResult requestsResult = wireMockServer.findRequestsMatching(RequestPattern.everything());
 
-        logger.debug("WireMock received requests:");
+        log.debug("WireMock received requests:");
         assertEquals("expected exactly 1 call to wiremock", 1, requestsResult.getRequests().size());
         return requestsResult.getRequests().get(0).getBodyAsString();
     }
