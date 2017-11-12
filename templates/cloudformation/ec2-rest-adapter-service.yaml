@@ -1,0 +1,296 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS CloudFormation template for testing X-Road REST Adapter
+  Service. The template creates a VPC and adds an EC2 instance with an Elastic
+  IP address and a security group. After that the latest version of REST Adapter
+  Service is fetched from GitHub, compiled and started.'
+Parameters:
+  InstanceType:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t2.small
+    AllowedValues:
+    - t2.micro
+    - t2.small
+    - t2.medium
+    - t2.large
+    - t2.xlarge
+    - t2.2xlarge
+    ConstraintDescription: must be a valid EC2 instance type.
+  KeyName:
+    Description: ' EC2 KeyPair to enable SSH access to the instance'
+    Type: "AWS::EC2::KeyPair::KeyName"
+  SSHLocation:
+    Description: ' The IP address range that can be used to SSH to the EC2 instance'
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  HTTPAccessLocation:
+    Description: ' The IP address range that can be used to access the port 8080'
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+Mappings:
+  RegionMap:
+    us-east-1:
+      AMI: ami-6057e21a
+    us-west-1:
+      AMI: ami-6057e21a
+    us-west-2:
+      AMI: ami-32d8124a
+    eu-central-1:
+      AMI: ami-e28d098d
+    eu-west-1:
+      AMI: ami-760aaa0f
+    eu-west-2:
+      AMI: ami-e3051987
+    sa-east-1:
+      AMI: ami-1678037a
+    ap-southeast-1:
+      AMI: ami-dd7935be
+    ap-southeast-2:
+      AMI: ami-1a668878
+    ap-northeast-1:
+      AMI: ami-2803ac4e
+    ap-northeast-2:
+      AMI: ami-fc862292
+    ap-south-1:
+      AMI: ami-2ed19c41
+    ca-central-1:
+      AMI: ami-ef3b838b
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/28
+      Tags:
+      - Key: Name
+        Value:
+          Ref: AWS::StackName
+  Subnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: VPC
+      CidrBlock: 10.0.0.0/28
+      Tags:
+      - Key: Name
+        Value:
+          Ref: AWS::StackName
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: Name
+        Value:
+          Ref: AWS::StackName
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: VPC
+      InternetGatewayId:
+        Ref: InternetGateway
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: VPC
+      Tags:
+      - Key: Name
+        Value:
+          Ref: AWS::StackName
+  Route:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId:
+        Ref: RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: InternetGateway
+  SubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: Subnet
+      RouteTableId:
+        Ref: RouteTable
+  NetworkAcl:
+    Type: AWS::EC2::NetworkAcl
+    Properties:
+      VpcId:
+        Ref: VPC
+      Tags:
+      - Key: Name
+        Value:
+          Ref: AWS::StackName
+  InboundHTTPNetworkAclEntry:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: NetworkAcl
+      RuleNumber: '100'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '8080'
+        To: '8080'
+  InboundSSHNetworkAclEntry:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: NetworkAcl
+      RuleNumber: '101'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '22'
+        To: '22'
+  InboundResponsePortsNetworkAclEntry:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: NetworkAcl
+      RuleNumber: '102'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '1024'
+        To: '65535'
+  OutBoundHTTPNetworkAclEntry:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: NetworkAcl
+      RuleNumber: '100'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '80'
+        To: '80'
+  OutBoundHTTPSNetworkAclEntry:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: NetworkAcl
+      RuleNumber: '101'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '443'
+        To: '443'
+  OutBoundResponsePortsNetworkAclEntry:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      NetworkAclId:
+        Ref: NetworkAcl
+      RuleNumber: '102'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '1024'
+        To: '65535'
+  SubnetNetworkAclAssociation:
+    Type: AWS::EC2::SubnetNetworkAclAssociation
+    Properties:
+      SubnetId:
+        Ref: Subnet
+      NetworkAclId:
+        Ref: NetworkAcl
+  IPAddress:
+    Type: AWS::EC2::EIP
+    DependsOn: AttachGateway
+    Properties:
+      Domain: vpc
+      InstanceId:
+        Ref: WebServerInstance
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId:
+        Ref: VPC
+      GroupDescription: Enable SSH access via port 22
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp:
+          Ref: SSHLocation
+      - IpProtocol: tcp
+        FromPort: '8080'
+        ToPort: '8080'
+        CidrIp:
+          Ref: HTTPAccessLocation
+      Tags:
+      - Key: Name
+        Value:
+          Ref: AWS::StackName
+  WebServerInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId:
+        Fn::FindInMap:
+        - RegionMap
+        - Ref: AWS::Region
+        - AMI
+      SecurityGroupIds:
+      - Ref: InstanceSecurityGroup
+      SubnetId:
+        Ref: Subnet
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      Tags:
+      - Key: Name
+        Value:
+          Ref: AWS::StackName
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum remove java-1.7.0-openjdk -y
+          yum install java-1.8.0-openjdk-devel -y
+          yum install git -y
+          cd /usr/local
+          wget http://www-us.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
+          tar xvf apache-maven-3.5.2-bin.tar.gz
+          rm apache-maven-3.5.2-bin.tar.gz
+          cd /home/ec2-user
+          echo "export M2_HOME=/usr/local/apache-maven-3.5.2" >> .bash_profile
+          echo "export M2=\$M2_HOME/bin" >> .bash_profile
+          echo "export PATH=\$M2:\$PATH" >> .bash_profile
+          git clone https://github.com/vrk-kpa/REST-adapter-service.git
+          chown -R ec2-user:ec2-user REST-adapter-service/
+          cd REST-adapter-service/src/
+          /usr/local/apache-maven-3.5.2/bin/mvn spring-boot:run
+Outputs:
+  URL:
+    Value:
+      Fn::Join:
+      - ''
+      - - http://
+        - Fn::GetAtt:
+          - WebServerInstance
+          - PublicIp
+        - :8080/rest-adapter-service/
+    Description: REST Adapter Service URL
