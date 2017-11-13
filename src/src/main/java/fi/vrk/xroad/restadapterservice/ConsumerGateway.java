@@ -44,15 +44,17 @@ import fi.vrk.xroad.restadapterservice.util.Constants;
 import fi.vrk.xroad.restadapterservice.util.ConsumerGatewayUtil;
 import fi.vrk.xroad.restadapterservice.util.RESTGatewayUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
+import javax.servlet.ReadListener;
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.soap.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -71,6 +73,7 @@ import java.util.Properties;
 @Slf4j
 public class ConsumerGateway extends HttpServlet {
 
+    public static final String JSON_CONVERSION_WRAPPER_ELEMENT = "jsonWrapperProperty";
     private Properties props;
     private Map<String, ConsumerEndpoint> endpoints;
     private boolean serviceCallsByXRdServiceId;
@@ -138,8 +141,15 @@ public class ConsumerGateway extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest requestTODO, HttpServletResponse response)
             throws ServletException, IOException {
+
+        // TODO: just to read it twice now
+//        HttpServletRequest request = new CustomHttpServletRequestWrapper(requestTODO);
+
+        ContentCachingRequestWrapper request = new ContentCachingRequestWrapper(requestTODO);
+
+
         log.info("***** ConsumerGateway servlet processing request");
         String responseStr;
         // Get resourcePath attribute
@@ -201,17 +211,44 @@ public class ConsumerGateway extends HttpServlet {
         log.info("Starting to process \"{}\" service. X-Road id : \"{}\". Message id : \"{}\".", serviceId, endpoint.getServiceId(), messageId);
         try {
             // Create ServiceRequest object
-            ServiceRequest<Map<String, String[]>> serviceRequest = new ServiceRequest<>(endpoint.getConsumer(), endpoint.getProducer(), messageId);
+            ServiceRequest<SOAPElement> serviceRequest = new ServiceRequest<>(endpoint.getConsumer(), endpoint.getProducer(), messageId);
             // Set userId
             serviceRequest.setUserId(userId);
             // Set HTTP request parameters as request data
-            serviceRequest.setRequestData(this.filterRequestParameters(request.getParameterMap()));
+            SOAPElement containerElement = SOAPFactory.newInstance().createElement("container");
+            serviceRequest.setRequestData(containerElement);
+            Map<String, String[]> params = this.filterRequestParameters(request.getParameterMap());
+            for (Map.Entry<String, String[]> entry : params.entrySet()) {
+                String key = entry.getKey();
+                String[] arr = entry.getValue();
+                for (String value : arr) {
+                    log.debug("Add parameter : \"{}\" -> \"{}\".", key, value);
+                    containerElement.addChildElement(key).addTextNode(value);
+                }
+            }
+            if (endpoint.isConvertPost()) {
+                String xml = getConvertedRequestBody(request);
+                SOAPElement elementFromBody = SOAPHelper.xmlStrToSOAPElement(xml);
+                SOAPHelper.moveChildren(elementFromBody, containerElement, true);
+//                if (true) throw new NullPointerException("ok, got converted json->xml: " + elementFromBody + ", containerElement:" + containerElement);
+            }
+
+
+//            serviceRequest.setRequestData(this.filterRequestParameters(request.getParameterMap()));
+
+            // TODO1
+            // TODO: serviceRequest.setRequestData(convertedJSON)
+            // ei pysty tekeen, koska ei ole flatti tietorakenne
+            // servicerequestin pitäisi sisältää Node?
+
             // Set request wrapper processing
             if (endpoint.isProcessingWrappers() != null) {
                 serviceRequest.setProcessingWrappers(endpoint.isProcessingWrappers());
             }
             // Serializer that converts the request to SOAP
-            ServiceRequestSerializer serializer = getRequestSerializer(endpoint, this.readRequestBody(request), contentType);
+            // TODO: convert tästä pois....? ja aiempaan TODO1 kohtaan?
+
+            ServiceRequestSerializer serializer = getRequestSerializer(endpoint, this.readAndNotReallyConvertRequestBody(request, endpoint.isConvertPost()), contentType);
             // Deserializer that converts the response from SOAP to XML/JSON
             ServiceResponseDeserializer deserializer = getResponseDeserializer(endpoint, omitNamespace);
             // SOAP client that makes the service call
@@ -626,7 +663,7 @@ public class ConsumerGateway extends HttpServlet {
      * @param parameters HTTP request parameters map
      * @return filtered parameters map
      */
-    private Map filterRequestParameters(Map<String, String[]> parameters) {
+    private Map<String, String[]> filterRequestParameters(Map<String, String[]> parameters) {
         // Request parameters map is unmodifiable so we need to copy it
         Map<String, String[]> params = new HashMap<>(parameters);
         // Remove X-Road headers
@@ -645,7 +682,8 @@ public class ConsumerGateway extends HttpServlet {
      * @param request HttpServletRequest that contains the request body
      * @return request body as a String or null
      */
-    private String readRequestBody(HttpServletRequest request) {
+    // TODO: do not convert here
+    private String readAndNotReallyConvertRequestBody(HttpServletRequest request, boolean convertPost) {
         try {
             // Read from request
             StringBuilder buffer = new StringBuilder();
@@ -654,12 +692,39 @@ public class ConsumerGateway extends HttpServlet {
             while ((line = reader.readLine()) != null) {
                 buffer.append(line);
             }
-            return buffer.toString();
+
+            String body;
+//            if (convertPost) {
+//                body = convertJsonToXml(buffer.toString());
+//            } else {
+                body = buffer.toString();
+//            }
+            return body;
         } catch (Exception e) {
             log.error("Failed to read the request body from the request.", e);
         }
         return null;
     }
+
+    // TODO: remove readAndNotReallyConvertRequestBody
+    private String getConvertedRequestBody(HttpServletRequest request) {
+        try {
+            // Read from request
+            StringBuilder buffer = new StringBuilder();
+            BufferedReader reader = request.getReader();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line);
+            }
+
+            String body = convertJsonToXml(buffer.toString());
+            return body;
+        } catch (Exception e) {
+            log.error("Failed to read the request body from the request.", e);
+        }
+        return null;
+    }
+
 
     /**
      * Serializes GET, POST, PUT and DELETE requests to SOAP.
@@ -683,38 +748,13 @@ public class ConsumerGateway extends HttpServlet {
         protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
             writeGetParametersToBody(request, soapRequest);
             if (this.requestBody != null && !this.requestBody.isEmpty()) {
-                if (convertPost) {
-                    convertJsonToXmlAndWriteToSoap(this.requestBody, soapRequest);
-                } else {
-                    // send HTTP POST as an attachment
+                if (!convertPost) {
+                    // send the entire HTTP POST as an attachment
+                    // if convertPost = true instead, converted HTTP POST is sent inside SOAP body
                     handleAttachment(request, soapRequest, envelope, this.requestBody);
                 }
-            }
-        }
 
-        /**
-         * Takes a JSON string, converts it to XML,
-         * and writes the result as a request element in
-         * output SOAP element body
-         * @param json
-         * @param outputSoapRequest
-         * @throws SOAPException
-         */
-        void convertJsonToXmlAndWriteToSoap(String json, SOAPElement outputSoapRequest) throws SOAPException {
-            log.debug("converting json: {}", json);
-            // create a json wrapper root property
-            StringBuffer buffer = new StringBuffer();
-            buffer.append("{ \"jsonWrapperProperty\": ");
-            buffer.append(json);
-            buffer.append("}");
-            String wrapped = buffer.toString();
-            String converted = new JSONToXMLConverter().convert(wrapped);
-            if (converted == null || converted.equals("")) {
-                throw new SOAPException("could not convert http body from json to xml");
             }
-            log.debug("converted json as xml: {}", converted);
-            SOAPElement convertedElement = SOAPHelper.xmlStrToSOAPElement(converted);
-            SOAPHelper.moveChildren(convertedElement, outputSoapRequest,true);
         }
 
         /**
@@ -723,20 +763,24 @@ public class ConsumerGateway extends HttpServlet {
          * @param soapRequest
          * @throws SOAPException
          */
+        // TODO3: nämä ei ole get parameters (eikä Map<String, String[]> params) vaan inline-body-stuff (joka on Nodessa sisällä)
         protected void writeGetParametersToBody(ServiceRequest request, SOAPElement soapRequest) throws SOAPException {
             if (this.resourceId != null && !this.resourceId.isEmpty()) {
                 log.debug("Add resourceId : \"{}\".", this.resourceId);
                 soapRequest.addChildElement("resourceId").addTextNode(this.resourceId);
             }
-            Map<String, String[]> params = (Map<String, String[]>) request.getRequestData();
-            for (Map.Entry<String, String[]> entry : params.entrySet()) {
-                String key = entry.getKey();
-                String[] arr = entry.getValue();
-                for (String value : arr) {
-                    log.debug("Add parameter : \"{}\" -> \"{}\".", key, value);
-                    soapRequest.addChildElement(key).addTextNode(value);
-                }
-            }
+            SOAPElement containerElement = (SOAPElement) request.getRequestData();
+            SOAPHelper.moveChildren(containerElement, soapRequest, true);
+
+//            Map<String, String[]> params = (Map<String, String[]>) request.getRequestData();
+//            for (Map.Entry<String, String[]> entry : params.entrySet()) {
+//                String key = entry.getKey();
+//                String[] arr = entry.getValue();
+//                for (String value : arr) {
+//                    log.debug("Add parameter : \"{}\" -> \"{}\".", key, value);
+//                    soapRequest.addChildElement(key).addTextNode(value);
+//                }
+//            }
         }
 
         protected void handleAttachment(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope, String attachmentData) throws SOAPException {
@@ -748,6 +792,29 @@ public class ConsumerGateway extends HttpServlet {
             request.getSoapMessage().addAttachmentPart(attachPart);
 
         }
+    }
+
+    /**
+     * Convert a JSON string to XML.
+     * JSON is wrapped inside an extra root element JSON_CONVERSION_WRAPPER_ELEMENT,
+     * so the resulting XML is inside a root element with same name
+     * @param json
+     * @return
+     * @throws SOAPException
+     */
+    private String convertJsonToXml(String json) throws SOAPException {
+        log.debug("converting json: {}", json);
+        // create a json wrapper root property
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("{ \"" + JSON_CONVERSION_WRAPPER_ELEMENT + "\": ");
+        buffer.append(json);
+        buffer.append("}");
+        String wrapped = buffer.toString();
+        String converted = new JSONToXMLConverter().convert(wrapped);
+        if (converted == null || converted.equals("")) {
+            throw new SOAPException("could not convert json to xml");
+        }
+        return converted;
     }
 
     private class EncryptingRequestSerializer extends RequestSerializer {
@@ -773,16 +840,15 @@ public class ConsumerGateway extends HttpServlet {
                 writeGetParametersToBody(request, payload);
                 // Process request body
                 if (this.requestBody != null && !this.requestBody.isEmpty()) {
-                    if (convertPost) {
-                        convertJsonToXmlAndWriteToSoap(this.requestBody, soapRequest);
-                    } else {
-                        // send HTTP POST as an attachment
+                    if (!convertPost) {
+                        // send the entire HTTP POST as an attachment
+                        // if convertPost = true instead, converted HTTP POST is sent inside SOAP body
                         handleAttachment(request, payload, envelope, symmetricEncrypter.encrypt(this.requestBody));
                     }
                 }
                 // Encrypt message with symmetric AES encryption
                 String encryptedData = symmetricEncrypter.encrypt(SOAPHelper.toString(payload));
-                // Build message body that includes enrypted data,
+                // Build message body that includes encrypted data,
                 // encrypted session key and IV
                 RESTGatewayUtil.buildEncryptedBody(symmetricEncrypter, asymmetricEncrypter, soapRequest, encryptedData);
             } catch (NoSuchAlgorithmException ex) {
@@ -921,4 +987,5 @@ public class ConsumerGateway extends HttpServlet {
         }
 
     }
+
 }

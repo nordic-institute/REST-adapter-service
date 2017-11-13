@@ -268,6 +268,7 @@ public class ProviderGatewayUtil {
             // Remove the key-value pair from the map
             params.remove(Constants.PARAM_REQUEST_BODY);
             // Return the value
+            log.debug("request body: {}", requestBody);
             return requestBody;
         }
         log.trace("\"{}\" key not found.", Constants.PARAM_REQUEST_BODY);
