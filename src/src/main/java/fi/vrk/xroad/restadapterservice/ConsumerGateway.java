@@ -79,6 +79,10 @@ public class ConsumerGateway extends HttpServlet {
     private String publicKeyFilePassword;
     private int keyLength;
 
+    public ConsumerGateway() {
+        log.info("!!!!!!!!!!!! ConsumerGateway()");
+    }
+
     /**
      * Reads properties (overridden is tests)
      * @return
