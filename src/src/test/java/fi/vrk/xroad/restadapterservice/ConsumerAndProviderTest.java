@@ -34,6 +34,7 @@ import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -66,21 +67,21 @@ import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 
+/**
+ * Tests cooperation of consumer and provider endpoints
+ */
 @RunWith(SpringRunner.class)
-// TODO: solve dynamic port & TestConsumerGateway in a later step
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.DEFINED_PORT)
-@TestPropertySource(properties = "server.port=9999")
+@TestPropertySource(properties = "server.port=7778")
 @Slf4j
-public class ApplicationTest {
+public class ConsumerAndProviderTest {
 
     private static String originalPropertiesDir;
     private WireMockServer wireMockServer;
 
-//    @Value("${wiremock.server.port}")
-    private int wireMockPort = 7777;
+    @Value("${wiremock.server.port}")
+    private int wireMockPort;
 
     @Before
     public void setUp() throws Exception {
@@ -91,7 +92,7 @@ public class ApplicationTest {
 
     @BeforeClass
     public static void setPropertiesDirectory() {
-        File apptestConfigFolder = new File(ApplicationTest.class.getClassLoader()
+        File apptestConfigFolder = new File(ConsumerAndProviderTest.class.getClassLoader()
                 .getResource("application-test-properties").getFile());
         originalPropertiesDir = System.getProperty(Constants.PROPERTIES_DIR_PARAM_NAME);
         System.setProperty(Constants.PROPERTIES_DIR_PARAM_NAME, apptestConfigFolder.getAbsolutePath());
@@ -110,13 +111,17 @@ public class ApplicationTest {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private TestConfig.TestConsumerGateway testConsumerGateway;
+    private TestConfig.RequestRecordingTestConsumerGateway testConsumerGateway;
 
     @Autowired
-    private TestConfig.TestProviderGateway testProviderGateway;
+    private TestConfig.RequestRecordingTestProviderGateway testProviderGateway;
 
+    /**
+     * client (rest) <- rest -> consumer endpoint:7778 <- XROAD SOAP -> provider endpoint:7778 <- rest -> wiremock rest api:7777
+     * @throws Exception
+     */
     @Test
-    public void testApplication() throws Exception {
+    public void testEncryptionAndConvertPost() throws Exception {
 
         String json = readFile("rest-service-response.json");
 
@@ -168,10 +173,10 @@ public class ApplicationTest {
     public static class TestConfig {
 
         @Autowired
-        TestConsumerGateway testConsumerGateway;
+        RequestRecordingTestConsumerGateway testConsumerGateway;
 
         @Autowired
-        TestProviderGateway testProviderGateway;
+        RequestRecordingTestProviderGateway testProviderGateway;
 
         @Bean
         public ServletRegistrationBean consumerGatewayBean() {
@@ -193,12 +198,21 @@ public class ApplicationTest {
         }
 
         @Component
-        public static class TestConsumerGateway extends ConsumerGateway {
+        public static class RequestRecordingTestConsumerGateway extends ConsumerGateway {
 
             private List<String> requestBodies = new ArrayList<>();
 
             public List<String> getRequestBodies() {
                 return requestBodies;
+            }
+
+            @Override
+            protected GatewayProperties readGatewayProperties() {
+                // override security server URL to use provider gateway running in random port
+                GatewayProperties properties = super.readGatewayProperties();
+                properties.getConsumerGatewayProps().setProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL,
+                        "http://localhost:7778/rest-adapter-service/Provider");
+                return properties;
             }
 
             @Override
@@ -213,7 +227,7 @@ public class ApplicationTest {
         }
 
         @Component
-        public static class TestProviderGateway extends ProviderGateway {
+        public static class RequestRecordingTestProviderGateway extends ProviderGateway {
 
             private List<String> requestBodies = new ArrayList<>();
 
@@ -232,7 +246,6 @@ public class ApplicationTest {
 
     }
 
-    // TODO: duplicate
     private String readFile(String filename) throws IOException, URISyntaxException {
         return new String(Files.readAllBytes(Paths.get(
                 ClassLoader.getSystemResource(filename).toURI()

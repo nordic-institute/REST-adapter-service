@@ -84,7 +84,7 @@ public class ConsumerGateway extends HttpServlet {
     }
 
     /**
-     * Reads properties (overridden is tests)
+     * Reads properties (overridden in tests)
      * @return
      */
     protected GatewayProperties readGatewayProperties() {
@@ -114,7 +114,7 @@ public class ConsumerGateway extends HttpServlet {
         log.debug("Setting Consumer and ConsumerGateway properties");
         String serviceCallsByXRdServiceIdStr = this.props.getProperty(Constants.CONSUMER_PROPS_SVC_CALLS_BY_XRD_SVC_ID_ENABLED);
         this.serviceCallsByXRdServiceId = serviceCallsByXRdServiceIdStr == null ? false : "true".equalsIgnoreCase(serviceCallsByXRdServiceIdStr);
-        log.debug("Security server URL : \"{}\".", props.getProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL));
+        log.debug("Security server URL : \"{}\".", getSecurityServerUrl());
         log.debug("Default client id : \"{}\".", this.props.getProperty(Constants.CONSUMER_PROPS_ID_CLIENT));
         log.debug("Default namespace for incoming ServiceResponses : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE));
         log.debug("Default namespace for outgoing ServiceRequests : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE));
@@ -242,9 +242,9 @@ public class ConsumerGateway extends HttpServlet {
             ServiceResponseDeserializer deserializer = getResponseDeserializer(endpoint, omitNamespace);
             // SOAP client that makes the service call
             SOAPClient client = new SOAPClientImpl();
-            log.info("Send request ({}) to the security server. URL : \"{}\".", messageId, props.getProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL));
+            log.info("Send request ({}) to the security server. URL : \"{}\".", messageId, getSecurityServerUrl());
             // Make the service call that returns the service response
-            ServiceResponse serviceResponse = client.send(serviceRequest, props.getProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL), serializer, deserializer);
+            ServiceResponse serviceResponse = client.send(serviceRequest, getSecurityServerUrl(), serializer, deserializer);
             log.info("Received response ({}) from the security server.", messageId);
             // Set response wrapper processing
             if (endpoint.isProcessingWrappers() != null) {
@@ -272,6 +272,10 @@ public class ConsumerGateway extends HttpServlet {
 
         // Send response
         this.writeResponse(response, responseStr);
+    }
+
+    protected String getSecurityServerUrl() {
+        return props.getProperty(Constants.CONSUMER_PROPS_SECURITY_SERVER_URL);
     }
 
     private void writeError404(HttpServletResponse response, String accept) {
