@@ -90,6 +90,7 @@ public class ConsumerGateway extends HttpServlet {
     protected GatewayProperties readGatewayProperties() {
         log.debug("Reading Consumer and ConsumerGateway properties");
         String propertiesDirectory = RESTGatewayUtil.getPropertiesDirectory();
+        Properties testprops = System.getProperties();
         Properties readEndpointProps;
         Properties readConsumerGatewayProps;
         if (propertiesDirectory != null) {
