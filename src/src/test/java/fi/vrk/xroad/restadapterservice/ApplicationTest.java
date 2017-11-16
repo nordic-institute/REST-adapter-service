@@ -26,16 +26,14 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import fi.vrk.xroad.restadapterservice.util.Constants;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
-import org.junit.*;
-import org.junit.contrib.java.lang.system.EnvironmentVariables;
-import org.junit.contrib.java.lang.system.ProvideSystemProperty;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -53,7 +51,6 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -68,6 +65,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 
 @RunWith(SpringRunner.class)
 // TODO: solve dynamic port & TestConsumerGateway in a later step
@@ -113,6 +112,9 @@ public class ApplicationTest {
     @Autowired
     private TestConfig.TestConsumerGateway testConsumerGateway;
 
+    @Autowired
+    private TestConfig.TestProviderGateway testProviderGateway;
+
     @Test
     public void testApplication() throws Exception {
 
@@ -147,16 +149,29 @@ public class ApplicationTest {
         assertTrue(response.getBody().contains("TekstiLisatiedot"));
         JSONAssert.assertEquals(json, response.getBody(), JSONCompareMode.NON_EXTENSIBLE);
 
+        // verify that provider endpoint received correct, encrypted request
+        assertEquals(1, testProviderGateway.getRequestBodies().size());
+        String requestToProvider = testProviderGateway.getRequestBodies().get(0);
+        assertTrue(requestToProvider.contains("toimija:encrypted"));
+        assertFalse(requestToProvider.contains("<toimija:Tunniste>12345</toimija:Tunniste>"));
+
         log.info("testConsumerGateway: {}", testConsumerGateway);
-        log.info("requests: {}", testConsumerGateway.getRequestBodies());
+        log.info("consumer endpoint requests: {}", testConsumerGateway.getRequestBodies());
+        log.info("provider endpoint requests: {}", testProviderGateway.getRequestBodies());
     }
 
 
+    /**
+     * Override Spring config with test versions of consumer and provider gateways
+     */
     @TestConfiguration
     public static class TestConfig {
 
         @Autowired
         TestConsumerGateway testConsumerGateway;
+
+        @Autowired
+        TestProviderGateway testProviderGateway;
 
         @Bean
         public ServletRegistrationBean consumerGatewayBean() {
@@ -168,6 +183,14 @@ public class ApplicationTest {
             return bean;
         }
 
+        @Bean
+        public ServletRegistrationBean providerGatewayBean() {
+            log.info("providerGatewayBean");
+            ServletRegistrationBean bean = new ServletRegistrationBean(
+                    testProviderGateway, "/Provider");
+            bean.setLoadOnStartup(1);
+            return bean;
+        }
 
         @Component
         public static class TestConsumerGateway extends ConsumerGateway {
@@ -176,11 +199,6 @@ public class ApplicationTest {
 
             public List<String> getRequestBodies() {
                 return requestBodies;
-            }
-
-            public TestConsumerGateway() {
-                super();
-                log.info("TestConsumerGateway");
             }
 
             @Override
@@ -192,11 +210,26 @@ public class ApplicationTest {
                 requestBodies.add(requestBody);
                 log.info("request is: {}", request);
             }
+        }
 
-            private String getRequestBody(HttpServletRequest request) throws IOException {
-                return IOUtils.toString(request.getReader());
+        @Component
+        public static class TestProviderGateway extends ProviderGateway {
+
+            private List<String> requestBodies = new ArrayList<>();
+
+            public List<String> getRequestBodies() {
+                return requestBodies;
+            }
+
+            @Override
+            protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
+                super.doPost(wrappedRequest, response);
+                String requestBody = new String(wrappedRequest.getContentAsByteArray(), StandardCharsets.UTF_8);
+                requestBodies.add(requestBody);
             }
         }
+
     }
 
     // TODO: duplicate
