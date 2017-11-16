@@ -49,7 +49,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -57,9 +59,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ApplicationTest {
 
     private static final String REST_ADAPTER_HAETOIMIJA_JSON_REQUEST = "{ \"Tunniste\": \"12345\" }";
-
-    @LocalServerPort
-    private int port;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -85,7 +84,12 @@ public class ApplicationTest {
         log.info("response body: {}", response.getBody());
         log.info("response headers: {}", response.getHeaders());
 
-//        HttpEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+        assertTrue(response.getHeaders().containsKey("Content-Type"));
+        assertTrue(response.getHeaders().getContentType().equals(MediaType.APPLICATION_JSON_UTF8));
+        assertTrue(response.getBody().contains("TekstiLisatiedot"));
+        final String FULLRESPONSE_BODY = "kldhjaskjdash"; // TODO:
+        assertEquals(FULLRESPONSE_BODY, response.getBody());
+
 
         log.info("testConsumerGateway: {}", testConsumerGateway);
         log.info("requests: {}", testConsumerGateway.getRequestBodies());
