@@ -152,6 +152,7 @@ public class ConsumerAndProviderTest {
         assertTrue(response.getHeaders().containsKey("Content-Type"));
         assertTrue(response.getHeaders().getContentType().equals(MediaType.APPLICATION_JSON_UTF8));
         assertTrue(response.getBody().contains("TekstiLisatiedot"));
+
         JSONAssert.assertEquals(json, response.getBody(), JSONCompareMode.NON_EXTENSIBLE);
 
         // verify that provider endpoint received correct, encrypted request
