@@ -77,6 +77,18 @@ Some of the ways to install Rest Adapter Service are
 
 ## Using package manager to install Rest Adapter
 
+### Remove Tomcat dependency used by older versions
+
+If you had previously installed Rest Adapter with version 0.0.12 or earlier, it ran on a standalone Tomcat7 installation.
+You may wish to remove the Tomcat installation, as both Tomcat and standalone Rest Adapter run on port 8080 by default and conflict with each other.
+If Tomcat was installed automatically as a dependency package, it will be removed with e.g.
+
+```shell
+apt-get autoremove
+```
+
+Otherwise, use standard `apt` or `yum` commands to remove the `tomcat7` package.
+
 ### Ubuntu 14
 
 Rest Adapter Service requires `java8-runtime-headless` dependency. 
