@@ -79,10 +79,6 @@ public class ConsumerGateway extends HttpServlet {
     private String publicKeyFilePassword;
     private int keyLength;
 
-    public ConsumerGateway() {
-        log.info("!!!!!!!!!!!! ConsumerGateway()");
-    }
-
     /**
      * Reads properties (overridden in tests)
      * @return
@@ -145,7 +141,6 @@ public class ConsumerGateway extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        log.info("***** ConsumerGateway servlet processing request");
         String responseStr;
         // Get resourcePath attribute
         String resourcePath = (String) request.getAttribute("resourcePath");
