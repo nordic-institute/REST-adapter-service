@@ -86,7 +86,6 @@ public class ConsumerGateway extends HttpServlet {
     protected GatewayProperties readGatewayProperties() {
         log.debug("Reading Consumer and ConsumerGateway properties");
         String propertiesDirectory = RESTGatewayUtil.getPropertiesDirectory();
-        Properties testprops = System.getProperties();
         Properties readEndpointProps;
         Properties readConsumerGatewayProps;
         if (propertiesDirectory != null) {
@@ -709,13 +708,15 @@ public class ConsumerGateway extends HttpServlet {
 
         @Override
         protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
+            // Write everything except possible attachment reference to request body SOAPElement
             writeBodyContents(request, soapRequest);
             if (this.requestBody != null && !this.requestBody.isEmpty()) {
                 if (!convertPost) {
                     // send the entire HTTP POST as an attachment
-                    // if convertPost = true instead, converted HTTP POST is sent inside SOAP body
-                    // (taken care of in serializer.writeBodyContents)
                     handleAttachment(request, soapRequest, envelope, this.requestBody);
+                } else {
+                    // converted HTTP POST is sent inside SOAP body
+                    // (already handled in serializer.writeBodyContents)
                 }
 
             }
@@ -733,6 +734,8 @@ public class ConsumerGateway extends HttpServlet {
                 log.debug("Add resourceId : \"{}\".", this.resourceId);
                 soapRequest.addChildElement("resourceId").addTextNode(this.resourceId);
             }
+            // requestData contains request parameters and possible converted JSON
+            // body, as initialized in ConsumerGateway.processRequest
             SOAPElement containerElement = (SOAPElement) request.getRequestData();
             SOAPHelper.moveChildren(containerElement, soapRequest, true);
         }
@@ -790,15 +793,16 @@ public class ConsumerGateway extends HttpServlet {
             try {
                 // Create new symmetric encrypter using of defined key length
                 Encrypter symmetricEncrypter = RESTGatewayUtil.createSymmetricEncrypter(this.keyLength);
-                // Process request parameters
+                // Write everything except possible attachment reference to request body SOAPElement
                 writeBodyContents(request, payload);
                 // Process request body
                 if (this.requestBody != null && !this.requestBody.isEmpty()) {
                     if (!convertPost) {
                         // send the entire HTTP POST as an attachment
-                        // if convertPost = true instead, converted HTTP POST is sent inside SOAP body
-                        // (taken care of in serializer.writeBodyContents)
                         handleAttachment(request, payload, envelope, symmetricEncrypter.encrypt(this.requestBody));
+                    } else {
+                        // converted HTTP POST is sent inside SOAP body
+                        // (already handled in serializer.writeBodyContents)
                     }
                 }
                 // Encrypt message with symmetric AES encryption
