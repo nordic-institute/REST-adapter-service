@@ -185,6 +185,7 @@ ls -la target/rest-adapter-service-0.0.12-SNAPSHOT.war
 ```
 
 or extract war file from a .deb or .rpm package which has been downloaded from the packet repository.
+For detailed instructions, [see this page.](documentation/Downloading-WAR-from-repository.md)
 
 To set configuration files location, you need to specify `propertiesDirectory` system property using a container-specific method.
 
