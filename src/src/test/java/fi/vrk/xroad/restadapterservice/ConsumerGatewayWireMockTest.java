@@ -177,7 +177,7 @@ public class ConsumerGatewayWireMockTest {
         }
     }
 
-    static class ConsumerGatewayPropertiesBuilder {
+    public static class ConsumerGatewayPropertiesBuilder {
         private Properties properties = new Properties();
         private ConsumerGatewayPropertiesBuilder addProperty(String name, String value) {
             properties.setProperty(name, value);
@@ -200,7 +200,7 @@ public class ConsumerGatewayWireMockTest {
         }
     }
 
-    static class EndpointPropertiesBuilder {
+    public static class EndpointPropertiesBuilder {
         private Properties properties = new Properties();
         private int index;
 

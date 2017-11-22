@@ -46,7 +46,6 @@ public class ConsumerURIFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain fc) throws IOException, ServletException {
-        log.info("***** filter processing request");
         HttpServletRequest request = (HttpServletRequest) req;
         String servletName = "Consumer";
         String oldURI = request.getRequestURI().substring(request.getContextPath().length() + 1);

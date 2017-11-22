@@ -322,6 +322,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
                 log.debug("SOAP attachment detected. Use attachment as request body.", Constants.PARAM_REQUEST_BODY);
                 List<String> values = new ArrayList<>();
                 values.add(SOAPHelper.toString((AttachmentPart) message.getAttachments().next()));
+                log.debug("attachment value: {}", values);
                 map.put(Constants.PARAM_REQUEST_BODY, values);
                 return true;
             } else {
