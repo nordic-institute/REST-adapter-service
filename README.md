@@ -191,6 +191,19 @@ To set configuration files location, you need to specify `propertiesDirectory` s
 
 ## Using Docker
 
+You can create a docker image to run Rest Adapter inside a container, using the provided Dockerfile. 
+Before building the image, build the war file inside `src` directory
+
+```
+mvn clean install
+```
+If you have not built the war, building the Docker image will fail with message
+```
+Step 2 : ADD src/target/rest-adapter-service-*.war rest-adapter-service.war
+No source files were specified
+```
+
+
 While you are in the project root directory, build the image using the docker build command. The ```-t``` parameter gives your image a tag, so you can run it more easily later. Don’t forget the ```.``` command, which tells the docker build command to look in the current directory for a file called Dockerfile.
 
 ```
