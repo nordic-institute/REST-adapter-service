@@ -267,21 +267,22 @@ Running integration tests with encryption configuration enabled:
 ### Additional documentation
 
 * [Requirements](documentation/Requirements.md)
-* [Setting up Development Environment](documentation/Setting-up-Development-Environment.md)
+* [Setting up development environment](documentation/Setting-up-Development-Environment.md)
 * [Setting up SSL on Tomcat](documentation/Setting-up-SSL-on-Tomcat.md)
-* [Import a Certificate as a Trusted Certificate](documentation/Import-a-Certificate-as-a-Trusted-Certificate.md)
+* [Import a certificate as a trusted certificate](documentation/Import-a-Certificate-as-a-Trusted-Certificate.md)
 * [Encryption](documentation/Encryption.md)
 * [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md)
+* [Obtaining WAR file from package repository](documentation/Downloading-WAR-from-repository.md)
 * Examples
   * [Configuring Rest Adapter Service provider](documentation/Configuring-Rest-Adapter-Service-provider.md)
-  * [CRUD API Configuration](documentation/CRUD-API-Configuration.md)
+  * [CRUD API configuration](documentation/CRUD-API-Configuration.md)
 
 ### Links to material
 
-* [Data Exchange Layer X-Road](https://www.ria.ee/x-road/)
+* [Data exchange layer X-Road](https://www.ria.ee/x-road/)
 * [X-Road overview ](https://speakerdeck.com/educloudalliance/x-road-overview)
 * [X-Road regulations](https://speakerdeck.com/educloudalliance/x-road-regulations)
 * [Palveluväylä kehitysympäristö (Finnish only)](http://palveluvayla.fi)
 * [Requirements for Information Systems and Adapter
 Servers](http://x-road.ee/docs/eng/x-road_service_protocol.pdf)
-* [XRd4J - Java Library for X-Road v6](https://github.com/vrk-kpa/xrd4j)
+* [XRd4J - Java library for X-Road v6](https://github.com/vrk-kpa/xrd4j)
