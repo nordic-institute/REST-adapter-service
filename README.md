@@ -110,10 +110,6 @@ apt-get install rest-adapter-service
 ```
 Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md). 
 Service will automatically start during boot.
-Start the service:
-```shell
-service rest-adapter-service start
-```
 
 ### Ubuntu 16
 
@@ -129,29 +125,34 @@ Install Rest Adapter Service package
 apt-get install rest-adapter-service 
 ```
 Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md).
-Service is enabled or disabled using system presets, which means that on a default Ubuntu 16 it be enabled (and start during boots).
-Start the service:
-```shell
-service rest-adapter-service start
-```
+Service is enabled or disabled using system presets.
+On a typical Ubuntu 16 system it will be *enabled* (and start during boots).
 
 ### RHEL 7
 
 Install Rest Adapter Service package
-TODO: install correct repo and key
+TODO: install correct repo and key, these are not known at this time.
 ```shell
 yum install rest-adapter-service
 ```
 Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md).
-Service is enabled or disabled using system presets, which means that on a default RHEL 7 it be disabled (and not start during boots).
+Service is enabled or disabled using system presets.
+On a typical RHEL 7 system it will be *disabled* (and not start during boots).
 Enable the service (to start automatically during boots):
 ```shell
 systemctl enable rest-adapter-service
 ```
-Start the service:
+
+### Starting and stopping the service
+Starting the service:
 ```shell
 service rest-adapter-service start
 ```
+Stopping the service:
+```shell
+service rest-adapter-service stop
+```
+
 ### Changing the port
 To change the port, modify configuration file `/etc/rest-adapter-service/application.properties`
 ```shell
