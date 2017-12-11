@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2017 Population Register Centre (VRK)
  *
@@ -28,6 +28,7 @@ import fi.vrk.xrd4j.common.security.Encrypter;
 import fi.vrk.xrd4j.common.util.ConfigurationHelper;
 import fi.vrk.xrd4j.common.util.MessageHelper;
 import fi.vrk.xroad.restadapterservice.endpoint.ConsumerEndpoint;
+
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -42,7 +43,7 @@ import java.util.regex.Pattern;
  * @author Petteri Kivimäki
  */
 @Slf4j
-public class ConsumerGatewayUtil {
+public final class ConsumerGatewayUtil {
 
     /**
      * This a utility class providing only static methods which is why it should
@@ -57,7 +58,7 @@ public class ConsumerGatewayUtil {
      * endpoints. Returns a map containing service id - consumer endpoint
      * key-value pairs.
      *
-     * @param endpoints consumer properties
+     * @param endpoints         consumer properties
      * @param gatewayProperties REST Consumer Gateway general properties
      * @return map containing service id - consumer endpoint key-value pairs
      */
@@ -120,9 +121,9 @@ public class ConsumerGatewayUtil {
      * Extracts properties common for consumer endpoints from the given
      * properties.
      *
-     * @param key property key
+     * @param key       property key
      * @param endpoints list of configured endpoints read from properties
-     * @param endpoint the endpoint object that's being initialized
+     * @param endpoint  the endpoint object that's being initialized
      */
     public static void extractEndpoints(String key, Properties endpoints, ConsumerEndpoint endpoint) {
         // Set more specific endpoint properties
@@ -183,7 +184,7 @@ public class ConsumerGatewayUtil {
     /**
      * Sets default values to the given endpoint.
      *
-     * @param endpoint ConsumerEndpoint to be modified
+     * @param endpoint          ConsumerEndpoint to be modified
      * @param gatewayProperties REST Consumer Gateway general properties
      */
     private static void setDefaultValues(ConsumerEndpoint endpoint, Properties gatewayProperties) {
@@ -238,8 +239,8 @@ public class ConsumerGatewayUtil {
      * and service id is "GET /myhost.com/service/123". Based on these two
      * strings we can parse the resource id "123" from the service id.
      *
-     * @param key service identifier as a String from properties
-     * @param endpoint Endpoint object representing the identifier
+     * @param key       service identifier as a String from properties
+     * @param endpoint  Endpoint object representing the identifier
      * @param serviceId service identifier as a String that has been called
      */
     private static void parseResourceId(String key, ConsumerEndpoint endpoint, String serviceId) {
@@ -261,9 +262,9 @@ public class ConsumerGatewayUtil {
      * Rewrites all the URLs in the responseStr that are matching the
      * resourcePath to point the Consumer Gateway servlet.
      *
-     * @param servletUrl URL of Consumer Gateway serlvet
+     * @param servletUrl     URL of Consumer Gateway serlvet
      * @param pathToResource path that's rewritten to point the Consumer Gateway
-     * @param responseStr response to be modified
+     * @param responseStr    response to be modified
      * @return modified response
      */
     public static String rewriteUrl(String servletUrl, String pathToResource, String responseStr) {
@@ -329,8 +330,8 @@ public class ConsumerGatewayUtil {
      * information is not in the configuration file. Resource path is used as
      * service id.
      *
-     * @param props consumer gateway properties that contain default namespace
-     * and prefix
+     * @param props          consumer gateway properties that contain default namespace
+     *                       and prefix
      * @param pathToResource resource path that was called, used as service id
      * @return ConsumerEndpoint object
      */
@@ -416,15 +417,16 @@ public class ConsumerGatewayUtil {
      * with one or more keys and/or private key is was not checked, false is
      * returned.
      *
-     * @param props general properties
-     * @param endpoints list of configured endpoints
+     * @param props                    general properties
+     * @param endpoints                list of configured endpoints
      * @param asymmetricEncrypterCache cache variable for asymmetric encrypters.
-     * All the asymmetric encrypters that are successfully checked are added to
-     * the cache.
+     *                                 All the asymmetric encrypters that are successfully checked are added to
+     *                                 the cache.
      * @return true if everything is OK. False if there's a problem with one or
      * more keys and/or private key is was not checked.
      */
-    public static boolean checkEncryptionProperties(Properties props, Map<String, ConsumerEndpoint> endpoints, Map<String, Encrypter> asymmetricEncrypterCache) {
+    public static boolean checkEncryptionProperties(Properties props, Map<String, ConsumerEndpoint> endpoints,
+                                                    Map<String, Encrypter> asymmetricEncrypterCache) {
         log.info("Check encryption properties.");
         boolean result = true;
         boolean mustCheckPrivateKey = false;
@@ -446,7 +448,7 @@ public class ConsumerGatewayUtil {
                 }
             }
             // If response is encrypted, decryption is done using the private
-            // key, so it must be possible to access it. It's enough to 
+            // key, so it must be possible to access it. It's enough to
             // check the private key once so it can be done outside of the loop.
             if (endpoint.isResponseEncrypted()) {
                 mustCheckPrivateKey = true;

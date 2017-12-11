@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2017 Population Register Centre (VRK)
  *
@@ -27,7 +27,7 @@ package fi.vrk.xroad.restadapterservice.util;
  *
  * @author Petteri Kivimäki
  */
-public class Constants {
+public final class Constants {
 
     /**
      * Properties files
@@ -38,7 +38,6 @@ public class Constants {
     public static final String PROPERTIES_FILE_CONSUMERS = "/consumers.properties";
     /**
      * Endpoint properties - used by both provider and consumer endpoints
-     *
      */
     public static final String ENDPOINT_PROPS_ID = "id";
     public static final String ENDPOINT_PROPS_VERB = "verb";
@@ -112,6 +111,13 @@ public class Constants {
     public static final String PROPERTIES_DIR_NAME = "rest-adapter-service";
 
     /**
+     * HTTP status codes
+     */
+    public static final int HTTP_OK = 200;
+    public static final int HTTP_INTERNAL_ERROR = 500;
+    public static final int HTTP_NOT_FOUND = 404;
+
+    /**
      * HTTP error messages
      */
     public static final String ERROR_404 = "404 Not Found";
@@ -139,6 +145,7 @@ public class Constants {
      */
     public static final String LOG_STRING_FOR_SETTINGS = "\"{}\" setting found. Value : \"{}\".";
     public static final String LOG_STRING_FOR_HEADERS = "{} : {}";
+
     /**
      * Constructs and initializes a new Constants object. Should never be used.
      */

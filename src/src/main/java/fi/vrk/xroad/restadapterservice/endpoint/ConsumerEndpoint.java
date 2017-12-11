@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2017 Population Register Centre (VRK)
  *
@@ -24,6 +24,7 @@ package fi.vrk.xroad.restadapterservice.endpoint;
 
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -84,8 +85,9 @@ public class ConsumerEndpoint extends AbstractEndpoint {
 
     /**
      * Constructs and initializes a new ProviderEndpoint object.
-     * @param serviceId unique ID of the service to be called
-     * @param clientId client id of this ConsumerEndpoint
+     *
+     * @param serviceId    unique ID of the service to be called
+     * @param clientId     client id of this ConsumerEndpoint
      * @param resourcePath resource path of the Adapter Service
      */
     public ConsumerEndpoint(String serviceId, String clientId, String resourcePath) {
@@ -97,6 +99,7 @@ public class ConsumerEndpoint extends AbstractEndpoint {
 
     /**
      * Returns the resource path of this ConsumerEndpoint.
+     *
      * @return resource path of this ConsumerEndpoint
      */
     public String getResourcePath() {
@@ -105,6 +108,7 @@ public class ConsumerEndpoint extends AbstractEndpoint {
 
     /**
      * Sets the resource path of this ConsumerEndpoint.
+     *
      * @param resourcePath new value
      */
     public void setResourcePath(String resourcePath) {
@@ -113,6 +117,7 @@ public class ConsumerEndpoint extends AbstractEndpoint {
 
     /**
      * Returns the client id of this ConsumerEndpoint.
+     *
      * @return client id of this ConsumerEndpoint
      */
     public String getClientId() {
@@ -121,6 +126,7 @@ public class ConsumerEndpoint extends AbstractEndpoint {
 
     /**
      * Sets the client id of this ConsumerEndpoint.
+     *
      * @param clientId new value
      */
     public void setClientId(String clientId) {
@@ -129,6 +135,7 @@ public class ConsumerEndpoint extends AbstractEndpoint {
 
     /**
      * Returns the resource id value.
+     *
      * @return resource id value
      */
     public String getResourceId() {
@@ -137,6 +144,7 @@ public class ConsumerEndpoint extends AbstractEndpoint {
 
     /**
      * Sets the resource id value.
+     *
      * @param resourceId new value
      */
     public void setResourceId(String resourceId) {
@@ -145,6 +153,7 @@ public class ConsumerEndpoint extends AbstractEndpoint {
 
     /**
      * Returns the X-Road consumer member.
+     *
      * @return X-Road consumer member
      */
     public ConsumerMember getConsumer() {
@@ -153,6 +162,7 @@ public class ConsumerEndpoint extends AbstractEndpoint {
 
     /**
      * Sets the X-Road consumer member.
+     *
      * @param consumer X-Road consumer member
      */
     public void setConsumer(ConsumerMember consumer) {
@@ -161,6 +171,7 @@ public class ConsumerEndpoint extends AbstractEndpoint {
 
     /**
      * Returns the X-Road producer member.
+     *
      * @return X-Road producer member
      */
     public ProducerMember getProducer() {
@@ -169,6 +180,7 @@ public class ConsumerEndpoint extends AbstractEndpoint {
 
     /**
      * Sets the X-Road producer member.
+     *
      * @param producer X-Road producer member
      */
     public void setProducer(ProducerMember producer) {
@@ -178,6 +190,7 @@ public class ConsumerEndpoint extends AbstractEndpoint {
     /**
      * Returns a boolean value that indicates if URLs in the response body
      * should be modified to point the Consumer Endpoint instance.
+     *
      * @return true if and only if the URLs should be modified; otherwise false
      */
     public boolean isModifyUrl() {
@@ -187,6 +200,7 @@ public class ConsumerEndpoint extends AbstractEndpoint {
     /**
      * Sets a boolean value that indicates if URLs in the response body
      * should be modified to point the Consumer Endpoint instance.
+     *
      * @param modifyUrl
      */
     public void setModifyUrl(boolean modifyUrl) {
