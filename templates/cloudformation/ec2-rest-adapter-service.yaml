@@ -1,9 +1,32 @@
 ---
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'AWS CloudFormation template for testing X-Road REST Adapter
-  Service. The template creates a VPC and adds an EC2 instance with an Elastic
-  IP address and a security group. After that the latest version of REST Adapter
-  Service is fetched from GitHub, compiled and started.'
+Description: 'AWS CloudFormation template for testing the latest development
+  version of X-Road REST Adapter Service. The template creates a VPC and adds
+  an EC2 instance with an Elastic IP address and a security group. After
+  that the latest version of REST Adapter Service is fetched from GitHub,
+  compiled and started.
+
+  N.B.! This template is NOT officially supported by REST Adapter Service.
+  This template is only an example of how AWS could be used with REST
+  Adapter Service. In addition, it is not guaranteed that every version of REST
+  Adapter Service will work with this AWS template and in the case of issues,
+  no support is provided by the development team.'
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      -
+        Label:
+          default: 'General'
+        Parameters:
+          - InstanceType
+      -
+        Label:
+          default: 'Access and Security'
+        Parameters:
+          - KeyName
+          - SSHLocation
+          - HTTPAccessLocation
+          - ServerPort
 Parameters:
   InstanceType:
     Description: WebServer EC2 instance type
@@ -19,9 +42,9 @@ Parameters:
     ConstraintDescription: must be a valid EC2 instance type.
   KeyName:
     Description: ' EC2 KeyPair to enable SSH access to the instance'
-    Type: "AWS::EC2::KeyPair::KeyName"
+    Type: AWS::EC2::KeyPair::KeyName
   SSHLocation:
-    Description: ' The IP address range that can be used to SSH to the EC2 instance'
+    Description: ' The IP address range that can be used to SSH to the EC2 instance (optional)'
     Type: String
     MinLength: '9'
     MaxLength: '18'
@@ -29,13 +52,18 @@ Parameters:
     AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
     ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
   HTTPAccessLocation:
-    Description: ' The IP address range that can be used to access the port 8080'
+    Description: ' The IP address range that can be used to access the defined port (optional)'
     Type: String
     MinLength: '9'
     MaxLength: '18'
     Default: 0.0.0.0/0
     AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
     ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  ServerPort:
+    Description: ' The port number that REST Adapter Service is listening'
+    Type: Number
+    Default: 8080
+    ConstraintDescription: must be a valid port number.
 Mappings:
   RegionMap:
     us-east-1:
@@ -71,62 +99,49 @@ Resources:
       CidrBlock: 10.0.0.0/28
       Tags:
       - Key: Name
-        Value:
-          Ref: AWS::StackName
+        Value: !Ref AWS::StackName
   Subnet:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId:
-        Ref: VPC
+      VpcId: !Ref VPC
       CidrBlock: 10.0.0.0/28
       Tags:
       - Key: Name
-        Value:
-          Ref: AWS::StackName
+        Value: !Ref AWS::StackName
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
       - Key: Name
-        Value:
-          Ref: AWS::StackName
+        Value: !Ref AWS::StackName
   AttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
-      VpcId:
-        Ref: VPC
-      InternetGatewayId:
-        Ref: InternetGateway
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
   RouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId:
-        Ref: VPC
+      VpcId: !Ref VPC
       Tags:
       - Key: Name
-        Value:
-          Ref: AWS::StackName
+        Value: !Ref AWS::StackName
   Route:
     Type: AWS::EC2::Route
     DependsOn: AttachGateway
     Properties:
-      RouteTableId:
-        Ref: RouteTable
+      RouteTableId: !Ref RouteTable
       DestinationCidrBlock: 0.0.0.0/0
-      GatewayId:
-        Ref: InternetGateway
+      GatewayId: !Ref InternetGateway
   SubnetRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      SubnetId:
-        Ref: Subnet
-      RouteTableId:
-        Ref: RouteTable
+      SubnetId: !Ref Subnet
+      RouteTableId: !Ref RouteTable
   NetworkAcl:
     Type: AWS::EC2::NetworkAcl
     Properties:
-      VpcId:
-        Ref: VPC
+      VpcId: !Ref VPC
       Tags:
       - Key: Name
         Value:
@@ -134,21 +149,19 @@ Resources:
   InboundHTTPNetworkAclEntry:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
-      NetworkAclId:
-        Ref: NetworkAcl
+      NetworkAclId: !Ref NetworkAcl
       RuleNumber: '100'
       Protocol: '6'
       RuleAction: allow
       Egress: 'false'
       CidrBlock: 0.0.0.0/0
       PortRange:
-        From: '8080'
-        To: '8080'
+        From: !Ref ServerPort
+        To: !Ref ServerPort
   InboundSSHNetworkAclEntry:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
-      NetworkAclId:
-        Ref: NetworkAcl
+      NetworkAclId: !Ref NetworkAcl
       RuleNumber: '101'
       Protocol: '6'
       RuleAction: allow
@@ -160,8 +173,7 @@ Resources:
   InboundResponsePortsNetworkAclEntry:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
-      NetworkAclId:
-        Ref: NetworkAcl
+      NetworkAclId: !Ref NetworkAcl
       RuleNumber: '102'
       Protocol: '6'
       RuleAction: allow
@@ -173,8 +185,7 @@ Resources:
   OutBoundHTTPNetworkAclEntry:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
-      NetworkAclId:
-        Ref: NetworkAcl
+      NetworkAclId: !Ref NetworkAcl
       RuleNumber: '100'
       Protocol: '6'
       RuleAction: allow
@@ -186,8 +197,7 @@ Resources:
   OutBoundHTTPSNetworkAclEntry:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
-      NetworkAclId:
-        Ref: NetworkAcl
+      NetworkAclId: !Ref NetworkAcl
       RuleNumber: '101'
       Protocol: '6'
       RuleAction: allow
@@ -199,8 +209,7 @@ Resources:
   OutBoundResponsePortsNetworkAclEntry:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
-      NetworkAclId:
-        Ref: NetworkAcl
+      NetworkAclId: !Ref NetworkAcl
       RuleNumber: '102'
       Protocol: '6'
       RuleAction: allow
@@ -212,23 +221,19 @@ Resources:
   SubnetNetworkAclAssociation:
     Type: AWS::EC2::SubnetNetworkAclAssociation
     Properties:
-      SubnetId:
-        Ref: Subnet
-      NetworkAclId:
-        Ref: NetworkAcl
+      SubnetId: !Ref Subnet
+      NetworkAclId: !Ref NetworkAcl
   IPAddress:
     Type: AWS::EC2::EIP
     DependsOn: AttachGateway
     Properties:
       Domain: vpc
-      InstanceId:
-        Ref: WebServerInstance
+      InstanceId: !Ref WebServerInstance
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      VpcId:
-        Ref: VPC
-      GroupDescription: Enable SSH access via port 22
+      VpcId: !Ref VPC
+      GroupDescription: 'Enable SSH access via port 22 and application access via defined port.'
       SecurityGroupIngress:
       - IpProtocol: tcp
         FromPort: '22'
@@ -236,34 +241,28 @@ Resources:
         CidrIp:
           Ref: SSHLocation
       - IpProtocol: tcp
-        FromPort: '8080'
-        ToPort: '8080'
-        CidrIp:
-          Ref: HTTPAccessLocation
+        FromPort: !Ref ServerPort
+        ToPort: !Ref ServerPort
+        CidrIp: !Ref HTTPAccessLocation
       Tags:
       - Key: Name
-        Value:
-          Ref: AWS::StackName
+        Value: !Ref AWS::StackName
   WebServerInstance:
     Type: AWS::EC2::Instance
     Properties:
       ImageId:
         Fn::FindInMap:
         - RegionMap
-        - Ref: AWS::Region
+        - !Ref AWS::Region
         - AMI
       SecurityGroupIds:
-      - Ref: InstanceSecurityGroup
-      SubnetId:
-        Ref: Subnet
-      InstanceType:
-        Ref: InstanceType
-      KeyName:
-        Ref: KeyName
+      - !Ref InstanceSecurityGroup
+      SubnetId: !Ref Subnet
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyName
       Tags:
       - Key: Name
-        Value:
-          Ref: AWS::StackName
+        Value: !Ref AWS::StackName
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
@@ -282,15 +281,8 @@ Resources:
           git clone https://github.com/vrk-kpa/REST-adapter-service.git
           chown -R ec2-user:ec2-user REST-adapter-service/
           cd REST-adapter-service/src/
-          /usr/local/apache-maven-3.5.2/bin/mvn spring-boot:run
+          /usr/local/apache-maven-3.5.2/bin/mvn spring-boot:run -Drun.jvmArguments="-Dserver.port=${ServerPort}"
 Outputs:
-  URL:
-    Value:
-      Fn::Join:
-      - ''
-      - - http://
-        - Fn::GetAtt:
-          - WebServerInstance
-          - PublicIp
-        - :8080/rest-adapter-service/
+  PublicURL:
+    Value: !Sub 'http://${WebServerInstance.PublicIp}:${ServerPort}/rest-adapter-service/'
     Description: REST Adapter Service URL
