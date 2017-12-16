@@ -4,9 +4,7 @@ This folder contains AWS CloudFormation templates for X-Road REST Adapter Servic
 
 ##  EC2 REST Adapter Service
 
-**Disclaimer**
-
-This template is NOT officially supported by REST Adapter Service.
+**Disclaimer**: This template is NOT officially supported by REST Adapter Service.
 This template is only an example of how AWS could be used with REST
 Adapter Service. In addition, it is not guaranteed that every version of REST
 Adapter Service will work with this AWS template and in the case of issues,
