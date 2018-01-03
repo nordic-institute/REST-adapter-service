@@ -24,6 +24,9 @@ First aim is to get first practical REST API integrated to X-Road, document the 
 
 In parallel with the technical development we will collect more use cases from Finland about REST/JSON APIs that need to be integrated with X-Road. Aim is not to make automated solution which covers 100% of cases. We will cheer loudly if 80% coverage is achieved.
 
+## Want to contribute?
+For more information look at the [contribution instructions](https://github.com/vrk-kpa/REST-adapter-service/blob/master/CONTRIBUTING.md).
+
 ## Try It Out 
 
 The fastest and easiest way to try out the application is by using the Spring Boot Maven plugin.
