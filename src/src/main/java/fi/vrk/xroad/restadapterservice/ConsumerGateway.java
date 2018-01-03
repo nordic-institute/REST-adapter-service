@@ -155,13 +155,13 @@ public class ConsumerGateway extends HttpServlet {
         // Get resourcePath attribute
         String resourcePath = (String) request.getAttribute("resourcePath");
         // Get HTTP headers
-        String userId = processUserId(this.getXRdHeader(request, Constants.XRD_HEADER_USER_ID));
-        String messageId = processMessageId(this.getXRdHeader(request, Constants.XRD_HEADER_MESSAGE_ID));
-        String namespace = this.getXRdHeader(request, Constants.XRD_HEADER_NAMESPACE_SERIALIZE);
-        String prefix = this.getXRdHeader(request, Constants.XRD_HEADER_NAMESPACE_PREFIX_SERIALIZE);
+        String userId = processUserId(getXRdHeader(request, Constants.XRD_HEADER_USER_ID));
+        String messageId = processMessageId(getXRdHeader(request, Constants.XRD_HEADER_MESSAGE_ID));
+        String namespace = getXRdHeader(request, Constants.XRD_HEADER_NAMESPACE_SERIALIZE);
+        String prefix = getXRdHeader(request, Constants.XRD_HEADER_NAMESPACE_PREFIX_SERIALIZE);
         String contentType = request.getHeader(Constants.HTTP_HEADER_CONTENT_TYPE);
-        String acceptHeader = this.getXRdHeader(request, Constants.HTTP_HEADER_ACCEPT) == null ? Constants.TEXT_XML
-                : this.getXRdHeader(request, Constants.HTTP_HEADER_ACCEPT);
+        String acceptHeader = getXRdHeader(request, Constants.HTTP_HEADER_ACCEPT) == null ? Constants.TEXT_XML
+                : getXRdHeader(request, Constants.HTTP_HEADER_ACCEPT);
         log.info("Request received. Method : \"{}\". Resource path : \"{}\".", request.getMethod(), resourcePath);
 
         // Check accept header
@@ -220,11 +220,10 @@ public class ConsumerGateway extends HttpServlet {
             serviceRequest.setRequestData(containerElement);
 
             // store request parameters in serviceRequest
-            Map<String, String[]> params = this.filterRequestParameters(request.getParameterMap());
+            Map<String, String[]> params = filterRequestParameters(request.getParameterMap());
             for (Map.Entry<String, String[]> entry : params.entrySet()) {
-                String key = entry.getKey();
-                String[] arr = entry.getValue();
-                for (String value : arr) {
+                final String key = entry.getKey();
+                for (String value : entry.getValue()) {
                     log.debug("Add parameter : \"{}\" -> \"{}\".", key, value);
                     containerElement.addChildElement(key).addTextNode(value);
                 }
@@ -263,7 +262,7 @@ public class ConsumerGateway extends HttpServlet {
             // to point this servlet
             if (endpoint.isModifyUrl()) {
                 // Get ConsumerGateway URL
-                String servletUrl = this.getServletUrl(request);
+                String servletUrl = getServletUrl(request);
                 // Modify the response
                 responseStr = ConsumerGatewayUtil.rewriteUrl(servletUrl, resourcePath, responseStr);
             }
@@ -273,12 +272,12 @@ public class ConsumerGateway extends HttpServlet {
             log.error(ex.getMessage(), ex);
             log.error("Processing \"{}\" service failed. X-Road id : \"{}\". Message id : \"{}\".", serviceId, endpoint.getServiceId(), messageId);
             // Internal server error -> return 500
-            responseStr = this.generateError(Constants.ERROR_500, accept);
+            responseStr = generateError(Constants.ERROR_500, accept);
             response.setStatus(Constants.HTTP_INTERNAL_ERROR);
         }
 
         // Send response
-        this.writeResponse(response, responseStr);
+        writeResponse(response, responseStr);
     }
 
     protected String getSecurityServerUrl() {
@@ -287,10 +286,10 @@ public class ConsumerGateway extends HttpServlet {
 
     private void writeError404(HttpServletResponse response, String accept) {
         String responseStr;
-        responseStr = this.generateError(Constants.ERROR_404, accept);
+        responseStr = generateError(Constants.ERROR_404, accept);
         response.setStatus(Constants.HTTP_NOT_FOUND);
         // Send response
-        this.writeResponse(response, responseStr);
+        writeResponse(response, responseStr);
         // Quit processing
     }
 
@@ -455,7 +454,7 @@ public class ConsumerGateway extends HttpServlet {
         } else {
             // Error message detected
             log.debug("Received response contains SOAP fault.");
-            responseStr = this.generateFault(serviceResponse.getErrorMessage());
+            responseStr = generateFault(serviceResponse.getErrorMessage());
         }
         // SOAP message doesn't have attachments
         if (!SOAPHelper.hasAttachments(serviceResponse.getSoapMessage())) {
@@ -511,7 +510,7 @@ public class ConsumerGateway extends HttpServlet {
      * @param response    HttpServletResponse object
      * @param responseStr response payload as a String
      */
-    private void writeResponse(HttpServletResponse response, String responseStr) {
+    private static void writeResponse(HttpServletResponse response, String responseStr) {
         PrintWriter out = null;
         try {
             log.debug("Send response.");
@@ -584,7 +583,7 @@ public class ConsumerGateway extends HttpServlet {
         processRequest(request, response);
     }
 
-    private String generateError(String errorMsg, String contentType) {
+    private static String generateError(String errorMsg, String contentType) {
         StringBuilder builder = new StringBuilder();
         if (contentType.startsWith(Constants.APPLICATION_JSON)) {
             builder.append("{\"error\":\"").append(errorMsg).append("\"}");
@@ -595,7 +594,7 @@ public class ConsumerGateway extends HttpServlet {
         return builder.toString();
     }
 
-    private String generateFault(ErrorMessage err) {
+    private static String generateFault(ErrorMessage err) {
         StringBuilder builder = new StringBuilder();
         builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         builder.append("<error>");
@@ -621,7 +620,7 @@ public class ConsumerGateway extends HttpServlet {
      * @param request HTTP servlet request
      * @return URL of this servlet
      */
-    private String getServletUrl(HttpServletRequest request) {
+    private static String getServletUrl(HttpServletRequest request) {
         return request.getScheme() + "://"
                 + // "http" + "://
                 request.getServerName()
@@ -644,7 +643,7 @@ public class ConsumerGateway extends HttpServlet {
      * @param header  name of the header
      * @return value of the header
      */
-    private String getXRdHeader(HttpServletRequest request, String header) {
+    private static String getXRdHeader(HttpServletRequest request, String header) {
         String headerValue = request.getParameter(header);
         if (headerValue != null && !headerValue.isEmpty()) {
             return headerValue;
@@ -660,7 +659,7 @@ public class ConsumerGateway extends HttpServlet {
      * @param parameters HTTP request parameters map
      * @return filtered parameters map
      */
-    private Map<String, String[]> filterRequestParameters(Map<String, String[]> parameters) {
+    private static Map<String, String[]> filterRequestParameters(Map<String, String[]> parameters) {
         // Request parameters map is unmodifiable so we need to copy it
         Map<String, String[]> params = new HashMap<>(parameters);
         // Remove X-Road headers
@@ -679,7 +678,7 @@ public class ConsumerGateway extends HttpServlet {
      * @param request HttpServletRequest that contains the request body
      * @return request body as a String or null
      */
-    private String readRequestBody(HttpServletRequest request) {
+    private static String readRequestBody(HttpServletRequest request) {
         try {
             // Read from request
             StringBuilder buffer = new StringBuilder();
@@ -689,8 +688,7 @@ public class ConsumerGateway extends HttpServlet {
                 buffer.append(line);
             }
 
-            String body = buffer.toString();
-            return body;
+            return buffer.toString();
         } catch (Exception e) {
             log.error("Failed to read the request body from the request.", e);
         }
@@ -768,16 +766,15 @@ public class ConsumerGateway extends HttpServlet {
      * @return
      * @throws SOAPException
      */
-    private String convertJsonToXml(String json) throws SOAPException {
+    private static String convertJsonToXml(String json) throws SOAPException {
         log.debug("converting json: {}", json);
         // create a json wrapper root property
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("{ \"" + JSON_CONVERSION_WRAPPER_ELEMENT + "\": ");
-        buffer.append(json);
-        buffer.append("}");
-        String wrapped = buffer.toString();
-        String converted = new JSONToXMLConverter().convert(wrapped);
-        if (converted == null || converted.equals("")) {
+        final StringBuilder wrapped = new StringBuilder();
+        wrapped.append("{ \"").append(JSON_CONVERSION_WRAPPER_ELEMENT).append("\": ")
+                .append(json)
+                .append("}");
+        final String converted = new JSONToXMLConverter().convert(wrapped.toString());
+        if (converted == null || converted.isEmpty()) {
             throw new SOAPException("could not convert json to xml");
         }
         return converted;
