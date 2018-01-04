@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2017 Population Register Centre (VRK)
  *
@@ -23,6 +23,7 @@
 package fi.vrk.xroad.restadapterservice;
 
 import fi.vrk.xroad.restadapterservice.filter.ConsumerURIFilter;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,38 +34,38 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.DispatcherType;
+
 import java.util.Arrays;
 import java.util.EnumSet;
 
+/**
+ * Rest adapter service application entry point
+ */
 @Configuration
 @Slf4j
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
-    public static void main(String[] args) throws Exception {
+
+    public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
     @Bean
     public ServletRegistrationBean consumerGatewayBean() {
-        log.info("consumerGatewayBean");
-        ServletRegistrationBean bean = new ServletRegistrationBean(
-                new ConsumerGateway(), "/Consumer/*");
+        ServletRegistrationBean bean = new ServletRegistrationBean(new ConsumerGateway(), "/Consumer/*");
         bean.setLoadOnStartup(1);
         return bean;
     }
 
     @Bean
     public ServletRegistrationBean providerGatewayBean() {
-        log.info("providerGatewayBean");
-        ServletRegistrationBean bean = new ServletRegistrationBean(
-                new ProviderGateway(), "/Provider");
+        ServletRegistrationBean bean = new ServletRegistrationBean(new ProviderGateway(), "/Provider");
         bean.setLoadOnStartup(1);
         return bean;
     }
 
     @Bean
-    public FilterRegistrationBean ConsumerURIFilterBean() {
-        log.info("ConsumerURIFilterBean");
+    public FilterRegistrationBean consumerURIFilterBean() {
         FilterRegistrationBean bean = new FilterRegistrationBean();
         bean.setFilter(new ConsumerURIFilter());
         bean.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST));

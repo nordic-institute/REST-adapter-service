@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2017 Population Register Centre (VRK)
  *
@@ -44,7 +44,7 @@ public class ProviderEndpoint extends AbstractEndpoint {
      * Constructs and initializes a new ProviderEndpoint object.
      *
      * @param serviceId unique ID of the service
-     * @param url URL of the Adapter Service
+     * @param url       URL of the Adapter Service
      */
     public ProviderEndpoint(String serviceId, String url) {
         super(serviceId);

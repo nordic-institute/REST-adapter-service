@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2017 Population Register Centre (VRK)
  *
@@ -22,10 +22,6 @@
  */
 package fi.vrk.xroad.restadapterservice;
 
-import fi.vrk.xroad.restadapterservice.endpoint.ProviderEndpoint;
-import fi.vrk.xroad.restadapterservice.util.Constants;
-import fi.vrk.xroad.restadapterservice.util.ProviderGatewayUtil;
-import fi.vrk.xroad.restadapterservice.util.RESTGatewayUtil;
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.message.ErrorMessage;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
@@ -42,9 +38,12 @@ import fi.vrk.xrd4j.server.deserializer.AbstractCustomRequestDeserializer;
 import fi.vrk.xrd4j.server.deserializer.CustomRequestDeserializer;
 import fi.vrk.xrd4j.server.serializer.AbstractServiceResponseSerializer;
 import fi.vrk.xrd4j.server.serializer.ServiceResponseSerializer;
+import fi.vrk.xroad.restadapterservice.endpoint.ProviderEndpoint;
+import fi.vrk.xroad.restadapterservice.util.Constants;
+import fi.vrk.xroad.restadapterservice.util.ProviderGatewayUtil;
+import fi.vrk.xroad.restadapterservice.util.RESTGatewayUtil;
+
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.Node;
@@ -52,6 +51,7 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
+
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,7 +95,8 @@ public class ProviderGateway extends AbstractAdapterServlet {
         }
         log.debug("Default namespace for incoming ServiceRequests : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE));
         log.debug("Default namespace for outgoing ServiceResponses : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE));
-        log.debug("Default namespace prefix for outgoing ServiceResponses : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE));
+        log.debug("Default namespace prefix for outgoing ServiceResponses : \"{}\".",
+                this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE));
         this.publicKeyFile = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE);
         this.publicKeyFilePassword = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE_PASSWORD);
         this.keyLength = RESTGatewayUtil.getKeyLength(props);
@@ -126,7 +127,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
      *
      * @param request ServiceRequest object that holds the request data
      * @return ServiceResponse object that holds the response data
-     * @throws SOAPException if there's a SOAP error
+     * @throws SOAPException  if there's a SOAP error
      * @throws XRd4JException if there's a XRd4J error
      */
     @Override
@@ -192,7 +193,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
         // "application/json"
         if (!RESTGatewayUtil.isValidContentType(contentType)) {
             log.warn("Response's content type is not \"{}\", \"{}\" or \"{}\".", Constants.TEXT_XML, Constants.APPLICATION_XML, Constants.APPLICATION_JSON);
-            if (restResponse.getStatusCode() == 200) {
+            if (restResponse.getStatusCode() == Constants.HTTP_OK) {
                 log.warn("Response's status code is 200. Return generic 404 error.");
                 response.setErrorMessage(new ErrorMessage("404", Constants.ERROR_404));
             } else {
@@ -264,9 +265,9 @@ public class ProviderGateway extends AbstractAdapterServlet {
      * to SOAP. The implementation of the ServiceResponseSerializer is decided
      * based on the given parameters.
      *
-     * @param endpoint ProviderEndpoint that's processed using the serializer
+     * @param endpoint           ProviderEndpoint that's processed using the serializer
      * @param consumerIdentifier string that identifies the consumer which
-     * response is being processed
+     *                           response is being processed
      * @return new ServiceResponseSerializer object
      * @throws XRd4JException
      */
@@ -336,7 +337,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
 
         private final Decrypter asymmetricDecrypter;
 
-        public DecryptingReqToMapRequestDeserializerImpl(Decrypter asymmetricDecrypter) {
+        DecryptingReqToMapRequestDeserializerImpl(Decrypter asymmetricDecrypter) {
             this.asymmetricDecrypter = asymmetricDecrypter;
             log.debug("New DecryptingReqToMapRequestDeserializerImpl created.");
         }
@@ -350,7 +351,8 @@ public class ProviderGateway extends AbstractAdapterServlet {
             Map<String, String> nodes = SOAPHelper.nodesToMap(requestNode.getChildNodes());
 
             // Decrypt session key using the private key
-            Decrypter symmetricDecrypter = RESTGatewayUtil.getSymmetricDecrypter(this.asymmetricDecrypter, nodes.get(Constants.PARAM_KEY), nodes.get(Constants.PARAM_IV));
+            Decrypter symmetricDecrypter =
+                    RESTGatewayUtil.getSymmetricDecrypter(this.asymmetricDecrypter, nodes.get(Constants.PARAM_KEY), nodes.get(Constants.PARAM_IV));
             // Decrypt the data
             String decrypted = symmetricDecrypter.decrypt(nodes.get(Constants.PARAM_ENCRYPTED));
             // Convert decrypted data to SOAP element
@@ -358,7 +360,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
 
             // Convert all the elements under request to key - value list pairs.
             // Each key can have multiple values
-            Map map = SOAPHelper.nodesToMultiMap(soapData.getChildNodes());
+            Map<String, List<String>> map = SOAPHelper.nodesToMultiMap(soapData.getChildNodes());
             // If message has attachments, use the first attachment as
             // request body
             processAttachment(map, message);
@@ -366,7 +368,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
             if (map.containsKey(Constants.PARAM_REQUEST_BODY)) {
                 // Get attachment value by fixed parameter name. The map
                 // contains key - value list so we must get the whole list.
-                List<String> values = (List<String>) map.get(Constants.PARAM_REQUEST_BODY);
+                List<String> values = map.get(Constants.PARAM_REQUEST_BODY);
                 // Only the first attachment is handled
                 String encryptedValue = values.get(0);
                 // Create new list that's added to the results
@@ -428,7 +430,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
         private final Encrypter asymmetricEncrypter;
         private final int keyLength;
 
-        public EncryptingXMLServiceResponseSerializer(Encrypter asymmetricEncrypter, int keyLength) {
+        EncryptingXMLServiceResponseSerializer(Encrypter asymmetricEncrypter, int keyLength) {
             this.asymmetricEncrypter = asymmetricEncrypter;
             this.keyLength = keyLength;
             log.debug("New EncryptingXMLServiceResponseSerializer created.");
@@ -453,14 +455,14 @@ public class ProviderGateway extends AbstractAdapterServlet {
                     // Process attachment - this will add new element to body too
                     handleAttachment(response, payload, envelope);
                 }
-                /**
+                /*
                  * N.B.! If signature is required (A: sign then encrypt), this
                  * is the place to do it. The string to be signed is accessed
                  * like this: SOAPHelper.toString(soapResponse)
                  */
                 // Encrypt message with symmetric AES encryption
                 String encryptedData = symmetricEncrypter.encrypt(SOAPHelper.toString(payload));
-                /**
+                /*
                  * N.B.! If signature is required (B: encrypt then sign), this
                  * is the place to do it. The encryptedData variable must be
                  * signed.

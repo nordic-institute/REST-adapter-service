@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2017 Population Register Centre (VRK)
  *
@@ -26,11 +26,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+
 import java.util.Map;
 
+/**
+ * Index controller
+ */
 @Controller
 public class IndexController {
 
+    /**
+     * return the index page
+     */
     @RequestMapping("/")
     public String indexPage(Map<String, Object> model, HttpServletRequest request) {
         model.put("requestURL", request.getRequestURL());

@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2017 Population Register Centre (VRK)
  *
@@ -23,10 +23,13 @@
 package fi.vrk.xroad.restadapterservice.util;
 
 import fi.vrk.xrd4j.common.message.ServiceRequest;
+import fi.vrk.xrd4j.common.security.Decrypter;
 import fi.vrk.xrd4j.common.util.MessageHelper;
 import fi.vrk.xrd4j.rest.converter.JSONToXMLConverter;
 import fi.vrk.xroad.restadapterservice.endpoint.ProviderEndpoint;
-import fi.vrk.xrd4j.common.security.Decrypter;
+
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,15 +38,13 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * This class provides utility methods for Provider Gateway implementation.
  *
  * @author Petteri Kivimäki
  */
 @Slf4j
-public class ProviderGatewayUtil {
+public final class ProviderGatewayUtil {
 
     /**
      * This a utility class providing only static methods which is why it should
@@ -57,7 +58,7 @@ public class ProviderGatewayUtil {
      * endpoints. Returns a map containing service id - provider endpoint
      * key-value pairs.
      *
-     * @param endpoints endpoint properties
+     * @param endpoints         endpoint properties
      * @param gatewayProperties REST Provider Gateway general properties
      * @return map containing service id - provider endpoint key-value pairs
      */
@@ -90,9 +91,9 @@ public class ProviderGatewayUtil {
             log.info("New provider endpoint found. ID : \"{}\", URL : \"{}\".", id, url);
 
             // HTTP verb, content-Type HTTP header, accept HTTP header,
-            // attachment, X-Road headers, request parameter name filter 
+            // attachment, X-Road headers, request parameter name filter
             // condition, request parameter name filter operation,
-            // request parameter value filter condition, request parameter 
+            // request parameter value filter condition, request parameter
             // value filter operation
             extractEndpoints(key, endpoints, endpoint);
 
@@ -113,9 +114,9 @@ public class ProviderGatewayUtil {
      * Extracts properties common for consumer endpoints from the given
      * properties.
      *
-     * @param key property key
+     * @param key       property key
      * @param endpoints list of configured endpoints read from properties
-     * @param endpoint the endpoint object that's being initialized
+     * @param endpoint  the endpoint object that's being initialized
      */
     public static void extractEndpoints(String key, Properties endpoints, ProviderEndpoint endpoint) {
         // HTTP verb
@@ -177,7 +178,7 @@ public class ProviderGatewayUtil {
     /**
      * Sets default values to the given endpoint.
      *
-     * @param endpoint ProviderEndpoint to be modified
+     * @param endpoint          ProviderEndpoint to be modified
      * @param gatewayProperties REST Consumer Gateway general properties
      */
     private static void setDefaultValues(ProviderEndpoint endpoint, Properties gatewayProperties) {
@@ -197,7 +198,7 @@ public class ProviderGatewayUtil {
      * Generates a Map containing HTTP headers that are sent to the service
      * endpoint.
      *
-     * @param request ServiceRequest holding X-Road specific headers
+     * @param request  ServiceRequest holding X-Road specific headers
      * @param endpoint ProviderEndpoint holding standard HTTP headers
      * @return Map containing HTTP headers
      */
@@ -283,7 +284,7 @@ public class ProviderGatewayUtil {
      * value or both of them. Filter condition and operation are defined
      * individually for parameter name and value.
      *
-     * @param request request which parameters are filtered
+     * @param request  request which parameters are filtered
      * @param endpoint endpoint that contains the rules for filtering
      */
     public static void filterRequestParameters(ServiceRequest request, ProviderEndpoint endpoint) {
@@ -292,7 +293,7 @@ public class ProviderGatewayUtil {
         List<String> keys = new ArrayList<>(((Map<String, String>) request.getRequestData()).keySet());
         // Loop through request parameters
         for (String orgKey : keys) {
-            // Skip request body and resourceId parameters - all the other 
+            // Skip request body and resourceId parameters - all the other
             // parameters are filtered
             if (!orgKey.equals(Constants.PARAM_REQUEST_BODY) && !orgKey.equals(Constants.PARAM_RESOURCE_ID)) {
                 processReqParamFilters(request, endpoint, orgKey);
@@ -308,9 +309,9 @@ public class ProviderGatewayUtil {
      * specified by orgKey. After processing processing the modified values are
      * updated to the original request.
      *
-     * @param request request which parameters are filtered
+     * @param request  request which parameters are filtered
      * @param endpoint endpoint that contains the rules for filtering
-     * @param orgKey the name of parameter to process
+     * @param orgKey   the name of parameter to process
      */
     private static void processReqParamFilters(ServiceRequest request, ProviderEndpoint endpoint, String orgKey) {
         // Variable that tells if request data must be updated
@@ -327,7 +328,8 @@ public class ProviderGatewayUtil {
             Matcher m = regex.matcher(orgKey);
             if (m.find()) {
                 key = m.replaceAll(endpoint.getReqParamNameFilterOperation());
-                log.trace("Filter condition: true. Filter operation: \"{}\". Parameter name: \"{}\" => \"{}\"", endpoint.getReqParamNameFilterOperation(), orgKey, key);
+                log.trace("Filter condition: true. Filter operation: \"{}\". Parameter name: \"{}\" => \"{}\"", endpoint.getReqParamNameFilterOperation(),
+                        orgKey, key);
                 update = true;
             }
         }
@@ -341,7 +343,8 @@ public class ProviderGatewayUtil {
                 Matcher m = regex.matcher(orgValue);
                 if (m.find()) {
                     String value = m.replaceAll(endpoint.getReqParamValueFilterOperation());
-                    log.trace("Filter condition: true. Filter operation: \"{}\". Parameter name: \"{}\" => \"{}\"", endpoint.getReqParamValueFilterOperation(), orgValue, value);
+                    log.trace("Filter condition: true. Filter operation: \"{}\". Parameter name: \"{}\" => \"{}\"", endpoint.getReqParamValueFilterOperation(),
+                            orgValue, value);
                     values.set(i, value);
                     update = true;
                 }
@@ -363,7 +366,7 @@ public class ProviderGatewayUtil {
      * everything is OK, true is returned. If there's a problem with the private
      * key, false is returned.
      *
-     * @param props general properties
+     * @param props     general properties
      * @param endpoints list of configured endpoints
      * @return true if everything is OK. False if there's a problem with the
      * private key or the private key is not needed
@@ -374,7 +377,7 @@ public class ProviderGatewayUtil {
         for (Map.Entry<String, ProviderEndpoint> entry : endpoints.entrySet()) {
             ProviderEndpoint endpoint = entry.getValue();
             // If request is encrypted, decryption is done using the private
-            // key, so it must be possible to access it. It's enough to 
+            // key, so it must be possible to access it. It's enough to
             // check the private key once.
             if (endpoint.isRequestEncrypted()) {
                 Decrypter decrypter = RESTGatewayUtil.checkPrivateKey(props);

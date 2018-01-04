@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
+   <suppress>
+      <notes><![CDATA[
+      file name: tomcat-annotations-api-8.5.23.jar
+      ]]></notes>
+      <gav regex="true">^org\.apache\.tomcat:tomcat-annotations-api:.*$</gav>
+      <cve>CVE-2016-5425</cve>
+      <cve>CVE-2016-6325</cve>
+      <cve>CVE-2017-6056</cve>
+   </suppress>
+   <suppress>
+       <notes><![CDATA[
+           file name: rest-0.2.0-SNAPSHOT.jar
+           ]]></notes>
+       <gav regex="true">^fi\.vrk\.xrd4j:rest:.*$</gav>
+       <cpe>cpe:/a:rest-client_project:rest-client</cpe>
+   </suppress>
+</suppressions>

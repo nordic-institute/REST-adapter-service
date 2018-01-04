@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2017 Population Register Centre (VRK)
  *
@@ -22,13 +22,21 @@
  */
 package fi.vrk.xroad.restadapterservice.util;
 
-import fi.vrk.xrd4j.common.security.*;
+import fi.vrk.xrd4j.common.security.AsymmetricDecrypter;
+import fi.vrk.xrd4j.common.security.AsymmetricEncrypter;
+import fi.vrk.xrd4j.common.security.CryptoHelper;
+import fi.vrk.xrd4j.common.security.Decrypter;
+import fi.vrk.xrd4j.common.security.Encrypter;
+import fi.vrk.xrd4j.common.security.SymmetricDecrypter;
+import fi.vrk.xrd4j.common.security.SymmetricEncrypter;
 import fi.vrk.xrd4j.common.util.MessageHelper;
 import fi.vrk.xroad.restadapterservice.endpoint.AbstractEndpoint;
+
 import lombok.extern.slf4j.Slf4j;
 
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,7 +54,9 @@ import java.util.Properties;
  * @author Petteri Kivimäki
  */
 @Slf4j
-public class RESTGatewayUtil {
+public final class RESTGatewayUtil {
+
+    public static final int DEFAULT_KEY_LENGTH = 128;
 
     /**
      * Constructs and initializes a new RESTGatewayUtil object. Should never be
@@ -78,16 +88,17 @@ public class RESTGatewayUtil {
      * false
      */
     public static boolean isValidContentType(String contentType) {
-        return contentType != null && (contentType.startsWith(Constants.TEXT_XML) || contentType.startsWith(Constants.APPLICATION_XML) || contentType.startsWith(Constants.APPLICATION_JSON));
+        return contentType != null && (contentType.startsWith(Constants.TEXT_XML) || contentType.startsWith(Constants.APPLICATION_XML) || contentType
+                .startsWith(Constants.APPLICATION_JSON));
     }
 
     /**
      * Extracts properties common for both consumer and provider endpoints from
      * the given properties.
      *
-     * @param key property key
+     * @param key       property key
      * @param endpoints list of configured endpoints read from properties
-     * @param endpoint the endpoint object that's being initialized
+     * @param endpoint  the endpoint object that's being initialized
      */
     public static void extractEndpoints(String key, Properties endpoints, AbstractEndpoint endpoint) {
         // Wrapper processing
@@ -159,10 +170,10 @@ public class RESTGatewayUtil {
     /**
      * Returns a decrypter with the private key.
      *
-     * @param privateKeyFile path to private key file
+     * @param privateKeyFile         path to private key file
      * @param privateKeyFilePassword private key file password
-     * @param privateKeyAlias private key alias
-     * @param privateKeyPassword private key password
+     * @param privateKeyAlias        private key alias
+     * @param privateKeyPassword     private key password
      * @return public key matching the given service id
      */
     public static Decrypter getDecrypter(String privateKeyFile, String privateKeyFilePassword, String privateKeyAlias, String privateKeyPassword) {
@@ -180,7 +191,8 @@ public class RESTGatewayUtil {
             return null;
         } catch (java.lang.NullPointerException ex) {
             log.error(ex.getMessage(), ex);
-            log.error("\"{}\" property value is invalid. No private key was found with the given alias value: \"{}\".", Constants.ENCRYPTION_PROPS_PRIVATE_KEY_ALIAS, privateKeyAlias);
+            log.error("\"{}\" property value is invalid. No private key was found with the given alias value: \"{}\".",
+                    Constants.ENCRYPTION_PROPS_PRIVATE_KEY_ALIAS, privateKeyAlias);
             return null;
         }
     }
@@ -191,9 +203,9 @@ public class RESTGatewayUtil {
      * Encrypter object which is returned if everything is OK. If creating the
      * object fails, null is returned.
      *
-     * @param props general properties
+     * @param props     general properties
      * @param serviceId unique string that identifies the service which is used
-     * as public key alias
+     *                  as public key alias
      * @return new Encrypter object on success; otherwise false
      */
     public static Encrypter checkPublicKey(Properties props, String serviceId) {
@@ -205,9 +217,9 @@ public class RESTGatewayUtil {
     /**
      * Returns an encrypter using the public key matching the given service id.
      *
-     * @param publicKeyFile path to public key file
+     * @param publicKeyFile         path to public key file
      * @param publicKeyFilePassword public key file password
-     * @param serviceId unique ID of the service
+     * @param serviceId             unique ID of the service
      * @return public key matching the given service id
      */
     public static Encrypter getEncrypter(String publicKeyFile, String publicKeyFilePassword, String serviceId) {
@@ -243,10 +255,10 @@ public class RESTGatewayUtil {
             } catch (NumberFormatException ex) {
                 log.error(ex.getMessage(), ex);
                 log.warn("Invalid value for \"{}\" property. Use default 128.", Constants.ENCRYPTION_PROPS_KEY_LENGTH);
-                return 128;
+                return DEFAULT_KEY_LENGTH;
             }
         }
-        return 128;
+        return DEFAULT_KEY_LENGTH;
     }
 
     /**
@@ -273,8 +285,8 @@ public class RESTGatewayUtil {
      * key of the message recipient.
      *
      * @param asymmetricDecrypter asymmetric RSA decrypter
-     * @param encryptedKey encrypted symmetric AES key
-     * @param encodedIV base 64 encoded initialization vector (VI)
+     * @param encryptedKey        encrypted symmetric AES key
+     * @param encodedIV           base 64 encoded initialization vector (VI)
      * @return Decrypter created using encrypted AES key and VI
      */
     public static Decrypter getSymmetricDecrypter(Decrypter asymmetricDecrypter, String encryptedKey, String encodedIV) {
@@ -294,13 +306,14 @@ public class RESTGatewayUtil {
      * encrypted session key and IV. The three elements are added as child
      * elements of the given SOAP message.
      *
-     * @param symmetricEncrypter symmetric AES encrypter
+     * @param symmetricEncrypter  symmetric AES encrypter
      * @param asymmetricEncrypter asymmetric RSA encrypter
-     * @param msg SOAP element container
-     * @param encryptedData encrypted data
+     * @param msg                 SOAP element container
+     * @param encryptedData       encrypted data
      * @throws SOAPException
      */
-    public static void buildEncryptedBody(Encrypter symmetricEncrypter, Encrypter asymmetricEncrypter, SOAPElement msg, String encryptedData) throws SOAPException {
+    public static void buildEncryptedBody(Encrypter symmetricEncrypter, Encrypter asymmetricEncrypter, SOAPElement msg, String encryptedData)
+            throws SOAPException {
         log.debug("Build message body with encrypted data, encrypted session key and encoded IV.");
         // Get base 64 encoded version of the key
         String sessionKey = CryptoHelper.encodeBase64(((SymmetricEncrypter) symmetricEncrypter).getKey().getEncoded());
@@ -312,22 +325,25 @@ public class RESTGatewayUtil {
         msg.addChildElement(Constants.PARAM_IV).addTextNode(CryptoHelper.encodeBase64(((SymmetricEncrypter) symmetricEncrypter).getIv()));
     }
 
+    /**
+     * Find the properties directory:
+     */
     public static String getPropertiesDirectory() {
         final String os = System.getProperty("os.name", "generic").toLowerCase();
         String dir = System.getProperty(Constants.PROPERTIES_DIR_PARAM_NAME);
-        if ( dir != null ) {
+        if (dir != null) {
             //if defined by the property, it will be an error if the directory does not exist
             return dir;
         }
 
-        Path p = Paths.get(System.getProperty("user.home"),Constants.PROPERTIES_DIR_NAME);
-        if ( Files.exists(p) ) {
+        Path p = Paths.get(System.getProperty("user.home"), Constants.PROPERTIES_DIR_NAME);
+        if (Files.exists(p)) {
             return p.toString();
         }
 
         if (os.startsWith("linux")) {
             p = Paths.get("/etc", Constants.PROPERTIES_DIR_NAME);
-            if ( Files.exists(p) ) {
+            if (Files.exists(p)) {
                 return p.toString();
             }
         }
