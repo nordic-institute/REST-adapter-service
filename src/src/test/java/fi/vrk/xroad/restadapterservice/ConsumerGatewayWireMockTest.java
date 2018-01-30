@@ -44,6 +44,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.SocketUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -56,14 +57,13 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Slf4j
 public class ConsumerGatewayWireMockTest {
 
     private WireMockServer wireMockServer;
 
-    @Value("${wiremock.server.port}")
-    private int wireMockPort;
+    private int wireMockPort = SocketUtils.findAvailableTcpPort();
 
     @Before
     public void setUp() throws Exception {
