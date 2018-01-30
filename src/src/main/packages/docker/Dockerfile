@@ -9,5 +9,5 @@ RUN yum clean all
 RUN sed -i 's/requiretty/!requiretty/' /etc/sudoers
 
 USER root
-CMD /usr/bin/mvn -f workspace/pom.xml clean package -P package-rpm
+CMD /usr/bin/mvn -f workspace/pom.xml clean install -P itest,package-rpm
 

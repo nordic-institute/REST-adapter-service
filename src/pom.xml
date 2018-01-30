@@ -205,7 +205,7 @@
                     <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
                     <enableExperimental>false</enableExperimental>
                     <suppressionFiles>
-                        <suppressionFile>dependency-check-suppressions.xml</suppressionFile>
+                        <suppressionFile>${project.basedir}/dependency-check-suppressions.xml</suppressionFile>
                     </suppressionFiles>
                 </configuration>
                 <executions>
@@ -237,27 +237,6 @@
                 <version>3.0.2</version>
                 <executions>
                     <execution>
-                        <id>copy-control-resources</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/packages/deb/control</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/packages/deb/control</directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                                <resource>
-                                    <directory>src/main/packages/deb/${deb-version-specific-control-directory}
-                                    </directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>copy-config-resources</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -273,6 +252,48 @@
                                 <resource>
                                     <directory>src/main/packages/config</directory>
                                     <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-control-resources-xenial</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/target/packages/deb/control-xenial</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/packages/deb/control</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>src/main/packages/deb/control-xenial
+                                    </directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-control-resources-trusty</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/target/packages/deb/control-trusty</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/packages/deb/control</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>src/main/packages/deb/control-trusty
+                                    </directory>
+                                    <filtering>true</filtering>
                                 </resource>
                             </resources>
                         </configuration>
@@ -306,8 +327,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-
         </plugins>
         <defaultGoal>package</defaultGoal>
         <resources>
@@ -353,6 +372,7 @@
                         <executions>
                             <execution>
                                 <id>generate-rpm</id>
+                                <phase>install</phase>
                                 <goals>
                                     <goal>rpm</goal>
                                 </goals>
@@ -444,10 +464,12 @@
             </build>
         </profile>
         <profile>
-            <id>package-deb14</id>
-            <properties>
-                <deb-version-specific-control-directory>control-deb14</deb-version-specific-control-directory>
-            </properties>
+            <id>package-trusty</id>
+            <activation>
+                <property>
+                    <name>deb-build</name>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -456,12 +478,14 @@
                         <version>1.5</version>
                         <executions>
                             <execution>
-                                <phase>package</phase>
+                                <id>pkg-trusty</id>
+                                <phase>install</phase>
                                 <goals>
                                     <goal>jdeb</goal>
                                 </goals>
                                 <configuration>
-                                    <controlDir>${basedir}/target/packages/deb/control</controlDir>
+                                    <deb>${project.build.directory}/${project.artifactId}_trusty_${project.version}_all.deb</deb>
+                                    <controlDir>${project.basedir}/target/packages/deb/control-trusty</controlDir>
                                     <verbose>true</verbose>
                                     <snapshotExpand>true</snapshotExpand>
                                     <dataSet>
@@ -508,10 +532,12 @@
         </profile>
 
         <profile>
-            <id>package-deb16</id>
-            <properties>
-                <deb-version-specific-control-directory>control-deb16</deb-version-specific-control-directory>
-            </properties>
+            <id>package-xenial</id>
+            <activation>
+                <property>
+                    <name>deb-build</name>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -520,12 +546,14 @@
                         <version>1.5</version>
                         <executions>
                             <execution>
-                                <phase>package</phase>
+                                <id>pkg-xenial</id>
+                                <phase>install</phase>
                                 <goals>
                                     <goal>jdeb</goal>
                                 </goals>
                                 <configuration>
-                                    <controlDir>${basedir}/target/packages/deb/control</controlDir>
+                                    <controlDir>${project.basedir}/target/packages/deb/control-xenial</controlDir>
+                                    <deb>${project.build.directory}/${project.artifactId}_xenial_${project.version}_all.deb</deb>
                                     <verbose>true</verbose>
                                     <snapshotExpand>true</snapshotExpand>
                                     <dataSet>
@@ -581,7 +609,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>encryptedProfile</id>
             <!-- use -Dencrypted to activate this profile -->
@@ -642,8 +669,6 @@
                                 </property>
                             </systemProperties>
                             <encoding>UTF-8</encoding>
-                            <inputEncoding>UTF-8</inputEncoding>
-                            <outputEncoding>UTF-8</outputEncoding>
                         </configuration>
                         <executions>
                             <execution>
