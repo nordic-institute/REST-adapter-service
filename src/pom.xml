@@ -132,7 +132,6 @@
             <version>2.2.1</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
     <licenses>
         <license>
@@ -372,6 +371,7 @@
                         <executions>
                             <execution>
                                 <id>generate-rpm</id>
+                                <!-- moved to install-phase to allow verify-phase failure to prevent packaging-->
                                 <phase>install</phase>
                                 <goals>
                                     <goal>rpm</goal>
@@ -384,6 +384,8 @@
                             <!-- version comes from above -->
                             <group>System Environment/Libraries</group>
                             <packager>Population Register Centre (VRK)</packager>
+                            <vendor>Population Register Centre (VRK)</vendor>
+                            <url>${project.url}</url>
                             <defineStatements>
                                 <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
                             </defineStatements>
@@ -467,6 +469,7 @@
             <id>package-trusty</id>
             <activation>
                 <property>
+                    <!-- -Ddeb-build to create both Ubuntu packages -->
                     <name>deb-build</name>
                 </property>
             </activation>
@@ -479,12 +482,13 @@
                         <executions>
                             <execution>
                                 <id>pkg-trusty</id>
+                                <!-- moved to install-phase to allow verify-phase failure to prevent packaging-->
                                 <phase>install</phase>
                                 <goals>
                                     <goal>jdeb</goal>
                                 </goals>
                                 <configuration>
-                                    <deb>${project.build.directory}/${project.artifactId}_trusty_${project.version}_all.deb</deb>
+                                    <deb>[[buildDir]]/trusty/[[artifactId]]_trusty_[[version]]_all.[[extension]]</deb>
                                     <controlDir>${project.basedir}/target/packages/deb/control-trusty</controlDir>
                                     <verbose>true</verbose>
                                     <snapshotExpand>true</snapshotExpand>
@@ -535,6 +539,7 @@
             <id>package-xenial</id>
             <activation>
                 <property>
+                    <!-- -Ddeb-build to create both Ubuntu packages -->
                     <name>deb-build</name>
                 </property>
             </activation>
@@ -547,13 +552,14 @@
                         <executions>
                             <execution>
                                 <id>pkg-xenial</id>
+                                <!-- moved to install-phase to allow verify-phase failure to prevent packaging-->
                                 <phase>install</phase>
                                 <goals>
                                     <goal>jdeb</goal>
                                 </goals>
                                 <configuration>
                                     <controlDir>${project.basedir}/target/packages/deb/control-xenial</controlDir>
-                                    <deb>${project.build.directory}/${project.artifactId}_xenial_${project.version}_all.deb</deb>
+                                    <deb>[[buildDir]]/xenial/[[artifactId]]_xenial_[[version]]_all.[[extension]]</deb>
                                     <verbose>true</verbose>
                                     <snapshotExpand>true</snapshotExpand>
                                     <dataSet>
