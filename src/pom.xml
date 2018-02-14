@@ -242,7 +242,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/config/etc/rest-adapter-service</outputDirectory>
+                            <outputDirectory>${project.basedir}/target/config/etc/rest-adapter-service</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>src/main/profiles/plaintext</directory>
