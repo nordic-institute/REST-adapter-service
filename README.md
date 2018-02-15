@@ -240,17 +240,17 @@ The build uses [license-maven-plugin](https://github.com/mycila/license-maven-pl
 
 The Rest Adapter Service builds DEB-packages for Ubuntu using the [jdeb Maven plugin](https://github.com/tcurdt/jdeb).
 
-Different profiles exist for building for Ubuntus with Upstart (Ubuntu 14.04) and Ubuntus with Systemd (Ubuntu 16.04).
+Different profiles exist for building for Ubuntu 14.04 (Upstart) and Ubuntu 16.04 (Systemd).
 
 Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`), the resulting package will contain a timestamp to make upgrading existing packages easy.
 
-## Ubuntu with Upstart (Ubuntu 14.04)
+## Ubuntu 14.04 – trusty (Upstart)
 
 `mvn -f src/pom.xml clean install -P package-trusty`
 
 The package will be generated in `src/target/trusty`.
 
-## Ubuntu with Systemd (Ubuntu 16.04)
+## Ubuntu 16.04 – xenial (Systemd)
 
 `mvn -f src/pom.xml clean install -P package-xenial`
 
