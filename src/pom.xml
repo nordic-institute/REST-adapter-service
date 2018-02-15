@@ -488,7 +488,7 @@
                                     <goal>jdeb</goal>
                                 </goals>
                                 <configuration>
-                                    <deb>[[buildDir]]/trusty/[[artifactId]]_trusty_[[version]]_all.[[extension]]</deb>
+                                    <deb>[[buildDir]]/trusty/[[artifactId]]_[[version]]_trusty_all.[[extension]]</deb>
                                     <controlDir>${project.basedir}/target/packages/deb/control-trusty</controlDir>
                                     <verbose>true</verbose>
                                     <snapshotExpand>true</snapshotExpand>
@@ -559,7 +559,7 @@
                                 </goals>
                                 <configuration>
                                     <controlDir>${project.basedir}/target/packages/deb/control-xenial</controlDir>
-                                    <deb>[[buildDir]]/xenial/[[artifactId]]_xenial_[[version]]_all.[[extension]]</deb>
+                                    <deb>[[buildDir]]/xenial/[[artifactId]]_[[version]]_xenial_all.[[extension]]</deb>
                                     <verbose>true</verbose>
                                     <snapshotExpand>true</snapshotExpand>
                                     <dataSet>

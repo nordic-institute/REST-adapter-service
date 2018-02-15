@@ -222,7 +222,7 @@ docker run -p 8080:8080 rest-adapter-service
 ```
 
 If customized properties are used, the host directory containing the properties files must be mounted as a data directory. 
-In addition, the directory containing the properties files inside the container must be set using JAVA_OPTS andpropertiesDirectory property.
+In addition, the directory containing the properties files inside the container must be set using JAVA_OPTS and propertiesDirectory property.
 
 ```
 docker run -p 8080:8080 -v /host/dir/conf:/my/conf -e "JAVA_OPTS=-DpropertiesDirectory=/my/conf"  rest-adapter-service
