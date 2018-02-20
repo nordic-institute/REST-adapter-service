@@ -45,6 +45,7 @@ import fi.vrk.xroad.restadapterservice.util.RESTGatewayUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.ServletException;
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.Node;
 import javax.xml.soap.SOAPElement;
@@ -80,7 +81,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
     private String publicKeyFilePassword;
 
     @Override
-    public void init() {
+    public void init() throws ServletException {
         super.init();
         log.debug("Starting to initialize Provider REST Gateway.");
         log.debug("Reading Provider and ProviderGateway properties");

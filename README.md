@@ -1,6 +1,6 @@
 # Joint X-Road Rest Adapter Service development
 
-This repository will be the home of REST/JSON support solutions for [X-Road](https://github.com/ria-ee/X-Road). Mandate for joint development is based on [MoU which was signed by Katainen and Ansip](https://github.com/vrk-kpa/REST-adapter-service/blob/master/MoU-Ansip-Katainen.md). The development and repository is shared between Estonia and Finland. Below is list of people who initiated the co-operation in Skype meeting which was held 18.12.2014.
+This repository will be the home of REST/JSON support solutions for [X-Road](https://github.com/ria-ee/X-Road). The mandate for joint development is based on [the MoU which was signed by Katainen and Ansip](https://github.com/vrk-kpa/REST-adapter-service/blob/master/MoU-Ansip-Katainen.md). The development and the repository are shared between Estonia and Finland. Below is a list of people who initiated the co-operation in a Skype meeting which was held 18.12.2014.
 
 People involved in initiation of co-operation:
 * Andres Kütt (Estonian Information System Authority, RIA, Estonia)
@@ -18,7 +18,7 @@ X-Road is not only a technical solution, the exchange of data with the databases
 Public and private sector enterprises and institutions can connect their information system with X-Road. This enables them to use X-Road services in their own electronic environment or offer their e-services via X-Road. Joining X-Road enables institutions to save resources, since the data exchange layer already exists. This makes data exchange more effective both inside the state institutions as well as regarding the communication between a citizen and the state.
 
 ## Aim 2015
-In this repository you will find (2015) Proof of Concept level code for service that will enable REST support in [X-Road](https://github.com/ria-ee/X-Road) version 6. The solution will not be part of Security Server, but more like a "REST Proxy". The solution could be included to Security Server in the future, but that remains to be seen. No plans for that have been made.
+In this repository you will find (2015) Proof of Concept level code for a service that will enable REST support in [X-Road](https://github.com/ria-ee/X-Road) version 6. The solution will not be a part of the Security Server, but more like a "REST Proxy". The solution could be included to the Security Server in the future, but that remains to be seen. No plans for that have been made.
 
 First aim is to get first practical REST API integrated to X-Road, document the process and open the code. We also need to test and evaluate the toolchain for example for WSDL-RAML conversions and other things.
 
@@ -66,15 +66,15 @@ Alternative configuration locations are mostly relevant only when
 starting the executable war from command line,
 deploying war into a standalone container, 
 or running the docker image. 
-When Rest Adapter Service is installed from a deb or rpm package, 
+When Rest Adapter Service is installed from DEB- or RPM-packages, 
 it explicitly sets `/etc/rest-adapter-service` as the configuration directory.
 
 More detailed usage examples are available in [documentation](documentation/Rest-Adapter-Service-principles.md#usage).
 
 # Installing Rest Adapter Service
 
-Some of the ways to install Rest Adapter Service are
-* Using package manager to install .deb or .rpm packages
+Rest Adapter Service can be installed and run in a number of ways:
+* Using package manager to install DEB- or RPM-packages
 * Deploying `rest-adapter-service.war` into a web container such as Tomcat
 * Using Docker to run Rest Adapter Service
 
@@ -92,7 +92,7 @@ apt-get autoremove
 
 Otherwise, use standard `apt` or `yum` commands to remove the `tomcat7` package.
 
-### Ubuntu 14
+### Ubuntu 14.04 (trusty)
 
 Rest Adapter Service requires `java8-runtime-headless` dependency. 
 Configure openjdk package repository, which provides that:
@@ -106,15 +106,14 @@ apt-get install openjdk-8-jre-headless
 ```
 Do not install Java 9, as Rest Adapter does not yet support it.
 
-Install Rest Adapter Service package
-TODO: install correct repo and key, these are not known at this time.
+Install Rest Adapter Service package from a repository (no official repository available at this time) with
 ```shell
 apt-get install rest-adapter-service
 ```
 Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md). 
 Service will automatically start during boot.
 
-### Ubuntu 16
+### Ubuntu 16.04 (xenial)
 
 Rest Adapter Service requires `java8-runtime-headless` dependency. 
 Install Java 8:
@@ -123,21 +122,24 @@ apt-get install openjdk-8-jre-headless
 ```
 Do not install Java 9, as Rest Adapter does not yet support it.
 
-Install Rest Adapter Service package
+Install Rest Adapter Service package from a repository (no official repository available at this time) with
 ```shell
 apt-get install rest-adapter-service 
 ```
+or from a locally built DEB-package by replacing the package name with the file path in the command above.
+
 Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md).
 Service is enabled or disabled using system presets.
-On a typical Ubuntu 16 system it will be *enabled* (and start during boots).
+On a typical Ubuntu 16.04 system it will be *enabled* (and start during boots).
 
 ### RHEL 7
 
-Install Rest Adapter Service package
-TODO: install correct repo and key, these are not known at this time.
+Install Rest Adapter Service package from a repository (no official repository available at this time) with
 ```shell
 yum install rest-adapter-service
 ```
+or from a locally built RPM-package by replacing the package name with the file path in the command above.
+
 Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md).
 Service is enabled or disabled using system presets.
 On a typical RHEL 7 system it will be *disabled* (and not start during boots).
@@ -165,13 +167,13 @@ server.port=8080
 
 ### Logs
 
-On Ubuntu 16 and RHEL, you can follow the logs using e.g. `journalctl`
+On Ubuntu 16.04 and RHEL, you can follow the logs using e.g. `journalctl`
 
 ```shell
 journalctl -fu rest-adapter-service
 ```
 
-On Ubuntu 14 the same can be done using
+On Ubuntu 14.04 the same can be done using
 
 ```shell
 tail -f /var/log/upstart/rest-adapter-service.log
@@ -188,7 +190,7 @@ ls -la target/rest-adapter-service-0.0.12-SNAPSHOT.war
 -rw-rw-r-- 1 janne janne 22459828 marra  3 16:45 target/rest-adapter-service-0.0.12-SNAPSHOT.war
 ```
 
-or extract war file from a .deb or .rpm package which has been downloaded from the packet repository.
+or extract war file from a DEB- or an RPM-package which has been downloaded from the packet repository.
 For detailed instructions, [see this page.](documentation/Downloading-WAR-from-repository.md)
 
 To set configuration files location, you need to specify `propertiesDirectory` system property using a container-specific method.
@@ -220,7 +222,7 @@ docker run -p 8080:8080 rest-adapter-service
 ```
 
 If customized properties are used, the host directory containing the properties files must be mounted as a data directory. 
-In addition, the directory containing the properties files inside the container must be set using JAVA_OPTS andpropertiesDirectory property.
+In addition, the directory containing the properties files inside the container must be set using JAVA_OPTS and propertiesDirectory property.
 
 ```
 docker run -p 8080:8080 -v /host/dir/conf:/my/conf -e "JAVA_OPTS=-DpropertiesDirectory=/my/conf"  rest-adapter-service
@@ -234,35 +236,41 @@ The build uses [license-maven-plugin](https://github.com/mycila/license-maven-pl
 
 `mvn license:format` generates the license headers where they are missing. More details can be found from the plugin documentation.
 
-## DEB Packaging
+## DEB-packaging
 
-The Rest Adapter Service builds DEB package for use with Ubuntu and siblings using the [jdeb Maven plugin](https://github.com/tcurdt/jdeb).
+The Rest Adapter Service builds DEB-packages for Ubuntu using the [jdeb Maven plugin](https://github.com/tcurdt/jdeb).
 
-Different profiles exist for building for Debians with Upstart (Ubuntu 14) and Debians with Systemd (Ubuntu 16).
+Different profiles exist for building for Ubuntu 14.04 (Upstart) and Ubuntu 16.04 (Systemd).
+
+Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`), the resulting package will contain a timestamp to make upgrading existing packages easy.
+
+## Ubuntu 14.04 – trusty (Upstart)
+
+`mvn -f src/pom.xml clean install -P package-trusty`
+
+The package will be generated in `src/target/trusty`.
+
+## Ubuntu 16.04 – xenial (Systemd)
+
+`mvn -f src/pom.xml clean install -P package-xenial`
+
+The package will be generated in `src/target/xenial`.
+
+
+## RPM-packaging
+
+The Rest Adapter Service can also be packed in an RPM-package for use with RHEL (or derivatives) using the [rpm-maven-plugin](https://github.com/mojohaus/rpm-maven-plugin).
+The RPM-packaging can only be run on a RHEL-platform.
+
+```mvn -f src/pom.xml clean install -P package-rpm```
+
+The package will be generated in `src/target/rpm/rest-adapter-service/RPMS/noarch`.
 
 Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
 
-## Debians with Upstart (Ubuntu 14)
+## RPM-packaging on a Non-RedHat Platform
 
-`mvn -f src/pom.xml clean package -P package-deb14`
-
-## Debians with Systemd (Ubuntu 16)
-
-`mvn -f src/pom.xml clean package -P package-deb16`
-
-
-## RPM Packaging
-
-The Rest Adapter Service also builds RPMs for use with RHEL (or derivatives) using the [rpm-maven-plugin](https://github.com/mojohaus/rpm-maven-plugin).
-RPM package build works only when done on RHEL platform.
-
-```mvn -f src/pom.xml clean package -P package-rpm```
-
-Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
-
-## RPM Packaging on a Non-RedHat Platform
-
-It is possible to build RPM packages even if running on a non-RedHat platform. A docker container can be used for the build.
+It is possible to build RPM-packages even if running on a non-RedHat platform. A docker container can be used for the build.
 
 ```shell
 # (in the directory which contains pom.xml)
@@ -273,7 +281,7 @@ docker build -t rest-adapter-rpm src/main/packages/docker
 
 ## Encryption of Message Content
 
-Starting from version 0.0.10 Rest Adapter Service supports encryption/decryption of message content. More information and instructions for configuration can be found in [documentation](documentation/Encryption.md).
+Starting from version 0.0.10 Rest Adapter Service supports encryption/decryption of message content. More information and instructions for configuration can be found in the [documentation](documentation/Encryption.md).
 
 By default plaintext configuration is enabled. The software can be built with encryption configuration enabled using the command below.
 This setting only affects the default configuration bundled inside the war file, and the integration tests. 

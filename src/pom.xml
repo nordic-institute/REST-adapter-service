@@ -132,7 +132,6 @@
             <version>2.2.1</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
     <licenses>
         <license>
@@ -205,7 +204,7 @@
                     <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
                     <enableExperimental>false</enableExperimental>
                     <suppressionFiles>
-                        <suppressionFile>dependency-check-suppressions.xml</suppressionFile>
+                        <suppressionFile>${project.basedir}/dependency-check-suppressions.xml</suppressionFile>
                     </suppressionFiles>
                 </configuration>
                 <executions>
@@ -237,34 +236,13 @@
                 <version>3.0.2</version>
                 <executions>
                     <execution>
-                        <id>copy-control-resources</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/packages/deb/control</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/packages/deb/control</directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                                <resource>
-                                    <directory>src/main/packages/deb/${deb-version-specific-control-directory}
-                                    </directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>copy-config-resources</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/config/etc/rest-adapter-service</outputDirectory>
+                            <outputDirectory>${project.basedir}/target/config/etc/rest-adapter-service</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>src/main/profiles/plaintext</directory>
@@ -273,6 +251,48 @@
                                 <resource>
                                     <directory>src/main/packages/config</directory>
                                     <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-control-resources-xenial</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/target/packages/deb/control-xenial</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/packages/deb/control</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>src/main/packages/deb/control-xenial
+                                    </directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-control-resources-trusty</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/target/packages/deb/control-trusty</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/packages/deb/control</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>src/main/packages/deb/control-trusty
+                                    </directory>
+                                    <filtering>true</filtering>
                                 </resource>
                             </resources>
                         </configuration>
@@ -306,8 +326,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-
         </plugins>
         <defaultGoal>package</defaultGoal>
         <resources>
@@ -353,6 +371,8 @@
                         <executions>
                             <execution>
                                 <id>generate-rpm</id>
+                                <!-- moved to install-phase to allow verify-phase failure to prevent packaging-->
+                                <phase>install</phase>
                                 <goals>
                                     <goal>rpm</goal>
                                 </goals>
@@ -364,6 +384,8 @@
                             <!-- version comes from above -->
                             <group>System Environment/Libraries</group>
                             <packager>Population Register Centre (VRK)</packager>
+                            <vendor>Population Register Centre (VRK)</vendor>
+                            <url>${project.url}</url>
                             <defineStatements>
                                 <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
                             </defineStatements>
@@ -444,10 +466,13 @@
             </build>
         </profile>
         <profile>
-            <id>package-deb14</id>
-            <properties>
-                <deb-version-specific-control-directory>control-deb14</deb-version-specific-control-directory>
-            </properties>
+            <id>package-trusty</id>
+            <activation>
+                <property>
+                    <!-- -Ddeb-build to create both Ubuntu packages -->
+                    <name>deb-build</name>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -456,12 +481,15 @@
                         <version>1.5</version>
                         <executions>
                             <execution>
-                                <phase>package</phase>
+                                <id>pkg-trusty</id>
+                                <!-- moved to install-phase to allow verify-phase failure to prevent packaging-->
+                                <phase>install</phase>
                                 <goals>
                                     <goal>jdeb</goal>
                                 </goals>
                                 <configuration>
-                                    <controlDir>${basedir}/target/packages/deb/control</controlDir>
+                                    <deb>[[buildDir]]/trusty/[[artifactId]]_[[version]]_trusty_all.[[extension]]</deb>
+                                    <controlDir>${project.basedir}/target/packages/deb/control-trusty</controlDir>
                                     <verbose>true</verbose>
                                     <snapshotExpand>true</snapshotExpand>
                                     <dataSet>
@@ -508,10 +536,13 @@
         </profile>
 
         <profile>
-            <id>package-deb16</id>
-            <properties>
-                <deb-version-specific-control-directory>control-deb16</deb-version-specific-control-directory>
-            </properties>
+            <id>package-xenial</id>
+            <activation>
+                <property>
+                    <!-- -Ddeb-build to create both Ubuntu packages -->
+                    <name>deb-build</name>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -520,12 +551,15 @@
                         <version>1.5</version>
                         <executions>
                             <execution>
-                                <phase>package</phase>
+                                <id>pkg-xenial</id>
+                                <!-- moved to install-phase to allow verify-phase failure to prevent packaging-->
+                                <phase>install</phase>
                                 <goals>
                                     <goal>jdeb</goal>
                                 </goals>
                                 <configuration>
-                                    <controlDir>${basedir}/target/packages/deb/control</controlDir>
+                                    <controlDir>${project.basedir}/target/packages/deb/control-xenial</controlDir>
+                                    <deb>[[buildDir]]/xenial/[[artifactId]]_[[version]]_xenial_all.[[extension]]</deb>
                                     <verbose>true</verbose>
                                     <snapshotExpand>true</snapshotExpand>
                                     <dataSet>
@@ -581,7 +615,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>encryptedProfile</id>
             <!-- use -Dencrypted to activate this profile -->
@@ -642,8 +675,6 @@
                                 </property>
                             </systemProperties>
                             <encoding>UTF-8</encoding>
-                            <inputEncoding>UTF-8</inputEncoding>
-                            <outputEncoding>UTF-8</outputEncoding>
                         </configuration>
                         <executions>
                             <execution>

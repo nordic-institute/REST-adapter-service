@@ -27,7 +27,6 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.matching.RequestPattern;
 import com.github.tomakehurst.wiremock.verification.FindRequestsResult;
 import fi.vrk.xroad.restadapterservice.util.Constants;
-import junit.framework.TestCase;
 import lombok.extern.slf4j.Slf4j;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
@@ -37,13 +36,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.SocketUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -62,8 +59,7 @@ public class ConsumerGatewayWireMockTest {
 
     private WireMockServer wireMockServer;
 
-    @Value("${wiremock.server.port}")
-    private int wireMockPort;
+    private int wireMockPort = SocketUtils.findAvailableTcpPort();
 
     @Before
     public void setUp() throws Exception {
