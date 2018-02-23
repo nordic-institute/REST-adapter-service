@@ -1,6 +1,6 @@
 # Change Log
 
-## 0.0.13-SNAPSHOT 2017-12-20
+## 0.0.13 2018-02-23
 - PVAYLADEV-1059 Add checkstyle and sonar checks and fix reported problems
 - Added new folder for templates and an example AWS CloudFormation template for testing REST Adapter Service.
 - PVAYLADEV-1001 Improved Rest Adapter Service documentation in relation to Docker.
