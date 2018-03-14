@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fi.vrk</groupId>
     <artifactId>rest-adapter-service</artifactId>
-    <version>0.0.13-SNAPSHOT</version>
+    <version>0.0.13</version>
     <name>REST Adapter Service</name>
     <description>
         REST Adapter Service component translates between X-Road and REST protocols. X-Road versions 6.4 and above are
@@ -20,7 +20,7 @@
         <version>1.5.9.RELEASE</version>
     </parent>
     <properties>
-        <xrd4j.version>0.2.0-SNAPSHOT</xrd4j.version>
+        <xrd4j.version>0.2.0</xrd4j.version>
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.16</log4j.version>
         <java.version>1.8</java.version>
@@ -60,7 +60,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.6</version>
+            <version>1.16.20</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -197,10 +198,9 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>3.0.2</version>
+                <version>3.1.1</version>
                 <configuration>
                     <cveValidForHours>12</cveValidForHours>
-                    <skip>false</skip>
                     <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
                     <enableExperimental>false</enableExperimental>
                     <suppressionFiles>
