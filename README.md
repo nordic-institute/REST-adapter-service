@@ -140,7 +140,7 @@ On a typical Ubuntu 16.04 system it will be *enabled* (and start during boots).
 
 ### RHEL 7
 
-Install Rest Adapter Service package from a repository (no official repository available at this time) with
+Install Rest Adapter Service package from the official repository with
 ```shell
 sudo yum-config-manager --add-repo http://www.nic.funet.fi/pub/csc/x-road/rest-adapter-service/0.0.13/rhel/7/stable
 rpm --import http://www.nic.funet.fi/pub/csc/x-road/client/rhel7-dev-current/palveluvayla-sign.gpg
