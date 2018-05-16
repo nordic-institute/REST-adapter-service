@@ -27,7 +27,7 @@ In parallel with the technical development we will collect more use cases from F
 ## Want to contribute?
 For more information look at the [contribution instructions](https://github.com/vrk-kpa/REST-adapter-service/blob/master/CONTRIBUTING.md).
 
-## Try It Out 
+## Try It Out
 
 The fastest and easiest way to try out the application is by using the Spring Boot Maven plugin.
 To do this, you need to have a working installation of [Maven](https://maven.apache.org/).
@@ -46,11 +46,11 @@ mvn spring-boot:run -Drun.jvmArguments="-DpropertiesDirectory=/my/conf"
 
 ## Configuration files location
 
-Rest Adapter Service tries to load configuration files from the following locations, 
-in the following order. 
+Rest Adapter Service tries to load configuration files from the following locations,
+in the following order.
 
 If a matching directory exists, all the configuration files
-need to exist in that directory, otherwise an error occurs. Configuration 
+need to exist in that directory, otherwise an error occurs. Configuration
 directory scanning stops once the first matching directory is located.
 
 Scanned directories:
@@ -62,11 +62,11 @@ Scanned directories:
 3. The directory `/etc/rest-adapter-service` (Linux only)
 4. As a fallback, the default configuration shipped with the WAR (classpath)
 
-Alternative configuration locations are mostly relevant only when 
+Alternative configuration locations are mostly relevant only when
 starting the executable war from command line,
-deploying war into a standalone container, 
-or running the docker image. 
-When Rest Adapter Service is installed from DEB- or RPM-packages, 
+deploying war into a standalone container,
+or running the docker image.
+When Rest Adapter Service is installed from DEB- or RPM-packages,
 it explicitly sets `/etc/rest-adapter-service` as the configuration directory.
 
 More detailed usage examples are available in [documentation](documentation/Rest-Adapter-Service-principles.md#usage).
@@ -94,7 +94,7 @@ Otherwise, use standard `apt` or `yum` commands to remove the `tomcat7` package.
 
 ### Ubuntu 14.04 (trusty)
 
-Rest Adapter Service requires `java8-runtime-headless` dependency. 
+Rest Adapter Service requires `java8-runtime-headless` dependency.
 Configure openjdk package repository, which provides that:
 ```shell
 apt-add-repository -y ppa:openjdk-r/ppa
@@ -106,25 +106,31 @@ apt-get install openjdk-8-jre-headless
 ```
 Do not install Java 9, as Rest Adapter does not yet support it.
 
-Install Rest Adapter Service package from a repository (no official repository available at this time) with
+Install Rest Adapter Service package from the official repository with
 ```shell
+apt-add-repository -y "deb http://www.nic.funet.fi/pub/csc/x-road/rest-adapter-service/0.0.13/trusty stable main"
+curl http://www.nic.funet.fi/pub/csc/x-road/client/ubuntu-dev-current/packages/dists/stable/palveluvayla@gofore.com.asc | sudo apt-key add -
+apt-get update
 apt-get install rest-adapter-service
 ```
-Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md). 
+Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md).
 Service will automatically start during boot.
 
 ### Ubuntu 16.04 (xenial)
 
-Rest Adapter Service requires `java8-runtime-headless` dependency. 
+Rest Adapter Service requires `java8-runtime-headless` dependency.
 Install Java 8:
 ```shell
 apt-get install openjdk-8-jre-headless
 ```
 Do not install Java 9, as Rest Adapter does not yet support it.
 
-Install Rest Adapter Service package from a repository (no official repository available at this time) with
+Install Rest Adapter Service package from the official repository with
 ```shell
-apt-get install rest-adapter-service 
+apt-add-repository -y "deb http://www.nic.funet.fi/pub/csc/x-road/rest-adapter-service/0.0.13/trusty stable main"
+curl http://www.nic.funet.fi/pub/csc/x-road/client/ubuntu-dev-current/packages/dists/stable/palveluvayla@gofore.com.asc | sudo apt-key add -
+apt-get update
+apt-get install rest-adapter-service
 ```
 or from a locally built DEB-package by replacing the package name with the file path in the command above.
 
@@ -134,8 +140,10 @@ On a typical Ubuntu 16.04 system it will be *enabled* (and start during boots).
 
 ### RHEL 7
 
-Install Rest Adapter Service package from a repository (no official repository available at this time) with
+Install Rest Adapter Service package from the official repository with
 ```shell
+sudo yum-config-manager --add-repo http://www.nic.funet.fi/pub/csc/x-road/rest-adapter-service/0.0.13/rhel/7/stable
+rpm --import http://www.nic.funet.fi/pub/csc/x-road/client/rhel7-dev-current/palveluvayla-sign.gpg
 yum install rest-adapter-service
 ```
 or from a locally built RPM-package by replacing the package name with the file path in the command above.
@@ -197,7 +205,7 @@ To set configuration files location, you need to specify `propertiesDirectory` s
 
 ## Using Docker
 
-You can create a docker image to run Rest Adapter inside a container, using the provided Dockerfile. 
+You can create a docker image to run Rest Adapter inside a container, using the provided Dockerfile.
 Before building the image, build the war file inside `src` directory
 
 ```
@@ -221,7 +229,7 @@ After building the image, you can run Rest Adapter using it.
 docker run -p 8080:8080 rest-adapter-service
 ```
 
-If customized properties are used, the host directory containing the properties files must be mounted as a data directory. 
+If customized properties are used, the host directory containing the properties files must be mounted as a data directory.
 In addition, the directory containing the properties files inside the container must be set using JAVA_OPTS and propertiesDirectory property.
 
 ```
@@ -284,7 +292,7 @@ docker build -t rest-adapter-rpm src/main/packages/docker
 Starting from version 0.0.10 Rest Adapter Service supports encryption/decryption of message content. More information and instructions for configuration can be found in the [documentation](documentation/Encryption.md).
 
 By default plaintext configuration is enabled. The software can be built with encryption configuration enabled using the command below.
-This setting only affects the default configuration bundled inside the war file, and the integration tests. 
+This setting only affects the default configuration bundled inside the war file, and the integration tests.
 External configuration, in `/etc/rest-adapter-service`
 or elsewhere, is not affected.
 
