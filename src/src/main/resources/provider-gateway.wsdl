@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
-                  xmlns:tns="http://vrk-test.x-road.fi/producer" 
+                  xmlns:tns="http://x-road.global/producer"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
                   xmlns:xrd="http://x-road.eu/xsd/xroad.xsd"
                   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                   xmlns:id="http://x-road.eu/xsd/identifiers"
-                  name="provider-gateway" targetNamespace="http://vrk-test.x-road.fi/producer">
+                  name="provider-gateway" targetNamespace="http://x-road.global/producer">
     <wsdl:types>
-        <xsd:schema elementFormDefault="qualified" targetNamespace="http://vrk-test.x-road.fi/producer">
+        <xsd:schema elementFormDefault="qualified" targetNamespace="http://x-road.global/producer">
             <!-- Import X-Road schema -->
             <xsd:import id="xrd" namespace="http://x-road.eu/xsd/xroad.xsd" schemaLocation="http://x-road.eu/xsd/xroad.xsd"/>
             
