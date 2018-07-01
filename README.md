@@ -1,31 +1,20 @@
-# Joint X-Road Rest Adapter Service development
+# X-Road REST Adapter Service
 
-This repository will be the home of REST/JSON support solutions for [X-Road](https://github.com/ria-ee/X-Road). The mandate for joint development is based on [the MoU which was signed by Katainen and Ansip](https://github.com/vrk-kpa/REST-adapter-service/blob/master/MoU-Ansip-Katainen.md). The development and the repository are shared between Estonia and Finland. Below is a list of people who initiated the co-operation in a Skype meeting which was held 18.12.2014.
+REST Adapter Service provides REST support to [X-Road](https://github.com/nordic-institute/X-Road) data exchange layer solution. REST Adapter Service sits between [X-Road](https://github.com/nordic-institute/X-Road) Security Server and a REST client or service ([diagram](https://github.com/nordic-institute/REST-adapter-service/raw/master/images/message-sequence_rest-gateway-0.0.4.png)). The component implements X-Road v4.0 [SOAP profile](https://github.com/nordic-institute/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md) and it's compatible with X-Road v6.4 and above. 
 
-People involved in initiation of co-operation:
-* Andres Kütt (Estonian Information System Authority, RIA, Estonia)
-* Alar Jõeste (Cybernetica, Estonia)
-* Margus Freudenthal (Cybernetica, Estonia)
-* Petteri Kivimäki (Population Register Centre, Finland)
-* Jarkko Moilanen (Ministry of Education and Culture, Finland)
+REST Adapter Service has two parts: _Consumer Gateway_ and _Provider Gateway._ It is possible to use either only Consumer Gateway, only Provider Gateway, or both.
 
-## Data Exchange Layer X-Road
+![different adapter usage scenarios](images/restgw-use-cases.png "Different adapter usage scenarios")
 
-[X-Road](https://github.com/ria-ee/X-Road) was launched in 2001. The data exchange layer X-Road is a technical and organizational environment, which enables secure Internet-based data exchange between the state’s information systems.
+* (A) using both Consumer and Provider Gateways
+  * when both the client and the server are REST/JSON, but the messages need to go through X-Road
+  * when end to end encryption is needed
+* (B) using only Consumer Gateway
+  * when the service is SOAP/XML, but a client needs to access it through REST/JSON
+* (C) using only Provider Gateway
+  * when a REST/JSON service needs to be published in X-Road for SOAP/XML clients
 
-X-Road is not only a technical solution, the exchange of data with the databases belonging to the state information system and between the databases belonging to the state information system shall be carried out through the data exchange layer of the state information system. X-Road allows institutions/people to securely exchange data as well as to ensure people’s access to the data maintained and processed in state databases.
-
-Public and private sector enterprises and institutions can connect their information system with X-Road. This enables them to use X-Road services in their own electronic environment or offer their e-services via X-Road. Joining X-Road enables institutions to save resources, since the data exchange layer already exists. This makes data exchange more effective both inside the state institutions as well as regarding the communication between a citizen and the state.
-
-## Aim 2015
-In this repository you will find (2015) Proof of Concept level code for a service that will enable REST support in [X-Road](https://github.com/ria-ee/X-Road) version 6. The solution will not be a part of the Security Server, but more like a "REST Proxy". The solution could be included to the Security Server in the future, but that remains to be seen. No plans for that have been made.
-
-First aim is to get first practical REST API integrated to X-Road, document the process and open the code. We also need to test and evaluate the toolchain for example for WSDL-RAML conversions and other things.
-
-In parallel with the technical development we will collect more use cases from Finland about REST/JSON APIs that need to be integrated with X-Road. Aim is not to make automated solution which covers 100% of cases. We will cheer loudly if 80% coverage is achieved.
-
-## Want to contribute?
-For more information look at the [contribution instructions](https://github.com/vrk-kpa/REST-adapter-service/blob/master/CONTRIBUTING.md).
+More information about available features can be found [here](documentation/Rest-Adapter-Service-principles.md).
 
 ## Try It Out
 
@@ -321,10 +310,27 @@ Running integration tests with encryption configuration enabled:
 
 ### Links to material
 
-* [Data exchange layer X-Road](https://www.ria.ee/x-road/)
-* [X-Road overview ](https://speakerdeck.com/educloudalliance/x-road-overview)
-* [X-Road regulations](https://speakerdeck.com/educloudalliance/x-road-regulations)
-* [Palveluväylä kehitysympäristö (Finnish only)](http://palveluvayla.fi)
-* [Requirements for Information Systems and Adapter
-Servers](http://x-road.ee/docs/eng/x-road_service_protocol.pdf)
+* [Data exchange layer X-Road](https://github.com/nordic-institute/X-Road)
+* [X-Road community](https://x-road.global/)
+* [Nordic Institute for Interoperability Solutions (NIIS)](https://www.niis.org/)
 * [XRd4J - Java library for X-Road v6](https://github.com/vrk-kpa/xrd4j)
+
+## Want to contribute?
+
+For more information look at the [contribution instructions](CONTRIBUTING.md).
+
+## Credits
+
+The development of REST Adapter Service started as a joint effort between Finland and Estonia in December 2014. Since then the component has been developed by different people and organizations.
+
+* REST Gateway was originally developed by the people listed below (https://github.com/educloudalliance/xroad-rest-gateway) during 2014-2017. 
+* The name of the component was changed to REST Adapter Service (https://github.com/vrk-kpa/REST-adapter-service) and it was maintained and further developed by the Finnish Population Register Centre (VRK) during 06/2017-05/2018.
+* In June 2018 it was agreed that Nordic Institute for Interoperability Solutions (NIIS) takes maintenance responsibility.
+
+Below is a list of people who initiated the co-operation in a Skype meeting which was held on 18th December 2014:
+
+* Andres Kütt (Estonian Information System Authority, RIA, Estonia)
+* Alar Jõeste (Cybernetica, Estonia)
+* Margus Freudenthal (Cybernetica, Estonia)
+* Petteri Kivimäki (Population Register Centre, Finland)
+* Jarkko Moilanen (Ministry of Education and Culture, Finland)
