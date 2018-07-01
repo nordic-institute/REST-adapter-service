@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fi.vrk.xroad.restadapterservice;
+package org.niis.xroad.restadapterservice;
 
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.message.ErrorMessage;
@@ -38,10 +38,10 @@ import fi.vrk.xrd4j.server.deserializer.AbstractCustomRequestDeserializer;
 import fi.vrk.xrd4j.server.deserializer.CustomRequestDeserializer;
 import fi.vrk.xrd4j.server.serializer.AbstractServiceResponseSerializer;
 import fi.vrk.xrd4j.server.serializer.ServiceResponseSerializer;
-import fi.vrk.xroad.restadapterservice.endpoint.ProviderEndpoint;
-import fi.vrk.xroad.restadapterservice.util.Constants;
-import fi.vrk.xroad.restadapterservice.util.ProviderGatewayUtil;
-import fi.vrk.xroad.restadapterservice.util.RESTGatewayUtil;
+import org.niis.xroad.restadapterservice.endpoint.ProviderEndpoint;
+import org.niis.xroad.restadapterservice.util.Constants;
+import org.niis.xroad.restadapterservice.util.ProviderGatewayUtil;
+import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
 
 import lombok.extern.slf4j.Slf4j;
 

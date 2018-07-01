@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fi.vrk.xroad.restadapterservice.filter;
+package org.niis.xroad.restadapterservice.filter;
 
 import lombok.extern.slf4j.Slf4j;
 

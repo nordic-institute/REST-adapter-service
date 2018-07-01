@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fi.vrk.xroad.restadapterservice.util;
+package org.niis.xroad.restadapterservice.util;
 
 import junit.framework.TestCase;
 import lombok.extern.slf4j.Slf4j;

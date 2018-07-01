@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fi.vrk.xroad.restadapterservice.endpoint;
+package org.niis.xroad.restadapterservice.endpoint;
 
 /**
  * This abstract class is a base class for ProviderEndpoint and ConsumerEndpoint

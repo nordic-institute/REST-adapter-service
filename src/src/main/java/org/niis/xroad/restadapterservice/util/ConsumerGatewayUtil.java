@@ -20,14 +20,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fi.vrk.xroad.restadapterservice.util;
+package org.niis.xroad.restadapterservice.util;
 
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.security.Encrypter;
 import fi.vrk.xrd4j.common.util.ConfigurationHelper;
 import fi.vrk.xrd4j.common.util.MessageHelper;
-import fi.vrk.xroad.restadapterservice.endpoint.ConsumerEndpoint;
+import org.niis.xroad.restadapterservice.endpoint.ConsumerEndpoint;
 
 import lombok.extern.slf4j.Slf4j;
 

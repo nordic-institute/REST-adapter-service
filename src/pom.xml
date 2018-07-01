@@ -3,7 +3,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>fi.vrk</groupId>
+    <groupId>org.niis</groupId>
     <artifactId>rest-adapter-service</artifactId>
     <version>0.0.14-SNAPSHOT</version>
     <name>REST Adapter Service</name>

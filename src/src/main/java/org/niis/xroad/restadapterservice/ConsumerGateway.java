@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fi.vrk.xroad.restadapterservice;
+package org.niis.xroad.restadapterservice;
 
 import fi.vrk.xrd4j.client.SOAPClient;
 import fi.vrk.xrd4j.client.SOAPClientImpl;
@@ -39,10 +39,10 @@ import fi.vrk.xrd4j.common.util.PropertiesUtil;
 import fi.vrk.xrd4j.common.util.SOAPHelper;
 import fi.vrk.xrd4j.rest.converter.JSONToXMLConverter;
 import fi.vrk.xrd4j.rest.converter.XMLToJSONConverter;
-import fi.vrk.xroad.restadapterservice.endpoint.ConsumerEndpoint;
-import fi.vrk.xroad.restadapterservice.util.Constants;
-import fi.vrk.xroad.restadapterservice.util.ConsumerGatewayUtil;
-import fi.vrk.xroad.restadapterservice.util.RESTGatewayUtil;
+import org.niis.xroad.restadapterservice.endpoint.ConsumerEndpoint;
+import org.niis.xroad.restadapterservice.util.Constants;
+import org.niis.xroad.restadapterservice.util.ConsumerGatewayUtil;
+import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -82,7 +82,7 @@ public class ConsumerGateway extends HttpServlet {
     public static final String JSON_CONVERSION_WRAPPER_ELEMENT = "jsonWrapperProperty";
     private Properties props;
     private Map<String, ConsumerEndpoint> endpoints;
-      private boolean serviceCallsByXRdServiceId;
+    private boolean serviceCallsByXRdServiceId;
     private Decrypter asymmetricDecrypter;
     private final Map<String, Encrypter> asymmetricEncrypterCache = new HashMap<>();
     private String publicKeyFile;

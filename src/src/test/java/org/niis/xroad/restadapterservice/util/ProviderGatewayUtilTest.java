@@ -20,13 +20,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fi.vrk.xroad.restadapterservice.util;
+package org.niis.xroad.restadapterservice.util;
 
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
-import fi.vrk.xroad.restadapterservice.endpoint.ProviderEndpoint;
+import org.niis.xroad.restadapterservice.endpoint.ProviderEndpoint;
 import java.util.Map;
 import java.util.Properties;
 import junit.framework.TestCase;

@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fi.vrk.xroad.restadapterservice.util;
+package org.niis.xroad.restadapterservice.util;
 
 import fi.vrk.xrd4j.common.security.AsymmetricDecrypter;
 import fi.vrk.xrd4j.common.security.AsymmetricEncrypter;
@@ -30,7 +30,7 @@ import fi.vrk.xrd4j.common.security.Encrypter;
 import fi.vrk.xrd4j.common.security.SymmetricDecrypter;
 import fi.vrk.xrd4j.common.security.SymmetricEncrypter;
 import fi.vrk.xrd4j.common.util.MessageHelper;
-import fi.vrk.xroad.restadapterservice.endpoint.AbstractEndpoint;
+import org.niis.xroad.restadapterservice.endpoint.AbstractEndpoint;
 
 import lombok.extern.slf4j.Slf4j;
 
