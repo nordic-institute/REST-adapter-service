@@ -313,7 +313,7 @@ Running integration tests with encryption configuration enabled:
 * [Data exchange layer X-Road](https://github.com/nordic-institute/X-Road)
 * [X-Road community](https://x-road.global/)
 * [Nordic Institute for Interoperability Solutions (NIIS)](https://www.niis.org/)
-* [XRd4J - Java library for X-Road v6](https://github.com/vrk-kpa/xrd4j)
+* [XRd4J - Java library for X-Road v6](https://github.com/nordic-institute/xrd4j)
 
 ## Want to contribute?
 
