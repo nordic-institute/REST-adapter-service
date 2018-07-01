@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2017 Population Register Centre (VRK)
+ * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -82,7 +82,7 @@ public class ConsumerGateway extends HttpServlet {
     public static final String JSON_CONVERSION_WRAPPER_ELEMENT = "jsonWrapperProperty";
     private Properties props;
     private Map<String, ConsumerEndpoint> endpoints;
-    private boolean serviceCallsByXRdServiceId;
+      private boolean serviceCallsByXRdServiceId;
     private Decrypter asymmetricDecrypter;
     private final Map<String, Encrypter> asymmetricEncrypterCache = new HashMap<>();
     private String publicKeyFile;

@@ -11,8 +11,8 @@
         REST Adapter Service component translates between X-Road and REST protocols. X-Road versions 6.4 and above are
         supported.
     </description>
-    <inceptionYear>2017</inceptionYear>
-    <url>https://github.com/vrk-kpa/REST-adapter-service</url>
+    <inceptionYear>2018</inceptionYear>
+    <url>https://github.com/nordic-institute/REST-adapter-service</url>
     <packaging>war</packaging>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -141,11 +141,20 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:git@github.com:vrk-kpa/REST-adapter-service.git</connection>
-        <developerConnection>scm:git:git@github.com:vrk-kpa/REST-adapter-service.git</developerConnection>
-        <url>git@github.com:vrk-kpa/REST-adapter-service.git</url>
+        <connection>scm:git:git@github.com:nordic-institute/REST-adapter-service.git</connection>
+        <developerConnection>scm:git:git@github.com:nordic-institute/REST-adapter-service.git</developerConnection>
+        <url>git@github.com:nordic-institute/REST-adapter-service.git</url>
     </scm>
     <developers>
+        <developer>
+            <id>niis</id>
+            <name>Nordic Institute for Interoperability Solutions (NIIS)</name>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
         <developer>
             <id>vrk</id>
             <name>Population Register Centre (VRK)</name>
@@ -306,7 +315,7 @@
                 <configuration>
                     <header>com/mycila/maven/plugin/license/templates/MIT.txt</header>
                     <properties>
-                        <owner>Population Register Centre (VRK)</owner>
+                        <owner>Nordic Institute for Interoperability Solutions (NIIS)</owner>
                     </properties>
                     <skipExistingHeaders>false</skipExistingHeaders>
                     <includes>
