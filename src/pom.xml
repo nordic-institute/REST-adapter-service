@@ -392,8 +392,8 @@
                             <distribution>RHEL</distribution>
                             <!-- version comes from above -->
                             <group>System Environment/Libraries</group>
-                            <packager>Population Register Centre (VRK)</packager>
-                            <vendor>Population Register Centre (VRK)</vendor>
+                            <packager>Nordic Institute for Interoperability Solutions (NIIS)</packager>
+                            <vendor>Nordic Institute for Interoperability Solutions (NIIS)</vendor>
                             <url>${project.url}</url>
                             <defineStatements>
                                 <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
