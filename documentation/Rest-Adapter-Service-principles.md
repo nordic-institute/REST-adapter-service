@@ -30,7 +30,7 @@
 
 ### Principle of Operation
 
-This is Rest Adapter Service component that sits between X-Road security server and a REST client or service ([diagram](https://github.com/vrk-kpa/REST-adapter-service/raw/master/images/message-sequence_rest-gateway-0.0.4.png)). The component implements X-Road v4.0 [SOAP profile](https://confluence.csc.fi/download/attachments/50873043/X-Road_protocol_for_adapter_server_messaging_4.0.0.pdf) and it's compatible with X-Road v6.4 and above. 
+This is Rest Adapter Service component that sits between X-Road security server and a REST client or service ([diagram](https://github.com/nordic-institute/REST-adapter-service/raw/master/images/message-sequence_rest-gateway-0.0.4.png)). The component implements X-Road v4.0 [SOAP profile](https://confluence.csc.fi/download/attachments/50873043/X-Road_protocol_for_adapter_server_messaging_4.0.0.pdf) and it's compatible with X-Road v6.4 and above. 
 
 Rest Adapter has two parts: _Consumer Gateway_ and _Provider Gateway._ It is possible to use either only Consumer Gateway, only Provider Gateway, or both.
 
@@ -190,7 +190,7 @@ Consumer Gateway receives HTTP GET, POST, PUT and DELETE request from informatio
 Browser-based access makes it possible to access services that are not configured in Consumer Gateway. The identifier of the service to be called is given as resource path. X-Road message headers and other request parameters are defined as URL parameters. It's enough to know that a service with the given identifier exists in X-Road and the X-Road client identifier that's used for making the service call is authorized to call the service. However, reformatting of resource links doesn't work when using browser-based access. For example:
 
 ```
-http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1/49?X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://vrk-test.x-road.fi/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
+http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1/49?X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://x-road.global/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
 ```
 
 #### Provider Gateway
@@ -720,7 +720,7 @@ http://localhost:8080/rest-adapter-service/Consumer/www.hel.fi/palvelukarttaws/r
 Browser-based access:
 
 ```
-http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1/?X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://vrk-test.x-road.fi/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
+http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1/?X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://x-road.global/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
 ```
 
 Consumer Gateway response:
@@ -868,7 +868,7 @@ http://localhost:8080/rest-adapter-service/Provider
 		<xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <test:getOrganizationList xmlns:test="http://vrk-test.x-road.fi/producer">
+        <test:getOrganizationList xmlns:test="http://x-road.global/producer">
             <test:request/>
         </test:getOrganizationList>
     </SOAP-ENV:Body>
@@ -899,7 +899,7 @@ Rest Adapter Service response:
 		<xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <ts1:getOrganizationListResponse xmlns:ts1="http://vrk-test.x-road.fi/producer">
+        <ts1:getOrganizationListResponse xmlns:ts1="http://x-road.global/producer">
             <ts1:request/>
             <ts1:response>
                 <ts1:array>
@@ -1035,7 +1035,7 @@ http://localhost:8080/rest-adapter-service/Consumer/www.hel.fi/palvelukarttaws/r
 Browser-based access:
 
 ```
-http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1/49?X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://vrk-test.x-road.fi/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
+http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1/49?X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://x-road.global/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
 ```
 
 Consumer Gateway response:
@@ -1089,7 +1089,7 @@ http://localhost:8080/rest-adapter-service/Provider
 		<xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <test:getOrganization xmlns:test="http://vrk-test.x-road.fi/producer">
+        <test:getOrganization xmlns:test="http://x-road.global/producer">
             <test:request>
                 <resourceId>49</resourceId>
             </test:request>
@@ -1123,7 +1123,7 @@ Rest Adapter Service response:
 		<xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <ts1:getOrganizationResponse xmlns:ts1="http://vrk-test.x-road.fi/producer">
+        <ts1:getOrganizationResponse xmlns:ts1="http://x-road.global/producer">
             <ts1:request>
                 <ts1:resourceId>49</ts1:resourceId>
             </ts1:request>
@@ -1166,7 +1166,7 @@ http://localhost:8080/rest-adapter-service/Consumer/api.kirjastot.fi/v3/organisa
 
 Browser-based access:
 ```
-http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.getLibrary.v1/?name=kallio&city.name=helsinki&X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://vrk-test.x-road.fi/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
+http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.getLibrary.v1/?name=kallio&city.name=helsinki&X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://x-road.global/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
 ```
 
 Consumer Gateway response:
@@ -1432,7 +1432,7 @@ http://localhost:8080/rest-adapter-service/Provider
         <xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <test:getLibrary xmlns:test="http://vrk-test.x-road.fi/producer">
+        <test:getLibrary xmlns:test="http://x-road.global/producer">
             <test:request>
                 <test:name>Kallio</test:name>
                 <test:city.name>Helsinki</test:city.name>
@@ -1586,7 +1586,7 @@ http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bi
 Browser-based access:
 
 ```
-http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.searchCompany.v1/?totalResults=false&resultsFrom=0&name=asunto&companyRegistrationFrom=2015-02-28&X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://vrk-test.x-road.fi/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
+http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.searchCompany.v1/?totalResults=false&resultsFrom=0&name=asunto&companyRegistrationFrom=2015-02-28&X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://x-road.global/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
 ```
 
 Consumer Gateway response:
@@ -1715,7 +1715,7 @@ http://localhost:8080/rest-adapter-service/Provider
 		<xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <test:searchCompany xmlns:test="http://vrk-test.x-road.fi/producer">
+        <test:searchCompany xmlns:test="http://x-road.global/producer">
             <test:request>
                 <totalResults>false</totalResults>
                 <maxResults>10</maxResults>
@@ -1876,7 +1876,7 @@ http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bi
 Browser-based access:
 
 ```
-http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.getCompany.v1/2663307-6/?X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://vrk-test.x-road.fi/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
+http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.getCompany.v1/2663307-6/?X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://x-road.global/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
 ```
 
 Consumer Gateway response:
@@ -2041,7 +2041,7 @@ http://localhost:8080/rest-adapter-service/Provider
 		<xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <test:getCompany xmlns:test="http://vrk-test.x-road.fi/producer">
+        <test:getCompany xmlns:test="http://x-road.global/producer">
             <test:request>
                 <resourceId>2663307-6</resourceId>
             </test:request>
@@ -2224,7 +2224,7 @@ http://localhost:8080/rest-adapter-service/Consumer/api.finto.fi/rest/v1/search/
 Browser-based access:
 
 ```
-http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.fintoService.v1/?query=cat&lang=en&X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://vrk-test.x-road.fi/producer&X-XRd-NamespacePrefixSerialize=ks
+http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.fintoService.v1/?query=cat&lang=en&X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://x-road.global/producer&X-XRd-NamespacePrefixSerialize=ks
 ```
 
 Consumer  Gateway response:
@@ -2497,7 +2497,7 @@ http://localhost:8080/rest-adapter-service/Provider
 		<xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <test:fintoService xmlns:test="http://vrk-test.x-road.fi/producer">
+        <test:fintoService xmlns:test="http://x-road.global/producer">
             <test:request>
                 <test:query>cat</test:query>
                 <test:lang>en</test:lang>

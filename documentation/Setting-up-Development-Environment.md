@@ -8,10 +8,10 @@ This document describes how a developer's workstation can be setup.
 
 ### Getting the code
 
-There are several of ways to get code, e.g. download it as a [zip](https://github.com/vrk-kpa/REST-adapter-service/archive/master.zip) file or clone the git repository.
+There are several of ways to get code, e.g. download it as a [zip](https://github.com/nordic-institute/REST-adapter-service/archive/master.zip) file or clone the git repository.
 
 ```
-git clone https://github.com/vrk-kpa/REST-adapter-service.git
+git clone https://github.com/nordic-institute/REST-adapter-service.git
 ```
 
 The code is located in the ```src``` folder.

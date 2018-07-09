@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2017 Population Register Centre (VRK)
+ * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fi.vrk.xroad.restadapterservice;
+package org.niis.xroad.restadapterservice;
 
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.message.ErrorMessage;
@@ -38,10 +38,10 @@ import fi.vrk.xrd4j.server.deserializer.AbstractCustomRequestDeserializer;
 import fi.vrk.xrd4j.server.deserializer.CustomRequestDeserializer;
 import fi.vrk.xrd4j.server.serializer.AbstractServiceResponseSerializer;
 import fi.vrk.xrd4j.server.serializer.ServiceResponseSerializer;
-import fi.vrk.xroad.restadapterservice.endpoint.ProviderEndpoint;
-import fi.vrk.xroad.restadapterservice.util.Constants;
-import fi.vrk.xroad.restadapterservice.util.ProviderGatewayUtil;
-import fi.vrk.xroad.restadapterservice.util.RESTGatewayUtil;
+import org.niis.xroad.restadapterservice.endpoint.ProviderEndpoint;
+import org.niis.xroad.restadapterservice.util.Constants;
+import org.niis.xroad.restadapterservice.util.ProviderGatewayUtil;
+import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
 
 import lombok.extern.slf4j.Slf4j;
 

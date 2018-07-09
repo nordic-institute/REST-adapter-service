@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.0.14-SNAPSHOT 2018-07-05
+- XRDDEV-45 Change copyright owner from VRK to NIIS and artifact package names from `fi.vrk.xroad.restadapterservice` to `org.niis.xroad.restadapterservice`.
+
 ## 0.0.13 2018-02-23
 - PVAYLADEV-1059 Add checkstyle and sonar checks and fix reported problems
 - Added new folder for templates and an example AWS CloudFormation template for testing REST Adapter Service.

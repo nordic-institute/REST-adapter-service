@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2017 Population Register Centre (VRK)
+ * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,13 +20,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fi.vrk.xroad.restadapterservice.util;
+package org.niis.xroad.restadapterservice.util;
 
 import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xrd4j.common.security.Decrypter;
 import fi.vrk.xrd4j.common.util.MessageHelper;
 import fi.vrk.xrd4j.rest.converter.JSONToXMLConverter;
-import fi.vrk.xroad.restadapterservice.endpoint.ProviderEndpoint;
+import org.niis.xroad.restadapterservice.endpoint.ProviderEndpoint;
 
 import lombok.extern.slf4j.Slf4j;
 
