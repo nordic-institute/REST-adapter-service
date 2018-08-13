@@ -22,10 +22,10 @@
  */
 package org.niis.xroad.restadapterservice.util;
 
-import fi.vrk.xrd4j.common.exception.XRd4JException;
-import fi.vrk.xrd4j.common.member.ConsumerMember;
-import fi.vrk.xrd4j.common.member.ProducerMember;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
+import org.niis.xrd4j.common.exception.XRd4JException;
+import org.niis.xrd4j.common.member.ConsumerMember;
+import org.niis.xrd4j.common.member.ProducerMember;
+import org.niis.xrd4j.common.util.SOAPHelper;
 import org.niis.xroad.restadapterservice.endpoint.ConsumerEndpoint;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
