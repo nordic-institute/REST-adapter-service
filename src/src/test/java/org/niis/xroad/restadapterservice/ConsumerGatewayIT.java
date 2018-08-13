@@ -22,9 +22,9 @@
  */
 package org.niis.xroad.restadapterservice;
 
-import fi.vrk.xrd4j.rest.ClientResponse;
-import fi.vrk.xrd4j.rest.client.RESTClient;
-import fi.vrk.xrd4j.rest.client.RESTClientFactory;
+import org.niis.xrd4j.rest.ClientResponse;
+import org.niis.xrd4j.rest.client.RESTClient;
+import org.niis.xrd4j.rest.client.RESTClientFactory;
 import org.niis.xroad.restadapterservice.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;

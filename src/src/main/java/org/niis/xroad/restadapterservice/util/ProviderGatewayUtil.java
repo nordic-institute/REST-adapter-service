@@ -22,10 +22,10 @@
  */
 package org.niis.xroad.restadapterservice.util;
 
-import fi.vrk.xrd4j.common.message.ServiceRequest;
-import fi.vrk.xrd4j.common.security.Decrypter;
-import fi.vrk.xrd4j.common.util.MessageHelper;
-import fi.vrk.xrd4j.rest.converter.JSONToXMLConverter;
+import org.niis.xrd4j.common.message.ServiceRequest;
+import org.niis.xrd4j.common.security.Decrypter;
+import org.niis.xrd4j.common.util.MessageHelper;
+import org.niis.xrd4j.rest.converter.JSONToXMLConverter;
 import org.niis.xroad.restadapterservice.endpoint.ProviderEndpoint;
 
 import lombok.extern.slf4j.Slf4j;

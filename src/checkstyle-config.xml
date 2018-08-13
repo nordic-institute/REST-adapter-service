@@ -129,7 +129,7 @@
             <property name="severity" value="warning"/>
         </module>
         <module name="ImportOrder">
-            <property name="groups" value="fi.vrk,*,javax,java"/>
+            <property name="groups" value="org.niis,*,javax,java"/>
             <property name="ordered" value="true"/>
             <property name="separated" value="true"/>
             <property name="option" value="bottom"/>
