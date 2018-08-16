@@ -10,7 +10,7 @@
     <description>
         REST Adapter Service component translates between X-Road and REST protocols. X-Road versions 6.4 and above are
         supported.
-        Test comment 5.
+        Test comment 6.
     </description>
     <inceptionYear>2018</inceptionYear>
     <url>https://github.com/nordic-institute/REST-adapter-service</url>
