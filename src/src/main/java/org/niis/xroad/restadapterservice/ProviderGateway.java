@@ -31,6 +31,7 @@ import org.niis.xrd4j.common.security.Encrypter;
 import org.niis.xrd4j.common.util.PropertiesUtil;
 import org.niis.xrd4j.common.util.SOAPHelper;
 import org.niis.xrd4j.rest.ClientResponse;
+import org.niis.xrd4j.rest.client.AbstractBodyHandler;
 import org.niis.xrd4j.rest.client.RESTClient;
 import org.niis.xrd4j.rest.client.RESTClientFactory;
 import org.niis.xrd4j.server.AbstractAdapterServlet;
@@ -44,6 +45,8 @@ import org.niis.xroad.restadapterservice.util.ProviderGatewayUtil;
 import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.xml.soap.AttachmentPart;
@@ -72,6 +75,8 @@ import java.util.Properties;
 @Slf4j
 public class ProviderGateway extends AbstractAdapterServlet {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProviderGateway.class);
+
     private Properties props;
     private Map<String, ProviderEndpoint> endpoints;
     private Decrypter asymmetricDecrypter;
@@ -79,6 +84,10 @@ public class ProviderGateway extends AbstractAdapterServlet {
     private int keyLength;
     private String publicKeyFile;
     private String publicKeyFilePassword;
+
+    private static final int HOVERFLY_PROXY_PORT = 8500;
+    private static final String HOVERFLY_PROXY_HOST = "127.0.0.1";
+    public static final boolean USE_PROXY = "true".equalsIgnoreCase(System.getProperty("useHoverflyProducerProxy"));
 
     @Override
     public void init() throws ServletException {
@@ -165,7 +174,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
         ServiceResponseSerializer serializer = getResponseSerializer(endpoint, request.getConsumer().toString());
 
         if (request.getRequestData() == null) {
-            log.warn("No request data was found. Return a non-techinal error message.");
+            log.warn("No request data was found. Return a non-technical error message.");
             ErrorMessage error = new ErrorMessage("422", Constants.ERROR_422);
             response.setErrorMessage(error);
             serializer.serialize(response, request);
@@ -180,7 +189,12 @@ public class ProviderGateway extends AbstractAdapterServlet {
         log.debug("Fetch data from service...");
         // Create a REST client, endpoint's HTTP verb defines the type
         // of the client that's returned
-        RESTClient restClient = RESTClientFactory.createRESTClient(endpoint.getHttpVerb());
+        RESTClient restClient;
+        if (USE_PROXY) {
+            restClient = RESTClientFactory.createRESTClient(endpoint.getHttpVerb(), HOVERFLY_PROXY_HOST, HOVERFLY_PROXY_PORT);
+        } else {
+            restClient = RESTClientFactory.createRESTClient(endpoint.getHttpVerb());
+        }
         // Get request body
         String requestBody = ProviderGatewayUtil.getRequestBody((Map<String, List<String>>) request.getRequestData());
         // Send request to the service endpoint
