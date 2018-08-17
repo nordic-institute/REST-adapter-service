@@ -20,7 +20,7 @@
         <version>1.5.9.RELEASE</version>
     </parent>
     <properties>
-        <xrd4j.version>0.3.0-SNAPSHOT</xrd4j.version>
+        <xrd4j.version>0.4.0-SNAPSHOT</xrd4j.version>
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.16</log4j.version>
         <java.version>1.8</java.version>
@@ -684,6 +684,8 @@
                                 </property>
                             </systemProperties>
                             <encoding>UTF-8</encoding>
+                            <!-- to make mountebank impostering easy -->
+                            <runOrder>alphabetical</runOrder>
                         </configuration>
                         <executions>
                             <execution>
@@ -703,6 +705,157 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <!-- starts mountebank docker container for playback -->
+            <id>mountebank-play</id>
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.26.1</version>
+
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>%g%a_mountebank</name>
+                                    <build>
+                                        <dockerFileDir>${project.basedir}/src/test/docker</dockerFileDir>
+                                        <filter>@</filter>
+                                    </build>
+                                    <alias>${project.artifactId}-test-mountebank-play</alias>
+                                    <run>
+                                        <namingStrategy>alias</namingStrategy>
+                                        <log>
+                                            <enabled>true</enabled>
+                                            <color>green</color>
+                                        </log>
+                                        <ports>
+                                            <port>13000:13000</port>
+                                            <port>13001:13001</port>
+                                        </ports>
+
+                                        <volumes>
+                                            <bind>
+                                                <volume>${project.basedir}/src/test/mountebank:/imposters</volume>
+                                            </bind>
+                                        </volumes>
+                                        <cmd>--configfile /imposters/imposters.ejs --allowInjection</cmd>
+                                        <wait>
+                                            <time>2</time>
+                                        </wait>
+                                    </run>
+                                </image>
+                            </images>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- starts squid proxy -->
+            <id>proxy</id>
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.26.1</version>
+
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>%g%a_squid</name>
+                                    <build>
+                                        <dockerFileDir>${project.basedir}/src/test/docker</dockerFileDir>
+                                        <dockerFile>proxy-Dockerfile</dockerFile>
+                                        <filter>@</filter>
+                                    </build>
+                                    <alias>${project.artifactId}-test-proxy</alias>
+                                    <run>
+                                        <namingStrategy>alias</namingStrategy>
+                                        <log>
+                                            <enabled>true</enabled>
+                                            <color>green</color>
+                                        </log>
+                                        <ports>
+                                            <port>3128:3128</port>
+                                        </ports>
+                                    </run>
+                                </image>
+                            </images>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- starts mountebank docker container for recording -->
+            <id>mountebank-record</id>
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.26.1</version>
+
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>%g%a_mountebank</name>
+                                    <build>
+                                        <dockerFileDir>${project.basedir}/src/test/docker</dockerFileDir>
+                                        <filter>@</filter>
+                                    </build>
+                                    <alias>${project.artifactId}-test-mountebank</alias>
+                                    <run>
+                                        <namingStrategy>alias</namingStrategy>
+                                        <log>
+                                            <enabled>true</enabled>
+                                            <color>green</color>
+                                        </log>
+                                        <ports>
+                                            <port>2525:2525</port>
+                                            <port>13000:13000</port>
+                                            <port>13001:13001</port>
+                                        </ports>
+                                        <cmd>--allowInjection</cmd>
+                                        <wait>
+                                            <time>2</time>
+                                        </wait>
+                                    </run>
+                                </image>
+                            </images>
+                        </configuration>
+
+                        <!--<executions>-->
+                            <!--<execution>-->
+                                <!--<id>start</id>-->
+                                <!--<phase>pre-integration-test</phase>-->
+                                <!--<goals>-->
+                                    <!--<goal>start</goal>-->
+                                <!--</goals>-->
+                            <!--</execution>-->
+                            <!--<execution>-->
+                                <!--<id>stop</id>-->
+                                <!--<phase>post-integration-test</phase>-->
+                                <!--<goals>-->
+                                    <!--<goal>stop</goal>-->
+                                <!--</goals>-->
+                            <!--</execution>-->
+                        <!--</executions>-->
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+
     </profiles>
     <repositories>
         <repository>

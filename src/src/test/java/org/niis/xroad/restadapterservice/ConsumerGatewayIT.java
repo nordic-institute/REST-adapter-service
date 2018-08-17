@@ -193,6 +193,7 @@ public class ConsumerGatewayIT {
     private void sendData(String url, String verb, Map<String, List<String>> urlParams, Map<String, String> headers, String expectedResponse, String expectedContentType) {
         RESTClient restClient = RESTClientFactory.createRESTClient(verb);
         // Send request to the service endpoint
+        System.out.println("sending request from test to: " + url);
         ClientResponse restResponse = restClient.send(url, "", urlParams, headers);
 
         String data = restResponse.getData();
