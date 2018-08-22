@@ -22,14 +22,14 @@
  */
 package org.niis.xroad.restadapterservice;
 
-import org.niis.xrd4j.rest.ClientResponse;
-import org.niis.xrd4j.rest.client.RESTClient;
-import org.niis.xrd4j.rest.client.RESTClientFactory;
-import org.niis.xroad.restadapterservice.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.niis.xrd4j.rest.ClientResponse;
+import org.niis.xrd4j.rest.client.RESTClient;
+import org.niis.xrd4j.rest.client.RESTClientFactory;
+import org.niis.xroad.restadapterservice.util.Constants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;

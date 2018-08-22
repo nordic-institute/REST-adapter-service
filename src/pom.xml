@@ -684,7 +684,7 @@
                                 </property>
                             </systemProperties>
                             <encoding>UTF-8</encoding>
-                            <!-- to make mountebank impostering easy -->
+                            <!-- to make test recording and playback easier -->
                             <runOrder>alphabetical</runOrder>
                         </configuration>
                         <executions>
@@ -707,11 +707,34 @@
         </profile>
 
         <profile>
-            <!-- starts mountebank docker container for playback -->
-            <id>mountebank-play</id>
+            <!-- starts hoverfly docker container for recording -->
+            <id>hoverfly-record</id>
             <build>
                 <plugins>
-
+                    <!-- plugins bound to same phase are executed in the order they appear in pom.xml
+                    https://stackoverflow.com/a/47475213/1469083
+                    so order of post-integration-test is 1. rest-request 2. docker stop -->
+                    <plugin>
+                        <groupId>com.github.cjnygard</groupId>
+                        <artifactId>rest-maven-plugin</artifactId>
+                        <version>0.1.4</version>
+                        <configuration>
+                            <endpoint>http://localhost:8888</endpoint>
+                            <resource>api/v2/simulation</resource>
+                            <method>GET</method>
+                            <outputDir>${project.basedir}/src/test/hoverfly</outputDir>
+                            <outputFilename>simulation.json</outputFilename>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>rest-request</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>rest-request</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
@@ -720,47 +743,55 @@
                         <configuration>
                             <images>
                                 <image>
-                                    <name>%g%a_mountebank</name>
-                                    <build>
-                                        <dockerFileDir>${project.basedir}/src/test/docker</dockerFileDir>
-                                        <filter>@</filter>
-                                    </build>
-                                    <alias>${project.artifactId}-test-mountebank-play</alias>
+                                    <!-- TODO: fix version instead of latest -->
+                                    <name>spectolabs/hoverfly:latest</name>
+                                    <alias>${project.artifactId}-integration-test-hoverfly</alias>
                                     <run>
                                         <namingStrategy>alias</namingStrategy>
-                                        <log>
-                                            <enabled>true</enabled>
-                                            <color>green</color>
-                                        </log>
+                                        <cmd>-capture</cmd>
                                         <ports>
-                                            <port>13000:13000</port>
-                                            <port>13001:13001</port>
+                                            <port>8500:8500</port>
+                                            <port>8888:8888</port>
                                         </ports>
-
-                                        <volumes>
-                                            <bind>
-                                                <volume>${project.basedir}/src/test/mountebank:/imposters</volume>
-                                            </bind>
-                                        </volumes>
-                                        <cmd>--configfile /imposters/imposters.ejs --allowInjection</cmd>
                                         <wait>
-                                            <time>2</time>
+                                            <http>
+                                                <url>http://localhost:8888</url>
+                                                <status>200</status>
+                                            </http>
                                         </wait>
                                     </run>
                                 </image>
                             </images>
                         </configuration>
+                        <executions>
+                            <execution>
+                                <id>start</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
         </profile>
 
         <profile>
-            <!-- starts squid proxy -->
-            <id>proxy</id>
+            <!-- starts hoverfly docker container for playback -->
+            <id>hoverfly-playback</id>
             <build>
                 <plugins>
-
+                    <!-- plugins bound to same phase are executed in the order they appear in pom.xml
+                    https://stackoverflow.com/a/47475213/1469083
+                    order of pre-integration-test is 1. docker start 2. rest PUT simulation.json -->
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
@@ -769,92 +800,70 @@
                         <configuration>
                             <images>
                                 <image>
-                                    <name>%g%a_squid</name>
-                                    <build>
-                                        <dockerFileDir>${project.basedir}/src/test/docker</dockerFileDir>
-                                        <dockerFile>proxy-Dockerfile</dockerFile>
-                                        <filter>@</filter>
-                                    </build>
-                                    <alias>${project.artifactId}-test-proxy</alias>
+                                    <!-- TODO: fix version instead of latest -->
+                                    <name>spectolabs/hoverfly:latest</name>
+                                    <alias>${project.artifactId}-integration-test-hoverfly</alias>
                                     <run>
                                         <namingStrategy>alias</namingStrategy>
-                                        <log>
-                                            <enabled>true</enabled>
-                                            <color>green</color>
-                                        </log>
                                         <ports>
-                                            <port>3128:3128</port>
+                                            <port>8500:8500</port>
+                                            <port>8888:8888</port>
                                         </ports>
-                                    </run>
-                                </image>
-                            </images>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <!-- starts mountebank docker container for recording -->
-            <id>mountebank-record</id>
-            <build>
-                <plugins>
-
-                    <plugin>
-                        <groupId>io.fabric8</groupId>
-                        <artifactId>docker-maven-plugin</artifactId>
-                        <version>0.26.1</version>
-
-                        <configuration>
-                            <images>
-                                <image>
-                                    <name>%g%a_mountebank</name>
-                                    <build>
-                                        <dockerFileDir>${project.basedir}/src/test/docker</dockerFileDir>
-                                        <filter>@</filter>
-                                    </build>
-                                    <alias>${project.artifactId}-test-mountebank</alias>
-                                    <run>
-                                        <namingStrategy>alias</namingStrategy>
-                                        <log>
-                                            <enabled>true</enabled>
-                                            <color>green</color>
-                                        </log>
-                                        <ports>
-                                            <port>2525:2525</port>
-                                            <port>13000:13000</port>
-                                            <port>13001:13001</port>
-                                        </ports>
-                                        <cmd>--allowInjection</cmd>
                                         <wait>
-                                            <time>2</time>
+                                            <http>
+                                                <url>http://localhost:8888</url>
+                                                <status>200</status>
+                                            </http>
                                         </wait>
                                     </run>
                                 </image>
                             </images>
                         </configuration>
-
-                        <!--<executions>-->
-                            <!--<execution>-->
-                                <!--<id>start</id>-->
-                                <!--<phase>pre-integration-test</phase>-->
-                                <!--<goals>-->
-                                    <!--<goal>start</goal>-->
-                                <!--</goals>-->
-                            <!--</execution>-->
-                            <!--<execution>-->
-                                <!--<id>stop</id>-->
-                                <!--<phase>post-integration-test</phase>-->
-                                <!--<goals>-->
-                                    <!--<goal>stop</goal>-->
-                                <!--</goals>-->
-                            <!--</execution>-->
-                        <!--</executions>-->
+                        <executions>
+                            <execution>
+                                <id>start</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.github.cjnygard</groupId>
+                        <artifactId>rest-maven-plugin</artifactId>
+                        <version>0.1.4</version>
+                        <configuration>
+                            <fileset>
+                                <directory>${project.basedir}/src/test/hoverfly</directory>
+                                <includes>
+                                    <include>simulation.json</include>
+                                </includes>
+                            </fileset>
+                            <endpoint>http://localhost:8888</endpoint>
+                            <resource>api/v2/simulation</resource>
+                            <method>PUT</method>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>rest-request</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>rest-request</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
         </profile>
-
 
     </profiles>
     <repositories>
