@@ -48,10 +48,11 @@ import java.util.List;
 import java.util.Map;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
-//import static org.xmlunit.matchers.HasXPathMatcher.hasXPath;
 
 import org.w3c.dom.Node;
 import org.xmlunit.assertj.XmlAssert;
@@ -162,11 +163,10 @@ public class ConsumerGatewayIT {
      */
     @Test
     public void testConsumerGateway2Json() {
-        Map<String, String> headers = new HashMap<>();
-        headers.put(Constants.HTTP_HEADER_ACCEPT, Constants.APPLICATION_JSON);
-        ClientResponse restResponse = sendData(this.urls.get(2), "get", this.urlParams.get(2), headers);
+        ClientResponse restResponse = sendJsonGet(2);
         String data = restResponse.getData();
         assertThat(data, hasJsonPath("$[*].name_fi", hasItem("Helsingin kaupunki")));
+        assertThat(data, hasJsonPath("$[*].name_fi", hasSize(greaterThan(1))));
         assertEquals(CONTENT_TYPE_JSON, restResponse.getContentType());
     }
 
@@ -175,7 +175,7 @@ public class ConsumerGatewayIT {
      */
     @Test
     public void testConsumerGateway2Xml() {
-        ClientResponse restResponse = sendData(this.urls.get(2), "get", this.urlParams.get(2), new HashMap<String, String>());
+        ClientResponse restResponse = sendXmlGet(2);
         String data = restResponse.getData();
         assertEquals(CONTENT_TYPE_XML, restResponse.getContentType());
         HashMap<String, String> prefix2Uri = new HashMap<String, String>();
@@ -204,11 +204,10 @@ public class ConsumerGatewayIT {
      */
     @Test
     public void testConsumerGateway3Json() {
-        String result = "{\"@context\":{\"hiddenLabel\":\"skos:hiddenLabel\",\"prefLabel\":\"skos:prefLabel\",\"skos\":\"http://www.w3.org/2004/02/skos/core#\",\"isothes\":\"http://purl.org/iso25964/skos-thes#\",\"onki\":\"http://schema.onki.fi/onki#\",\"altLabel\":\"skos:altLabel\",\"type\":\"@type\",\"@language\":\"en\",\"uri\":\"@id\",\"results\":{\"@container\":\"@list\",\"@id\":\"onki:results\"}},\"uri\":\"\",\"results\":{\"localname\":\"p19378\",\"prefLabel\":\"cat\",\"vocab\":\"yso\",\"type\":[\"skos:Concept\",\"http://www.yso.fi/onto/yso-meta/Concept\"],\"lang\":\"en\",\"uri\":\"http://www.yso.fi/onto/yso/p19378\"}}";
-        Map<String, String> headers = new HashMap<>();
-        headers.put(Constants.HTTP_HEADER_ACCEPT, Constants.APPLICATION_JSON);
-
-        sendData(this.urls.get(3), "get", this.urlParams.get(3), headers, result, CONTENT_TYPE_JSON);
+        ClientResponse restResponse = sendJsonGet(3);
+        String data = restResponse.getData();
+        assertThat(data, hasJsonPath("$.results.vocab", equalTo("yso")));
+        assertEquals(CONTENT_TYPE_JSON, restResponse.getContentType());
     }
 
     /**
@@ -216,7 +215,6 @@ public class ConsumerGatewayIT {
      */
     @Test
     public void testConsumerGateway3Xml() {
-        // TODO: cleanup others
         ClientResponse restResponse = sendXmlGet(3);
         String data = restResponse.getData();
         assertEquals(CONTENT_TYPE_XML, restResponse.getContentType());
@@ -234,9 +232,7 @@ public class ConsumerGatewayIT {
      */
     @Test
     public void testConsumerGateway4Json() {
-        Map<String, String> headers = new HashMap<>();
-        headers.put(Constants.HTTP_HEADER_ACCEPT, Constants.APPLICATION_JSON);
-        ClientResponse restResponse = sendData(this.urls.get(4), "get", this.urlParams.get(4), headers);
+        ClientResponse restResponse = sendJsonGet(4);
         String data = restResponse.getData();
         assertThat(data, hasJsonPath("$.result.items.organisation.name.value[*].content", hasItem("Kallion kirjasto")));
         assertEquals(CONTENT_TYPE_JSON, restResponse.getContentType());
@@ -310,5 +306,18 @@ public class ConsumerGatewayIT {
     private ClientResponse sendXmlGet(int index) {
         return sendData(this.urls.get(index), "get", this.urlParams.get(index), new HashMap<String, String>());
     }
+
+
+    /**
+     * Execute json get request with parameters from given index
+     * @param index
+     * @return
+     */
+    private ClientResponse sendJsonGet(int index) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put(Constants.HTTP_HEADER_ACCEPT, Constants.APPLICATION_JSON);
+        return sendData(this.urls.get(index), "get", this.urlParams.get(index), headers);
+    }
+
 
 }
