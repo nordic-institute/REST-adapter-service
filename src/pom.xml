@@ -26,6 +26,7 @@
         <java.version>1.8</java.version>
         <jdk.version>1.8</jdk.version>
         <xmlunit.version>2.6.1</xmlunit.version>
+        <failsafe.version>2.19.1</failsafe.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -691,7 +692,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.19.1</version>
+                        <version>${failsafe.version}</version>
                         <configuration>
                             <argLine>${failsafeArgLine}</argLine>
                             <systemProperties>
@@ -771,7 +772,7 @@
                                         <dockerFileDir>${project.basedir}/src/test/docker</dockerFileDir>
                                         <dockerFile>hoverfly-Dockerfile</dockerFile>
                                     </build>
-                                    <alias>${project.artifactId}-integration-test-hoverfly-v2withcacerts</alias>
+                                    <alias>${project.artifactId}-integration-test-hoverfly</alias>
                                     <run>
                                         <namingStrategy>alias</namingStrategy>
                                         <cmd>-capture</cmd>
@@ -809,8 +810,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <!-- TODO: constant -->
-                        <version>2.19.1</version>
+                        <version>${failsafe.version}</version>
                         <configuration>
                             <systemPropertyVariables>
                                 <javax.net.ssl.trustStore>${project.basedir}/src/test/hoverfly/hoverfly-truststore.jks</javax.net.ssl.trustStore>
@@ -840,7 +840,7 @@
                             <images>
                                 <image>
                                     <!-- TODO: fix version instead of latest -->
-                                    <name>spectolabs/hoverfly:latest</name>
+                                    <name>%g%a_hoverfly</name>
                                     <alias>${project.artifactId}-integration-test-hoverfly</alias>
                                     <run>
                                         <namingStrategy>alias</namingStrategy>
@@ -899,6 +899,18 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${failsafe.version}</version>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <javax.net.ssl.trustStore>${project.basedir}/src/test/hoverfly/hoverfly-truststore.jks</javax.net.ssl.trustStore>
+                                <javax.net.ssl.trustStoreType>JKS</javax.net.ssl.trustStoreType>
+                                <javax.net.ssl.trustStorePassword>hoverfly</javax.net.ssl.trustStorePassword>
+                            </systemPropertyVariables>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
