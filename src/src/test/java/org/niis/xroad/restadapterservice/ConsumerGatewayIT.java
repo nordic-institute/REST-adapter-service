@@ -149,10 +149,12 @@ public class ConsumerGatewayIT {
 
         ClientResponse restResponse = sendData(this.urls.get(1), "get", this.urlParams.get(1), new HashMap<String, String>());
         String data = restResponse.getData();
+        LOGGER.info("data from service: " + data);
         assertEquals(CONTENT_TYPE_XML, restResponse.getContentType());
 
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = new Diff(data, expectedResult);
+        LOGGER.info("diff: {}", diff);
         log.debug("diff: {}", diff);
         // diff is "similar" (not identical) even if namespace prefixes and element ordering differ
         assertTrue(diff.similar());
