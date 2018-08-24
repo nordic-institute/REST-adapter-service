@@ -816,6 +816,7 @@
                                 <javax.net.ssl.trustStore>${project.basedir}/src/test/hoverfly/hoverfly-truststore.jks</javax.net.ssl.trustStore>
                                 <javax.net.ssl.trustStoreType>JKS</javax.net.ssl.trustStoreType>
                                 <javax.net.ssl.trustStorePassword>hoverfly</javax.net.ssl.trustStorePassword>
+                                <useHoverflyProducerProxy>true</useHoverflyProducerProxy>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -909,6 +910,7 @@
                                 <javax.net.ssl.trustStore>${project.basedir}/src/test/hoverfly/hoverfly-truststore.jks</javax.net.ssl.trustStore>
                                 <javax.net.ssl.trustStoreType>JKS</javax.net.ssl.trustStoreType>
                                 <javax.net.ssl.trustStorePassword>hoverfly</javax.net.ssl.trustStorePassword>
+                                <useHoverflyProducerProxy>true</useHoverflyProducerProxy>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
