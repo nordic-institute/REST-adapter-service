@@ -22,8 +22,8 @@
  */
 package org.niis.xroad.restadapterservice.endpoint;
 
-import fi.vrk.xrd4j.common.member.ConsumerMember;
-import fi.vrk.xrd4j.common.member.ProducerMember;
+import org.niis.xrd4j.common.member.ConsumerMember;
+import org.niis.xrd4j.common.member.ProducerMember;
 
 import lombok.extern.slf4j.Slf4j;
 

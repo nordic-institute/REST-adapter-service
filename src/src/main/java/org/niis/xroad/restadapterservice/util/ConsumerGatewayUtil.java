@@ -22,11 +22,11 @@
  */
 package org.niis.xroad.restadapterservice.util;
 
-import fi.vrk.xrd4j.common.member.ConsumerMember;
-import fi.vrk.xrd4j.common.member.ProducerMember;
-import fi.vrk.xrd4j.common.security.Encrypter;
-import fi.vrk.xrd4j.common.util.ConfigurationHelper;
-import fi.vrk.xrd4j.common.util.MessageHelper;
+import org.niis.xrd4j.common.member.ConsumerMember;
+import org.niis.xrd4j.common.member.ProducerMember;
+import org.niis.xrd4j.common.security.Encrypter;
+import org.niis.xrd4j.common.util.ConfigurationHelper;
+import org.niis.xrd4j.common.util.MessageHelper;
 import org.niis.xroad.restadapterservice.endpoint.ConsumerEndpoint;
 
 import lombok.extern.slf4j.Slf4j;
