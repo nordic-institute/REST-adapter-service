@@ -328,6 +328,8 @@ mvn clean install -P itest -P hoverfly-record -Dencrypted
 
 ```(REST Adapter integration tests) ----> (Hoverfly) ----> (External API)```
 
+Hoverfly playback and record tests are run so that Provider Gateway sends requests through 
+the Hoverfly proxy. This mode is activated using system property `useHoverflyProducerProxy`.
 
 ### Additional documentation
 
