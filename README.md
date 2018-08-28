@@ -295,6 +295,8 @@ Running integration tests with encryption configuration enabled:
 
 ```mvn clean install -P itest -Dencrypted```
 
+Integration tests are run on port `9898`
+
 ## Mocking external API's for integration tests
 
 Integration tests execute requests against several external API's, such as `http://www.hel.fi/palvelukarttaws/rest/v2/organization/`.

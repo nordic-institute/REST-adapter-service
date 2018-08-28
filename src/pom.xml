@@ -196,6 +196,9 @@
         </developer>
     </developers>
     <build>
+        <filters>
+            <filter>src/main/filters/default.properties</filter>
+        </filters>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -283,6 +286,28 @@
                                     <filtering>false</filtering>
                                 </resource>
                             </resources>
+                            <filters>
+                                <filter>src/main/filters/default.properties</filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-integration-test-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/target/integration-test-profile</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/profiles/${adapter.profile.dir}</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                            <filters>
+                                <filter>src/main/filters/integration-test.properties</filter>
+                            </filters>
                         </configuration>
                     </execution>
                     <execution>
@@ -653,6 +678,9 @@
                     <name>encrypted</name>
                 </property>
             </activation>
+            <properties>
+                <adapter.profile.dir>encrypted</adapter.profile.dir>
+            </properties>
             <build>
                 <resources>
                     <resource>
@@ -675,6 +703,9 @@
                     <name>!encrypted</name>
                 </property>
             </activation>
+            <properties>
+                <adapter.profile.dir>plaintext</adapter.profile.dir>
+            </properties>
             <build>
                 <resources>
                     <resource>
@@ -703,7 +734,15 @@
                                     <name>consumerPath</name>
                                     <value>${project.build.finalName}</value>
                                 </property>
-
+                                <!-- customize spring boot port -->
+                                <property>
+                                    <name>server.port</name>
+                                    <value>9898</value>
+                                </property>
+                                <property>
+                                    <name>propertiesDirectory</name>
+                                    <value>${project.basedir}/target/integration-test-profile</value>
+                                </property>
                             </systemProperties>
                             <encoding>UTF-8</encoding>
                             <!-- to make test recording and playback easier -->
