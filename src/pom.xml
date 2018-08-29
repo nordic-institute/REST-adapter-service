@@ -804,7 +804,6 @@
                         <configuration>
                             <images>
                                 <image>
-                                    <!-- TODO: fix version instead of latest -->
                                     <name>%g%a_hoverfly</name>
                                     <build>
                                         <dockerFileDir>${project.basedir}/src/test/docker</dockerFileDir>
@@ -878,7 +877,6 @@
                         <configuration>
                             <images>
                                 <image>
-                                    <!-- TODO: fix version instead of latest -->
                                     <name>%g%a_hoverfly</name>
                                     <alias>${project.artifactId}-integration-test-hoverfly</alias>
                                     <run>
