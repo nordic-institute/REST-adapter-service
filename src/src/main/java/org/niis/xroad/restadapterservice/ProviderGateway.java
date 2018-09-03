@@ -75,8 +75,6 @@ import java.util.Properties;
 @Slf4j
 public class ProviderGateway extends AbstractAdapterServlet {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProviderGateway.class);
-
     private Properties props;
     private Map<String, ProviderEndpoint> endpoints;
     private Decrypter asymmetricDecrypter;
