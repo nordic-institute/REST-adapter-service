@@ -295,6 +295,44 @@ Running integration tests with encryption configuration enabled:
 
 ```mvn clean install -P itest -Dencrypted```
 
+Integration tests are run on port `9898`
+
+## Mocking external API's for integration tests
+
+Integration tests execute requests against several external API's, such as `http://www.hel.fi/palvelukarttaws/rest/v2/organization/`.
+These external API's may for example suffer from temporary downtime, or have their data changed so that integration tests no longer pass.
+To help with this problem, it is possible to mock external API's by using [Hoverfly](https://hoverfly.readthedocs.io/en/latest/index.html).
+
+```(REST Adapter integration tests) ----> (Hoverfly) --?--> (external API)```
+
+Hoverfly is run in a Docker container. Before using it for integration tests, you need to build the image:
+
+```mvn docker:build -P hoverfly-record```
+
+After that, you can run integration tests so that Hoverfly simulates the external API's. The recorded responses are stored in `src/test/hoverfly/simulation.json`
+
+```
+mvn clean install -P itest -P hoverfly-playback
+or
+mvn clean install -P itest -P hoverfly-playback -Dencrypted
+```
+
+```(REST Adapter integration tests) ----> (Hoverfly)```
+
+To record new versions of responses into `simulation.json`, use profile `hoverfly-record`. This should be done always when integration tests are changed in such a way that
+new or different responses are needed, or when the external API's change. 
+
+```
+mvn clean install -P itest -P hoverfly-record
+or
+mvn clean install -P itest -P hoverfly-record -Dencrypted
+```
+
+```(REST Adapter integration tests) ----> (Hoverfly) ----> (External API)```
+
+Hoverfly playback and record tests are run so that Provider Gateway sends requests through 
+the Hoverfly proxy. This mode is activated using system property `useHoverflyProducerProxy`.
+
 ### Additional documentation
 
 * [Requirements](documentation/Requirements.md)

@@ -1,0 +1,5 @@
+FROM spectolabs/hoverfly:v0.17.4
+
+RUN apt-get update
+RUN apt-get -y install ca-certificates
+

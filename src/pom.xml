@@ -25,6 +25,8 @@
         <log4j.version>1.2.16</log4j.version>
         <java.version>1.8</java.version>
         <jdk.version>1.8</jdk.version>
+        <xmlunit.version>2.6.1</xmlunit.version>
+        <failsafe.version>2.19.1</failsafe.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -123,14 +125,33 @@
         <dependency>
             <groupId>org.xmlunit</groupId>
             <artifactId>xmlunit-core</artifactId>
-            <version>2.2.1</version>
+            <version>${xmlunit.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.xmlunit</groupId>
             <artifactId>xmlunit-matchers</artifactId>
-            <version>2.2.1</version>
+            <version>${xmlunit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-assertj</artifactId>
+            <version>${xmlunit.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path-assert</artifactId>
+            <version>2.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>2.2.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -175,6 +196,9 @@
         </developer>
     </developers>
     <build>
+        <filters>
+            <filter>src/main/filters/default.properties</filter>
+        </filters>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -262,6 +286,28 @@
                                     <filtering>false</filtering>
                                 </resource>
                             </resources>
+                            <filters>
+                                <filter>src/main/filters/default.properties</filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-integration-test-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/target/integration-test-profile</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/profiles/${adapter.profile.dir}</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                            <filters>
+                                <filter>src/main/filters/integration-test.properties</filter>
+                            </filters>
                         </configuration>
                     </execution>
                     <execution>
@@ -632,6 +678,9 @@
                     <name>encrypted</name>
                 </property>
             </activation>
+            <properties>
+                <adapter.profile.dir>encrypted</adapter.profile.dir>
+            </properties>
             <build>
                 <resources>
                     <resource>
@@ -654,6 +703,9 @@
                     <name>!encrypted</name>
                 </property>
             </activation>
+            <properties>
+                <adapter.profile.dir>plaintext</adapter.profile.dir>
+            </properties>
             <build>
                 <resources>
                     <resource>
@@ -670,7 +722,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.19.1</version>
+                        <version>${failsafe.version}</version>
                         <configuration>
                             <argLine>${failsafeArgLine}</argLine>
                             <systemProperties>
@@ -682,8 +734,19 @@
                                     <name>consumerPath</name>
                                     <value>${project.build.finalName}</value>
                                 </property>
+                                <!-- customize spring boot port -->
+                                <property>
+                                    <name>server.port</name>
+                                    <value>9898</value>
+                                </property>
+                                <property>
+                                    <name>propertiesDirectory</name>
+                                    <value>${project.basedir}/target/integration-test-profile</value>
+                                </property>
                             </systemProperties>
                             <encoding>UTF-8</encoding>
+                            <!-- to make test recording and playback easier -->
+                            <runOrder>alphabetical</runOrder>
                         </configuration>
                         <executions>
                             <execution>
@@ -703,6 +766,194 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <!-- starts hoverfly docker container for recording -->
+            <id>hoverfly-record</id>
+            <build>
+                <plugins>
+                    <!-- plugins bound to same phase are executed in the order they appear in pom.xml
+                    https://stackoverflow.com/a/47475213/1469083
+                    so order of post-integration-test is 1. rest-request 2. docker stop -->
+                    <plugin>
+                        <groupId>com.github.cjnygard</groupId>
+                        <artifactId>rest-maven-plugin</artifactId>
+                        <version>0.1.4</version>
+                        <configuration>
+                            <endpoint>http://localhost:8888</endpoint>
+                            <resource>api/v2/simulation</resource>
+                            <method>GET</method>
+                            <outputDir>${project.basedir}/src/test/hoverfly</outputDir>
+                            <outputFilename>simulation.json</outputFilename>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>rest-request</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>rest-request</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.26.1</version>
+
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>%g%a_hoverfly</name>
+                                    <build>
+                                        <dockerFileDir>${project.basedir}/src/test/docker</dockerFileDir>
+                                        <dockerFile>hoverfly-Dockerfile</dockerFile>
+                                    </build>
+                                    <alias>${project.artifactId}-integration-test-hoverfly</alias>
+                                    <run>
+                                        <namingStrategy>alias</namingStrategy>
+                                        <cmd>-capture</cmd>
+                                        <ports>
+                                            <port>8500:8500</port>
+                                            <port>8888:8888</port>
+                                        </ports>
+                                        <wait>
+                                            <http>
+                                                <url>http://localhost:8888</url>
+                                                <status>200</status>
+                                            </http>
+                                        </wait>
+                                    </run>
+                                </image>
+                            </images>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${failsafe.version}</version>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <javax.net.ssl.trustStore>${project.basedir}/src/test/hoverfly/hoverfly-truststore.jks</javax.net.ssl.trustStore>
+                                <javax.net.ssl.trustStoreType>JKS</javax.net.ssl.trustStoreType>
+                                <javax.net.ssl.trustStorePassword>hoverfly</javax.net.ssl.trustStorePassword>
+                                <useHoverflyProducerProxy>true</useHoverflyProducerProxy>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- starts hoverfly docker container for playback -->
+            <id>hoverfly-playback</id>
+            <build>
+                <plugins>
+                    <!-- plugins bound to same phase are executed in the order they appear in pom.xml
+                    https://stackoverflow.com/a/47475213/1469083
+                    order of pre-integration-test is 1. docker start 2. rest PUT simulation.json -->
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.26.1</version>
+
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>%g%a_hoverfly</name>
+                                    <alias>${project.artifactId}-integration-test-hoverfly</alias>
+                                    <run>
+                                        <namingStrategy>alias</namingStrategy>
+                                        <ports>
+                                            <port>8500:8500</port>
+                                            <port>8888:8888</port>
+                                        </ports>
+                                        <wait>
+                                            <http>
+                                                <url>http://localhost:8888</url>
+                                                <status>200</status>
+                                            </http>
+                                        </wait>
+                                    </run>
+                                </image>
+                            </images>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.github.cjnygard</groupId>
+                        <artifactId>rest-maven-plugin</artifactId>
+                        <version>0.1.4</version>
+                        <configuration>
+                            <fileset>
+                                <directory>${project.basedir}/src/test/hoverfly</directory>
+                                <includes>
+                                    <include>simulation.json</include>
+                                </includes>
+                            </fileset>
+                            <endpoint>http://localhost:8888</endpoint>
+                            <resource>api/v2/simulation</resource>
+                            <method>PUT</method>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>rest-request</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>rest-request</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${failsafe.version}</version>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <javax.net.ssl.trustStore>${project.basedir}/src/test/hoverfly/hoverfly-truststore.jks</javax.net.ssl.trustStore>
+                                <javax.net.ssl.trustStoreType>JKS</javax.net.ssl.trustStoreType>
+                                <javax.net.ssl.trustStorePassword>hoverfly</javax.net.ssl.trustStorePassword>
+                                <useHoverflyProducerProxy>true</useHoverflyProducerProxy>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
     </profiles>
     <repositories>
         <repository>
