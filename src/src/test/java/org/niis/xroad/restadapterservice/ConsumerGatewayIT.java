@@ -33,8 +33,6 @@ import org.niis.xrd4j.rest.ClientResponse;
 import org.niis.xrd4j.rest.client.RESTClient;
 import org.niis.xrd4j.rest.client.RESTClientFactory;
 import org.niis.xroad.restadapterservice.util.Constants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -65,8 +63,6 @@ import org.xmlunit.assertj.XmlAssert;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Slf4j
 public class ConsumerGatewayIT {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConsumerGatewayIT.class);
 
     private static final String CONTENT_TYPE_XML = Constants.TEXT_XML + ";" + Constants.CHARSET_UTF8;
     private static final String CONTENT_TYPE_JSON = Constants.APPLICATION_JSON + ";" + Constants.CHARSET_UTF8;
@@ -149,12 +145,11 @@ public class ConsumerGatewayIT {
 
         ClientResponse restResponse = sendData(this.urls.get(1), "get", this.urlParams.get(1), new HashMap<String, String>());
         String data = restResponse.getData();
-        LOGGER.info("data from service: " + data);
+        log.debug("data from service: {}", data);
         assertEquals(CONTENT_TYPE_XML, restResponse.getContentType());
 
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = new Diff(data, expectedResult);
-        LOGGER.info("diff: {}", diff);
         log.debug("diff: {}", diff);
         // diff is "similar" (not identical) even if namespace prefixes and element ordering differ
         assertTrue(diff.similar());
