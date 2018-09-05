@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.0.14-SNAPSHOT 2018-09-05
+- XRDDEV-89 Change xrd4j from snapshot to release
+
 ## 0.0.14-SNAPSHOT 2018-07-05
 - XRDDEV-45 Change copyright owner from VRK to NIIS and artifact package names from `fi.vrk.xroad.restadapterservice` to `org.niis.xroad.restadapterservice`.
 - XRDDEV-38 Change xrd4j dependency from fi.vrk.xr4j to org.niis.xrd4j
