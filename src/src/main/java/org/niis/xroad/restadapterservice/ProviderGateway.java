@@ -32,7 +32,6 @@ import org.niis.xrd4j.common.security.Encrypter;
 import org.niis.xrd4j.common.util.PropertiesUtil;
 import org.niis.xrd4j.common.util.SOAPHelper;
 import org.niis.xrd4j.rest.ClientResponse;
-import org.niis.xrd4j.rest.client.AbstractBodyHandler;
 import org.niis.xrd4j.rest.client.RESTClient;
 import org.niis.xrd4j.rest.client.RESTClientFactory;
 import org.niis.xrd4j.server.AbstractAdapterServlet;
@@ -46,8 +45,6 @@ import org.niis.xroad.restadapterservice.util.ProviderGatewayUtil;
 import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.xml.soap.AttachmentPart;
@@ -251,7 +248,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
 
     protected void setProcessingWrappers(ProviderEndpoint endpoint, AbstractMessage... messages) {
         if (endpoint.isProcessingWrappers() != null) {
-            for(AbstractMessage message : messages) {
+            for (AbstractMessage message : messages) {
                 message.setProcessingWrappers(endpoint.isProcessingWrappers());
             }
         }
