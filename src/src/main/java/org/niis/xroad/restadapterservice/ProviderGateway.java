@@ -23,6 +23,7 @@
 package org.niis.xroad.restadapterservice;
 
 import org.niis.xrd4j.common.exception.XRd4JException;
+import org.niis.xrd4j.common.message.AbstractMessage;
 import org.niis.xrd4j.common.message.ErrorMessage;
 import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xrd4j.common.message.ServiceResponse;
@@ -154,10 +155,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
         log.info("Process \"{}\" service.", serviceId);
 
         // Set request and response wrapper processing
-        if (endpoint.isProcessingWrappers() != null) {
-            request.setProcessingWrappers(endpoint.isProcessingWrappers());
-            response.setProcessingWrappers(endpoint.isProcessingWrappers());
-        }
+        setProcessingWrappers(endpoint, request, response);
         // Deserialize the request
         CustomRequestDeserializer customDeserializer = getRequestDeserializer(endpoint);
         // Deserialize the request
@@ -185,14 +183,11 @@ public class ProviderGateway extends AbstractAdapterServlet {
         // Get HTTP headers for the request
         Map<String, String> headers = ProviderGatewayUtil.generateHttpHeaders(request, endpoint);
         log.debug("Fetch data from service...");
+
         // Create a REST client, endpoint's HTTP verb defines the type
         // of the client that's returned
-        RESTClient restClient;
-        if (USE_PROXY) {
-            restClient = RESTClientFactory.createRESTClient(endpoint.getHttpVerb(), HOVERFLY_PROXY_HOST, HOVERFLY_PROXY_PORT);
-        } else {
-            restClient = RESTClientFactory.createRESTClient(endpoint.getHttpVerb());
-        }
+        RESTClient restClient = getRESTClient(endpoint);
+
         // Get request body
         String requestBody = ProviderGatewayUtil.getRequestBody((Map<String, List<String>>) request.getRequestData());
         // Send request to the service endpoint
@@ -224,11 +219,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
             // needed
             response.setResponseData(data);
             // Set serializer's content type because we need to handle attachments
-            if (endpoint.isResponseEncrypted()) {
-                ((EncryptingXMLServiceResponseSerializer) serializer).setContentType(contentType);
-            } else {
-                ((XMLServiceResponseSerializer) serializer).setContentType(contentType);
-            }
+            ((XMLServiceResponseSerializer) serializer).setContentType(contentType);
         } else {
             // If data is not XML, it must be converted
             if (!RESTGatewayUtil.isXml(contentType)) {
@@ -249,6 +240,21 @@ public class ProviderGateway extends AbstractAdapterServlet {
         serializer.serialize(response, request);
         return response;
 
+    }
+
+    protected RESTClient getRESTClient(ProviderEndpoint endpoint) {
+        if (USE_PROXY) {
+            return RESTClientFactory.createRESTClient(endpoint.getHttpVerb(), HOVERFLY_PROXY_HOST, HOVERFLY_PROXY_PORT);
+        }
+        return RESTClientFactory.createRESTClient(endpoint.getHttpVerb());
+    }
+
+    protected void setProcessingWrappers(ProviderEndpoint endpoint, AbstractMessage... messages) {
+        if (endpoint.isProcessingWrappers() != null) {
+            for(AbstractMessage message : messages) {
+                message.setProcessingWrappers(endpoint.isProcessingWrappers());
+            }
+        }
     }
 
     /**
