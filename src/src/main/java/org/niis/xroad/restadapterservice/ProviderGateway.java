@@ -23,7 +23,6 @@
 package org.niis.xroad.restadapterservice;
 
 import org.niis.xrd4j.common.exception.XRd4JException;
-import org.niis.xrd4j.common.message.AbstractMessage;
 import org.niis.xrd4j.common.message.ErrorMessage;
 import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xrd4j.common.message.ServiceResponse;
@@ -246,11 +245,10 @@ public class ProviderGateway extends AbstractAdapterServlet {
         return RESTClientFactory.createRESTClient(endpoint.getHttpVerb());
     }
 
-    protected void setProcessingWrappers(ProviderEndpoint endpoint, AbstractMessage... messages) {
+    protected void setProcessingWrappers(ProviderEndpoint endpoint, ServiceRequest request, ServiceResponse response) {
         if (endpoint.isProcessingWrappers() != null) {
-            for (AbstractMessage message : messages) {
-                message.setProcessingWrappers(endpoint.isProcessingWrappers());
-            }
+            response.setProcessingWrappers(endpoint.isProcessingWrappers());
+            request.setProcessingWrappers(endpoint.isProcessingWrappers());
         }
     }
 
