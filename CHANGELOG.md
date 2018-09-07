@@ -2,6 +2,7 @@
 
 ## 1.0.0 2018-07-07
 - XRDDEV-91 Fix checkstyle and sonar issues
+- XRDDEV-89 Change xrd4j from snapshot to release
 - XRDDEV-45 Change copyright owner from VRK to NIIS and artifact package names from `fi.vrk.xroad.restadapterservice` to `org.niis.xroad.restadapterservice`.
 - XRDDEV-38 Change xrd4j dependency from fi.vrk.xr4j to org.niis.xrd4j
 - XRDDEV-38 Change Maven download URL to one that does not stop working when new versions are released
