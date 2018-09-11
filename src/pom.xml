@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.niis</groupId>
     <artifactId>rest-adapter-service</artifactId>
-    <version>0.0.14-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>REST Adapter Service</name>
     <description>
         REST Adapter Service component translates between X-Road and REST protocols. X-Road versions 6.4 and above are
