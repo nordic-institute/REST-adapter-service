@@ -3,8 +3,9 @@ obtain the war package from package repository, and for example deploy it to a s
 
 To do this, you can either
 
-1. install Rest Adapter service from package repository to some server or container, and copy `/usr/lib/rest-adapter-service/rest-adapter-service.war` from there 
-2. extract `rest-adapter-service.war` from the installation packages, using commands below
+1. download Rest Adapter service (`rest-adapter-service-x.y.z.war`) from [NIIS's Maven repository](https://artifactory.niis.org/xroad-maven-releases/org/niis/rest-adapter-service/)
+2. install Rest Adapter service from package repository to some server or container, and copy `/usr/lib/rest-adapter-service/rest-adapter-service.war` from there 
+3. extract `rest-adapter-service.war` from the installation packages, using commands below
 
 The commands listed below are examples, and you may need to modify them depending on your exact system configuration.
 The commands were tested using `root` user inside a LXC container - in a real system you need to use `sudo`

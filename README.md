@@ -97,8 +97,8 @@ Do not install Java 9, as Rest Adapter does not yet support it.
 
 Install Rest Adapter Service package from the official repository with
 ```shell
-apt-add-repository -y "deb http://www.nic.funet.fi/pub/csc/x-road/rest-adapter-service/0.0.13/trusty stable main"
-curl http://www.nic.funet.fi/pub/csc/x-road/client/ubuntu-dev-current/packages/dists/stable/palveluvayla@gofore.com.asc | sudo apt-key add -
+apt-add-repository "https://artifactory.niis.org/xroad-extensions-release-deb main"
+curl https://artifactory.niis.org/api/gpg/key/public | apt-key add -
 apt-get update
 apt-get install rest-adapter-service
 ```
@@ -116,8 +116,8 @@ Do not install Java 9, as Rest Adapter does not yet support it.
 
 Install Rest Adapter Service package from the official repository with
 ```shell
-apt-add-repository -y "deb http://www.nic.funet.fi/pub/csc/x-road/rest-adapter-service/0.0.13/trusty stable main"
-curl http://www.nic.funet.fi/pub/csc/x-road/client/ubuntu-dev-current/packages/dists/stable/palveluvayla@gofore.com.asc | sudo apt-key add -
+apt-add-repository "https://artifactory.niis.org/xroad-extensions-release-deb main"
+curl https://artifactory.niis.org/api/gpg/key/public | apt-key add -
 apt-get update
 apt-get install rest-adapter-service
 ```
@@ -131,8 +131,8 @@ On a typical Ubuntu 16.04 system it will be *enabled* (and start during boots).
 
 Install Rest Adapter Service package from the official repository with
 ```shell
-sudo yum-config-manager --add-repo http://www.nic.funet.fi/pub/csc/x-road/rest-adapter-service/0.0.13/rhel/7/stable
-rpm --import http://www.nic.funet.fi/pub/csc/x-road/client/rhel7-dev-current/palveluvayla-sign.gpg
+yum-config-manager --add-repo https://artifactory.niis.org/xroad-extensions-release-rpm
+rpm --import https://artifactory.niis.org/api/gpg/key/public/
 yum install rest-adapter-service
 ```
 or from a locally built RPM-package by replacing the package name with the file path in the command above.
@@ -178,13 +178,15 @@ tail -f /var/log/upstart/rest-adapter-service.log
 
 ## Deploying rest-adapter-service web application into a container
 
-You can either build `rest-adapter-service.war` yourself (built war appears in `target/` directory)
+Rest Adapter service (`rest-adapter-service.war`) can be downloaded from [NIIS's Maven repository](https://artifactory.niis.org/xroad-maven-releases/org/niis/rest-adapter-service/)
+
+In addition, you can also build `rest-adapter-service.war` yourself (built war appears in `target/` directory)
 
 ```shell
 mvn clean install
 ...
-ls -la target/rest-adapter-service-0.0.12-SNAPSHOT.war
--rw-rw-r-- 1 janne janne 22459828 marra  3 16:45 target/rest-adapter-service-0.0.12-SNAPSHOT.war
+ls -la target/rest-adapter-service-1.1.0-SNAPSHOT.war
+-rw-rw-r-- 1 janne janne 22459828 marra  3 16:45 target/rest-adapter-service-1.1.0-SNAPSHOT.war
 ```
 
 or extract war file from a DEB- or an RPM-package which has been downloaded from the packet repository.
