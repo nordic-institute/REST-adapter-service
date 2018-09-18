@@ -178,7 +178,17 @@ tail -f /var/log/upstart/rest-adapter-service.log
 
 ## Deploying rest-adapter-service web application into a container
 
-Rest Adapter service (`rest-adapter-service.war`) can be downloaded from [NIIS's Maven repository](https://artifactory.niis.org/xroad-maven-releases/org/niis/rest-adapter-service/)
+If you do not want to install Rest Adapter as a standalone service from package repository, you can obtain the war 
+package from package repository, and for example deploy it to a standalone Tomcat installation.
+
+Rest Adapter service (`rest-adapter-service.war`) can be downloaded from [NIIS's Maven repository](https://artifactory.niis.org/xroad-maven-releases/org/niis/rest-adapter-service/):
+
+```shell
+mvn org.apache.maven.plugins:maven-dependency-plugin:2.4:get \
+                                        -DremoteRepositories=https://artifactory.niis.org/xroad-maven-releases \
+                                        -Dartifact=org.niis:rest-adapter-service:1.0.0:war \
+                                        -Ddest=./rest-adapter-service.war
+```
 
 In addition, you can also build `rest-adapter-service.war` yourself (built war appears in `target/` directory)
 
@@ -188,9 +198,6 @@ mvn clean install
 ls -la target/rest-adapter-service-1.1.0-SNAPSHOT.war
 -rw-rw-r-- 1 janne janne 22459828 marra  3 16:45 target/rest-adapter-service-1.1.0-SNAPSHOT.war
 ```
-
-or extract war file from a DEB- or an RPM-package which has been downloaded from the packet repository.
-For detailed instructions, [see this page.](documentation/Downloading-WAR-from-repository.md)
 
 To set configuration files location, you need to specify `propertiesDirectory` system property using a container-specific method.
 
