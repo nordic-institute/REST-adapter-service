@@ -35,7 +35,7 @@ src/target/rest-adapter-service-xxx.war
 If running ```mvn clean install``` generates the error presented below, there are two possible solutions.
 
 ```
-[ERROR] Failed to execute goal on project rest-adapter-service: Could not resolve dependencies for project com.pkrete.xrd4j.tools:rest-gateway:war:0.0.3-SNAPSHOT: Failed to collect dependencies at com.pkrete.xrd4j:common:jar:0.0.1: Failed to read artifact descriptor for com.pkrete.xrd4j:common:jar:0.0.1: Could not transfer artifact com.pkrete.xrd4j:common:pom:0.0.1 from/to csc-repo (https://maven.csc.fi/repository/internal/): sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target -> [Help 1]
+[ERROR] Failed to execute goal on project rest-adapter-service: Could not resolve dependencies for project org.niis:rest-adapter-service:war:1.1.0-SNAPSHOT: Failed to collect dependencies at org.niis.xrd4j:common:jar:0.3.0: Failed to read artifact descriptor for org.niis.xrd4j:common:jar:0.3.0: Could not transfer artifact org.niis.xrd4j:common:pom:0.3.0 from/to niis-repo (https://artifactory.niis.org/xroad-maven-releases): sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target -> [Help 1]
 ```
 
 ##### Solution 1
@@ -48,7 +48,7 @@ mvn install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall
 
 ##### Solution 2
 
-Import CSC's Maven repository's certificate as a trusted certificate into ```cacerts``` keystore. See full [instructions](Import-a-Certificate-as-a-Trusted-Certificate.md). CSC's Maven repository's URL is ```https://maven.csc.fi```.
+Import NIIS's Maven repository's certificate as a trusted certificate into ```cacerts``` keystore. See full [instructions](Import-a-Certificate-as-a-Trusted-Certificate.md). NIIS's Maven release repository's URL is ```https://artifactory.niis.org/xroad-maven-releases```.
 
 ### IDE Setup
 
