@@ -1,6 +1,9 @@
 # X-Road REST Adapter Service
 
-REST Adapter Service provides REST support to [X-Road](https://github.com/nordic-institute/X-Road) data exchange layer solution. REST Adapter Service sits between [X-Road](https://github.com/nordic-institute/X-Road) Security Server and a REST client or service ([diagram](https://github.com/nordic-institute/REST-adapter-service/raw/master/images/message-sequence_rest-gateway-0.0.4.png)). The component implements X-Road v4.0 [SOAP profile](https://github.com/nordic-institute/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md) and it's compatible with X-Road v6.4 and above. 
+[![Go to X-Road Community Slack](https://img.shields.io/badge/Go%20to%20Community%20Slack-grey.svg)](https://jointxroad.slack.com/)
+[![Get invited](https://img.shields.io/badge/No%20Slack-Get%20invited-green.svg)](https://x-road.global/join-the-xroad-community)
+
+REST Adapter Service provides REST support to [X-Road](https://github.com/nordic-institute/X-Road) data exchange layer solution. REST Adapter Service sits between [X-Road](https://github.com/nordic-institute/X-Road) Security Server and a REST client or service ([diagram](https://github.com/nordic-institute/REST-adapter-service/raw/master/images/message-sequence_rest-gateway-0.0.4.png)). The component implements X-Road v4.0 [SOAP profile](https://github.com/nordic-institute/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md) and it's compatible with X-Road v6.4 and above.
 
 REST Adapter Service has two parts: _Consumer Gateway_ and _Provider Gateway._ It is possible to use either only Consumer Gateway, only Provider Gateway, or both.
 
@@ -178,7 +181,7 @@ tail -f /var/log/upstart/rest-adapter-service.log
 
 ## Deploying rest-adapter-service web application into a container
 
-If you do not want to install Rest Adapter as a standalone service from package repository, you can obtain the war 
+If you do not want to install Rest Adapter as a standalone service from package repository, you can obtain the war
 package from package repository, and for example deploy it to a standalone Tomcat installation.
 
 Rest Adapter service (`rest-adapter-service.war`) can be downloaded from [NIIS's Maven repository](https://artifactory.niis.org/xroad-maven-releases/org/niis/rest-adapter-service/):
@@ -329,7 +332,7 @@ mvn clean install -P itest -P hoverfly-playback -Dencrypted
 ```(REST Adapter integration tests) ----> (Hoverfly)```
 
 To record new versions of responses into `simulation.json`, use profile `hoverfly-record`. This should be done always when integration tests are changed in such a way that
-new or different responses are needed, or when the external API's change. 
+new or different responses are needed, or when the external API's change.
 
 ```
 mvn clean install -P itest -P hoverfly-record
@@ -339,7 +342,7 @@ mvn clean install -P itest -P hoverfly-record -Dencrypted
 
 ```(REST Adapter integration tests) ----> (Hoverfly) ----> (External API)```
 
-Hoverfly playback and record tests are run so that Provider Gateway sends requests through 
+Hoverfly playback and record tests are run so that Provider Gateway sends requests through
 the Hoverfly proxy. This mode is activated using system property `useHoverflyProducerProxy`.
 
 ### Additional documentation
@@ -370,7 +373,7 @@ For more information look at the [contribution instructions](CONTRIBUTING.md).
 
 The development of REST Adapter Service started as a joint effort between Finland and Estonia in December 2014. Since then the component has been developed by different people and organizations.
 
-* REST Gateway was originally developed by the people listed below (https://github.com/educloudalliance/xroad-rest-gateway) during 2014-2017. 
+* REST Gateway was originally developed by the people listed below (https://github.com/educloudalliance/xroad-rest-gateway) during 2014-2017.
 * The name of the component was changed to REST Adapter Service (https://github.com/vrk-kpa/REST-adapter-service) and it was maintained and further developed by the Finnish Population Register Centre (VRK) during 06/2017-05/2018.
 * In June 2018 it was agreed that Nordic Institute for Interoperability Solutions (NIIS) takes maintenance responsibility.
 
