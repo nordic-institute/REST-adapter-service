@@ -44,6 +44,8 @@ Rest Adapter has two parts: _Consumer Gateway_ and _Provider Gateway._ It is pos
 * (C) using only Provider Gateway
   * when a REST/JSON service needs to be published in X-Road for SOAP/XML clients
 
+**N.B.** Use of alternative A is no longer required since X-Road has a built-in support for consuming and producing REST services starting from version 6.21.0. [More information.](https://github.com/nordic-institute/X-Road/blob/develop/doc/Protocols/pr-rest_x-road_message_protocol_for_rest.md)
+
 The component is tested with X-Road v6.4 and it includes the following features:
 
 * **Provider Gateway** : access REST services (JSON, XML) via WSDL defined X-Road services
