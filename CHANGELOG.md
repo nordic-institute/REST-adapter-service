@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.1.0 2020-09-14
+- XRDDEV-1347 Update dependencies, migrate from Spring Boot 1.x to 2.x, and from Tomcat 8 to 9
+
 ## 1.0.0 2018-07-07
 - XRDDEV-91 Fix checkstyle and sonar issues, update hoverfly simulation
 - XRDDEV-89 Change xrd4j from snapshot to release
