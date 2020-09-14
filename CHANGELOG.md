@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.1.0 202x-xx-xx
+## 1.1.0-SNAPSHOT 202x-xx-xx
 - XRDDEV-1347 Update dependencies, migrate from Spring Boot 1.x to 2.x, and from Tomcat 8 to 9
 
 ## 1.0.0 2018-07-07
