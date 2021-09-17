@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.1.0-SNAPSHOT 2021-09-17
+- Add 3rd party notices
+
 ## 1.1.0-SNAPSHOT 2020-09-14
 - XRDDEV-1347 Update dependencies, migrate from Spring Boot 1.x to 2.x, and from Tomcat 8 to 9
 

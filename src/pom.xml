@@ -278,6 +278,26 @@
                 <version>3.0.2</version>
                 <executions>
                     <execution>
+                        <id>copy-license-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/target/classes/META-INF</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>../</directory>
+                                    <filtering>false</filtering>
+                                    <includes>
+                                        <include>3RD-PARTY-NOTICES.txt</include>
+                                        <include>LICENSE</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>copy-config-resources</id>
                         <phase>generate-resources</phase>
                         <goals>
