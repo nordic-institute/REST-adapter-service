@@ -1,0 +1,47 @@
+---
+excludes:
+  paths:
+  - pattern: "3RD-PARTY-NOTICES.txt"
+    reason: "OTHER"
+    comment: "File including 3rd party license notices."
+
+  - pattern: "images/**"
+    reason: "DOCUMENTATION_OF"
+    comment: "This directory contains images that are not distributed."
+
+  - pattern: "documentation/**"
+    reason: "DOCUMENTATION_OF"
+    comment: "This directory contains documentation that's not distributed."
+
+  scopes:
+  - pattern: "checkstyle"
+    reason: "BUILD_DEPENDENCY_OF"
+    comment: "Packages for code styling checks (testing) only."
+
+  - pattern: "devDependencies"
+    reason: "DEV_DEPENDENCY_OF"
+    comment: "Packages for development only."
+
+  - pattern: "jacocoAgent"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: "Packages for code coverage (testing) only."
+
+  - pattern: "jacocoAnt"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: "Packages for code coverage (testing) only."
+
+  - pattern: "test.*"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: "Packages for testing only."
+
+  - pattern: "annotationProcessor"
+    reason: "DEV_DEPENDENCY_OF"
+    comment: "Packages for development only."
+
+  - pattern: "compileClasspath"
+    reason: "DEV_DEPENDENCY_OF"
+    comment: "Packages for development only."
+
+  - pattern: "compileOnly"
+    reason: "DEV_DEPENDENCY_OF"
+    comment: "Packages for development only."
