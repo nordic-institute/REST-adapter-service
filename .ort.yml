@@ -45,3 +45,13 @@ excludes:
   - pattern: "compileOnly"
     reason: "DEV_DEPENDENCY_OF"
     comment: "Packages for development only."
+
+resolutions:
+  rule_violations:
+    - message: "commercial license LicenseRef-scancode-proprietary-license in Maven:org.aspectj:aspectjweaver:1.9.6."
+      reason: "LICENSE_ACQUIRED_EXCEPTION"
+      comment: "These files are used as per the license terms and therefore license is acquired, that is used within Python, compiled Python, or other languages (such as C) wherein the modified or derived code is exclusively imported into a Python module."
+
+    - message: "proprietary-free license LicenseRef-scancode-efsl-1.0 in Maven:jakarta.annotation:jakarta.annotation-api:1.3.5."
+      reason: "LICENSE_ACQUIRED_EXCEPTION"
+      comment: "These specification files, to the extent used, are not modified and therefore used as per the license."
