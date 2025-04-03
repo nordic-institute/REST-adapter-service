@@ -43,6 +43,9 @@ Icon
 Thumbs.db
 ehthumbs.db
 
+# VS Code
+.vscode/
+
 # Folder config file
 Desktop.ini
 
@@ -59,6 +62,13 @@ $RECYCLE.BIN/
 src/target/
 src/.extract/
 
+# Test
+src/tomcat/
+
 .idea
 src/rest-gateway.iml
 *.iml
+
+# gradle build
+build/
+
