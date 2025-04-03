@@ -69,7 +69,7 @@ src/tomcat/
 src/rest-gateway.iml
 *.iml
 
-# gradle build
+# build
 build/
-src/.gradle/
-
+src/.mvn
+src/.gradle
