@@ -5,7 +5,7 @@
 plugins {
     `java-library`
     `maven-publish`
-    `war`
+    // `war`
 }
 
 repositories {
@@ -23,6 +23,9 @@ repositories {
     }
 }
 
+// val buildProfile: String? by project  
+
+// apply(from = "profile-${buildProfile ?: "itest"}.gradle.kts")  
 
 dependencies {
     implementation(libs.org.springframework.boot.spring.boot.starter.web) 
@@ -38,11 +41,14 @@ dependencies {
         }
         // include (group="org.assertj", module="assertj-core", version="3.16.1")
     }
+    implementation(libs.org.projectlombok.lombok)
+    // implementation("org.slf4j:slf4j-log4j12:1.7.29")
     // implementation("org.xmlunit.xmlunit.assertj:org.assertj:assertj-core") {
     //     version {
     //         strictly("3.16.1")
     //     }
     // }
+    annotationProcessor(libs.org.projectlombok.lombok)
     testImplementation(libs.org.springframework.boot.spring.boot.starter.test) {
         exclude (group= "com.vaadin.external.google", module= "android-json")
     }
@@ -56,9 +62,10 @@ dependencies {
     testImplementation(libs.org.xmlunit.xmlunit.matchers)
     testImplementation(libs.com.jayway.jsonpath.json.path.assert)
     testImplementation(libs.com.jayway.jsonpath.json.path)
-    providedCompile(libs.org.springframework.boot.spring.boot.starter.tomcat)
-    providedCompile(libs.org.apache.tomcat.embed.tomcat.embed.jasper)
-    providedCompile(libs.org.projectlombok.lombok)
+    compileOnly(libs.org.springframework.boot.spring.boot.starter.tomcat)
+    compileOnly(libs.org.apache.tomcat.embed.tomcat.embed.jasper)
+    // annotationProcessor(libs.org.projectlombok)
+
 }
 
 group = "org.niis"

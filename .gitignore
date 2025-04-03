@@ -71,4 +71,5 @@ src/rest-gateway.iml
 
 # gradle build
 build/
+src/.gradle/
 
