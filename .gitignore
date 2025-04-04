@@ -70,6 +70,6 @@ src/rest-gateway.iml
 *.iml
 
 # build
-build/
-src/.mvn
+src/build
 src/.gradle
+src/.mvn
