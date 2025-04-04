@@ -4,7 +4,7 @@
 
 plugins {
     `java-library`
-    `maven-publish`
+    // `maven-publish`
     // `war`
 }
 
@@ -23,13 +23,27 @@ repositories {
     }
 }
 
-// val buildProfile: String? by project  
+ext {
+    set("xrd4j.version", "0.3.0")
+    set("java.version", "1.8")
+    set("jdk.version", "1.8")
+    set("xmlunit.version", "2.7.0")
+    set("failsafe.version", "2.19.1")
+    set("project.build.sourceEncoding", "UTF-8")
+    set("project.build.resourceEncoding", "UTF-8")
+    set("project.reporting.outputEncoding", "UTF-8")
+    set("tomcat.version", "9.0.37")
+    set("app.home", "/var/lib/tomcat/webapps")
+    // set("sonar.junit.reportPaths", "target/failsafe-reports,target/surefire-reports")
+    set("server.port","9898")
+}
 
-// apply(from = "profile-${buildProfile ?: "itest"}.gradle.kts")  
 
 dependencies {
     implementation(libs.org.springframework.boot.spring.boot.starter.web) 
     implementation(libs.org.springframework.boot.spring.boot.starter.aop)
+    implementation(libs.org.springframework.boot.spring.boot.starter.tomcat)
+    implementation(libs.org.projectlombok.lombok)
     implementation(libs.org.niis.xrd4j.common)
     implementation(libs.org.niis.xrd4j.client)
     implementation(libs.org.niis.xrd4j.server)
@@ -39,19 +53,12 @@ dependencies {
             implementation("org.assertj:assertj-core:3.16.1")
             implementation("net.bytebuddy:byte-buddy:1.10.5")
         }
-        // include (group="org.assertj", module="assertj-core", version="3.16.1")
     }
-    implementation(libs.org.projectlombok.lombok)
-    // implementation("org.slf4j:slf4j-log4j12:1.7.29")
-    // implementation("org.xmlunit.xmlunit.assertj:org.assertj:assertj-core") {
-    //     version {
-    //         strictly("3.16.1")
-    //     }
-    // }
     annotationProcessor(libs.org.projectlombok.lombok)
     testImplementation(libs.org.springframework.boot.spring.boot.starter.test) {
         exclude (group= "com.vaadin.external.google", module= "android-json")
     }
+    testImplementation(libs.org.apache.tomcat.embed.tomcat.embed.jasper)
     testImplementation(libs.com.github.tomakehurst.wiremock)
     testImplementation(libs.commons.io.commons.io)
     testImplementation(libs.com.github.stefanbirkner.system.rules)
@@ -62,9 +69,7 @@ dependencies {
     testImplementation(libs.org.xmlunit.xmlunit.matchers)
     testImplementation(libs.com.jayway.jsonpath.json.path.assert)
     testImplementation(libs.com.jayway.jsonpath.json.path)
-    compileOnly(libs.org.springframework.boot.spring.boot.starter.tomcat)
-    compileOnly(libs.org.apache.tomcat.embed.tomcat.embed.jasper)
-    // annotationProcessor(libs.org.projectlombok)
+    testAnnotationProcessor(libs.org.projectlombok.lombok)
 
 }
 
@@ -73,11 +78,11 @@ version = "1.1.0-SNAPSHOT"
 description = "REST Adapter Service"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
-publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
-    }
-}
+// publishing {
+//     publications.create<MavenPublication>("maven") {
+//         from(components["java"])
+//     }
+// }
 
 tasks.withType<JavaCompile>() {
     options.encoding = "UTF-8"
@@ -85,4 +90,33 @@ tasks.withType<JavaCompile>() {
 
 tasks.withType<Javadoc>() {
     options.encoding = "UTF-8"
+}
+
+
+tasks.test {
+    // useJUnitPlatform()
+    // exclude ("/org/niis/xroad/restadapterservice/*")
+  
+    include("org/niis/xroad/restadapterservice/util/*")
+}
+
+tasks.processTestResources {
+    // Include and filter `application-test-properties/*`
+    filesMatching("application-test-properties/*") {
+        expand(project.properties) // Enable filtering
+    }
+    
+        
+
+    // // Include `application-test-keys/*` without filtering
+    // filesMatching("application-test-keys/*") {
+    //     filteringCharset = null // Disable filtering
+    // }
+
+    // Exclude `application-test-properties/*` and `application-test-keys/*` from other resources
+    // exclude("application-test-properties/*", "application-test-keys/*")
+    // from("src/test/ressources/application-test-properties") {
+    //     include("**/*.properties")
+    // }
+    // info("$buildDir/resources/test/application-test-")
 }
