@@ -12,7 +12,7 @@
         supported.
     </description>
     <inceptionYear>2018</inceptionYear>
-    <url>https://github.com/nordic-institute/REST-adapter-service</url>
+    <url>https://github.com/nordic-institute/REST-adapter-service</url> 
     <packaging>war</packaging>
     <parent>
         <groupId>org.springframework.boot</groupId>

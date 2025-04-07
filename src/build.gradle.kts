@@ -5,26 +5,21 @@
 
 import java.util.Properties;
 
-plugins {
+plugins {   
     `java-library`
-    // `maven-publish`
-    // `war`
+    `application`
+    `maven-publish`
+    java
+    // id("org.springframework.boot") version "3.4.4"    
+    // id("io.spring.dependency-management")
+    
 }
 
-repositories {
-    mavenLocal()
-    maven {
-        url = uri("https://artifactory.niis.org/xroad-maven-releases")
-    }
 
-    maven {
-        url = uri("https://artifactory.niis.org/xroad-maven-snapshots")
-    }
-
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
+application {
+	mainClass.set("com.example.ExampleApplication")
 }
+
 
 ext {
     set("xrd4j.version", "0.3.0")
@@ -81,11 +76,47 @@ version = "1.1.0-SNAPSHOT"
 description = "REST Adapter Service"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
-// publishing {
-//     publications.create<MavenPublication>("maven") {
-//         from(components["java"])
-//     }
-// }
+publishing {
+    publications {
+        create<MavenPublication>("rest-adaper-service-extension") {
+            from(components["java"])
+
+            pom {
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("http://www.opensource.org/licenses/mit-license.php")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git@github.com:nordic-institute/REST-adapter-service.git")
+                    developerConnection.set("scm:git:git@github.com:nordic-institute/REST-adapter-service.git")
+                    url.set("https://github.com/nordic-institute/REST-adapter-service.git")
+                }
+                developers {
+                    developer {
+                        id.set("niis")
+                        name.set("Nordic Institute for Interoperability Solutions (NIIS)")
+                        roles.set(listOf("architect", "developer"))
+                        timezone.set("+2")
+                    }
+                    developer {
+                        id.set("vrk")
+                        name.set("Population Register Centre (VRK)")
+                        roles.set(listOf("architect", "developer"))
+                        timezone.set("+2")
+                    }
+                    developer {
+                        id.set("petkivim")
+                        name.set("Petteri Kivimäki")
+                        roles.set(listOf("architect", "developer"))
+                        timezone.set("+2")
+                    }
+                }
+            }
+        }
+    }
+}
 
 tasks.withType<JavaCompile>() {
     options.encoding = "UTF-8"
@@ -143,13 +174,15 @@ tasks.processTestResources {
 }
 
 tasks.jar {
+    archiveBaseName.set("rest-adapter-service")
     manifest {
-        attributes["Main-Class"] = "org.niis"
+        attributes["Main-Class"] = "org.niis.xroad.restadapterservice.Application"
     }
+    // mainClass.set("org.niis.xroad.restadapterservice.Application")
 
     // archiveBaseName.set("my-kotlin-app")
     // archiveVersion.set(project.version.toString())
 
-    // Include compiled classes and resources
-    from(sourceSets.main.get().output)
+    // // Include compiled classes and resources
+    // from(sourceSets.main.get().output)
 }
