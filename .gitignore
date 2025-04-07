@@ -63,7 +63,7 @@ src/target/
 src/.extract/
 
 # Test
-src/tomcat/
+src/tomcat
 
 .idea
 src/rest-gateway.iml
