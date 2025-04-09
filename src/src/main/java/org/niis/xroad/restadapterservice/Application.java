@@ -22,6 +22,7 @@
  */
 package org.niis.xroad.restadapterservice;
 
+import org.niis.xrd4j.server.AbstractAdapterServlet;
 import org.niis.xroad.restadapterservice.filter.ConsumerURIFilter;
 
 import org.springframework.boot.SpringApplication;
@@ -32,7 +33,8 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.DispatcherType;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.http.HttpServlet;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -50,21 +52,23 @@ public class Application extends SpringBootServletInitializer {
 
     @Bean
     public ServletRegistrationBean consumerGatewayBean() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(new ConsumerGateway(), "/Consumer/*");
+        ServletRegistrationBean<ConsumerGateway> bean = new ServletRegistrationBean<ConsumerGateway>(
+                new ConsumerGateway(), "/Consumer/*");
         bean.setLoadOnStartup(1);
         return bean;
     }
 
     @Bean
     public ServletRegistrationBean providerGatewayBean() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(new ProviderGateway(), "/Provider");
+        ServletRegistrationBean<ProviderGateway> bean = new ServletRegistrationBean<ProviderGateway>(
+                new ProviderGateway(), "/Provider");
         bean.setLoadOnStartup(1);
         return bean;
     }
 
     @Bean
     public FilterRegistrationBean consumerURIFilterBean() {
-        FilterRegistrationBean bean = new FilterRegistrationBean();
+        FilterRegistrationBean<ConsumerURIFilter> bean = new FilterRegistrationBean();
         bean.setFilter(new ConsumerURIFilter());
         bean.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST));
         bean.setUrlPatterns(Arrays.asList("/Consumer/*"));

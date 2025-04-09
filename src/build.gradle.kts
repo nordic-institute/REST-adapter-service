@@ -46,21 +46,18 @@ ext {
 // }
 
 dependencies {
-    implementation(libs.org.springframework.boot.spring.boot.starter.web) 
-    implementation(libs.org.springframework.boot.spring.boot.starter.aop)
-    implementation(libs.org.springframework.boot.spring.boot.starter.tomcat)
+        // implementation(libs.org.springframework.boot.spring.boot.starter.web)
+    implementation("org.springframework.boot:spring-boot-starter-web:3.4.3") 
+        // implementation(libs.org.springframework.boot.spring.boot.starter.aop)
+    implementation("org.springframework.boot:spring-boot-starter-aop:3.3.5")
+        // implementation(libs.org.springframework.boot.spring.boot.starter.tomcat)
+    implementation("org.springframework.boot:spring-boot-starter-tomcat:3.4.4")
+
+   
+
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
-    // implementation(files("$projectDir/../../xrd4j/src/common/build/libs/common-0.7.0-SNAPSHOT.jar"))
-    // implementation(files("$projectDir/../../xrd4j/src/client/build/libs/client-0.7.0-SNAPSHOT.jar"))
-    // implementation(files("$projectDir/../../xrd4j/src/rest/build/libs/rest-0.7.0-SNAPSHOT.jar"))
-    // implementation(files("$projectDir/../../xrd4j/src/server/build/libs/server-0.7.0-SNAPSHOT.jar"))
-    // implementation("com.springsource.javax.xml.soap:com.springsource.javax.xml.soap:1.3.0")
-
-    // implementation(files("$projectDir/../../xrd4j/src/common/build/libs/common-0.7.0-SNAPSHOT-sources.jar"))
-    // implementation(files("$projectDir/../../xrd4j/src/client/build/libs/client-0.7.0-SNAPSHOT-sources.jar"))
-    // implementation(files("$projectDir/../../xrd4j/src/rest/build/libs/rest-0.7.0-SNAPSHOT-sources.jar"))
-    // implementation(files("$projectDir/../../xrd4j/src/server/build/libs/server-0.7.0-SNAPSHOT-sources.jar"))
+    
     implementation("org.niis.xrd4j:common:0.6.0")
     implementation("org.niis.xrd4j:client:0.6.0")
     implementation("org.niis.xrd4j:server:0.6.0")
@@ -72,7 +69,8 @@ dependencies {
             implementation("net.bytebuddy:byte-buddy:1.10.5")
         }
     }
-    implementation("jakarta.xml.soap:jakarta.xml.soap-api:3.0.0")
+    // implementation("jakarta.xml.soap:jakarta.xml.soap-api:3.0.0")
+    // implementation("jakarta.servlet:jakarta.servlet-api:6.1.0")
     testImplementation(libs.org.springframework.boot.spring.boot.starter.test) {
         exclude (group= "com.vaadin.external.google", module= "android-json")
     }

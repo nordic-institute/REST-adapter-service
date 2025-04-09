@@ -46,7 +46,7 @@ import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 import jakarta.xml.soap.AttachmentPart;
 import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPElement;
@@ -510,4 +510,5 @@ public class ProviderGateway extends AbstractAdapterServlet {
         }
 
     }
+
 }

@@ -47,10 +47,10 @@ import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.xml.soap.AttachmentPart;
 import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPElement;
