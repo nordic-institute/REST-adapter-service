@@ -30,9 +30,11 @@ import org.niis.xrd4j.common.security.Encrypter;
 import org.niis.xrd4j.common.security.SymmetricDecrypter;
 import org.niis.xrd4j.common.security.SymmetricEncrypter;
 import org.niis.xrd4j.common.util.MessageHelper;
+import org.niis.xroad.restadapterservice.ProviderGateway;
 import org.niis.xroad.restadapterservice.endpoint.AbstractEndpoint;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPException;
@@ -53,8 +55,9 @@ import java.util.Properties;
  *
  * @author Petteri Kivimäki
  */
-@Slf4j
 public final class RESTGatewayUtil {
+
+    private static final Logger log = LoggerFactory.getLogger(RESTGatewayUtil.class);
 
     public static final int DEFAULT_KEY_LENGTH = 128;
 

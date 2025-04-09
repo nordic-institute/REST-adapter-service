@@ -49,7 +49,7 @@ dependencies {
     implementation(libs.org.springframework.boot.spring.boot.starter.web) 
     implementation(libs.org.springframework.boot.spring.boot.starter.aop)
     implementation(libs.org.springframework.boot.spring.boot.starter.tomcat)
-    implementation("org.projectlombok:lombok:1.18.30")
+    compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     // implementation(files("$projectDir/../../xrd4j/src/common/build/libs/common-0.7.0-SNAPSHOT.jar"))
     // implementation(files("$projectDir/../../xrd4j/src/client/build/libs/client-0.7.0-SNAPSHOT.jar"))

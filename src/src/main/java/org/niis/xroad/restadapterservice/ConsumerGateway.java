@@ -44,7 +44,8 @@ import org.niis.xroad.restadapterservice.util.Constants;
 import org.niis.xroad.restadapterservice.util.ConsumerGatewayUtil;
 import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -76,8 +77,9 @@ import java.util.Properties;
  *
  * @author Petteri Kivimäki
  */
-@Slf4j
 public class ConsumerGateway extends HttpServlet {
+
+    private static final Logger log = LoggerFactory.getLogger(ConsumerGateway.class);
 
     public static final String JSON_CONVERSION_WRAPPER_ELEMENT = "jsonWrapperProperty";
     private Properties props;

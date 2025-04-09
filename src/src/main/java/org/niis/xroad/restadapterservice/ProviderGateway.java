@@ -43,7 +43,8 @@ import org.niis.xroad.restadapterservice.util.Constants;
 import org.niis.xroad.restadapterservice.util.ProviderGatewayUtil;
 import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import jakarta.xml.soap.AttachmentPart;
@@ -69,9 +70,9 @@ import java.util.Properties;
  *
  * @author Petteri Kivimäki
  */
-@Slf4j
 public class ProviderGateway extends AbstractAdapterServlet {
 
+    private static final Logger log = LoggerFactory.getLogger(ProviderGateway.class);
     private Properties props;
     private Map<String, ProviderEndpoint> endpoints;
     private Decrypter asymmetricDecrypter;

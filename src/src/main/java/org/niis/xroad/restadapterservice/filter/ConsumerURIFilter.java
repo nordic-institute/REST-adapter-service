@@ -22,7 +22,9 @@
  */
 package org.niis.xroad.restadapterservice.filter;
 
-import lombok.extern.slf4j.Slf4j;
+import org.niis.xroad.restadapterservice.ProviderGateway;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -42,8 +44,9 @@ import java.io.IOException;
  *
  * @author Petteri Kivimäki
  */
-@Slf4j
 public class ConsumerURIFilter implements Filter {
+
+    private static final Logger log = LoggerFactory.getLogger(ConsumerURIFilter.class);
 
     @Override
     public void init(FilterConfig fc) throws ServletException {

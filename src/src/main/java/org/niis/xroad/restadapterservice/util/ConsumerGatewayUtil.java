@@ -27,9 +27,11 @@ import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.security.Encrypter;
 import org.niis.xrd4j.common.util.ConfigurationHelper;
 import org.niis.xrd4j.common.util.MessageHelper;
+import org.niis.xroad.restadapterservice.ProviderGateway;
 import org.niis.xroad.restadapterservice.endpoint.ConsumerEndpoint;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Properties;
@@ -42,12 +44,13 @@ import java.util.regex.Pattern;
  *
  * @author Petteri Kivimäki
  */
-@Slf4j
 public final class ConsumerGatewayUtil {
 
+    private static final Logger log = LoggerFactory.getLogger(ConsumerGatewayUtil.class);
+
     /**
-     * This a utility class providing only static methods which is why it should
-     * not be initiated.
+     * This a utility class providing only static methods which is why it should not
+     * be initiated.
      */
     private ConsumerGatewayUtil() {
 
@@ -55,8 +58,8 @@ public final class ConsumerGatewayUtil {
 
     /**
      * Goes through the given properties and extracts all the defined consumer
-     * endpoints. Returns a map containing service id - consumer endpoint
-     * key-value pairs.
+     * endpoints. Returns a map containing service id - consumer endpoint key-value
+     * pairs.
      *
      * @param endpoints         consumer properties
      * @param gatewayProperties REST Consumer Gateway general properties
@@ -118,8 +121,7 @@ public final class ConsumerGatewayUtil {
     }
 
     /**
-     * Extracts properties common for consumer endpoints from the given
-     * properties.
+     * Extracts properties common for consumer endpoints from the given properties.
      *
      * @param key       property key
      * @param endpoints list of configured endpoints read from properties
@@ -165,8 +167,8 @@ public final class ConsumerGatewayUtil {
      * variable.
      *
      * @param endpoint ConsumerEndpoint object
-     * @return true if and only if creating ConsumerMember object and
-     * ProducerMember objects succeeded; otherwise false
+     * @return true if and only if creating ConsumerMember object and ProducerMember
+     *         objects succeeded; otherwise false
      */
     protected static boolean setConsumerAndProducer(ConsumerEndpoint endpoint) {
         // Create ProducerMember object
@@ -189,14 +191,18 @@ public final class ConsumerGatewayUtil {
      */
     private static void setDefaultValues(ConsumerEndpoint endpoint, Properties gatewayProperties) {
         // Initialize endpoint properties to those defined in gateway properties
-        endpoint.setNamespaceDeserialize(gatewayProperties.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE));
-        endpoint.setNamespaceSerialize(gatewayProperties.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE));
+        endpoint.setNamespaceDeserialize(
+                gatewayProperties.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE));
+        endpoint.setNamespaceSerialize(
+                gatewayProperties.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE));
         endpoint.setPrefix(gatewayProperties.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE));
         if (gatewayProperties.containsKey(Constants.ENDPOINT_PROPS_WRAPPERS)) {
-            endpoint.setProcessingWrappers(MessageHelper.strToBool(gatewayProperties.getProperty(Constants.ENDPOINT_PROPS_WRAPPERS)));
+            endpoint.setProcessingWrappers(
+                    MessageHelper.strToBool(gatewayProperties.getProperty(Constants.ENDPOINT_PROPS_WRAPPERS)));
         }
         if (gatewayProperties.containsKey(Constants.CONSUMER_PROPS_CONVERT_POST)) {
-            endpoint.setConvertPost(MessageHelper.strToBool(gatewayProperties.getProperty(Constants.CONSUMER_PROPS_CONVERT_POST)));
+            endpoint.setConvertPost(
+                    MessageHelper.strToBool(gatewayProperties.getProperty(Constants.CONSUMER_PROPS_CONVERT_POST)));
         }
 
         // Set default HTTP verb
@@ -222,7 +228,8 @@ public final class ConsumerGatewayUtil {
             String keyMod = key.replaceAll("\\{" + Constants.PARAM_RESOURCE_ID + "\\}", "([\\\\w\\\\-]+?)");
             log.trace("Modified key used for comparison : \"{}\".", keyMod);
             if (serviceId.matches(keyMod)) {
-                log.debug("Found partial match by service id. Request value : \"{}\", matching value : \"{}\".", serviceId, key);
+                log.debug("Found partial match by service id. Request value : \"{}\", matching value : \"{}\".",
+                        serviceId, key);
                 ConsumerEndpoint endpoint = entry.getValue();
                 // Parse resource id and set it to endpoint
                 parseResourceId(key, endpoint, serviceId);
@@ -234,10 +241,10 @@ public final class ConsumerGatewayUtil {
     }
 
     /**
-     * Parses the resource id from the given service id and sets endpoint's
-     * resource id variable. E.g. key is "GET /myhost.com/service/{resourceId}"
-     * and service id is "GET /myhost.com/service/123". Based on these two
-     * strings we can parse the resource id "123" from the service id.
+     * Parses the resource id from the given service id and sets endpoint's resource
+     * id variable. E.g. key is "GET /myhost.com/service/{resourceId}" and service
+     * id is "GET /myhost.com/service/123". Based on these two strings we can parse
+     * the resource id "123" from the service id.
      *
      * @param key       service identifier as a String from properties
      * @param endpoint  Endpoint object representing the identifier
@@ -259,8 +266,8 @@ public final class ConsumerGatewayUtil {
     }
 
     /**
-     * Rewrites all the URLs in the responseStr that are matching the
-     * resourcePath to point the Consumer Gateway servlet.
+     * Rewrites all the URLs in the responseStr that are matching the resourcePath
+     * to point the Consumer Gateway servlet.
      *
      * @param servletUrl     URL of Consumer Gateway serlvet
      * @param pathToResource path that's rewritten to point the Consumer Gateway
@@ -273,7 +280,8 @@ public final class ConsumerGatewayUtil {
         try {
             // Remove "/{resourceId}" from resource path, and omit
             // first and last slash ('/') character
-            String resourcePath = pathToResource.substring(1, pathToResource.length() - 1).replaceAll("/\\{" + Constants.PARAM_RESOURCE_ID + "\\}", "");
+            String resourcePath = pathToResource.substring(1, pathToResource.length() - 1)
+                    .replaceAll("/\\{" + Constants.PARAM_RESOURCE_ID + "\\}", "");
             log.debug("Resourse URL that's replaced with Consumer Gateway URL : \"http(s)://{}\".", resourcePath);
             log.debug("New resource URL : \"{}{}\".", servletUrl, resourcePath);
             // Modify the response
@@ -292,7 +300,7 @@ public final class ConsumerGatewayUtil {
      *
      * @param endpoint ConsumerEndpoint object
      * @return true if and only if creating ConsumerMember object succeeded;
-     * otherwise false
+     *         otherwise false
      */
     protected static boolean setConsumerMember(ConsumerEndpoint endpoint) {
         ConsumerMember consumer = ConfigurationHelper.parseConsumerMember(endpoint.getClientId());
@@ -312,7 +320,7 @@ public final class ConsumerGatewayUtil {
      *
      * @param endpoint ConsumerEndpoint object
      * @return true if and only if creating ProducerMember object succeeded;
-     * otherwise false
+     *         otherwise false
      */
     protected static boolean setProducerMember(ConsumerEndpoint endpoint) {
         ProducerMember producer = ConfigurationHelper.parseProducerMember(endpoint.getServiceId());
@@ -330,8 +338,8 @@ public final class ConsumerGatewayUtil {
      * information is not in the configuration file. Resource path is used as
      * service id.
      *
-     * @param props          consumer gateway properties that contain default namespace
-     *                       and prefix
+     * @param props          consumer gateway properties that contain default
+     *                       namespace and prefix
      * @param pathToResource resource path that was called, used as service id
      * @return ConsumerEndpoint object
      */
@@ -377,8 +385,8 @@ public final class ConsumerGatewayUtil {
     /**
      * Removes response tag and its namespace prefixes from the given response
      * message. All the response tag's namespace prefixes are removed from the
-     * children. Response tag can be simple \<response\> or prefixed with
-     * service name \<serviceNameResponse\>.
+     * children. Response tag can be simple \<response\> or prefixed with service
+     * name \<serviceNameResponse\>.
      *
      * @param message response message
      * @return children of the response tag
@@ -411,22 +419,21 @@ public final class ConsumerGatewayUtil {
     }
 
     /**
-     * Checks and validates the properties related to encryption. The method
-     * checks that all the necessary private and public keys exist and are
-     * accessible. If everything is OK, true is returned. If there's a problem
-     * with one or more keys and/or private key is was not checked, false is
-     * returned.
+     * Checks and validates the properties related to encryption. The method checks
+     * that all the necessary private and public keys exist and are accessible. If
+     * everything is OK, true is returned. If there's a problem with one or more
+     * keys and/or private key is was not checked, false is returned.
      *
      * @param props                    general properties
      * @param endpoints                list of configured endpoints
-     * @param asymmetricEncrypterCache cache variable for asymmetric encrypters.
-     *                                 All the asymmetric encrypters that are successfully checked are added to
-     *                                 the cache.
-     * @return true if everything is OK. False if there's a problem with one or
-     * more keys and/or private key is was not checked.
+     * @param asymmetricEncrypterCache cache variable for asymmetric encrypters. All
+     *                                 the asymmetric encrypters that are
+     *                                 successfully checked are added to the cache.
+     * @return true if everything is OK. False if there's a problem with one or more
+     *         keys and/or private key is was not checked.
      */
     public static boolean checkEncryptionProperties(Properties props, Map<String, ConsumerEndpoint> endpoints,
-                                                    Map<String, Encrypter> asymmetricEncrypterCache) {
+            Map<String, Encrypter> asymmetricEncrypterCache) {
         log.info("Check encryption properties.");
         boolean result = true;
         boolean mustCheckPrivateKey = false;

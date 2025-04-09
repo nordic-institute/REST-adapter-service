@@ -24,7 +24,6 @@ package org.niis.xroad.restadapterservice;
 
 import org.niis.xroad.restadapterservice.filter.ConsumerURIFilter;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -42,7 +41,6 @@ import java.util.EnumSet;
  * Rest adapter service application entry point
  */
 @Configuration
-@Slf4j
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 
