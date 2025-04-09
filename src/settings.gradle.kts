@@ -7,11 +7,6 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-
-plugins {   
-    
-}
-
 dependencyResolutionManagement {    
     repositories {
         mavenLocal()
@@ -22,13 +17,27 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://artifactory.niis.org/xroad-maven-snapshots")
         }
+        // maven {
+        //     url = uri("/home/pauline/Documents/work/X-ROAD/xrd4j")
+        // }
 
         maven {
             url = uri("https://repo.maven.apache.org/maven2/")
         }
+    //         maven {
+    //     url = uri("https://repo.spring.io/release")
+    // }
     }
 }
 
 rootProject.name = "rest-adapter-service"
 
+// includeBuild("../../xrd4j/src/common") {
+    // dependencySubstitution {
+    //     // Substitute a dependency with a project in the included build
+    //     substitute(module("libs.org.niis.xrd4j.common")).using(project("common"))
+    //     // substitute module("com.developed.project:mylibrary2") with project(":mylibrary2")
+    // }
+// }
+// includeBuild()
 

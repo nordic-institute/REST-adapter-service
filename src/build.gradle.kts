@@ -22,9 +22,9 @@ application {
 
 
 ext {
-    set("xrd4j.version", "0.3.0")
-    set("java.version", "1.8")
-    set("jdk.version", "1.8")
+    set("xrd4j.version", "0.6.0")
+    set("java.version", "21")
+    set("jdk.version", "21")
     set("xmlunit.version", "2.7.0")
     set("failsafe.version", "2.19.1")
     set("project.build.sourceEncoding", "UTF-8")
@@ -36,23 +36,43 @@ ext {
     set("server.port","9898")
 }
 
+// repositories {
+//     flatDir {
+//         dirs("$projectDir/../../xrd4j/src/build/common/build/libs") 
+//         dirs("$projectDir/../../xrd4j/src/build/client/build/libs") 
+//         dirs("$projectDir/../../xrd4j/src/build/server/build/libs") 
+//         dirs("$projectDir/../../xrd4j/src/build/rest/build/libs") 
+//     }
+// }
 
 dependencies {
     implementation(libs.org.springframework.boot.spring.boot.starter.web) 
     implementation(libs.org.springframework.boot.spring.boot.starter.aop)
     implementation(libs.org.springframework.boot.spring.boot.starter.tomcat)
-    implementation(libs.org.projectlombok.lombok)
-    implementation(libs.org.niis.xrd4j.common)
-    implementation(libs.org.niis.xrd4j.client)
-    implementation(libs.org.niis.xrd4j.server)
-    implementation(libs.org.niis.xrd4j.rest)
+    implementation("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    // implementation(files("$projectDir/../../xrd4j/src/common/build/libs/common-0.7.0-SNAPSHOT.jar"))
+    // implementation(files("$projectDir/../../xrd4j/src/client/build/libs/client-0.7.0-SNAPSHOT.jar"))
+    // implementation(files("$projectDir/../../xrd4j/src/rest/build/libs/rest-0.7.0-SNAPSHOT.jar"))
+    // implementation(files("$projectDir/../../xrd4j/src/server/build/libs/server-0.7.0-SNAPSHOT.jar"))
+    // implementation("com.springsource.javax.xml.soap:com.springsource.javax.xml.soap:1.3.0")
+
+    // implementation(files("$projectDir/../../xrd4j/src/common/build/libs/common-0.7.0-SNAPSHOT-sources.jar"))
+    // implementation(files("$projectDir/../../xrd4j/src/client/build/libs/client-0.7.0-SNAPSHOT-sources.jar"))
+    // implementation(files("$projectDir/../../xrd4j/src/rest/build/libs/rest-0.7.0-SNAPSHOT-sources.jar"))
+    // implementation(files("$projectDir/../../xrd4j/src/server/build/libs/server-0.7.0-SNAPSHOT-sources.jar"))
+    implementation("org.niis.xrd4j:common:0.6.0")
+    implementation("org.niis.xrd4j:client:0.6.0")
+    implementation("org.niis.xrd4j:server:0.6.0")
+    implementation("org.niis.xrd4j:rest:0.6.0")
+
     implementation(libs.org.xmlunit.xmlunit.assertj) {
         constraints {
             implementation("org.assertj:assertj-core:3.16.1")
             implementation("net.bytebuddy:byte-buddy:1.10.5")
         }
     }
-    annotationProcessor(libs.org.projectlombok.lombok)
+    implementation("jakarta.xml.soap:jakarta.xml.soap-api:3.0.0")
     testImplementation(libs.org.springframework.boot.spring.boot.starter.test) {
         exclude (group= "com.vaadin.external.google", module= "android-json")
     }
@@ -74,7 +94,7 @@ dependencies {
 group = "org.niis"
 version = "1.1.0-SNAPSHOT"
 description = "REST Adapter Service"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+// java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 publishing {
     publications {
@@ -120,6 +140,7 @@ publishing {
 
 tasks.withType<JavaCompile>() {
     options.encoding = "UTF-8"
+    options.annotationProcessorPath = configurations.annotationProcessor.get()
 
 }
 
