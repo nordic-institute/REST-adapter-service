@@ -49,9 +49,9 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -72,7 +72,7 @@ import static org.junit.Assert.assertFalse;
  * Tests cooperation of consumer and provider endpoints
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestPropertySource(properties = "server.port=7778")
 @Slf4j
 public class ConsumerAndProviderTest {
@@ -92,8 +92,8 @@ public class ConsumerAndProviderTest {
 
     @BeforeClass
     public static void setPropertiesDirectory() {
-        File apptestConfigFolder = new File(ConsumerAndProviderTest.class.getClassLoader()
-                .getResource("application-test-properties").getFile());
+        File apptestConfigFolder = new File(
+                ConsumerAndProviderTest.class.getClassLoader().getResource("application-test-properties").getFile());
         originalPropertiesDir = System.getProperty(Constants.PROPERTIES_DIR_PARAM_NAME);
         System.setProperty(Constants.PROPERTIES_DIR_PARAM_NAME, apptestConfigFolder.getAbsolutePath());
     }
@@ -101,7 +101,7 @@ public class ConsumerAndProviderTest {
     @AfterClass
     public static void restorePropertiesDirectory() {
         if (originalPropertiesDir != null) {
-            System.setProperty(Constants.PROPERTIES_DIR_PARAM_NAME,  originalPropertiesDir);
+            System.setProperty(Constants.PROPERTIES_DIR_PARAM_NAME, originalPropertiesDir);
         }
     }
 
@@ -117,7 +117,9 @@ public class ConsumerAndProviderTest {
     private TestConfig.RequestRecordingTestProviderGateway testProviderGateway;
 
     /**
-     * client (rest) <- rest -> consumer endpoint:7778 <- XROAD SOAP -> provider endpoint:7778 <- rest -> wiremock rest api:7777
+     * client (rest) <- rest -> consumer endpoint:7778 <- XROAD SOAP -> provider
+     * endpoint:7778 <- rest -> wiremock rest api:7777
+     * 
      * @throws Exception
      */
     @Test
@@ -127,9 +129,7 @@ public class ConsumerAndProviderTest {
 
         // start WireMock, which simulates the security server
         wireMockServer.stubFor(post(urlMatching("/wiremock/rest-service/.*"))
-                .willReturn(aResponse()
-                        .withHeader("Content-Type", "application/json;charset=UTF-8\n")
-                        .withBody(json)));
+                .willReturn(aResponse().withHeader("Content-Type", "application/json;charset=UTF-8\n").withBody(json)));
 
         // check that the landing page (jsp) contains expected text
         assertThat(restTemplate.getForObject("/", String.class)).contains("REST Adapter Service");
@@ -166,7 +166,6 @@ public class ConsumerAndProviderTest {
         log.info("provider endpoint requests: {}", testProviderGateway.getRequestBodies());
     }
 
-
     /**
      * Override Spring config with test versions of consumer and provider gateways
      */
@@ -183,8 +182,7 @@ public class ConsumerAndProviderTest {
         public ServletRegistrationBean consumerGatewayBean() {
             log.info("test-consumerGatewayBean");
             log.info("testConsumerGateway: {}", testConsumerGateway);
-            ServletRegistrationBean bean = new ServletRegistrationBean(
-                    testConsumerGateway, "/Consumer/*");
+            ServletRegistrationBean bean = new ServletRegistrationBean(testConsumerGateway, "/Consumer/*");
             bean.setLoadOnStartup(1);
             return bean;
         }
@@ -192,8 +190,7 @@ public class ConsumerAndProviderTest {
         @Bean
         public ServletRegistrationBean providerGatewayBean() {
             log.info("providerGatewayBean");
-            ServletRegistrationBean bean = new ServletRegistrationBean(
-                    testProviderGateway, "/Provider");
+            ServletRegistrationBean bean = new ServletRegistrationBean(testProviderGateway, "/Provider");
             bean.setLoadOnStartup(1);
             return bean;
         }
@@ -217,7 +214,8 @@ public class ConsumerAndProviderTest {
             }
 
             @Override
-            protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+                    throws ServletException, IOException {
                 ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
                 log.info("test consumer gateway processing request....");
                 super.processRequest(wrappedRequest, response);
@@ -237,7 +235,8 @@ public class ConsumerAndProviderTest {
             }
 
             @Override
-            protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            protected void doPost(HttpServletRequest request, HttpServletResponse response)
+                    throws ServletException, IOException {
                 ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
                 super.doPost(wrappedRequest, response);
                 String requestBody = new String(wrappedRequest.getContentAsByteArray(), StandardCharsets.UTF_8);
@@ -248,9 +247,7 @@ public class ConsumerAndProviderTest {
     }
 
     private String readFile(String filename) throws IOException, URISyntaxException {
-        return new String(Files.readAllBytes(Paths.get(
-                ClassLoader.getSystemResource(filename).toURI()
-        )), "UTF-8");
+        return new String(Files.readAllBytes(Paths.get(ClassLoader.getSystemResource(filename).toURI())), "UTF-8");
     }
 
 }

@@ -34,7 +34,6 @@ import org.niis.xrd4j.rest.client.RESTClient;
 import org.niis.xrd4j.rest.client.RESTClientFactory;
 import org.niis.xroad.restadapterservice.util.Constants;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.*;
@@ -54,6 +53,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.w3c.dom.Node;
 import org.xmlunit.assertj.XmlAssert;
+
 /**
  * This class contains integrations tests for REST Gateway.
  *
@@ -69,7 +69,7 @@ public class ConsumerGatewayIT {
     private final Map<Integer, String> urls = new HashMap<>();
     private final Map<Integer, Map<String, List<String>>> urlParams = new HashMap<>();
 
-    @LocalServerPort
+    @Value("${local.server.port}")
     private int port;
 
     @Value("#{servletContext.contextPath}")
@@ -134,16 +134,17 @@ public class ConsumerGatewayIT {
      */
     @Test
     public void testConsumerGateway1Xml() throws Exception {
-        String expectedResult = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<ts1:getOrganizationResponse xmlns:ts1=\"http://x-road.global/producer\">\n" +
-                "    <ts1:data_source_url>www.liikuntapaikat.fi</ts1:data_source_url>\n" +
-                "    <ts1:name_fi>Jyväskylän yliopisto, LIPAS Liikuntapaikat.fi</ts1:name_fi>\n" +
-                "    <ts1:name_sv>Jyväskylä universitet, LIPAS Liikuntapaikat.fi</ts1:name_sv>\n" +
-                "    <ts1:id>1010</ts1:id>\n" +
-                "    <ts1:name_en>University of Jyväskylä, LIPAS Liikuntapaikat.fi</ts1:name_en>\n" +
-                "</ts1:getOrganizationResponse>";
+        String expectedResult = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<ts1:getOrganizationResponse xmlns:ts1=\"http://x-road.global/producer\">\n"
+                + "    <ts1:data_source_url>www.liikuntapaikat.fi</ts1:data_source_url>\n"
+                + "    <ts1:name_fi>Jyväskylän yliopisto, LIPAS Liikuntapaikat.fi</ts1:name_fi>\n"
+                + "    <ts1:name_sv>Jyväskylä universitet, LIPAS Liikuntapaikat.fi</ts1:name_sv>\n"
+                + "    <ts1:id>1010</ts1:id>\n"
+                + "    <ts1:name_en>University of Jyväskylä, LIPAS Liikuntapaikat.fi</ts1:name_en>\n"
+                + "</ts1:getOrganizationResponse>";
 
-        ClientResponse restResponse = sendData(this.urls.get(1), "get", this.urlParams.get(1), new HashMap<String, String>());
+        ClientResponse restResponse = sendData(this.urls.get(1), "get", this.urlParams.get(1),
+                new HashMap<String, String>());
         String data = restResponse.getData();
         log.debug("data from service: {}", data);
         assertEquals(CONTENT_TYPE_XML, restResponse.getContentType());
@@ -151,7 +152,8 @@ public class ConsumerGatewayIT {
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = new Diff(data, expectedResult);
         log.debug("diff: {}", diff);
-        // diff is "similar" (not identical) even if namespace prefixes and element ordering differ
+        // diff is "similar" (not identical) even if namespace prefixes and element
+        // ordering differ
         assertTrue(diff.similar());
     }
 
@@ -177,23 +179,18 @@ public class ConsumerGatewayIT {
         assertEquals(CONTENT_TYPE_XML, restResponse.getContentType());
         HashMap<String, String> prefix2Uri = new HashMap<String, String>();
         prefix2Uri.put("ts1", "http://x-road.global/producer");
-        XmlAssert.assertThat(data)
-                .withNamespaceContext(prefix2Uri)
-                .nodesByXPath("//ts1:getOrganizationListResponse/ts1:array/ts1:name_fi")
-                .exist()
+        XmlAssert.assertThat(data).withNamespaceContext(prefix2Uri)
+                .nodesByXPath("//ts1:getOrganizationListResponse/ts1:array/ts1:name_fi").exist()
                 .areExactly(1, new Condition<Node>() {
                     @Override
                     public boolean matches(Node node) {
-                            return node != null &&
-                                    node.getTextContent() != null &&
-                                    node.getTextContent().equals("Helsingin kaupunki");
+                        return node != null && node.getTextContent() != null
+                                && node.getTextContent().equals("Helsingin kaupunki");
                     }
                 });
 
-        XmlAssert.assertThat(data)
-                .withNamespaceContext(prefix2Uri)
-                .valueByXPath("count(//ts1:getOrganizationListResponse/ts1:array)")
-                .asInt().isGreaterThan(1);
+        XmlAssert.assertThat(data).withNamespaceContext(prefix2Uri)
+                .valueByXPath("count(//ts1:getOrganizationListResponse/ts1:array)").asInt().isGreaterThan(1);
     }
 
     /**
@@ -217,10 +214,8 @@ public class ConsumerGatewayIT {
         assertEquals(CONTENT_TYPE_XML, restResponse.getContentType());
         HashMap<String, String> prefix2Uri = new HashMap<>();
         prefix2Uri.put("ts1", "http://x-road.global/producer");
-        XmlAssert.assertThat(data)
-                .withNamespaceContext(prefix2Uri)
-                .valueByXPath("//ts1:fintoServiceResponse/ts1:results/ts1:vocab")
-                .isEqualTo("yso");
+        XmlAssert.assertThat(data).withNamespaceContext(prefix2Uri)
+                .valueByXPath("//ts1:fintoServiceResponse/ts1:results/ts1:vocab").isEqualTo("yso");
     }
 
     /**
@@ -245,33 +240,31 @@ public class ConsumerGatewayIT {
         String data = restResponse.getData();
         assertEquals(CONTENT_TYPE_XML, restResponse.getContentType());
 
-        XmlAssert.assertThat(data)
-                .nodesByXPath("//result/items/organisation/name/value")
-                .exist()
-                .areExactly(1, new Condition<Node>() {
+        XmlAssert.assertThat(data).nodesByXPath("//result/items/organisation/name/value").exist().areExactly(1,
+                new Condition<Node>() {
                     @Override
                     public boolean matches(Node node) {
-                        return node != null &&
-                                node.getTextContent() != null &&
-                                node.getTextContent().equals("Kallio Library");
+                        return node != null && node.getTextContent() != null
+                                && node.getTextContent().equals("Kallio Library");
                     }
                 });
 
-        XmlAssert.assertThat(data)
-                .valueByXPath("count(//result/items/organisation/name/value)")
-                .asInt().isGreaterThan(1);
+        XmlAssert.assertThat(data).valueByXPath("count(//result/items/organisation/name/value)").asInt()
+                .isGreaterThan(1);
     }
 
     /**
      * Execute request, and assert that response is expected
+     * 
      * @param url
      * @param verb
      * @param urlParams
      * @param headers
-     * @param expectedResponse expected response
+     * @param expectedResponse    expected response
      * @param expectedContentType expected response content type
      */
-    private void sendData(String url, String verb, Map<String, List<String>> urlParams, Map<String, String> headers, String expectedResponse, String expectedContentType) {
+    private void sendData(String url, String verb, Map<String, List<String>> urlParams, Map<String, String> headers,
+            String expectedResponse, String expectedContentType) {
         ClientResponse restResponse = sendData(url, verb, urlParams, headers);
 
         String data = restResponse.getData();
@@ -282,14 +275,15 @@ public class ConsumerGatewayIT {
 
     /**
      * Execute request, and return ClientResponse
+     * 
      * @param url
      * @param verb
      * @param urlParams
      * @param headers
      * @return
      */
-    private ClientResponse sendData(String url, String verb, Map<String,
-            List<String>> urlParams, Map<String, String> headers) {
+    private ClientResponse sendData(String url, String verb, Map<String, List<String>> urlParams,
+            Map<String, String> headers) {
         RESTClient restClient = RESTClientFactory.createRESTClient(verb);
         // Send request to the service endpoint
         System.out.println("sending request from test to: " + url);
@@ -304,9 +298,9 @@ public class ConsumerGatewayIT {
         return sendData(this.urls.get(index), "get", this.urlParams.get(index), new HashMap<String, String>());
     }
 
-
     /**
      * Execute json get request with parameters from given index
+     * 
      * @param index
      * @return
      */
@@ -315,6 +309,5 @@ public class ConsumerGatewayIT {
         headers.put(Constants.HTTP_HEADER_ACCEPT, Constants.APPLICATION_JSON);
         return sendData(this.urls.get(index), "get", this.urlParams.get(index), headers);
     }
-
 
 }
