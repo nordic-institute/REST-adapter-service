@@ -71,7 +71,6 @@ src/rest-gateway.iml
 
 # build
 build/
-src/.mvn
 src/bin
 
 # these lines dont work :(
