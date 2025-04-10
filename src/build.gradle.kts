@@ -1,9 +1,8 @@
 plugins {   
+    java
     `maven-publish`
-    java 
+    id("org.springframework.boot") version "3.3.3"
 }
-
-
 
 
 ext {
@@ -22,33 +21,32 @@ ext {
 }
 
 dependencies {
-        // implementation(libs.org.springframework.boot.spring.boot.starter.web)
+    // SpringBoot
     implementation("org.springframework.boot:spring-boot-starter-web:3.4.3") 
-        // implementation(libs.org.springframework.boot.spring.boot.starter.aop)
     implementation("org.springframework.boot:spring-boot-starter-aop:3.3.5")
-        // implementation(libs.org.springframework.boot.spring.boot.starter.tomcat)
     implementation("org.springframework.boot:spring-boot-starter-tomcat:3.4.4")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.3.3") {
+        exclude (group= "com.vaadin.external.google", module= "android-json")
+    }
 
-   
-
-    compileOnly("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
-    testImplementation("org.projectlombok:lombok:1.18.30")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
-    
+    // xrd4j
     implementation("org.niis.xrd4j:common:0.6.0")
     implementation("org.niis.xrd4j:client:0.6.0")
     implementation("org.niis.xrd4j:server:0.6.0")
     implementation("org.niis.xrd4j:rest:0.6.0")
 
-    implementation(libs.org.xmlunit.xmlunit.assertj) {
+    // Lombok
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    testImplementation("org.projectlombok:lombok:1.18.30")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
+    
+    
+    testImplementation(libs.org.xmlunit.xmlunit.assertj) {
         constraints {
             implementation("org.assertj:assertj-core:3.16.1")
             implementation("net.bytebuddy:byte-buddy:1.10.5")
         }
-    }
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.3.3") {
-        exclude (group= "com.vaadin.external.google", module= "android-json")
     }
     testImplementation(libs.org.apache.tomcat.embed.tomcat.embed.jasper)
     testImplementation(libs.com.github.tomakehurst.wiremock)
@@ -61,6 +59,9 @@ dependencies {
     testImplementation(libs.org.xmlunit.xmlunit.matchers)
     testImplementation(libs.com.jayway.jsonpath.json.path.assert)
     testImplementation(libs.com.jayway.jsonpath.json.path)
+
+    // added to fix runtime errors
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.2.1")
 
 }
 
@@ -135,11 +136,10 @@ tasks.test {
     exclude("org/niis/xroad/restadapterservice/ConsumerGatewayIT.class")
 }
 
-
-tasks.jar {
+tasks.bootJar {
     archiveBaseName.set("rest-adapter-service")
     manifest {
-        attributes["Main-Class"] = "org.niis.xroad.restadapterservice.Application"
+        attributes["main-class"] = "org.niis.xroad.restadapterservice.Application"
     }
     // mainClass.set("org.niis.xroad.restadapterservice.Application")
 
