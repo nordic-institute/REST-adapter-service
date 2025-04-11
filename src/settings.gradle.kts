@@ -7,28 +7,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-dependencyResolutionManagement {    
-    repositories {
-        mavenLocal()
-        maven {
-            url = uri("https://artifactory.niis.org/xroad-maven-releases")
-        }
 
-        maven {
-            url = uri("https://artifactory.niis.org/xroad-maven-snapshots")
-        }
-        // maven {
-        //     url = uri("/home/pauline/Documents/work/X-ROAD/xrd4j")
-        // }
-
-        maven {
-            url = uri("https://repo.maven.apache.org/maven2/")
-        }
-    //         maven {
-    //     url = uri("https://repo.spring.io/release")
-    // }
-    }
-}
 
 rootProject.name = "rest-adapter-service"
 

@@ -74,5 +74,4 @@ public class Application extends SpringBootServletInitializer {
         bean.setUrlPatterns(Arrays.asList("/Consumer/*"));
         return bean;
     }
-
 }

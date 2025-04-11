@@ -26,20 +26,20 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.matching.RequestPattern;
 import com.github.tomakehurst.wiremock.verification.FindRequestsResult;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.niis.xroad.restadapterservice.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 
@@ -50,10 +50,9 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Slf4j
 public class ConsumerGatewayWireMockTest {
@@ -61,14 +60,14 @@ public class ConsumerGatewayWireMockTest {
     private WireMockServer wireMockServer;
     private int wireMockPort = findAvailableTcpPort();
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         // set up mock http server for ss
         wireMockServer = new WireMockServer(new WireMockConfiguration().port(wireMockPort));
         wireMockServer.start();
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         wireMockServer.stop();
     }
@@ -140,7 +139,8 @@ public class ConsumerGatewayWireMockTest {
         FindRequestsResult requestsResult = wireMockServer.findRequestsMatching(RequestPattern.everything());
 
         log.debug("WireMock received requests:");
-        assertEquals("expected exactly 1 call to wiremock", 1, requestsResult.getRequests().size());
+        log.debug("assertEquals expects exactly 1 call to wiremock");
+        assertEquals(1, requestsResult.getRequests().size());
         return requestsResult.getRequests().get(0).getBodyAsString();
     }
 

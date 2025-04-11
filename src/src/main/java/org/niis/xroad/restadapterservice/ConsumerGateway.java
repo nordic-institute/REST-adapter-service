@@ -22,6 +22,11 @@
  */
 package org.niis.xroad.restadapterservice;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.xml.soap.*;
 import org.niis.xrd4j.client.SOAPClient;
 import org.niis.xrd4j.client.SOAPClientImpl;
 import org.niis.xrd4j.client.deserializer.AbstractResponseDeserializer;
@@ -43,21 +48,11 @@ import org.niis.xroad.restadapterservice.endpoint.ConsumerEndpoint;
 import org.niis.xroad.restadapterservice.util.Constants;
 import org.niis.xroad.restadapterservice.util.ConsumerGatewayUtil;
 import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.xml.soap.AttachmentPart;
-import jakarta.xml.soap.Node;
-import jakarta.xml.soap.SOAPElement;
-import jakarta.xml.soap.SOAPEnvelope;
-import jakarta.xml.soap.SOAPException;
-import jakarta.xml.soap.SOAPFactory;
-import jakarta.xml.soap.SOAPMessage;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -67,6 +62,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
+import static org.w3c.dom.Node.ELEMENT_NODE;
 
 /**
  * This class implements a Servlet which functionality can be configured through
@@ -135,7 +132,7 @@ public class ConsumerGateway extends HttpServlet {
         log.debug("Default namespace prefix for outgoing ServiceRequests : \"{}\".",
                 this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE));
         log.debug("Service calls by X-Road service id are enabled : {}.", this.serviceCallsByXRdServiceId);
-        this.publicKeyFile = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE);
+        this.publicKeyFile = System.getProperty("user.dir") + props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE);
         this.publicKeyFilePassword = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE_PASSWORD);
         this.keyLength = RESTGatewayUtil.getKeyLength(props);
         log.debug("Symmetric key length : \"{}\".", this.keyLength);
@@ -319,7 +316,7 @@ public class ConsumerGateway extends HttpServlet {
      * @throws XRd4JException
      */
     private ServiceRequestSerializer getRequestSerializer(ConsumerEndpoint endpoint, String requestBody,
-            String contentType) throws XRd4JException {
+                                                          String contentType) throws XRd4JException {
         // Type of the serializer depends on the encryption
         if (endpoint.isRequestEncrypted()) {
             log.debug("Endpoint requires that request is encrypted.");
@@ -398,7 +395,7 @@ public class ConsumerGateway extends HttpServlet {
      *
      * @param messageId message id to be checked
      * @return unique identifier if the given message id is null; otherwise
-     *         messageId
+     * messageId
      */
     private String processMessageId(String messageId) {
         // Set messageId if null
@@ -763,13 +760,46 @@ public class ConsumerGateway extends HttpServlet {
                 soapRequest.addChildElement("resourceId").addTextNode(this.resourceId);
             }
             // requestData contains request parameters and possible converted JSON
-            // body, as initialized in ConsumerGateway.processRequest
+            // body, as     initialized in ConsumerGateway.processRequest
             SOAPElement containerElement = (SOAPElement) request.getRequestData();
-            SOAPHelper.moveChildren(containerElement, soapRequest, true);
+            Document targetDocument = soapRequest.getOwnerDocument();
+
+            SOAPElement importedElement = (SOAPElement) targetDocument.importNode(containerElement, true);
+            //           SOAPHelper.moveChildren(importedElement, soapRequest, true);
+            NodeList children = importedElement.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                Node child = (Node) children.item(i);
+                if ((child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
+                    child = updateNamespaceAndPrefix(child, soapRequest.getNamespaceURI(), soapRequest.getPrefix());
+                    updateNamespaceAndPrefix(child.getChildNodes(), soapRequest.getNamespaceURI(), soapRequest.getPrefix());
+                }
+                child.setParentElement(soapRequest);
+            }
+        }
+
+        public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) {
+            if (node.getNodeType() == ELEMENT_NODE) {
+                if (prefix != null && !prefix.isEmpty()) {
+                    node = (Node) node.getOwnerDocument().renameNode(node, namespace, prefix + ":" + node.getLocalName());
+                } else if (namespace != null && !namespace.isEmpty()) {
+                    node = (Node) node.getOwnerDocument().renameNode(node, namespace, node.getLocalName());
+                }
+            }
+            return node;
+        }
+
+        public static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) {
+            for (int i = 0; i < list.getLength(); i++) {
+                Node node = (Node) list.item(i);
+                if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
+                    node = updateNamespaceAndPrefix(node, namespace, prefix);
+                }
+                updateNamespaceAndPrefix(node.getChildNodes(), namespace, prefix);
+            }
         }
 
         protected void handleAttachment(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope,
-                String attachmentData) throws SOAPException {
+                                        String attachmentData) throws SOAPException {
             log.debug("Request body was found from the request. Add request body as SOAP attachment."
                     + " Content type is \"{}\".", this.contentType);
             SOAPElement data = soapRequest.addChildElement(envelope.createName(Constants.PARAM_REQUEST_BODY));
@@ -808,7 +838,7 @@ public class ConsumerGateway extends HttpServlet {
         private final int keyLength;
 
         EncryptingRequestSerializer(String resourceId, String requestBody, String contentType,
-                Encrypter asymmetricEncrypter, int keyLength, boolean convertPost) {
+                                    Encrypter asymmetricEncrypter, int keyLength, boolean convertPost) {
             super(resourceId, requestBody, contentType, convertPost);
             this.asymmetricEncrypter = asymmetricEncrypter;
             this.keyLength = keyLength;
@@ -877,9 +907,18 @@ public class ConsumerGateway extends HttpServlet {
         }
 
         protected void handleNamespace(Node responseNode) {
-            if (this.omitNamespace) {
-                log.debug("Remove namespaces from response.");
-                SOAPHelper.removeNamespace(responseNode);
+            try {
+                Document document = responseNode.getOwnerDocument(); // Get the document of the responseNode
+                if (document != null) {
+                    Node importedNode = (Node) document.importNode(responseNode, true); // Import the node into the correct document
+                    // Perform namespace removal on the imported node
+                    if (importedNode instanceof Element) {
+                        ((Element) importedNode).removeAttribute("xmlns");
+                        ((Element) importedNode).setPrefix(null);
+                    }
+                }
+            } catch (Exception e) {
+                log.error("Failed to remove namespace from node.", e);
             }
         }
     }

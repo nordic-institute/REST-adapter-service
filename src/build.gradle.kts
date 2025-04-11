@@ -1,9 +1,36 @@
-plugins {   
+plugins {
     java
     `maven-publish`
     id("org.springframework.boot") version "3.3.3"
 }
 
+sourceSets
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri("https://artifactory.niis.org/xroad-maven-releases")
+        mavenContent {
+            releasesOnly()
+        }
+    }
+    maven {
+        url = uri("https://artifactory.niis.org/xroad-maven-snapshots")
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
+    maven {
+        url = uri("https://repo.maven.apache.org/maven2/")
+    }
+    mavenCentral()
+}
+
+
+//sourceSets {
+//    getByName("main").java.srcDirs("src/src/java")
+//    getByName("main").resources.srcDirs("src/src/resources")
+//}
 
 ext {
     set("xrd4j.version", "0.6.0")
@@ -17,17 +44,21 @@ ext {
     set("tomcat.version", "9.0.37")
     set("app.home", "/var/lib/tomcat/webapps")
     // set("sonar.junit.reportPaths", "target/failsafe-reports,target/surefire-reports")
-    set("server.port","9898")
+    set("server.port", "9898")
 }
 
 dependencies {
     // SpringBoot
-    implementation("org.springframework.boot:spring-boot-starter-web:3.4.3") 
+    implementation("org.springframework.boot:spring-boot-starter-web:3.4.3")
     implementation("org.springframework.boot:spring-boot-starter-aop:3.3.5")
     implementation("org.springframework.boot:spring-boot-starter-tomcat:3.4.4")
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.3.3") {
-        exclude (group= "com.vaadin.external.google", module= "android-json")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.4") {
+        exclude(group = "com.vaadin.external.google", module = "android-json")
+        exclude(group = "org.skyscreamer", module = "jsonassert")
+        exclude(group = "junit")
     }
+//    implementation("org.springframework.boot:spring-boot-starter-tomcat:3.3.3")
+//    implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
 
     // xrd4j
     implementation("org.niis.xrd4j:common:0.6.0")
@@ -40,28 +71,38 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     testImplementation("org.projectlombok:lombok:1.18.30")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
-    
-    
-    testImplementation(libs.org.xmlunit.xmlunit.assertj) {
-        constraints {
-            implementation("org.assertj:assertj-core:3.16.1")
-            implementation("net.bytebuddy:byte-buddy:1.10.5")
-        }
+
+
+    implementation("org.assertj:assertj-core:3.24.2")
+    implementation("net.bytebuddy:byte-buddy:1.10.5")
+
+//    testImplementation("junit:junit:4.13.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
+    testImplementation("org.assertj:assertj-core:3.24.2")
+    testImplementation(libs.org.xmlunit.xmlunit.assertj)
+    testImplementation("org.apache.tomcat.embed:tomcat-embed-jasper:10.1.13")
+    testImplementation("com.github.tomakehurst:wiremock:2.27.2") {
+        exclude(group = "com.vaadin.external.google", module = "android-json")
     }
-    testImplementation(libs.org.apache.tomcat.embed.tomcat.embed.jasper)
-    testImplementation(libs.com.github.tomakehurst.wiremock)
     testImplementation(libs.commons.io.commons.io)
     testImplementation(libs.com.github.stefanbirkner.system.rules)
-    testImplementation(libs.org.skyscreamer.jsonassert) {
-        exclude (group = "com.vaadin.external.google", module = "android-json")
+    testImplementation("org.skyscreamer:jsonassert:1.5.1") {
+        exclude(group = "com.vaadin.external.google", module = "android-json")
     }
     testImplementation(libs.org.xmlunit.xmlunit.core)
     testImplementation(libs.org.xmlunit.xmlunit.matchers)
     testImplementation(libs.com.jayway.jsonpath.json.path.assert)
     testImplementation(libs.com.jayway.jsonpath.json.path)
+    //    testImplementation("junit:junit:4.12")
 
-    // added to fix runtime errors
-    implementation("org.apache.httpcomponents.client5:httpclient5:5.2.1")
+
+    //added to fix runtime errors
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.4.1")
+    testImplementation("org.apache.httpcomponents.client5:httpclient5:5.4.1")
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+//    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.12.0")
 
 }
 
@@ -122,17 +163,16 @@ tasks.withType<Javadoc>() {
     options.encoding = "UTF-8"
 }
 
-tasks.processTestResources {
-    // Include and filter `application-test-properties/*`
-    filesMatching("application-test-properties/*") {
-        expand(project.properties) // Enable filtering
-    }
-    
+val isEncrypted = project.hasProperty("encrypted")
+val adapterProfileDir = if (isEncrypted) "encrypted" else "plaintext"
+
+tasks.processResources {
+    from("src/main/profiles/$adapterProfileDir/") {}
 }
 
 tasks.test {
     useJUnitPlatform()
-    // somehow this test wasnt run 
+    System.setProperty("project.projectDir", project.projectDir.toString())
     exclude("org/niis/xroad/restadapterservice/ConsumerGatewayIT.class")
 }
 

@@ -74,7 +74,7 @@ public final class RESTGatewayUtil {
      *
      * @param contentType content type to be checked
      * @return returns true if and only if the given content type begins with
-     *         "text/xml" or "application/xml"; otherwise returns false
+     * "text/xml" or "application/xml"; otherwise returns false
      */
     public static boolean isXml(String contentType) {
         return contentType != null
@@ -87,13 +87,13 @@ public final class RESTGatewayUtil {
      *
      * @param contentType content type to be checked
      * @return returns true if and only if the given content type begins with
-     *         "text/xml", "application/xml" or "application/json; otherwise returns
-     *         false
+     * "text/xml", "application/xml" or "application/json; otherwise returns
+     * false
      */
     public static boolean isValidContentType(String contentType) {
         return contentType != null
                 && (contentType.startsWith(Constants.TEXT_XML) || contentType.startsWith(Constants.APPLICATION_XML)
-                        || contentType.startsWith(Constants.APPLICATION_JSON));
+                || contentType.startsWith(Constants.APPLICATION_JSON));
     }
 
     /**
@@ -165,10 +165,12 @@ public final class RESTGatewayUtil {
      * @return new Decrypter object on success; otherwise false
      */
     public static Decrypter checkPrivateKey(Properties props) {
-        String privateKeyFile = props.getProperty(Constants.ENCRYPTION_PROPS_PRIVATE_KEY_FILE);
+        String privateKeyFile = System.getProperty("user.dir") + props.getProperty(Constants.ENCRYPTION_PROPS_PRIVATE_KEY_FILE);
         String privateKeyFilePassword = props.getProperty(Constants.ENCRYPTION_PROPS_PRIVATE_KEY_FILE_PASSWORD);
         String privateKeyAlias = props.getProperty(Constants.ENCRYPTION_PROPS_PRIVATE_KEY_ALIAS);
         String privateKeyPassword = props.getProperty(Constants.ENCRYPTION_PROPS_PRIVATE_KEY_PASSWORD);
+
+        log.info("PrivateKeyFile = " + privateKeyFile);
         return getDecrypter(privateKeyFile, privateKeyFilePassword, privateKeyAlias, privateKeyPassword);
     }
 
@@ -182,7 +184,7 @@ public final class RESTGatewayUtil {
      * @return public key matching the given service id
      */
     public static Decrypter getDecrypter(String privateKeyFile, String privateKeyFilePassword, String privateKeyAlias,
-            String privateKeyPassword) {
+                                         String privateKeyPassword) {
         try {
             log.debug("Read private key \"{}\" from keystore.", privateKeyAlias);
             Decrypter decrypter = new AsymmetricDecrypter(privateKeyFile, privateKeyFilePassword, privateKeyAlias,
@@ -190,7 +192,7 @@ public final class RESTGatewayUtil {
             log.info("Access to private key \"{}\" checked.", privateKeyAlias);
             return decrypter;
         } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException
-                | UnrecoverableEntryException ex) {
+                 | UnrecoverableEntryException ex) {
             log.error(ex.getMessage(), ex);
             log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_FILE, privateKeyFile);
             log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_FILE_PASSWORD,
@@ -219,8 +221,9 @@ public final class RESTGatewayUtil {
      * @return new Encrypter object on success; otherwise false
      */
     public static Encrypter checkPublicKey(Properties props, String serviceId) {
-        String publicKeyFile = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE);
+        String publicKeyFile = System.getProperty("user.dir") + props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE);
         String publicKeyFilePassword = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE_PASSWORD);
+
         return getEncrypter(publicKeyFile, publicKeyFilePassword, serviceId);
     }
 
@@ -300,7 +303,7 @@ public final class RESTGatewayUtil {
      * @return Decrypter created using encrypted AES key and VI
      */
     public static Decrypter getSymmetricDecrypter(Decrypter asymmetricDecrypter, String encryptedKey,
-            String encodedIV) {
+                                                  String encodedIV) {
         log.debug("Decrypt symmetric session key.");
         // Decrypt session key using the private key
         String decryptedSessionKey = asymmetricDecrypter.decrypt(encryptedKey);
@@ -324,7 +327,7 @@ public final class RESTGatewayUtil {
      * @throws SOAPException
      */
     public static void buildEncryptedBody(Encrypter symmetricEncrypter, Encrypter asymmetricEncrypter, SOAPElement msg,
-            String encryptedData) throws SOAPException {
+                                          String encryptedData) throws SOAPException {
         log.debug("Build message body with encrypted data, encrypted session key and encoded IV.");
         // Get base 64 encoded version of the key
         String sessionKey = CryptoHelper.encodeBase64(((SymmetricEncrypter) symmetricEncrypter).getKey().getEncoded());

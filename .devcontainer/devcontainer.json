@@ -6,14 +6,11 @@
 	"image": "mcr.microsoft.com/devcontainers/java:1-21-bullseye",
 	"features": {
 		"ghcr.io/devcontainers/features/java:1": {
-			"version": "none",
+			"version": "21",
 			"installMaven": "false",
 			"installGradle": "true"
 		}
 	},
-	"mounts": [
-		"source=${localEnv:PWD}/../xrd4j,target=/workspaces/xrd4j,type=bind,consistency=cached"
-	]
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.

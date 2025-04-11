@@ -24,12 +24,12 @@ package org.niis.xroad.restadapterservice;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.niis.xroad.restadapterservice.util.Constants;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -46,12 +46,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -63,15 +63,15 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 /**
  * Tests cooperation of consumer and provider endpoints
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestPropertySource(properties = "server.port=7778")
 @Slf4j
@@ -83,14 +83,14 @@ public class ConsumerAndProviderTest {
     @Value("${wiremock.server.port}")
     private int wireMockPort;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         // set up mock http server for ss
         wireMockServer = new WireMockServer(new WireMockConfiguration().port(wireMockPort));
         wireMockServer.start();
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setPropertiesDirectory() {
         File apptestConfigFolder = new File(
                 ConsumerAndProviderTest.class.getClassLoader().getResource("application-test-properties").getFile());
@@ -98,7 +98,7 @@ public class ConsumerAndProviderTest {
         System.setProperty(Constants.PROPERTIES_DIR_PARAM_NAME, apptestConfigFolder.getAbsolutePath());
     }
 
-    @AfterClass
+    @AfterAll
     public static void restorePropertiesDirectory() {
         if (originalPropertiesDir != null) {
             System.setProperty(Constants.PROPERTIES_DIR_PARAM_NAME, originalPropertiesDir);
@@ -119,7 +119,7 @@ public class ConsumerAndProviderTest {
     /**
      * client (rest) <- rest -> consumer endpoint:7778 <- XROAD SOAP -> provider
      * endpoint:7778 <- rest -> wiremock rest api:7777
-     * 
+     *
      * @throws Exception
      */
     @Test
