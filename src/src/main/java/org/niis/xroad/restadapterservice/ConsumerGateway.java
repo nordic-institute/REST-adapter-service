@@ -65,6 +65,7 @@ import java.util.Properties;
 
 import static org.w3c.dom.Node.ELEMENT_NODE;
 
+
 /**
  * This class implements a Servlet which functionality can be configured through
  * external properties files. This class implements a REST consumer gateway by
@@ -760,13 +761,15 @@ public class ConsumerGateway extends HttpServlet {
                 soapRequest.addChildElement("resourceId").addTextNode(this.resourceId);
             }
             // requestData contains request parameters and possible converted JSON
-            // body, as     initialized in ConsumerGateway.processRequest
+            // body, as initialized in ConsumerGateway.processRequest
             SOAPElement containerElement = (SOAPElement) request.getRequestData();
             Document targetDocument = soapRequest.getOwnerDocument();
 
             SOAPElement importedElement = (SOAPElement) targetDocument.importNode(containerElement, true);
-            //           SOAPHelper.moveChildren(importedElement, soapRequest, true);
-            NodeList children = importedElement.getChildNodes();
+            // SOAPHelper.moveChildren(importedElement, soapRequest, true);
+
+            soapRequest.appendChild(importedElement);
+            NodeList children = soapRequest.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 Node child = (Node) children.item(i);
                 if ((child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
@@ -777,6 +780,34 @@ public class ConsumerGateway extends HttpServlet {
             }
         }
 
+        /**
+         * Updates the namespace URI and prefix of all the nodes in the list, if
+         * node does not have namespace URI yet. The list is updated recursively, so
+         * also the children of children (and so on) will be updated.
+         *
+         * @param list      list of nodes to be updated
+         * @param namespace target namespace
+         * @param prefix    target prefix
+         */
+        public static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) {
+            for (int i = 0; i < list.getLength(); i++) {
+                Node node = (Node) list.item(i);
+                if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
+                    node = updateNamespaceAndPrefix(node, namespace, prefix);
+                }
+                updateNamespaceAndPrefix(node.getChildNodes(), namespace, prefix);
+            }
+        }
+
+        /**
+         * Updates the namespace URI and prefix of the given node with the given
+         * values. If prefix is null or empty, only namespace URI is updated.
+         *
+         * @param node      Node to be updated
+         * @param namespace target namespace
+         * @param prefix    target prefix
+         * @return updated Node
+         */
         public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) {
             if (node.getNodeType() == ELEMENT_NODE) {
                 if (prefix != null && !prefix.isEmpty()) {
@@ -786,16 +817,6 @@ public class ConsumerGateway extends HttpServlet {
                 }
             }
             return node;
-        }
-
-        public static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) {
-            for (int i = 0; i < list.getLength(); i++) {
-                Node node = (Node) list.item(i);
-                if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
-                    node = updateNamespaceAndPrefix(node, namespace, prefix);
-                }
-                updateNamespaceAndPrefix(node.getChildNodes(), namespace, prefix);
-            }
         }
 
         protected void handleAttachment(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope,
