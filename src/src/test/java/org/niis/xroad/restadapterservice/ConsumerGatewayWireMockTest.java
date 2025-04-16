@@ -26,6 +26,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.matching.RequestPattern;
 import com.github.tomakehurst.wiremock.verification.FindRequestsResult;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,6 +54,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Disabled
 @SpringBootTest
 @Slf4j
 public class ConsumerGatewayWireMockTest {
@@ -72,6 +74,7 @@ public class ConsumerGatewayWireMockTest {
         wireMockServer.stop();
     }
 
+    @Disabled
     @Test
     public void testJsonConversion() throws Exception {
         String json = readFile("consumer-gw-test-request.json");

@@ -24,19 +24,16 @@ package org.niis.xroad.restadapterservice.util;
 
 import junit.framework.TestCase;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for RESTGatewayUtil class.
  *
  * @author Petteri Kivimäki
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Slf4j
 public class RESTGatewayUtilTest {

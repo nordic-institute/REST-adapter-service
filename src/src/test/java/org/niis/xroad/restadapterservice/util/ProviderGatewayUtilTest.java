@@ -27,24 +27,22 @@ import org.niis.xrd4j.common.member.ConsumerMember;
 import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xroad.restadapterservice.endpoint.ProviderEndpoint;
+
 import java.util.Map;
 import java.util.Properties;
-import junit.framework.TestCase;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.assertEquals;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for ProviderGatewayUtil class.
  *
  * @author Petteri Kivimäki
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Slf4j
 public class ProviderGatewayUtilTest {
@@ -56,7 +54,7 @@ public class ProviderGatewayUtilTest {
      *
      * @throws Exception
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         Properties props = new Properties();
         Properties endpoints = new Properties();

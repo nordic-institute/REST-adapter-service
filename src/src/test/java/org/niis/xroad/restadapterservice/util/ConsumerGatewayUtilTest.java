@@ -27,12 +27,13 @@ import org.niis.xrd4j.common.member.ConsumerMember;
 import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.util.SOAPHelper;
 import org.niis.xroad.restadapterservice.endpoint.ConsumerEndpoint;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Properties;
-import junit.framework.TestCase;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -42,16 +43,15 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Test cases for ConsumerGatewayUtil class.
- *
+ * <p>
  * Running these tests cause the below error message to appear on the screen.
  * The error message is expected and can be ignored. The error message:
- *
+ * <p>
  * "[Fatal Error] :1:xx: The markup in the document following the root element
  * must be well-formed."
  *
  * @author Petteri Kivimäki
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class ConsumerGatewayUtilTest {
 
@@ -63,7 +63,7 @@ public class ConsumerGatewayUtilTest {
      *
      * @throws Exception
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.servletUrl = "http://localhost:8080/RESTGateway/Consumer/";
         Properties props = new Properties();
