@@ -73,7 +73,6 @@ public class ConsumerGatewayWireMockTest {
         wireMockServer.stop();
     }
 
-    @Disabled
     @Test
     public void testJsonConversion() throws Exception {
         String json = readFile("consumer-gw-test-request.json");
