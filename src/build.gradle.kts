@@ -4,7 +4,8 @@
 
 import java.util.Properties;
 
-import org.springframework.boot.gradle.tasks.run.BootRun
+import org.springframework.boot.gradle.tasks.run.BootRun;
+import org.apache.tools.ant.filters.ReplaceTokens
 
 
 plugins {
@@ -14,7 +15,6 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     application
 //    `maven-publish`
-    // id("io.spring.dependency-management")
 
 }
 
@@ -164,19 +164,17 @@ val isEncrypted = project.hasProperty("encrypted")
 val adapterProfileDir = if (isEncrypted) "encrypted" else "plaintext"
 
 val filterFile = file("src/main/filters/default.properties")
-
+val props = Properties().apply {
+    load(filterFile.reader())
+}
+val replacements = props.entries.associate { it.key.toString() to it.value.toString() }
 
 
 tasks.processResources {
     from("src/main/profiles/$adapterProfileDir/") {
-//        filesMatching("**/consumer-gateway.properties") {
-//            expand(project.properties)
-//
-//            val props = Properties().apply {
-//                load(filterFile.reader())
-//            }
-//            expand(props.entries.associate { it.key.toString() to it.value })
-//        }
+        filesMatching("**/consumer-gateway.properties") {
+            filter<ReplaceTokens>("tokens" to replacements)
+        }
     }
     filesMatching("src/main/resources") {
         expand(project.properties)
@@ -193,24 +191,6 @@ tasks.processTestResources {
     filesMatching("application-test-properties/*") {
         expand(project.properties) // Enable filtering
     }
-
-    // // Include `application-test-keys/*` without filtering
-    // filesMatching("application-test-keys/*") {
-    //     expand(project.properties) 
-    // }
-
-
-    // // Include `application-test-keys/*` without filtering
-    // filesMatching("application-test-keys/*") {
-    //     filteringCharset = null // Disable filtering
-    // }
-
-    // Exclude `application-test-properties/*` and `application-test-keys/*` from other resources
-    // exclude("application-test-properties/*", "application-test-keys/*")
-    // from("src/test/ressources/application-test-properties") {
-    //     include("**/*.properties")
-    // }
-    // info("$buildDir/resources/test/application-test-")
 }
 
 tasks.jar {
