@@ -133,7 +133,7 @@ public class ConsumerGateway extends HttpServlet {
         log.debug("Default namespace prefix for outgoing ServiceRequests : \"{}\".",
                 this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE));
         log.debug("Service calls by X-Road service id are enabled : {}.", this.serviceCallsByXRdServiceId);
-        this.publicKeyFile = System.getProperty("user.dir") + props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE);
+        this.publicKeyFile = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE);
         this.publicKeyFilePassword = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE_PASSWORD);
         this.keyLength = RESTGatewayUtil.getKeyLength(props);
         log.debug("Symmetric key length : \"{}\".", this.keyLength);
@@ -763,20 +763,20 @@ public class ConsumerGateway extends HttpServlet {
             // requestData contains request parameters and possible converted JSON
             // body, as initialized in ConsumerGateway.processRequest
             SOAPElement containerElement = (SOAPElement) request.getRequestData();
-            Document targetDocument = soapRequest.getOwnerDocument();
-
-            SOAPElement importedElement = (SOAPElement) targetDocument.importNode(containerElement, true);
+//            Document targetDocument = soapRequest.getOwnerDocument();
+//
+//            SOAPElement importedElement = (SOAPElement) targetDocument.importNode(containerElement, true);
             // SOAPHelper.moveChildren(importedElement, soapRequest, true);
 
-            soapRequest.appendChild(importedElement);
-            NodeList children = soapRequest.getChildNodes();
+
+            NodeList children = containerElement.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 Node child = (Node) children.item(i);
+                child.setParentElement(soapRequest);
                 if ((child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
                     child = updateNamespaceAndPrefix(child, soapRequest.getNamespaceURI(), soapRequest.getPrefix());
                     updateNamespaceAndPrefix(child.getChildNodes(), soapRequest.getNamespaceURI(), soapRequest.getPrefix());
                 }
-                child.setParentElement(soapRequest);
             }
         }
 

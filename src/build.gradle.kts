@@ -1,6 +1,9 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+import java.util.*
+
 plugins {
     java
-    `maven-publish`
+//    `maven-publish`
     id("org.springframework.boot") version "3.3.3"
 }
 
@@ -111,47 +114,47 @@ version = "1.1.0-SNAPSHOT"
 description = "REST Adapter Service"
 java.sourceCompatibility = JavaVersion.VERSION_21
 
-publishing {
-    publications {
-        create<MavenPublication>("rest-adaper-service-extension") {
-            from(components["java"])
-
-            pom {
-                licenses {
-                    license {
-                        name.set("MIT License")
-                        url.set("http://www.opensource.org/licenses/mit-license.php")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:git@github.com:nordic-institute/REST-adapter-service.git")
-                    developerConnection.set("scm:git:git@github.com:nordic-institute/REST-adapter-service.git")
-                    url.set("https://github.com/nordic-institute/REST-adapter-service.git")
-                }
-                developers {
-                    developer {
-                        id.set("niis")
-                        name.set("Nordic Institute for Interoperability Solutions (NIIS)")
-                        roles.set(listOf("architect", "developer"))
-                        timezone.set("+2")
-                    }
-                    developer {
-                        id.set("vrk")
-                        name.set("Population Register Centre (VRK)")
-                        roles.set(listOf("architect", "developer"))
-                        timezone.set("+2")
-                    }
-                    developer {
-                        id.set("petkivim")
-                        name.set("Petteri Kivimäki")
-                        roles.set(listOf("architect", "developer"))
-                        timezone.set("+2")
-                    }
-                }
-            }
-        }
-    }
-}
+//publishing {
+//    publications {
+//        create<MavenPublication>("rest-adaper-service-extension") {
+//            from(components["java"])
+//
+//            pom {
+//                licenses {
+//                    license {
+//                        name.set("MIT License")
+//                        url.set("http://www.opensource.org/licenses/mit-license.php")
+//                    }
+//                }
+//                scm {
+//                    connection.set("scm:git:git@github.com:nordic-institute/REST-adapter-service.git")
+//                    developerConnection.set("scm:git:git@github.com:nordic-institute/REST-adapter-service.git")
+//                    url.set("https://github.com/nordic-institute/REST-adapter-service.git")
+//                }
+//                developers {
+//                    developer {
+//                        id.set("niis")
+//                        name.set("Nordic Institute for Interoperability Solutions (NIIS)")
+//                        roles.set(listOf("architect", "developer"))
+//                        timezone.set("+2")
+//                    }
+//                    developer {
+//                        id.set("vrk")
+//                        name.set("Population Register Centre (VRK)")
+//                        roles.set(listOf("architect", "developer"))
+//                        timezone.set("+2")
+//                    }
+//                    developer {
+//                        id.set("petkivim")
+//                        name.set("Petteri Kivimäki")
+//                        roles.set(listOf("architect", "developer"))
+//                        timezone.set("+2")
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 tasks.withType<JavaCompile>() {
     options.encoding = "UTF-8"
@@ -166,13 +169,38 @@ tasks.withType<Javadoc>() {
 val isEncrypted = project.hasProperty("encrypted")
 val adapterProfileDir = if (isEncrypted) "encrypted" else "plaintext"
 
-tasks.processResources {
-    from("src/main/profiles/$adapterProfileDir/") {}
+val filterFile = file("src/main/filters/default.properties")
+val props = Properties().apply {
+    load(filterFile.reader())
 }
+val replacements = props.entries.associate { it.key.toString() to it.value.toString() }
+
+
+
+tasks.processResources {
+    filesMatching("**/*.properties") {
+        filter { line ->
+            line.replace("@projectDir@", project.projectDir.toString())
+        }
+    }
+    from("src/main/profiles/$adapterProfileDir/") {
+        filesMatching("**/consumer-gateway.properties") {
+            filter<ReplaceTokens>("tokens" to replacements)
+        }
+    }
+    filesMatching("src/main/resources") {
+        expand(project.properties)
+
+        val props = Properties().apply {
+            load(filterFile.reader())
+        }
+        expand(props.entries.associate { it.key.toString() to it.value })
+    }
+}
+
 
 tasks.test {
     useJUnitPlatform()
-    System.setProperty("project.projectDir", project.projectDir.toString())
     exclude("org/niis/xroad/restadapterservice/ConsumerGatewayIT.class")
 }
 

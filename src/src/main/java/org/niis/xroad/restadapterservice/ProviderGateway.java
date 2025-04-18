@@ -110,7 +110,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
                 this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE));
         log.debug("Default namespace prefix for outgoing ServiceResponses : \"{}\".",
                 this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE));
-        this.publicKeyFile = System.getProperty("user.dir") + props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE);
+        this.publicKeyFile = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE);
         this.publicKeyFilePassword = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE_PASSWORD);
         this.keyLength = RESTGatewayUtil.getKeyLength(props);
         log.debug("Symmetric key length : \"{}\".", this.keyLength);

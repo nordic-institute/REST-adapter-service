@@ -54,7 +54,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Disabled
 @SpringBootTest
 @Slf4j
 public class ConsumerGatewayWireMockTest {

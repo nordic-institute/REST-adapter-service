@@ -222,7 +222,7 @@ public final class RESTGatewayUtil {
      * @return new Encrypter object on success; otherwise false
      */
     public static Encrypter checkPublicKey(Properties props, String serviceId) {
-        String publicKeyFile = System.getProperty("user.dir") + props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE);
+        String publicKeyFile = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE);
         String publicKeyFilePassword = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE_PASSWORD);
 
         return getEncrypter(publicKeyFile, publicKeyFilePassword, serviceId);
