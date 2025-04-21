@@ -225,8 +225,23 @@ public class ConsumerGateway extends HttpServlet {
             // Set userId
             serviceRequest.setUserId(userId);
             // serviceRequest carries its payload as an SOAPElement
-            SOAPElement containerElement = SOAPFactory.newInstance().createElement("container");
+//            SOAPElement containerElement = SOAPFactory.newInstance().createElement("container");
+
+
+            SOAPMessage msg = MessageFactory.newInstance().createMessage();
+            SOAPEnvelope envelope = msg.getSOAPPart().getEnvelope();
+            SOAPBody body = envelope.getBody();
+// THIS is the right way to create an element
+            SOAPElement containerElement = body.addChildElement("container");
+            Document ownerDocument = containerElement.getOwnerDocument();
+            if (ownerDocument == null) {
+                throw new SOAPException("Owner document is null");
+            }
+            ownerDocument.normalizeDocument();
+
+
             serviceRequest.setRequestData(containerElement);
+
 
             // store request parameters in serviceRequest
             Map<String, String[]> params = filterRequestParameters(request.getParameterMap());
@@ -763,13 +778,13 @@ public class ConsumerGateway extends HttpServlet {
             // requestData contains request parameters and possible converted JSON
             // body, as initialized in ConsumerGateway.processRequest
             SOAPElement containerElement = (SOAPElement) request.getRequestData();
-//            Document targetDocument = soapRequest.getOwnerDocument();
+            Document targetDocument = soapRequest.getOwnerDocument();
 //
-//            SOAPElement importedElement = (SOAPElement) targetDocument.importNode(containerElement, true);
+            SOAPElement importedElement = (SOAPElement) targetDocument.importNode(containerElement, true);
             // SOAPHelper.moveChildren(importedElement, soapRequest, true);
 
 
-            NodeList children = containerElement.getChildNodes();
+            NodeList children = importedElement.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 Node child = (Node) children.item(i);
                 child.setParentElement(soapRequest);
