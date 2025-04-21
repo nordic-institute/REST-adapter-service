@@ -100,8 +100,10 @@ public class ConsumerGateway extends HttpServlet {
         Properties readEndpointProps;
         Properties readConsumerGatewayProps;
         if (propertiesDirectory != null) {
-            readEndpointProps = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_CONSUMERS, false);
-            readConsumerGatewayProps = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_CONSUMER_GATEWAY, false);
+            readEndpointProps = PropertiesUtil.getInstance()
+                    .load(propertiesDirectory + Constants.PROPERTIES_FILE_CONSUMERS, false);
+            readConsumerGatewayProps = PropertiesUtil.getInstance()
+                    .load(propertiesDirectory + Constants.PROPERTIES_FILE_CONSUMER_GATEWAY, false);
         } else {
             readEndpointProps = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_CONSUMERS);
             readConsumerGatewayProps = PropertiesUtil.getInstance().load(Constants.PROPERTIES_FILE_CONSUMER_GATEWAY);
@@ -118,12 +120,16 @@ public class ConsumerGateway extends HttpServlet {
         Properties endpointProps = gatewayProperties.getEndpointProps();
 
         log.debug("Setting Consumer and ConsumerGateway properties");
-        String serviceCallsByXRdServiceIdStr = this.props.getProperty(Constants.CONSUMER_PROPS_SVC_CALLS_BY_XRD_SVC_ID_ENABLED);
-        this.serviceCallsByXRdServiceId = serviceCallsByXRdServiceIdStr == null ? false : "true".equalsIgnoreCase(serviceCallsByXRdServiceIdStr);
+        String serviceCallsByXRdServiceIdStr = this.props
+                .getProperty(Constants.CONSUMER_PROPS_SVC_CALLS_BY_XRD_SVC_ID_ENABLED);
+        this.serviceCallsByXRdServiceId = serviceCallsByXRdServiceIdStr == null ? false
+                : "true".equalsIgnoreCase(serviceCallsByXRdServiceIdStr);
         log.debug("Security server URL : \"{}\".", getSecurityServerUrl());
         log.debug("Default client id : \"{}\".", this.props.getProperty(Constants.CONSUMER_PROPS_ID_CLIENT));
-        log.debug("Default namespace for incoming ServiceResponses : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE));
-        log.debug("Default namespace for outgoing ServiceRequests : \"{}\".", this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE));
+        log.debug("Default namespace for incoming ServiceResponses : \"{}\".",
+                this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE));
+        log.debug("Default namespace for outgoing ServiceRequests : \"{}\".",
+                this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE));
         log.debug("Default namespace prefix for outgoing ServiceRequests : \"{}\".",
                 this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE));
         log.debug("Service calls by X-Road service id are enabled : {}.", this.serviceCallsByXRdServiceId);
@@ -149,7 +155,8 @@ public class ConsumerGateway extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException      if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
         String responseStr;
         // Get resourcePath attribute
@@ -209,10 +216,12 @@ public class ConsumerGateway extends HttpServlet {
         // Set namespace and prefix received from header, if not null or empty
         processNamespaceAndPrefix(endpoint, namespace, prefix);
 
-        log.info("Starting to process \"{}\" service. X-Road id : \"{}\". Message id : \"{}\".", serviceId, endpoint.getServiceId(), messageId);
+        log.info("Starting to process \"{}\" service. X-Road id : \"{}\". Message id : \"{}\".", serviceId,
+                endpoint.getServiceId(), messageId);
         try {
             // Create ServiceRequest object
-            ServiceRequest<SOAPElement> serviceRequest = new ServiceRequest<>(endpoint.getConsumer(), endpoint.getProducer(), messageId);
+            ServiceRequest<SOAPElement> serviceRequest = new ServiceRequest<>(endpoint.getConsumer(),
+                    endpoint.getProducer(), messageId);
             // Set userId
             serviceRequest.setUserId(userId);
             // serviceRequest carries its payload as an SOAPElement
@@ -231,7 +240,8 @@ public class ConsumerGateway extends HttpServlet {
 
             String requestBody = readRequestBody(request);
             if (endpoint.isConvertPost()) {
-                // convert request body (JSON) into XML element and store end result inside containerElement
+                // convert request body (JSON) into XML element and store end result inside
+                // containerElement
                 String xml = convertJsonToXml(requestBody);
                 SOAPElement elementFromBody = SOAPHelper.xmlStrToSOAPElement(xml);
                 SOAPHelper.moveChildren(elementFromBody, containerElement, true);
@@ -249,7 +259,8 @@ public class ConsumerGateway extends HttpServlet {
             SOAPClient client = new SOAPClientImpl();
             log.info("Send request ({}) to the security server. URL : \"{}\".", messageId, getSecurityServerUrl());
             // Make the service call that returns the service response
-            ServiceResponse serviceResponse = client.send(serviceRequest, getSecurityServerUrl(), serializer, deserializer);
+            ServiceResponse serviceResponse = client.send(serviceRequest, getSecurityServerUrl(), serializer,
+                    deserializer);
             log.info("Received response ({}) from the security server.", messageId);
             // Set response wrapper processing
             if (endpoint.isProcessingWrappers() != null) {
@@ -266,11 +277,12 @@ public class ConsumerGateway extends HttpServlet {
                 // Modify the response
                 responseStr = ConsumerGatewayUtil.rewriteUrl(servletUrl, resourcePath, responseStr);
             }
-            log.info("Processing \"{}\" service successfully completed. X-Road id : \"{}\". Message id : \"{}\".", serviceId, endpoint.getServiceId(),
-                    messageId);
+            log.info("Processing \"{}\" service successfully completed. X-Road id : \"{}\". Message id : \"{}\".",
+                    serviceId, endpoint.getServiceId(), messageId);
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
-            log.error("Processing \"{}\" service failed. X-Road id : \"{}\". Message id : \"{}\".", serviceId, endpoint.getServiceId(), messageId);
+            log.error("Processing \"{}\" service failed. X-Road id : \"{}\". Message id : \"{}\".", serviceId,
+                    endpoint.getServiceId(), messageId);
             // Internal server error -> return 500
             responseStr = generateError(Constants.ERROR_500, accept);
             response.setStatus(Constants.HTTP_INTERNAL_ERROR);
@@ -294,9 +306,9 @@ public class ConsumerGateway extends HttpServlet {
     }
 
     /**
-     * Returns a new ServiceRequestSerializer that converts the request to SOAP.
-     * The implementation of the ServiceRequestSerializer is decided based on
-     * the given parameters.
+     * Returns a new ServiceRequestSerializer that converts the request to SOAP. The
+     * implementation of the ServiceRequestSerializer is decided based on the given
+     * parameters.
      *
      * @param endpoint    ConsumerEndpoint that's processed using the serializer
      * @param requestBody request body that's being processed
@@ -304,7 +316,8 @@ public class ConsumerGateway extends HttpServlet {
      * @return new ServiceRequestSerializer object
      * @throws XRd4JException
      */
-    private ServiceRequestSerializer getRequestSerializer(ConsumerEndpoint endpoint, String requestBody, String contentType) throws XRd4JException {
+    private ServiceRequestSerializer getRequestSerializer(ConsumerEndpoint endpoint, String requestBody,
+            String contentType) throws XRd4JException {
         // Type of the serializer depends on the encryption
         if (endpoint.isRequestEncrypted()) {
             log.debug("Endpoint requires that request is encrypted.");
@@ -313,20 +326,23 @@ public class ConsumerGateway extends HttpServlet {
             // Check if encrypter already exists in cache - it should as all
             // the encrypters are loaded during start up
             if (this.asymmetricEncrypterCache.containsKey(providerId)) {
-                asymmetricEncrypter = RESTGatewayUtil.getEncrypter(this.publicKeyFile, this.publicKeyFilePassword, providerId);
+                asymmetricEncrypter = RESTGatewayUtil.getEncrypter(this.publicKeyFile, this.publicKeyFilePassword,
+                        providerId);
                 log.trace("Asymmetric encrypter for provider \"{}\" loaded from cache.", providerId);
             } else {
                 // Create new encrypter if it does not exist already for some reason
-                asymmetricEncrypter = RESTGatewayUtil.getEncrypter(this.publicKeyFile, this.publicKeyFilePassword, providerId);
+                asymmetricEncrypter = RESTGatewayUtil.getEncrypter(this.publicKeyFile, this.publicKeyFilePassword,
+                        providerId);
                 // Add new encrypter to the cache
                 this.asymmetricEncrypterCache.put(providerId, asymmetricEncrypter);
-                log.trace("Asymmetric encrypter for provider \"{}\" not found from cache. New ecrypter created.", providerId);
+                log.trace("Asymmetric encrypter for provider \"{}\" not found from cache. New ecrypter created.",
+                        providerId);
             }
             if (asymmetricEncrypter == null) {
                 throw new XRd4JException("No public key found when encryption is required.");
             }
-            return new EncryptingRequestSerializer(endpoint.getResourceId(), requestBody, contentType, asymmetricEncrypter, this.keyLength,
-                    endpoint.isConvertPost());
+            return new EncryptingRequestSerializer(endpoint.getResourceId(), requestBody, contentType,
+                    asymmetricEncrypter, this.keyLength, endpoint.isConvertPost());
         } else {
             return new RequestSerializer(endpoint.getResourceId(), requestBody, contentType, endpoint.isConvertPost());
         }
@@ -334,8 +350,8 @@ public class ConsumerGateway extends HttpServlet {
 
     /**
      * Returns a new ServiceResponseDeserializer that converts the response from
-     * SOAP to XML/JSON. The implementation of the ServiceResponseDeserializer
-     * is decided based on the given parameters.
+     * SOAP to XML/JSON. The implementation of the ServiceResponseDeserializer is
+     * decided based on the given parameters.
      *
      * @param endpoint      ConsumerEndpoint that's processed using the deserializer
      * @param omitNamespace boolean value that tells if the response namespace
@@ -343,7 +359,8 @@ public class ConsumerGateway extends HttpServlet {
      * @return new ServiceResponseDeserializer object
      * @throws XRd4JException
      */
-    private ServiceResponseDeserializer getResponseDeserializer(ConsumerEndpoint endpoint, boolean omitNamespace) throws XRd4JException {
+    private ServiceResponseDeserializer getResponseDeserializer(ConsumerEndpoint endpoint, boolean omitNamespace)
+            throws XRd4JException {
         // Type of the serializer depends on the encryption
         if (endpoint.isResponseEncrypted()) {
             // If asymmetric decrypter is null, there's nothing to do
@@ -358,8 +375,8 @@ public class ConsumerGateway extends HttpServlet {
     }
 
     /**
-     * Returns "anonymous" if the given user id is null. Otherwise returns the
-     * given user id.
+     * Returns "anonymous" if the given user id is null. Otherwise returns the given
+     * user id.
      *
      * @param userId user id to be checked
      * @return "anonymous" if the given user id is null; otherwise userId
@@ -379,13 +396,14 @@ public class ConsumerGateway extends HttpServlet {
      *
      * @param messageId message id to be checked
      * @return unique identifier if the given message id is null; otherwise
-     * messageId
+     *         messageId
      */
     private String processMessageId(String messageId) {
         // Set messageId if null
         if (messageId == null) {
             String id = MessageHelper.generateId();
-            log.debug("\"{}\" header is null. Use auto-generated id \"{}\" instead.", Constants.XRD_HEADER_MESSAGE_ID, id);
+            log.debug("\"{}\" header is null. Use auto-generated id \"{}\" instead.", Constants.XRD_HEADER_MESSAGE_ID,
+                    id);
             return id;
         }
         return messageId;
@@ -393,8 +411,8 @@ public class ConsumerGateway extends HttpServlet {
     }
 
     /**
-     * Checks namespace and prefix for null and empty, and sets them to endpoint
-     * if a value is found.
+     * Checks namespace and prefix for null and empty, and sets them to endpoint if
+     * a value is found.
      *
      * @param endpoint  ConsumerEndpoint object
      * @param namespace namespace HTTP header String
@@ -409,13 +427,14 @@ public class ConsumerGateway extends HttpServlet {
         // Set prefix received from header, if not null or empty
         if (!RESTGatewayUtil.isNullOrEmpty(prefix)) {
             endpoint.getProducer().setNamespacePrefix(prefix);
-            log.debug("\"{}\" HTTP header found. Value : \"{}\".", Constants.XRD_HEADER_NAMESPACE_PREFIX_SERIALIZE, prefix);
+            log.debug("\"{}\" HTTP header found. Value : \"{}\".", Constants.XRD_HEADER_NAMESPACE_PREFIX_SERIALIZE,
+                    prefix);
         }
     }
 
     /**
-     * Checks the value of the accept header and sets it to "text/xml" if no
-     * valid value is found. UTF8 character set definition is added if missing.
+     * Checks the value of the accept header and sets it to "text/xml" if no valid
+     * value is found. UTF8 character set definition is added if missing.
      *
      * @param accept HTTP Accept header value from the request
      * @return sanitized Accept header value
@@ -435,8 +454,8 @@ public class ConsumerGateway extends HttpServlet {
     }
 
     /**
-     * Process the response and check it for error messages and attachments
-     * etc., and generate the response message string.
+     * Process the response and check it for error messages and attachments etc.,
+     * and generate the response message string.
      *
      * @param response        HttpServletResponse object
      * @param serviceResponse ServiceResponse object
@@ -540,7 +559,8 @@ public class ConsumerGateway extends HttpServlet {
      * @throws IOException      if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -553,7 +573,8 @@ public class ConsumerGateway extends HttpServlet {
      * @throws IOException      if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -566,7 +587,8 @@ public class ConsumerGateway extends HttpServlet {
      * @throws IOException      if an I/O error occurs
      */
     @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -579,7 +601,8 @@ public class ConsumerGateway extends HttpServlet {
      * @throws IOException      if an I/O error occurs
      */
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -621,23 +644,18 @@ public class ConsumerGateway extends HttpServlet {
      * @return URL of this servlet
      */
     private static String getServletUrl(HttpServletRequest request) {
-        return request.getScheme() + "://"
-                + // "http" + "://
-                request.getServerName()
-                + // "myhost"
-                ":"
-                + // ":"
-                request.getServerPort()
-                + // "8080"
-                request.getContextPath()
-                + "/Consumer/";
+        return request.getScheme() + "://" + // "http" + "://
+                request.getServerName() + // "myhost"
+                ":" + // ":"
+                request.getServerPort() + // "8080"
+                request.getContextPath() + "/Consumer/";
     }
 
     /**
-     * Checks if URL parameter (1) or HTTP header (2) with the given name exists
-     * and returns its value. If no URL parameter or HTTP header is found, null
-     * is returned. URL parameters are the primary source, and HTTP headers
-     * secondary source.
+     * Checks if URL parameter (1) or HTTP header (2) with the given name exists and
+     * returns its value. If no URL parameter or HTTP header is found, null is
+     * returned. URL parameters are the primary source, and HTTP headers secondary
+     * source.
      *
      * @param request HTTP request
      * @param header  name of the header
@@ -653,8 +671,8 @@ public class ConsumerGateway extends HttpServlet {
 
     /**
      * Removes all the X-Road specific HTTP and SOAP headers from the request
-     * parameters map. This method must be called before writing the parameters
-     * to the SOAP request object.
+     * parameters map. This method must be called before writing the parameters to
+     * the SOAP request object.
      *
      * @param parameters HTTP request parameters map
      * @return filtered parameters map
@@ -714,8 +732,10 @@ public class ConsumerGateway extends HttpServlet {
         }
 
         @Override
-        protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
-            // Write everything except possible attachment reference to request body SOAPElement
+        protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope)
+                throws SOAPException {
+            // Write everything except possible attachment reference to request body
+            // SOAPElement
             writeBodyContents(request, soapRequest);
             if (this.requestBody != null && !this.requestBody.isEmpty()) {
                 if (!convertPost) {
@@ -728,8 +748,8 @@ public class ConsumerGateway extends HttpServlet {
         }
 
         /**
-         * Copies resourceId, GET params (if any) coming from the GET URL, and converted JSON->XML (if any) to the
-         * SOAP request body
+         * Copies resourceId, GET params (if any) coming from the GET URL, and converted
+         * JSON->XML (if any) to the SOAP request body
          *
          * @param request
          * @param soapRequest
@@ -743,11 +763,17 @@ public class ConsumerGateway extends HttpServlet {
             // requestData contains request parameters and possible converted JSON
             // body, as initialized in ConsumerGateway.processRequest
             SOAPElement containerElement = (SOAPElement) request.getRequestData();
+
+            log.info("container element document");
+            log.info(containerElement.getOwnerDocument().toString());
+            log.info(containerElement.getOwnerDocument().getNamespaceURI());
             SOAPHelper.moveChildren(containerElement, soapRequest, true);
         }
 
-        protected void handleAttachment(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope, String attachmentData) throws SOAPException {
-            log.debug("Request body was found from the request. Add request body as SOAP attachment." + " Content type is \"{}\".", this.contentType);
+        protected void handleAttachment(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope,
+                String attachmentData) throws SOAPException {
+            log.debug("Request body was found from the request. Add request body as SOAP attachment."
+                    + " Content type is \"{}\".", this.contentType);
             SOAPElement data = soapRequest.addChildElement(envelope.createName(Constants.PARAM_REQUEST_BODY));
             data.addAttribute(envelope.createName("href"), Constants.PARAM_REQUEST_BODY);
             AttachmentPart attachPart = request.getSoapMessage().createAttachmentPart(attachmentData, this.contentType);
@@ -758,9 +784,9 @@ public class ConsumerGateway extends HttpServlet {
     }
 
     /**
-     * Convert a JSON string to XML.
-     * JSON is wrapped inside an extra root element JSON_CONVERSION_WRAPPER_ELEMENT,
-     * so the resulting XML is inside a root element with same name
+     * Convert a JSON string to XML. JSON is wrapped inside an extra root element
+     * JSON_CONVERSION_WRAPPER_ELEMENT, so the resulting XML is inside a root
+     * element with same name
      *
      * @param json
      * @return
@@ -770,9 +796,7 @@ public class ConsumerGateway extends HttpServlet {
         log.debug("converting json: {}", json);
         // create a json wrapper root property
         final StringBuilder wrapped = new StringBuilder();
-        wrapped.append("{ \"").append(JSON_CONVERSION_WRAPPER_ELEMENT).append("\": ")
-                .append(json)
-                .append("}");
+        wrapped.append("{ \"").append(JSON_CONVERSION_WRAPPER_ELEMENT).append("\": ").append(json).append("}");
         final String converted = new JSONToXMLConverter().convert(wrapped.toString());
         if (converted == null || converted.isEmpty()) {
             throw new SOAPException("could not convert json to xml");
@@ -785,8 +809,8 @@ public class ConsumerGateway extends HttpServlet {
         private final Encrypter asymmetricEncrypter;
         private final int keyLength;
 
-        EncryptingRequestSerializer(String resourceId, String requestBody, String contentType, Encrypter asymmetricEncrypter, int keyLength,
-                                    boolean convertPost) {
+        EncryptingRequestSerializer(String resourceId, String requestBody, String contentType,
+                Encrypter asymmetricEncrypter, int keyLength, boolean convertPost) {
             super(resourceId, requestBody, contentType, convertPost);
             this.asymmetricEncrypter = asymmetricEncrypter;
             this.keyLength = keyLength;
@@ -794,12 +818,14 @@ public class ConsumerGateway extends HttpServlet {
         }
 
         @Override
-        protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
+        protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope)
+                throws SOAPException {
             SOAPElement payload = SOAPHelper.xmlStrToSOAPElement("<" + Constants.PARAM_ENCRYPTION_WRAPPER + "/>");
             try {
                 // Create new symmetric encrypter using of defined key length
                 Encrypter symmetricEncrypter = RESTGatewayUtil.createSymmetricEncrypter(this.keyLength);
-                // Write everything except possible attachment reference to request body SOAPElement
+                // Write everything except possible attachment reference to request body
+                // SOAPElement
                 writeBodyContents(request, payload);
                 // Process request body
                 if (this.requestBody != null && !this.requestBody.isEmpty()) {
@@ -884,34 +910,35 @@ public class ConsumerGateway extends HttpServlet {
             Map<String, String> nodes = SOAPHelper.nodesToMap(responseNode.getChildNodes());
 
             /**
-             * N.B.! If signature is present (B: encrypt then sign) and we want
-             * to verify it before going ahead with processing, this is the
-             * place to do it. The signed part of the message is accessed:
-             * nodes.get(Constants.PARAM_ENCRYPTED)
+             * N.B.! If signature is present (B: encrypt then sign) and we want to verify it
+             * before going ahead with processing, this is the place to do it. The signed
+             * part of the message is accessed: nodes.get(Constants.PARAM_ENCRYPTED)
              */
             // Decrypt session key using the private key
-            Decrypter symmetricDecrypter =
-                    RESTGatewayUtil.getSymmetricDecrypter(this.asymmetricDecrypter, nodes.get(Constants.PARAM_KEY), nodes.get(Constants.PARAM_IV));
+            Decrypter symmetricDecrypter = RESTGatewayUtil.getSymmetricDecrypter(this.asymmetricDecrypter,
+                    nodes.get(Constants.PARAM_KEY), nodes.get(Constants.PARAM_IV));
 
             // If message has attachments, return the first attachment
             if (message.countAttachments() > 0) {
                 log.debug("SOAP attachment detected. Use attachment as response data.");
                 // Return decrypted data
-                return symmetricDecrypter.decrypt(SOAPHelper.toString((AttachmentPart) message.getAttachments().next()));
+                return symmetricDecrypter
+                        .decrypt(SOAPHelper.toString((AttachmentPart) message.getAttachments().next()));
             }
             /**
-             * N.B.! If signature is present (A: sign then encrypt) and we want
-             * to verify it before going ahead with processing, this is the
-             * place to do it. The signed part of the message is accessed:
-             * symmetricDecrypter.decrypt(nodes.get(Constants.PARAM_ENCRYPTED))
-             * UTF-8 String wrapper must left out from signature verification.
+             * N.B.! If signature is present (A: sign then encrypt) and we want to verify it
+             * before going ahead with processing, this is the place to do it. The signed
+             * part of the message is accessed:
+             * symmetricDecrypter.decrypt(nodes.get(Constants.PARAM_ENCRYPTED)) UTF-8 String
+             * wrapper must left out from signature verification.
              */
 
             // Decrypt the response. UTF-8 characters are not showing correctly
             // if we don't wrap the decrypted data into a new string and
             // explicitly tell that it's UTF-8 even if encrypter and
             // decrypter handle strings as UTF-8.
-            String decryptedResponse = new String(symmetricDecrypter.decrypt(nodes.get(Constants.PARAM_ENCRYPTED)).getBytes(StandardCharsets.UTF_8));
+            String decryptedResponse = new String(
+                    symmetricDecrypter.decrypt(nodes.get(Constants.PARAM_ENCRYPTED)).getBytes(StandardCharsets.UTF_8));
             // Convert encrypted response to SOAP
             SOAPElement encryptionWrapper = SOAPHelper.xmlStrToSOAPElement(decryptedResponse);
             // Remove all the children under response node
