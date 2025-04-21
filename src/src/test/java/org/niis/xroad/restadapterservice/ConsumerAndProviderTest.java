@@ -83,6 +83,7 @@ public class ConsumerAndProviderTest {
     @Value("${wiremock.server.port}")
     private int wireMockPort;
 
+
     @BeforeEach
     public void setUp() throws Exception {
         // set up mock http server for ss

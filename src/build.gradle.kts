@@ -57,20 +57,22 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-tomcat:3.4.4")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.4") {
         exclude(group = "com.vaadin.external.google", module = "android-json")
-        exclude(group = "org.skyscreamer", module = "jsonassert")
+
+//        exclude(group = "org.skyscreamer", module = "jsonassert")
+//        exclude(group = "junit")
 //        exclude(group = " org.mockito", module = "mockito-core")
 //        exclude(group = " org.mockito", module = "mockito-junit-jupiter")
     }
 //    implementation("org.springframework.boot:spring-boot-starter-tomcat:3.3.3")
     implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
 
-    // xrd4j
+// xrd4j
     implementation("org.niis.xrd4j:common:0.6.0")
     implementation("org.niis.xrd4j:client:0.6.0")
     implementation("org.niis.xrd4j:server:0.6.0")
     implementation("org.niis.xrd4j:rest:0.6.0")
 
-    // Lombok
+// Lombok
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     testImplementation("org.projectlombok:lombok:1.18.30")
@@ -78,17 +80,18 @@ dependencies {
 
 //    testImplementation("junit:junit:4.13.1")
 //    testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
-    testImplementation("org.assertj:assertj-core:3.24.2")
+//    testImplementation("org.assertj:assertj-core:3.24.2")
     testImplementation(libs.org.xmlunit.xmlunit.assertj)
     testImplementation("org.apache.tomcat.embed:tomcat-embed-jasper:10.1.39")
-    testImplementation("com.github.tomakehurst:wiremock:3.0.1") {
-        exclude(group = "com.vaadin.external.google", module = "android-json")
-    }
+
+    testImplementation("org.wiremock.integrations:wiremock-spring-boot:3.6.0")
+    testAnnotationProcessor("org.wiremock.integrations:wiremock-spring-boot:3.6.0")
+
     testImplementation(libs.commons.io.commons.io)
     testImplementation(libs.com.github.stefanbirkner.system.rules)
-    testImplementation("org.skyscreamer:jsonassert:1.5.1") {
-        exclude(group = "com.vaadin.external.google", module = "android-json")
-    }
+//    testImplementation("org.skyscreamer:jsonassert:1.5.1") {
+//        exclude(group = "com.vaadin.external.google", module = "android-json")
+//    }
     testImplementation(libs.org.xmlunit.xmlunit.core)
     testImplementation(libs.org.xmlunit.xmlunit.matchers)
     testImplementation(libs.com.jayway.jsonpath.json.path.assert)
@@ -98,12 +101,15 @@ dependencies {
 
     //added to fix runtime errors
     implementation("org.apache.httpcomponents.client5:httpclient5:5.4.1")
-    testImplementation("org.apache.httpcomponents.client5:httpclient5:5.4.1")
+//    testImplementation("org.apache.httpcomponents.client5:httpclient5:5.4.1")
+
+//    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
 
 //    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.12.0")
 
 }
+
 
 
 group = "org.niis"
