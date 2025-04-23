@@ -39,6 +39,7 @@ import jakarta.servlet.http.HttpServlet;
 import java.util.Arrays;
 import java.util.EnumSet;
 
+
 /**
  * Rest adapter service application entry point
  */
@@ -47,6 +48,7 @@ import java.util.EnumSet;
 public class Application extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
+
         SpringApplication.run(Application.class, args);
     }
 

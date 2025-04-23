@@ -54,6 +54,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -225,19 +226,18 @@ public class ConsumerGateway extends HttpServlet {
             // Set userId
             serviceRequest.setUserId(userId);
             // serviceRequest carries its payload as an SOAPElement
-//            SOAPElement containerElement = SOAPFactory.newInstance().createElement("container");
+            SOAPElement containerElement = SOAPFactory.newInstance().createElement("container");
 
-
-            SOAPMessage msg = MessageFactory.newInstance().createMessage();
-            SOAPEnvelope envelope = msg.getSOAPPart().getEnvelope();
-            SOAPBody body = envelope.getBody();
-// THIS is the right way to create an element
-            SOAPElement containerElement = body.addChildElement("container");
-            Document ownerDocument = containerElement.getOwnerDocument();
-            if (ownerDocument == null) {
-                throw new SOAPException("Owner document is null");
-            }
-            ownerDocument.normalizeDocument();
+//            SOAPMessage msg = MessageFactory.newInstance().createMessage();
+//            SOAPEnvelope envelope = msg.getSOAPPart().getEnvelope();
+//            SOAPBody body = envelope.getBody();
+//            // THIS is the right way to create an element
+//            SOAPElement containerElement = body.addChildElement("container");
+//            Document ownerDocument = containerElement.getOwnerDocument();
+//            if (ownerDocument == null) {
+//                throw new SOAPException("Owner document is null");
+//            }
+//            ownerDocument.normalizeDocument();
 
 
             serviceRequest.setRequestData(containerElement);

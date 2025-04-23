@@ -6,7 +6,9 @@ plugins {
     `maven-publish`
     id("org.springframework.boot") version "3.4.4"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    `checkstyle`
+    id("org.owasp.dependencycheck") version "12.1.1"
+//    `checkstyle`
+    jacoco
 }
 
 
@@ -31,10 +33,6 @@ repositories {
 }
 
 
-//sourceSets {
-//    getByName("main").java.srcDirs("src/src/java")
-//    getByName("main").resources.srcDirs("src/src/resources")
-//}
 
 ext {
     set("xrd4j.version", "0.6.0")
@@ -58,19 +56,22 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-tomcat:3.4.4")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.4") {
         exclude(group = "com.vaadin.external.google", module = "android-json")
-
     }
 
-// xrd4j
+    // xrd4j
     implementation("org.niis.xrd4j:common:0.6.0")
     implementation("org.niis.xrd4j:client:0.6.0")
     implementation("org.niis.xrd4j:server:0.6.0")
     implementation("org.niis.xrd4j:rest:0.6.0")
 
     implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
+    implementation("jakarta.xml.soap:jakarta.xml.soap-api:3.0.2")
+    implementation("jakarta.xml.soap:jakarta.xml.soap-api:3.0.2")
+    implementation("com.sun.xml.messaging.saaj:saaj-impl:3.0.4")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.4.1")
 
-// Lombok
+
+    // Lombok
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     testImplementation("org.projectlombok:lombok:1.18.30")
@@ -90,7 +91,6 @@ dependencies {
     testImplementation(libs.org.xmlunit.xmlunit.matchers)
     testImplementation(libs.com.jayway.jsonpath.json.path.assert)
     testImplementation(libs.com.jayway.jsonpath.json.path)
-
 
 }
 
@@ -161,8 +161,6 @@ val props = Properties().apply {
 }
 val replacements = props.entries.associate { it.key.toString() to it.value.toString() }
 
-
-
 tasks.processResources {
     filesMatching("**/*.properties") {
         filter { line ->
@@ -195,6 +193,11 @@ tasks.processTestResources {
 tasks.test {
     useJUnitPlatform()
     exclude("org/niis/xroad/restadapterservice/ConsumerGatewayIT.class")
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // tests are required to run before generating the report
 }
 
 tasks.bootJar {
