@@ -22,6 +22,10 @@
  */
 package org.niis.xroad.restadapterservice;
 
+import com.sun.xml.messaging.saaj.soap.SOAPDocument;
+import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
+import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
+import com.sun.xml.messaging.saaj.soap.ver1_1.BodyElement1_1Impl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -54,7 +58,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -225,24 +228,20 @@ public class ConsumerGateway extends HttpServlet {
                     endpoint.getProducer(), messageId);
             // Set userId
             serviceRequest.setUserId(userId);
+
             // serviceRequest carries its payload as an SOAPElement
 //            SOAPElement containerElement = SOAPFactory.newInstance().createElement("container");
 
-            SOAPFactory factory = SOAPFactory.newInstance();
-            SOAPElement containerElement = factory.createElement("contaier");
-//            SOAPMessage msg = MessageFactory.newInstance().createMessage();
-//            SOAPEnvelope envelope = msg.getSOAPPart().getEnvelope();
-//            SOAPBody body = envelope.getBody();
-//            // THIS is the right way to create an element
-//            SOAPElement containerElement = body.addChildElement("container");
-            Document ownerDocument = containerElement.getOwnerDocument();
-            Element element = ownerDocument.getDocumentElement();
-//            ownerDocument.importNode(containerElement, true);
-//            ownerDocument.renameNode(containerElement, "testNamespace", "testPrefix");
 
+            SOAPMessage msg = MessageFactory.newInstance().createMessage();
+            SOAPEnvelope envelope = msg.getSOAPPart().getEnvelope();
+            SOAPBody body = envelope.getBody();
+            ElementImpl containerElement = (ElementImpl) body.addChildElement("container");
+            Document ownerDocument = containerElement.getOwnerDocument();
+            ownerDocument.importNode(containerElement, true);
+            ownerDocument.renameNode(containerElement.getDomElement(), "testNamespace", "testPrefix");
 
             serviceRequest.setRequestData(containerElement);
-
 
             // store request parameters in serviceRequest
             Map<String, String[]> params = filterRequestParameters(request.getParameterMap());
@@ -781,8 +780,8 @@ public class ConsumerGateway extends HttpServlet {
             SOAPElement containerElement = (SOAPElement) request.getRequestData();
             Document targetDocument = soapRequest.getOwnerDocument();
 //
-            SOAPElement importedElement = (SOAPElement) targetDocument.importNode(containerElement, true);
-            // SOAPHelper.moveChildren(importedElement, soapRequest, true);
+            ElementImpl importedElement = (ElementImpl) targetDocument.importNode(containerElement, true);
+//            SOAPHelper.moveChildren(importedElement, soapRequest, true);
 
 
             NodeList children = importedElement.getChildNodes();
@@ -826,11 +825,13 @@ public class ConsumerGateway extends HttpServlet {
          */
         public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) {
             if (node.getNodeType() == ELEMENT_NODE) {
+                ElementImpl nodeElementImpl = (ElementImpl) node;
                 if (prefix != null && !prefix.isEmpty()) {
-                    node = (Node) node.getOwnerDocument().renameNode(node, namespace, prefix + ":" + node.getLocalName());
+                    nodeElementImpl = (ElementImpl) node.getOwnerDocument().renameNode(nodeElementImpl.getDomElement(), namespace, prefix + ":" + node.getLocalName());
                 } else if (namespace != null && !namespace.isEmpty()) {
-                    node = (Node) node.getOwnerDocument().renameNode(node, namespace, node.getLocalName());
+                    nodeElementImpl = (ElementImpl) node.getOwnerDocument().renameNode(nodeElementImpl.getDomElement(), namespace, node.getLocalName());
                 }
+                return (Node) nodeElementImpl.getDomElement();
             }
             return node;
         }
