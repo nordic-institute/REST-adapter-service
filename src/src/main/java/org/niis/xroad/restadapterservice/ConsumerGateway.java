@@ -226,18 +226,19 @@ public class ConsumerGateway extends HttpServlet {
             // Set userId
             serviceRequest.setUserId(userId);
             // serviceRequest carries its payload as an SOAPElement
-            SOAPElement containerElement = SOAPFactory.newInstance().createElement("container");
+//            SOAPElement containerElement = SOAPFactory.newInstance().createElement("container");
 
+            SOAPFactory factory = SOAPFactory.newInstance();
+            SOAPElement containerElement = factory.createElement("contaier");
 //            SOAPMessage msg = MessageFactory.newInstance().createMessage();
 //            SOAPEnvelope envelope = msg.getSOAPPart().getEnvelope();
 //            SOAPBody body = envelope.getBody();
 //            // THIS is the right way to create an element
 //            SOAPElement containerElement = body.addChildElement("container");
-//            Document ownerDocument = containerElement.getOwnerDocument();
-//            if (ownerDocument == null) {
-//                throw new SOAPException("Owner document is null");
-//            }
-//            ownerDocument.normalizeDocument();
+            Document ownerDocument = containerElement.getOwnerDocument();
+            Element element = ownerDocument.getDocumentElement();
+//            ownerDocument.importNode(containerElement, true);
+//            ownerDocument.renameNode(containerElement, "testNamespace", "testPrefix");
 
 
             serviceRequest.setRequestData(containerElement);

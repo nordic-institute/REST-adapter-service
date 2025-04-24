@@ -12,6 +12,24 @@ plugins {
 }
 
 
+//sourceSets {
+//    create("integrationTest") {
+//        java.srcDirs("src/test/java/")
+//        resources.srcDir("src/test/resources")
+//        compileClasspath += sourceSets.main.get().output + sourceSets.test.get().output + configurations["testRuntimeClasspath"]
+//        runtimeClasspath += output + compileClasspath
+//        configurations {
+//            named("integrationTestImplementation") {
+//                extendsFrom(configurations["testImplementation"])
+//            }
+//            named("integrationTestRuntimeOnly") {
+//                extendsFrom(configurations["testRuntimeOnly"])
+//            }
+//        }
+//    }
+//
+//}
+
 repositories {
     mavenLocal()
     maven {
@@ -143,6 +161,11 @@ publishing {
     }
 }
 
+dependencyCheck {
+//    formats = ("xml", "json")
+    outputDirectory = "${project.projectDir}/build/reports/dependency-check-report"
+    suppressionFile = "${project.projectDir}/src/dependency-check-suppressions.xml"
+}
 tasks.withType<JavaCompile>() {
     options.encoding = "UTF-8"
     options.annotationProcessorPath = configurations.annotationProcessor.get()
@@ -168,7 +191,7 @@ tasks.processResources {
         }
     }
     from("src/main/profiles/$adapterProfileDir/") {
-        filesMatching("**/consumer-gateway.properties") {
+        filesMatching("**/*.properties") {
             filter<ReplaceTokens>("tokens" to replacements)
         }
     }
@@ -188,6 +211,7 @@ tasks.processTestResources {
             line.replace("@projectDir@", project.projectDir.toString())
         }
     }
+
 }
 
 tasks.test {
@@ -198,6 +222,40 @@ tasks.test {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
+}
+
+tasks.register("processIntegrationTestResources") {
+    group = "build"
+    description = "Processes integration test resources"
+    dependsOn("processResources")
+    doLast {
+        copy {
+            from("src/main/profiles/$adapterProfileDir/") {
+                filesMatching("**/*.properties") {
+                    filter<ReplaceTokens>("tokens" to replacements)
+                }
+            }
+            into("${project.projectDir}/build/resources/integration-test-profile")
+        }
+    }
+}
+
+tasks.register<Test>("iTest") {
+    useJUnitPlatform()
+    dependsOn("processTestResources")
+    description = "Runs integration tests"
+    group = "verification"
+    testClassesDirs = sourceSets["test"].output.classesDirs
+    classpath = sourceSets["test"].runtimeClasspath
+
+    include("org/niis/xroad/restadapterservice/ConsumerGatewayIT.class")
+
+    // System properties — like Maven <systemProperties>
+    systemProperty("log4j.configuration", "test-log4j.xml")
+    systemProperty("consumerPath", project.projectDir.resolve("libs").resolve("${project.name}-${project.version}.jar"))
+    systemProperty("server.port", "9898")
+    systemProperty("propertiesDirectory", "${project.projectDir}/build/resources/integration-test-profile")
+
 }
 
 tasks.bootJar {

@@ -26,16 +26,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Condition;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.niis.xrd4j.rest.ClientResponse;
 import org.niis.xrd4j.rest.client.RESTClient;
 import org.niis.xrd4j.rest.client.RESTClientFactory;
 import org.niis.xroad.restadapterservice.util.Constants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.*;
 
 import java.nio.charset.StandardCharsets;
@@ -59,7 +58,6 @@ import org.xmlunit.assertj.XmlAssert;
  *
  * @author Petteri Kivimäki
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Slf4j
 public class ConsumerGatewayIT {
@@ -75,7 +73,7 @@ public class ConsumerGatewayIT {
     @Value("#{servletContext.contextPath}")
     private String servletContextPath;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         String buildPath = servletContextPath;
         String baseUrl = "http://localhost:" + port + "/" + buildPath + "/Consumer/";
@@ -255,7 +253,7 @@ public class ConsumerGatewayIT {
 
     /**
      * Execute request, and assert that response is expected
-     * 
+     *
      * @param url
      * @param verb
      * @param urlParams
@@ -264,7 +262,7 @@ public class ConsumerGatewayIT {
      * @param expectedContentType expected response content type
      */
     private void sendData(String url, String verb, Map<String, List<String>> urlParams, Map<String, String> headers,
-            String expectedResponse, String expectedContentType) {
+                          String expectedResponse, String expectedContentType) {
         ClientResponse restResponse = sendData(url, verb, urlParams, headers);
 
         String data = restResponse.getData();
@@ -275,7 +273,7 @@ public class ConsumerGatewayIT {
 
     /**
      * Execute request, and return ClientResponse
-     * 
+     *
      * @param url
      * @param verb
      * @param urlParams
@@ -283,7 +281,7 @@ public class ConsumerGatewayIT {
      * @return
      */
     private ClientResponse sendData(String url, String verb, Map<String, List<String>> urlParams,
-            Map<String, String> headers) {
+                                    Map<String, String> headers) {
         RESTClient restClient = RESTClientFactory.createRESTClient(verb);
         // Send request to the service endpoint
         System.out.println("sending request from test to: " + url);
@@ -300,7 +298,7 @@ public class ConsumerGatewayIT {
 
     /**
      * Execute json get request with parameters from given index
-     * 
+     *
      * @param index
      * @return
      */
