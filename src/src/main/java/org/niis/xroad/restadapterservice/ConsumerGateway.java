@@ -22,6 +22,7 @@
  */
 package org.niis.xroad.restadapterservice;
 
+import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -232,9 +233,9 @@ public class ConsumerGateway extends HttpServlet {
 //            SOAPEnvelope envelope = msg.getSOAPPart().getEnvelope();
 //            SOAPElement containerElement = envelope.addChildElement("container");
 
-            Document ownerDocument = containerElement.getOwnerDocument();
-//            ownerDocument.importNode(containerElement, true);
-//            ownerDocument.renameNode(containerElement.getDomElement(), "testNamespace", "testPrefix");
+//            Document ownerDocument = containerElement.getOwnerDocument();
+////            ownerDocument.importNode(containerElement, true);
+//            ownerDocument.renameNode((Node) containerElement.getDomElement(), "testNamespace", "testPrefix");
 
             serviceRequest.setRequestData(containerElement);
 
@@ -254,6 +255,7 @@ public class ConsumerGateway extends HttpServlet {
                 // containerElement
                 String xml = convertJsonToXml(requestBody);
                 SOAPElement elementFromBody = SOAPHelper.xmlStrToSOAPElement(xml);
+                Document OD = elementFromBody.getOwnerDocument();
                 SOAPHelper.moveChildren(elementFromBody, containerElement, true);
             }
 
@@ -770,27 +772,21 @@ public class ConsumerGateway extends HttpServlet {
                 log.debug("Add resourceId : \"{}\".", this.resourceId);
                 soapRequestTest.addChildElement("resourceId").addTextNode(this.resourceId);
             }
-            // requestData contains request parameters and possible converted JSON
-            // body, as initialized in ConsumerGateway.processRequest
-            SOAPElement containerElement = (SOAPElement) request.getRequestData();
-//            Document targetDocument = soapRequest.getOwnerDocument();
-//
-//            ElementImpl importedElement = (ElementImpl) targetDocument.importNode(containerElement, true);
-//            SOAPHelper.moveChildren(importedElement, soapRequest, true);
 
+
+            ElementImpl containerElement = (ElementImpl) request.getRequestData();
 
             NodeList children = containerElement.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 Node child = (Node) children.item(i);
-                child.setParentElement(soapRequestTest);
-//                ElementImpl childElementImpl = (ElementImpl) child;
-//                Element childDomElement = childElementImpl;
+                ElementImpl childElementImpl = (ElementImpl) child;
                 if ((child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
                     String namespace = soapRequestTest.getNamespaceURI();
                     String prefix = soapRequestTest.getPrefix();
-                    child = updateNamespaceAndPrefix(child, namespace, prefix);
+                    child = updateNamespaceAndPrefix(childElementImpl, namespace, prefix);
                     updateNamespaceAndPrefix(child.getChildNodes(), soapRequestTest.getNamespaceURI(), soapRequestTest.getPrefix());
                 }
+                child.setParentElement(soapRequestTest);
             }
         }
 
@@ -806,10 +802,16 @@ public class ConsumerGateway extends HttpServlet {
         public static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) {
             for (int i = 0; i < list.getLength(); i++) {
                 Node node = (Node) list.item(i);
+                if (node.getNodeType() == ELEMENT_NODE) {
+                    ElementImpl childElementImpl = (ElementImpl) node;
+                    if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
+                        node = updateNamespaceAndPrefix(node, namespace, prefix);
+                    }
+                }
                 if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
                     node = updateNamespaceAndPrefix(node, namespace, prefix);
+                    updateNamespaceAndPrefix(node.getChildNodes(), namespace, prefix);
                 }
-                updateNamespaceAndPrefix(node.getChildNodes(), namespace, prefix);
             }
         }
 
@@ -824,13 +826,16 @@ public class ConsumerGateway extends HttpServlet {
          */
         public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) {
             if (node.getNodeType() == ELEMENT_NODE) {
+                Node newNode = node;
+                ElementImpl elementImpl = (ElementImpl) node;
                 if (prefix != null && !prefix.isEmpty()) {
                     Document ownerDocument = node.getOwnerDocument();
                     ownerDocument.importNode(node, true);
-                    node = (Node) ownerDocument.renameNode(node, namespace, prefix + ":" + node.getLocalName());
+                    newNode = (Node) ownerDocument.renameNode(elementImpl.getDomElement(), namespace, prefix + ":" + node.getLocalName());
                 } else if (namespace != null && !namespace.isEmpty()) {
-                    node = (Node) node.getOwnerDocument().renameNode(node, namespace, node.getLocalName());
+                    newNode = (Node) node.getOwnerDocument().renameNode(elementImpl.getDomElement(), namespace, node.getLocalName());
                 }
+                return newNode;
             }
             return node;
         }
