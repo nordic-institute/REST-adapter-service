@@ -85,7 +85,7 @@ dependencies {
     implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
     implementation("jakarta.xml.soap:jakarta.xml.soap-api:3.0.2")
     implementation("jakarta.xml.soap:jakarta.xml.soap-api:3.0.2")
-//    implementation("com.sun.xml.messaging.saaj:saaj-impl:3.0.4")
+    implementation("com.sun.xml.messaging.saaj:saaj-impl:3.0.4")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.4.1")
 
 
