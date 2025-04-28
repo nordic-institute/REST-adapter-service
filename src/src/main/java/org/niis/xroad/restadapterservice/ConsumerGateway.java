@@ -51,6 +51,7 @@ import org.niis.xroad.restadapterservice.util.ConsumerGatewayUtil;
 import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -270,6 +271,7 @@ public class ConsumerGateway extends HttpServlet {
             if (endpoint.isProcessingWrappers() != null) {
                 serviceResponse.setProcessingWrappers(endpoint.isProcessingWrappers());
             }
+            serviceResponse.setProcessingWrappers(false);
             // Generate response message
             responseStr = handleResponse(response, serviceResponse);
 
@@ -767,6 +769,7 @@ public class ConsumerGateway extends HttpServlet {
 
             ElementImpl containerElement = (ElementImpl) request.getRequestData();
 
+//            SOAPHelper.moveChildren(containerElement, (ElementImpl) soapRequest, true);
             NodeList children = containerElement.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 Node child = (Node) children.item(i);
@@ -927,7 +930,7 @@ public class ConsumerGateway extends HttpServlet {
         @Override
         protected String deserializeResponseData(Node responseNode, SOAPMessage message) throws SOAPException {
             // Remove namespace if it's required
-            handleNamespace(responseNode);
+            handleNamespace((ElementImpl) responseNode);
 
             // If message has attachments, return the first attachment
             if (message.countAttachments() > 0) {
@@ -938,19 +941,26 @@ public class ConsumerGateway extends HttpServlet {
             return SOAPHelper.toString(responseNode);
         }
 
-        protected void handleNamespace(Node responseNode) {
+        protected void handleNamespace(ElementImpl responseNode) throws SOAPException {
             try {
-                Document document = responseNode.getOwnerDocument(); // Get the document of the responseNode
-                if (document != null) {
-                    Node importedNode = (Node) document.importNode(responseNode, true); // Import the node into the correct document
-                    // Perform namespace removal on the imported node
-                    if (importedNode instanceof Element) {
-                        ((Element) importedNode).removeAttribute("xmlns");
-                        ((Element) importedNode).setPrefix(null);
+                if (responseNode.getNodeType() != ELEMENT_NODE) {
+                    return;
+                }
+                System.out.println(responseNode.getElementQName().getPrefix());
+                if (!responseNode.getElementQName().getPrefix().equals(null) && !responseNode.getElementQName().getPrefix().equals("")) {
+                    responseNode.setPrefix(null);
+                    responseNode.removeAttribute("xmlns");
+                }
+                NodeList nodeList = responseNode.getChildNodes();
+                for (int i = 0; i < nodeList.getLength(); i++) {
+                    if (nodeList.item(i).getNodeType() == ELEMENT_NODE) {
+                        ElementImpl child = (ElementImpl) nodeList.item(i);
+                        handleNamespace(child);
                     }
                 }
-            } catch (Exception e) {
-                log.error("Failed to remove namespace from node.", e);
+//                        ((Element) importedNode).removeAttribute("xmlns");
+            } catch (DOMException e) {
+                throw new SOAPException("Unable to remove namespaces", e);
             }
         }
     }
@@ -1023,7 +1033,7 @@ public class ConsumerGateway extends HttpServlet {
             // problem to occur.
             Node modifiedResponseNode = (Node) responseNode.cloneNode(true);
             // Remove namespace if it's required
-            handleNamespace(modifiedResponseNode);
+            handleNamespace((ElementImpl) modifiedResponseNode);
             // Return the response
             return SOAPHelper.toString(modifiedResponseNode);
         }
