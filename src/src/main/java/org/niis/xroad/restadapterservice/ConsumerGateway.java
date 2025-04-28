@@ -174,7 +174,7 @@ public class ConsumerGateway extends HttpServlet {
 
         // Check accept header
         String accept = processAcceptHeader(acceptHeader);
-        // Set reponse content type according the accept header
+        // Set response content type according the accept header
         response.setContentType(accept);
 
         // Omit response namespace, if response is wanted in JSON
@@ -227,15 +227,7 @@ public class ConsumerGateway extends HttpServlet {
             serviceRequest.setUserId(userId);
 
             // serviceRequest carries its payload as an SOAPElement
-            SOAPElement containerElement = (SOAPElement) SOAPFactory.newInstance().createElement("container");
-
-//            SOAPMessage msg = MessageFactory.newInstance().createMessage();
-//            SOAPEnvelope envelope = msg.getSOAPPart().getEnvelope();
-//            SOAPElement containerElement = envelope.addChildElement("container");
-
-//            Document ownerDocument = containerElement.getOwnerDocument();
-////            ownerDocument.importNode(containerElement, true);
-//            ownerDocument.renameNode((Node) containerElement.getDomElement(), "testNamespace", "testPrefix");
+            SOAPElement containerElement = SOAPFactory.newInstance().createElement("container");
 
             serviceRequest.setRequestData(containerElement);
 
@@ -764,15 +756,14 @@ public class ConsumerGateway extends HttpServlet {
          * JSON->XML (if any) to the SOAP request body
          *
          * @param request
-         * @param soapRequestTest
+         * @param soapRequest
          * @throws SOAPException
          */
-        protected void writeBodyContents(ServiceRequest request, SOAPElement soapRequestTest) throws SOAPException {
+        protected void writeBodyContents(ServiceRequest request, SOAPElement soapRequest) throws SOAPException {
             if (this.resourceId != null && !this.resourceId.isEmpty()) {
                 log.debug("Add resourceId : \"{}\".", this.resourceId);
-                soapRequestTest.addChildElement("resourceId").addTextNode(this.resourceId);
+                soapRequest.addChildElement("resourceId").addTextNode(this.resourceId);
             }
-
 
             ElementImpl containerElement = (ElementImpl) request.getRequestData();
 
@@ -781,12 +772,12 @@ public class ConsumerGateway extends HttpServlet {
                 Node child = (Node) children.item(i);
                 ElementImpl childElementImpl = (ElementImpl) child;
                 if ((child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
-                    String namespace = soapRequestTest.getNamespaceURI();
-                    String prefix = soapRequestTest.getPrefix();
+                    String namespace = soapRequest.getNamespaceURI();
+                    String prefix = soapRequest.getPrefix();
                     child = updateNamespaceAndPrefix(childElementImpl, namespace, prefix);
-                    updateNamespaceAndPrefix(child.getChildNodes(), soapRequestTest.getNamespaceURI(), soapRequestTest.getPrefix());
+                    updateNamespaceAndPrefix(child.getChildNodes(), soapRequest.getNamespaceURI(), soapRequest.getPrefix());
                 }
-                child.setParentElement(soapRequestTest);
+                child.setParentElement(soapRequest);
             }
         }
 
@@ -849,7 +840,6 @@ public class ConsumerGateway extends HttpServlet {
             AttachmentPart attachPart = request.getSoapMessage().createAttachmentPart(attachmentData, this.contentType);
             attachPart.setContentId(Constants.PARAM_REQUEST_BODY);
             request.getSoapMessage().addAttachmentPart(attachPart);
-
         }
     }
 
