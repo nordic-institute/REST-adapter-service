@@ -943,14 +943,7 @@ public class ConsumerGateway extends HttpServlet {
 
         protected void handleNamespace(ElementImpl responseNode) throws SOAPException {
             try {
-                if (responseNode.getNodeType() != ELEMENT_NODE) {
-                    return;
-                }
-                System.out.println(responseNode.getElementQName().getPrefix());
-                if (!responseNode.getElementQName().getPrefix().equals(null) && !responseNode.getElementQName().getPrefix().equals("")) {
-                    responseNode.setPrefix(null);
-                    responseNode.removeAttribute("xmlns");
-                }
+                responseNode.getOwnerDocument().renameNode(responseNode.getDomElement(), null, responseNode.getLocalName());
                 NodeList nodeList = responseNode.getChildNodes();
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     if (nodeList.item(i).getNodeType() == ELEMENT_NODE) {
@@ -958,7 +951,6 @@ public class ConsumerGateway extends HttpServlet {
                         handleNamespace(child);
                     }
                 }
-//                        ((Element) importedNode).removeAttribute("xmlns");
             } catch (DOMException e) {
                 throw new SOAPException("Unable to remove namespaces", e);
             }
