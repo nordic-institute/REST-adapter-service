@@ -78,7 +78,7 @@ public class ConsumerGatewayIT {
     @BeforeEach
     public void setUp() {
         String buildPath = servletContextPath;
-        String baseUrl = "http://localhost:" + port + buildPath + "/Consumer/"; // TODO maybe this can stay like before with     + "/"     between port and buildpath
+        String baseUrl = "http://localhost:" + port + buildPath + "/Consumer/";
 
         // Set up test case 1
         urls.put(1, baseUrl + "www.hel.fi/palvelukarttaws/rest/v2/organization/");

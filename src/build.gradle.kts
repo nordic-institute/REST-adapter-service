@@ -177,13 +177,14 @@ tasks.withType<Javadoc>() {
 val isEncrypted = project.hasProperty("encrypted")
 val adapterProfileDir = if (isEncrypted) "encrypted" else "plaintext"
 
-val filterFile = file("src/main/filters/default.properties")
-val props = Properties().apply {
-    load(filterFile.reader())
-}
-val replacements = props.entries.associate { it.key.toString() to it.value.toString() }
-
 tasks.processResources {
+
+    val filterFile = file("src/main/filters/default.properties")
+    val props = Properties().apply {
+        load(filterFile.reader())
+    }
+    val replacements = props.entries.associate { it.key.toString() to it.value.toString() }
+
     filesMatching("**/*.properties") {
         filter { line ->
             line.replace("@projectDir@", project.projectDir.toString())
@@ -197,9 +198,6 @@ tasks.processResources {
     filesMatching("src/main/resources") {
         expand(project.properties)
 
-        val props = Properties().apply {
-            load(filterFile.reader())
-        }
         expand(props.entries.associate { it.key.toString() to it.value })
     }
 }
@@ -210,7 +208,6 @@ tasks.processTestResources {
             line.replace("@projectDir@", project.projectDir.toString())
         }
     }
-
 }
 
 tasks.test {
@@ -224,9 +221,16 @@ tasks.jacocoTestReport {
 }
 
 tasks.register("processIntegrationTestResources") {
-//    group = "build"
+    group = "test"
     description = "Processes integration test resources"
-    dependsOn("processResources")
+
+    val filterFile = file("src/main/filters/default.properties")
+    val filterFile2 = file("src/main/filters/integration-test.properties")
+    val props = Properties().apply {
+        load(filterFile.reader())
+        load(filterFile2.reader())
+    }
+    val replacements = props.entries.associate { it.key.toString() to it.value.toString() }
     doLast {
         copy {
             from("src/main/profiles/$adapterProfileDir/") {
@@ -241,23 +245,18 @@ tasks.register("processIntegrationTestResources") {
 
 tasks.register<Test>("iTest") {
     useJUnitPlatform()
-    dependsOn("processTestResources")
     dependsOn("processIntegrationTestResources")
     description = "Runs integration tests"
     group = "verification"
     testClassesDirs = sourceSets["test"].output.classesDirs
     classpath = sourceSets["test"].runtimeClasspath
 
-//    maxParallelForks = 1
-
     include("org/niis/xroad/restadapterservice/ConsumerGatewayIT.class")
 
-    // System properties — like Maven <systemProperties>
     systemProperty("log4j.configuration", "test-log4j.xml")
     systemProperty("consumerPath", project.projectDir.resolve("libs").resolve("${project.name}-${project.version}.jar"))
-    systemProperty("server.port", "8080")
+    systemProperty("server.port", "9898")
     systemProperty("propertiesDirectory", "${project.projectDir}/build/resources/integration-test-profile")
-
 }
 
 tasks.bootJar {
