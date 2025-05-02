@@ -942,6 +942,10 @@ public class ConsumerGateway extends HttpServlet {
         }
 
         protected void handleNamespace(ElementImpl responseNode) throws SOAPException {
+            if (!this.omitNamespace) {
+                return;
+            }
+
             try {
                 responseNode.getOwnerDocument().renameNode(responseNode.getDomElement(), null, responseNode.getLocalName());
                 NodeList nodeList = responseNode.getChildNodes();
@@ -954,6 +958,7 @@ public class ConsumerGateway extends HttpServlet {
             } catch (DOMException e) {
                 throw new SOAPException("Unable to remove namespaces", e);
             }
+
         }
     }
 

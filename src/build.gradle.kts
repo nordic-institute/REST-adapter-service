@@ -242,6 +242,7 @@ tasks.register("processIntegrationTestResources") {
 tasks.register<Test>("iTest") {
     useJUnitPlatform()
     dependsOn("processTestResources")
+    dependsOn("processIntegrationTestResources")
     description = "Runs integration tests"
     group = "verification"
     testClassesDirs = sourceSets["test"].output.classesDirs

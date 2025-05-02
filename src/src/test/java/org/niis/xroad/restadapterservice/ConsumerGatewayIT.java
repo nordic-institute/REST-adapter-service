@@ -76,7 +76,7 @@ public class ConsumerGatewayIT {
     @BeforeEach
     public void setUp() {
         String buildPath = servletContextPath;
-        String baseUrl = "http://localhost:" + port + "/" + buildPath + "/Consumer/";
+        String baseUrl = "http://localhost:" + port + buildPath + "/Consumer/";
 
         // Set up test case 1
         urls.put(1, baseUrl + "www.hel.fi/palvelukarttaws/rest/v2/organization/");
@@ -213,7 +213,7 @@ public class ConsumerGatewayIT {
         HashMap<String, String> prefix2Uri = new HashMap<>();
         prefix2Uri.put("ts1", "http://x-road.global/producer");
         XmlAssert.assertThat(data).withNamespaceContext(prefix2Uri)
-                .valueByXPath("//ts1:fintoServiceResponse/ts1:results/ts1:vocab").isEqualTo("yso");
+                .valueByXPath("/ts1:fintoServiceResponse/ts1:results/ts1:vocab").isEqualTo("yso");
     }
 
     /**
