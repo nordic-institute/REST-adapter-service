@@ -248,12 +248,14 @@ tasks.register<Test>("iTest") {
     testClassesDirs = sourceSets["test"].output.classesDirs
     classpath = sourceSets["test"].runtimeClasspath
 
+//    maxParallelForks = 1
+
     include("org/niis/xroad/restadapterservice/ConsumerGatewayIT.class")
 
     // System properties — like Maven <systemProperties>
     systemProperty("log4j.configuration", "test-log4j.xml")
     systemProperty("consumerPath", project.projectDir.resolve("libs").resolve("${project.name}-${project.version}.jar"))
-    systemProperty("server.port", "9898")
+    systemProperty("server.port", "8080")
     systemProperty("propertiesDirectory", "${project.projectDir}/build/resources/integration-test-profile")
 
 }

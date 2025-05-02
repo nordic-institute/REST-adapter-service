@@ -27,6 +27,7 @@ import org.assertj.core.api.Condition;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.niis.xrd4j.rest.ClientResponse;
 import org.niis.xrd4j.rest.client.RESTClient;
@@ -50,6 +51,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
+import org.springframework.test.annotation.DirtiesContext;
 import org.w3c.dom.Node;
 import org.xmlunit.assertj.XmlAssert;
 
@@ -76,7 +78,7 @@ public class ConsumerGatewayIT {
     @BeforeEach
     public void setUp() {
         String buildPath = servletContextPath;
-        String baseUrl = "http://localhost:" + port + buildPath + "/Consumer/";
+        String baseUrl = "http://localhost:" + port + buildPath + "/Consumer/"; // TODO maybe this can stay like before with     + "/"     between port and buildpath
 
         // Set up test case 1
         urls.put(1, baseUrl + "www.hel.fi/palvelukarttaws/rest/v2/organization/");
@@ -119,6 +121,7 @@ public class ConsumerGatewayIT {
     /**
      * REST API for City of Helsinki Service Map - List of Organizations - JSON
      */
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway1Json() {
         String result = "{\"data_source_url\":\"www.liikuntapaikat.fi\",\"name_fi\":\"Jyväskylän yliopisto, LIPAS Liikuntapaikat.fi\",\"name_sv\":\"Jyväskylä universitet, LIPAS Liikuntapaikat.fi\",\"id\":1010,\"name_en\":\"University of Jyväskylä, LIPAS Liikuntapaikat.fi\"}";
@@ -130,6 +133,7 @@ public class ConsumerGatewayIT {
     /**
      * REST API for City of Helsinki Service Map - List of Organizations - XML
      */
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway1Xml() throws Exception {
         String expectedResult = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -158,6 +162,7 @@ public class ConsumerGatewayIT {
     /**
      * REST API for City of Helsinki Service Map - Single Organization - JSON
      */
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway2Json() {
         ClientResponse restResponse = sendJsonGet(2);
@@ -170,6 +175,7 @@ public class ConsumerGatewayIT {
     /**
      * REST API for City of Helsinki Service Map - Single Organization - XML
      */
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway2Xml() {
         ClientResponse restResponse = sendXmlGet(2);
@@ -194,6 +200,7 @@ public class ConsumerGatewayIT {
     /**
      * Finto : Finnish Thesaurus and Ontology Service - Search - JSON
      */
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway3Json() {
         ClientResponse restResponse = sendJsonGet(3);
@@ -205,6 +212,7 @@ public class ConsumerGatewayIT {
     /**
      * Finto : Finnish Thesaurus and Ontology Service - Search - XML
      */
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway3Xml() {
         ClientResponse restResponse = sendXmlGet(3);
@@ -220,6 +228,8 @@ public class ConsumerGatewayIT {
      * Finnish Library Directory - JSON - N.B.! Response contains cyrillic
      * characters.
      */
+
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway4Json() {
         ClientResponse restResponse = sendJsonGet(4);
@@ -232,6 +242,7 @@ public class ConsumerGatewayIT {
      * Finnish Library Directory - XML - N.B.! Response contains cyrillic
      * characters.
      */
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway4Xml() {
         ClientResponse restResponse = sendXmlGet(4);
