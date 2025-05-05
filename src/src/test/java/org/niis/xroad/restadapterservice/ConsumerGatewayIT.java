@@ -27,7 +27,6 @@ import org.assertj.core.api.Condition;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.niis.xrd4j.rest.ClientResponse;
 import org.niis.xrd4j.rest.client.RESTClient;
@@ -38,7 +37,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.*;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +54,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
-import org.springframework.test.annotation.DirtiesContext;
 import org.w3c.dom.Node;
 import org.xmlunit.assertj.XmlAssert;
 
@@ -81,15 +83,15 @@ public class ConsumerGatewayIT {
         String baseUrl = "http://localhost:" + port + buildPath + "/Consumer/";
 
         // Set up test case 1
-        urls.put(1, baseUrl + "www.hel.fi/palvelukarttaws/rest/v2/organization/");
+        urls.put(1, baseUrl + "www.hel.fi/palvelukarttaws/rest/v4/department/");
         Map<String, List<String>> caseParams = new HashMap<>();
         List<String> values = new ArrayList<>();
-        values.add("1010");
+        values.add("cc70d1d8-3ca7-416a-9ea7-27e6b7ce58a8");
         caseParams.put(Constants.PARAM_RESOURCE_ID, values);
         this.urlParams.put(1, caseParams);
 
         // Set up test case 2
-        urls.put(2, baseUrl + "www.hel.fi/palvelukarttaws/rest/v2/organization/");
+        urls.put(2, baseUrl + "www.hel.fi/palvelukarttaws/rest/v4/organization/");
         this.urlParams.put(2, new HashMap<String, List<String>>());
 
         // Set up test case 3
@@ -121,28 +123,39 @@ public class ConsumerGatewayIT {
     /**
      * REST API for City of Helsinki Service Map - List of Organizations - JSON
      */
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
-    public void testConsumerGateway1Json() {
-        String result = "{\"data_source_url\":\"www.liikuntapaikat.fi\",\"name_fi\":\"Jyväskylän yliopisto, LIPAS Liikuntapaikat.fi\",\"name_sv\":\"Jyväskylä universitet, LIPAS Liikuntapaikat.fi\",\"id\":1010,\"name_en\":\"University of Jyväskylä, LIPAS Liikuntapaikat.fi\"}";
+    public void testConsumerGateway1Json() throws Exception {
+        String json = readFile("consumer-IT-expected-response.json");
+//        String result = "{\"data_source_url\":\"www.liikuntapaikat.fi\",\"name_fi\":\"Jyväskylän yliopisto, LIPAS Liikuntapaikat.fi\",\"name_sv\":\"Jyväskylä universitet, LIPAS Liikuntapaikat.fi\",\"id\":1010,\"name_en\":\"University of Jyväskylä, LIPAS Liikuntapaikat.fi\"}";
         Map<String, String> headers = new HashMap<>();
         headers.put(Constants.HTTP_HEADER_ACCEPT, Constants.APPLICATION_JSON);
-        sendData(this.urls.get(1), "get", this.urlParams.get(1), headers, result, CONTENT_TYPE_JSON);
+        sendData(this.urls.get(1), "get", this.urlParams.get(1), headers, json, CONTENT_TYPE_JSON);
     }
 
     /**
      * REST API for City of Helsinki Service Map - List of Organizations - XML
      */
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway1Xml() throws Exception {
-        String expectedResult = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                + "<ts1:getOrganizationResponse xmlns:ts1=\"http://x-road.global/producer\">\n"
-                + "    <ts1:data_source_url>www.liikuntapaikat.fi</ts1:data_source_url>\n"
-                + "    <ts1:name_fi>Jyväskylän yliopisto, LIPAS Liikuntapaikat.fi</ts1:name_fi>\n"
-                + "    <ts1:name_sv>Jyväskylä universitet, LIPAS Liikuntapaikat.fi</ts1:name_sv>\n"
-                + "    <ts1:id>1010</ts1:id>\n"
-                + "    <ts1:name_en>University of Jyväskylä, LIPAS Liikuntapaikat.fi</ts1:name_en>\n"
+        String expectedResult = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
+                + "<ts1:getOrganizationResponse xmlns:ts1=\"http://x-road.global/producer\">"
+                + "    <ts1:abbr_fi>Kasko</ts1:abbr_fi>"
+                + "    <ts1:www_en>https://www.hel.fi/en/decision-making/city-organization/divisions/education-division</ts1:www_en>"
+                + "    <ts1:municipality_code>91</ts1:municipality_code>"
+                + "    <ts1:oid/>"
+                + "    <ts1:name_fi>Kasvatuksen ja koulutuksen toimiala</ts1:name_fi>"
+                + "    <ts1:name_sv>Fostrans- och utbildningssektorn</ts1:name_sv>"
+                + "    <ts1:phone>+358 9 310 8600</ts1:phone>"
+                + "    <ts1:parent_id>83e74666-0836-4c1d-948a-4b34a8b90301</ts1:parent_id>"
+                + "    <ts1:org_id>83e74666-0836-4c1d-948a-4b34a8b90301</ts1:org_id>"
+                + "    <ts1:organization_type>MUNICIPALITY</ts1:organization_type>"
+                + "    <ts1:id>cc70d1d8-3ca7-416a-9ea7-27e6b7ce58a8</ts1:id>"
+                + "    <ts1:business_id>0201256-6</ts1:business_id>"
+                + "    <ts1:email>neuvonta.opetusvirasto@hel.fi</ts1:email>"
+                + "    <ts1:www_fi>https://www.hel.fi/fi/paatoksenteko-ja-hallinto/kaupungin-organisaatio/toimialat/kasvatuksen-ja-koulutuksen-toimiala</ts1:www_fi>"
+                + "    <ts1:www_sv>https://www.hel.fi/sv/beslutsfattande-och-forvaltning/stadens-organisation/sektorer/fostrans-och-utbildningssektorn</ts1:www_sv>"
+                + "    <ts1:hierarchy_level>1</ts1:hierarchy_level>"
+                + "    <ts1:name_en>Education Division</ts1:name_en>"
                 + "</ts1:getOrganizationResponse>";
 
         ClientResponse restResponse = sendData(this.urls.get(1), "get", this.urlParams.get(1),
@@ -162,7 +175,6 @@ public class ConsumerGatewayIT {
     /**
      * REST API for City of Helsinki Service Map - Single Organization - JSON
      */
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway2Json() {
         ClientResponse restResponse = sendJsonGet(2);
@@ -175,7 +187,6 @@ public class ConsumerGatewayIT {
     /**
      * REST API for City of Helsinki Service Map - Single Organization - XML
      */
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway2Xml() {
         ClientResponse restResponse = sendXmlGet(2);
@@ -200,7 +211,6 @@ public class ConsumerGatewayIT {
     /**
      * Finto : Finnish Thesaurus and Ontology Service - Search - JSON
      */
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway3Json() {
         ClientResponse restResponse = sendJsonGet(3);
@@ -212,7 +222,6 @@ public class ConsumerGatewayIT {
     /**
      * Finto : Finnish Thesaurus and Ontology Service - Search - XML
      */
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway3Xml() {
         ClientResponse restResponse = sendXmlGet(3);
@@ -229,7 +238,6 @@ public class ConsumerGatewayIT {
      * characters.
      */
 
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway4Json() {
         ClientResponse restResponse = sendJsonGet(4);
@@ -242,7 +250,6 @@ public class ConsumerGatewayIT {
      * Finnish Library Directory - XML - N.B.! Response contains cyrillic
      * characters.
      */
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testConsumerGateway4Xml() {
         ClientResponse restResponse = sendXmlGet(4);
@@ -317,6 +324,10 @@ public class ConsumerGatewayIT {
         Map<String, String> headers = new HashMap<>();
         headers.put(Constants.HTTP_HEADER_ACCEPT, Constants.APPLICATION_JSON);
         return sendData(this.urls.get(index), "get", this.urlParams.get(index), headers);
+    }
+
+    private String readFile(String filename) throws IOException, URISyntaxException {
+        return new String(Files.readAllBytes(Paths.get(ClassLoader.getSystemResource(filename).toURI())), "UTF-8");
     }
 
 }
