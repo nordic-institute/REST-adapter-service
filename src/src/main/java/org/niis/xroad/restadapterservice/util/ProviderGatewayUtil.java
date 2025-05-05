@@ -26,7 +26,6 @@ import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xrd4j.common.security.Decrypter;
 import org.niis.xrd4j.common.util.MessageHelper;
 import org.niis.xrd4j.rest.converter.JSONToXMLConverter;
-import org.niis.xroad.restadapterservice.ProviderGateway;
 import org.niis.xroad.restadapterservice.endpoint.ProviderEndpoint;
 
 import org.slf4j.Logger;
@@ -385,7 +384,7 @@ public final class ProviderGatewayUtil {
      * @param props     general properties
      * @param endpoints list of configured endpoints
      * @return true if everything is OK. False if there's a problem with the private
-     *         key or the private key is not needed
+     * key or the private key is not needed
      */
     public static boolean checkPrivateKeyProperties(Properties props, Map<String, ProviderEndpoint> endpoints) {
         log.info("Check private key encryption properties.");

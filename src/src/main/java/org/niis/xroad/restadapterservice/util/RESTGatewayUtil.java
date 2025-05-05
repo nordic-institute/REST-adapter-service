@@ -166,12 +166,9 @@ public final class RESTGatewayUtil {
      */
     public static Decrypter checkPrivateKey(Properties props) {
         String privateKeyFile = props.getProperty(Constants.ENCRYPTION_PROPS_PRIVATE_KEY_FILE);
-        log.debug("PrivateKeyFile = " + privateKeyFile);
         String privateKeyFilePassword = props.getProperty(Constants.ENCRYPTION_PROPS_PRIVATE_KEY_FILE_PASSWORD);
         String privateKeyAlias = props.getProperty(Constants.ENCRYPTION_PROPS_PRIVATE_KEY_ALIAS);
         String privateKeyPassword = props.getProperty(Constants.ENCRYPTION_PROPS_PRIVATE_KEY_PASSWORD);
-
-        log.info("PrivateKeyFile = " + privateKeyFile);
         return getDecrypter(privateKeyFile, privateKeyFilePassword, privateKeyAlias, privateKeyPassword);
     }
 

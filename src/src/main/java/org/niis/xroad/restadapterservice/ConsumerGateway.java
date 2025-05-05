@@ -22,12 +22,7 @@
  */
 package org.niis.xroad.restadapterservice;
 
-import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.xml.soap.*;
+
 import org.niis.xrd4j.client.SOAPClient;
 import org.niis.xrd4j.client.SOAPClientImpl;
 import org.niis.xrd4j.client.deserializer.AbstractResponseDeserializer;
@@ -49,12 +44,20 @@ import org.niis.xroad.restadapterservice.endpoint.ConsumerEndpoint;
 import org.niis.xroad.restadapterservice.util.Constants;
 import org.niis.xroad.restadapterservice.util.ConsumerGatewayUtil;
 import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.xml.soap.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -66,7 +69,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import static org.w3c.dom.Node.ELEMENT_NODE;
-
 
 /**
  * This class implements a Servlet which functionality can be configured through
@@ -248,7 +250,6 @@ public class ConsumerGateway extends HttpServlet {
                 // containerElement
                 String xml = convertJsonToXml(requestBody);
                 SOAPElement elementFromBody = SOAPHelper.xmlStrToSOAPElement(xml);
-                Document OD = elementFromBody.getOwnerDocument();
                 SOAPHelper.moveChildren(elementFromBody, containerElement, true);
             }
 
@@ -271,7 +272,6 @@ public class ConsumerGateway extends HttpServlet {
             if (endpoint.isProcessingWrappers() != null) {
                 serviceResponse.setProcessingWrappers(endpoint.isProcessingWrappers());
             }
-            serviceResponse.setProcessingWrappers(false);
             // Generate response message
             responseStr = handleResponse(response, serviceResponse);
 
@@ -738,15 +738,15 @@ public class ConsumerGateway extends HttpServlet {
         }
 
         @Override
-        protected void serializeRequest(ServiceRequest request, SOAPElement soapRequestSerializeRequest, SOAPEnvelope envelope)
+        protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope)
                 throws SOAPException {
             // Write everything except possible attachment reference to request body
             // SOAPElement
-            writeBodyContents(request, soapRequestSerializeRequest);
+            writeBodyContents(request, soapRequest);
             if (this.requestBody != null && !this.requestBody.isEmpty()) {
                 if (!convertPost) {
                     // send the entire HTTP POST as an attachment
-                    handleAttachment(request, soapRequestSerializeRequest, envelope, this.requestBody);
+                    handleAttachment(request, soapRequest, envelope, this.requestBody);
                 }
                 // converted HTTP POST is sent inside SOAP body
                 // (already handled in serializer.writeBodyContents)
@@ -766,10 +766,10 @@ public class ConsumerGateway extends HttpServlet {
                 log.debug("Add resourceId : \"{}\".", this.resourceId);
                 soapRequest.addChildElement("resourceId").addTextNode(this.resourceId);
             }
-
+            // requestData contains request parameters and possible converted JSON
+            // body, as initialized in ConsumerGateway.processRequest
             ElementImpl containerElement = (ElementImpl) request.getRequestData();
 
-//            SOAPHelper.moveChildren(containerElement, (ElementImpl) soapRequest, true);
             NodeList children = containerElement.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 Node child = (Node) children.item(i);
@@ -834,11 +834,11 @@ public class ConsumerGateway extends HttpServlet {
             return node;
         }
 
-        protected void handleAttachment(ServiceRequest request, SOAPElement soapRequestHandleAttachment, SOAPEnvelope envelope,
+        protected void handleAttachment(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope,
                                         String attachmentData) throws SOAPException {
             log.debug("Request body was found from the request. Add request body as SOAP attachment."
                     + " Content type is \"{}\".", this.contentType);
-            SOAPElement data = soapRequestHandleAttachment.addChildElement(envelope.createName(Constants.PARAM_REQUEST_BODY));
+            SOAPElement data = soapRequest.addChildElement(envelope.createName(Constants.PARAM_REQUEST_BODY));
             data.addAttribute(envelope.createName("href"), Constants.PARAM_REQUEST_BODY);
             AttachmentPart attachPart = request.getSoapMessage().createAttachmentPart(attachmentData, this.contentType);
             attachPart.setContentId(Constants.PARAM_REQUEST_BODY);
@@ -881,7 +881,7 @@ public class ConsumerGateway extends HttpServlet {
         }
 
         @Override
-        protected void serializeRequest(ServiceRequest request, SOAPElement soapRequestSerializeRequest, SOAPEnvelope envelope)
+        protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope)
                 throws SOAPException {
             SOAPElement payload = SOAPHelper.xmlStrToSOAPElement("<" + Constants.PARAM_ENCRYPTION_WRAPPER + "/>");
             try {
@@ -903,7 +903,7 @@ public class ConsumerGateway extends HttpServlet {
                 String encryptedData = symmetricEncrypter.encrypt(SOAPHelper.toString(payload));
                 // Build message body that includes encrypted data,
                 // encrypted session key and IV
-                RESTGatewayUtil.buildEncryptedBody(symmetricEncrypter, asymmetricEncrypter, soapRequestSerializeRequest, encryptedData);
+                RESTGatewayUtil.buildEncryptedBody(symmetricEncrypter, asymmetricEncrypter, soapRequest, encryptedData);
             } catch (NoSuchAlgorithmException ex) {
                 log.error(ex.getMessage(), ex);
                 throw new SOAPException("Encrypting SOAP request failed.", ex);

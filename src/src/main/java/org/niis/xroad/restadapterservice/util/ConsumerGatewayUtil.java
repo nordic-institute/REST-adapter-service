@@ -27,7 +27,6 @@ import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.security.Encrypter;
 import org.niis.xrd4j.common.util.ConfigurationHelper;
 import org.niis.xrd4j.common.util.MessageHelper;
-import org.niis.xroad.restadapterservice.ProviderGateway;
 import org.niis.xroad.restadapterservice.endpoint.ConsumerEndpoint;
 
 import org.slf4j.Logger;
@@ -168,7 +167,7 @@ public final class ConsumerGatewayUtil {
      *
      * @param endpoint ConsumerEndpoint object
      * @return true if and only if creating ConsumerMember object and ProducerMember
-     *         objects succeeded; otherwise false
+     * objects succeeded; otherwise false
      */
     protected static boolean setConsumerAndProducer(ConsumerEndpoint endpoint) {
         // Create ProducerMember object
@@ -300,7 +299,7 @@ public final class ConsumerGatewayUtil {
      *
      * @param endpoint ConsumerEndpoint object
      * @return true if and only if creating ConsumerMember object succeeded;
-     *         otherwise false
+     * otherwise false
      */
     protected static boolean setConsumerMember(ConsumerEndpoint endpoint) {
         ConsumerMember consumer = ConfigurationHelper.parseConsumerMember(endpoint.getClientId());
@@ -320,7 +319,7 @@ public final class ConsumerGatewayUtil {
      *
      * @param endpoint ConsumerEndpoint object
      * @return true if and only if creating ProducerMember object succeeded;
-     *         otherwise false
+     * otherwise false
      */
     protected static boolean setProducerMember(ConsumerEndpoint endpoint) {
         ProducerMember producer = ConfigurationHelper.parseProducerMember(endpoint.getServiceId());
@@ -430,10 +429,10 @@ public final class ConsumerGatewayUtil {
      *                                 the asymmetric encrypters that are
      *                                 successfully checked are added to the cache.
      * @return true if everything is OK. False if there's a problem with one or more
-     *         keys and/or private key is was not checked.
+     * keys and/or private key is was not checked.
      */
     public static boolean checkEncryptionProperties(Properties props, Map<String, ConsumerEndpoint> endpoints,
-            Map<String, Encrypter> asymmetricEncrypterCache) {
+                                                    Map<String, Encrypter> asymmetricEncrypterCache) {
         log.info("Check encryption properties.");
         boolean result = true;
         boolean mustCheckPrivateKey = false;

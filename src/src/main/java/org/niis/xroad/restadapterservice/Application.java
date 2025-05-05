@@ -22,7 +22,6 @@
  */
 package org.niis.xroad.restadapterservice;
 
-import org.niis.xrd4j.server.AbstractAdapterServlet;
 import org.niis.xroad.restadapterservice.filter.ConsumerURIFilter;
 
 import org.springframework.boot.SpringApplication;
@@ -34,11 +33,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import jakarta.servlet.DispatcherType;
-import jakarta.servlet.http.HttpServlet;
 
 import java.util.Arrays;
 import java.util.EnumSet;
-
 
 /**
  * Rest adapter service application entry point
@@ -48,7 +45,6 @@ import java.util.EnumSet;
 public class Application extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-
         SpringApplication.run(Application.class, args);
     }
 
