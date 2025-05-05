@@ -22,7 +22,7 @@
  */
 package org.niis.xroad.restadapterservice.filter;
 
-import org.niis.xroad.restadapterservice.ProviderGateway;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,11 +46,11 @@ import java.io.IOException;
  */
 public class ConsumerURIFilter implements Filter {
 
-    private static final Logger log = LoggerFactory.getLogger(ConsumerURIFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConsumerURIFilter.class);
 
     @Override
     public void init(FilterConfig fc) throws ServletException {
-        log.info("Consumer URI filter initialized.");
+        LOGGER.info("Consumer URI filter initialized.");
     }
 
     @Override
@@ -58,7 +58,7 @@ public class ConsumerURIFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         String servletName = "Consumer";
         String oldURI = request.getRequestURI().substring(request.getContextPath().length() + 1);
-        log.debug("Incoming request : \"{}\"", oldURI);
+        LOGGER.debug("Incoming request : \"{}\"", oldURI);
 
         if (oldURI.length() > servletName.length()) {
             String resourcePath = oldURI.substring(oldURI.indexOf('/'));
@@ -67,13 +67,13 @@ public class ConsumerURIFilter implements Filter {
                 if (!resourcePath.endsWith("/")) {
                     resourcePath += "/";
                 }
-                log.debug("Resource path : \"{}\"", resourcePath);
+                LOGGER.debug("Resource path : \"{}\"", resourcePath);
                 request.setAttribute("resourcePath", resourcePath);
             } else {
-                log.trace("Found resource path \"{}\" is not valid.", resourcePath);
+                LOGGER.trace("Found resource path \"{}\" is not valid.", resourcePath);
             }
         } else {
-            log.trace("No resource path found.");
+            LOGGER.trace("No resource path found.");
         }
         req.getRequestDispatcher("Consumer").forward(req, res);
     }

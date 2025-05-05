@@ -28,15 +28,13 @@ import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.util.SOAPHelper;
 import org.niis.xroad.restadapterservice.endpoint.ConsumerEndpoint;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Properties;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
@@ -52,6 +50,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Petteri Kivimäki
  */
+@SuppressWarnings("checkstyle:lineLength")
 @SpringBootTest
 public class ConsumerGatewayUtilTest {
 

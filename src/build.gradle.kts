@@ -3,14 +3,20 @@ import java.util.*
 
 plugins {
     java
+    checkstyle
     `maven-publish`
     id("org.springframework.boot") version "3.4.4"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.owasp.dependencycheck") version "12.1.1"
-//    `checkstyle`
     jacoco
 }
 
+checkstyle {
+    toolVersion = "10.23.1"
+    group = "verification"
+    configFile = file("${project.projectDir}/config/checkstyle/checkstyle-config.xml")
+//    configProperties["checkstyleSuppressionsPath"] = file("${project.projectDir}/dependency-check-suppressions.xml").absolutePath
+}
 
 //sourceSets {
 //    create("integrationTest") {
@@ -56,14 +62,10 @@ ext {
     set("xrd4j.version", "0.6.0")
     set("java.version", "21")
     set("jdk.version", "21")
-//    set("xmlunit.version", "2.7.0")
-//    set("failsafe.version", "2.19.1")
     set("project.build.sourceEncoding", "UTF-8")
     set("project.build.resourceEncoding", "UTF-8")
     set("project.reporting.outputEncoding", "UTF-8")
-//    set("tomcat.version", "10.0.39")
     set("app.home", "/var/lib/tomcat/webapps")
-    // set("sonar.junit.reportPaths", "target/failsafe-reports,target/surefire-reports")
     set("server.port", "9898")
 }
 
@@ -88,14 +90,13 @@ dependencies {
     testImplementation("org.projectlombok:lombok:1.18.30")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
 
-
     // other
     implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
     implementation("jakarta.xml.soap:jakarta.xml.soap-api:3.0.2")
     implementation("com.sun.xml.messaging.saaj:saaj-impl:3.0.4")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.4.1")
     implementation("org.apache.tomcat.embed:tomcat-embed-jasper:10.1.39")
-
+    checkstyle("com.puppycrawl.tools:checkstyle:10.23.1")
 
     //Test Implementation
     testImplementation(libs.org.xmlunit.xmlunit.assertj)
@@ -160,7 +161,6 @@ publishing {
 }
 
 dependencyCheck {
-//    formats = ("xml", "json")
     outputDirectory = "${project.projectDir}/build/reports/dependency-check-report"
     suppressionFile = "${project.projectDir}/src/dependency-check-suppressions.xml"
 }

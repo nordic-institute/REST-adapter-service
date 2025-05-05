@@ -22,20 +22,21 @@
  */
 package org.niis.xroad.restadapterservice;
 
+import org.niis.xrd4j.rest.ClientResponse;
+import org.niis.xrd4j.rest.client.RESTClient;
+import org.niis.xrd4j.rest.client.RESTClientFactory;
+import org.niis.xroad.restadapterservice.util.Constants;
+
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Condition;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.niis.xrd4j.rest.ClientResponse;
-import org.niis.xrd4j.rest.client.RESTClient;
-import org.niis.xrd4j.rest.client.RESTClientFactory;
-import org.niis.xroad.restadapterservice.util.Constants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static com.jayway.jsonpath.matchers.JsonPathMatchers.*;
+import org.w3c.dom.Node;
+import org.xmlunit.assertj.XmlAssert;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -47,15 +48,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.*;
-
-import org.w3c.dom.Node;
-import org.xmlunit.assertj.XmlAssert;
 
 /**
  * This class contains integrations tests for REST Gateway.
@@ -68,6 +68,12 @@ public class ConsumerGatewayIT {
 
     private static final String CONTENT_TYPE_XML = Constants.TEXT_XML + ";" + Constants.CHARSET_UTF8;
     private static final String CONTENT_TYPE_JSON = Constants.APPLICATION_JSON + ";" + Constants.CHARSET_UTF8;
+
+    private static final int TEST_CASE_1 = 1;
+    private static final int TEST_CASE_2 = 2;
+    private static final int TEST_CASE_3 = 3;
+    private static final int TEST_CASE_4 = 4;
+
     private final Map<Integer, String> urls = new HashMap<>();
     private final Map<Integer, Map<String, List<String>>> urlParams = new HashMap<>();
 
@@ -82,20 +88,21 @@ public class ConsumerGatewayIT {
         String buildPath = servletContextPath;
         String baseUrl = "http://localhost:" + port + buildPath + "/Consumer/";
 
+
         // Set up test case 1
-        urls.put(1, baseUrl + "www.hel.fi/palvelukarttaws/rest/v4/department/");
+        urls.put(TEST_CASE_1, baseUrl + "www.hel.fi/palvelukarttaws/rest/v4/department/");
         Map<String, List<String>> caseParams = new HashMap<>();
         List<String> values = new ArrayList<>();
         values.add("cc70d1d8-3ca7-416a-9ea7-27e6b7ce58a8");
         caseParams.put(Constants.PARAM_RESOURCE_ID, values);
-        this.urlParams.put(1, caseParams);
+        this.urlParams.put(TEST_CASE_1, caseParams);
 
         // Set up test case 2
-        urls.put(2, baseUrl + "www.hel.fi/palvelukarttaws/rest/v4/organization/");
-        this.urlParams.put(2, new HashMap<String, List<String>>());
+        urls.put(TEST_CASE_2, baseUrl + "www.hel.fi/palvelukarttaws/rest/v4/organization/");
+        this.urlParams.put(TEST_CASE_2, new HashMap<String, List<String>>());
 
         // Set up test case 3
-        urls.put(3, baseUrl + "api.finto.fi/rest/v1/search/");
+        urls.put(TEST_CASE_3, baseUrl + "api.finto.fi/rest/v1/search/");
         caseParams = new HashMap<>();
         values = new ArrayList<>();
         values.add("cat");
@@ -106,10 +113,10 @@ public class ConsumerGatewayIT {
         values = new ArrayList<>();
         values.add("yso");
         caseParams.put("vocab", values);
-        this.urlParams.put(3, caseParams);
+        this.urlParams.put(TEST_CASE_3, caseParams);
 
         // Set up test case 4
-        urls.put(4, baseUrl + "api.kirjastot.fi/v3/organisation/");
+        urls.put(TEST_CASE_4, baseUrl + "api.kirjastot.fi/v3/organisation/");
         caseParams = new HashMap<>();
         values = new ArrayList<>();
         values.add("kallio");
@@ -117,7 +124,7 @@ public class ConsumerGatewayIT {
         values = new ArrayList<>();
         values.add("helsinki");
         caseParams.put("city.name", values);
-        this.urlParams.put(4, caseParams);
+        this.urlParams.put(TEST_CASE_4, caseParams);
     }
 
     /**
@@ -129,7 +136,7 @@ public class ConsumerGatewayIT {
 //        String result = "{\"data_source_url\":\"www.liikuntapaikat.fi\",\"name_fi\":\"Jyväskylän yliopisto, LIPAS Liikuntapaikat.fi\",\"name_sv\":\"Jyväskylä universitet, LIPAS Liikuntapaikat.fi\",\"id\":1010,\"name_en\":\"University of Jyväskylä, LIPAS Liikuntapaikat.fi\"}";
         Map<String, String> headers = new HashMap<>();
         headers.put(Constants.HTTP_HEADER_ACCEPT, Constants.APPLICATION_JSON);
-        sendData(this.urls.get(1), "get", this.urlParams.get(1), headers, json, CONTENT_TYPE_JSON);
+        sendData(this.urls.get(TEST_CASE_1), "get", this.urlParams.get(TEST_CASE_1), headers, json, CONTENT_TYPE_JSON);
     }
 
     /**
@@ -158,7 +165,7 @@ public class ConsumerGatewayIT {
                 + "    <ts1:name_en>Education Division</ts1:name_en>"
                 + "</ts1:getOrganizationResponse>";
 
-        ClientResponse restResponse = sendData(this.urls.get(1), "get", this.urlParams.get(1),
+        ClientResponse restResponse = sendData(this.urls.get(TEST_CASE_1), "get", this.urlParams.get(1),
                 new HashMap<String, String>());
         String data = restResponse.getData();
         log.debug("data from service: {}", data);
@@ -177,7 +184,7 @@ public class ConsumerGatewayIT {
      */
     @Test
     public void testConsumerGateway2Json() {
-        ClientResponse restResponse = sendJsonGet(2);
+        ClientResponse restResponse = sendJsonGet(TEST_CASE_2);
         String data = restResponse.getData();
         assertThat(data, hasJsonPath("$[*].name_fi", hasItem("Helsingin kaupunki")));
         assertThat(data, hasJsonPath("$[*].name_fi", hasSize(greaterThan(1))));
@@ -189,7 +196,7 @@ public class ConsumerGatewayIT {
      */
     @Test
     public void testConsumerGateway2Xml() {
-        ClientResponse restResponse = sendXmlGet(2);
+        ClientResponse restResponse = sendXmlGet(TEST_CASE_2);
         String data = restResponse.getData();
         assertEquals(CONTENT_TYPE_XML, restResponse.getContentType());
         HashMap<String, String> prefix2Uri = new HashMap<String, String>();
@@ -213,7 +220,7 @@ public class ConsumerGatewayIT {
      */
     @Test
     public void testConsumerGateway3Json() {
-        ClientResponse restResponse = sendJsonGet(3);
+        ClientResponse restResponse = sendJsonGet(TEST_CASE_3);
         String data = restResponse.getData();
         assertThat(data, hasJsonPath("$.results.vocab", equalTo("yso")));
         assertEquals(CONTENT_TYPE_JSON, restResponse.getContentType());
@@ -224,7 +231,7 @@ public class ConsumerGatewayIT {
      */
     @Test
     public void testConsumerGateway3Xml() {
-        ClientResponse restResponse = sendXmlGet(3);
+        ClientResponse restResponse = sendXmlGet(TEST_CASE_3);
         String data = restResponse.getData();
         assertEquals(CONTENT_TYPE_XML, restResponse.getContentType());
         HashMap<String, String> prefix2Uri = new HashMap<>();
@@ -240,7 +247,7 @@ public class ConsumerGatewayIT {
 
     @Test
     public void testConsumerGateway4Json() {
-        ClientResponse restResponse = sendJsonGet(4);
+        ClientResponse restResponse = sendJsonGet(TEST_CASE_4);
         String data = restResponse.getData();
         assertThat(data, hasJsonPath("$.result.items.organisation.name.value[*].content", hasItem("Kallion kirjasto")));
         assertEquals(CONTENT_TYPE_JSON, restResponse.getContentType());
@@ -252,7 +259,7 @@ public class ConsumerGatewayIT {
      */
     @Test
     public void testConsumerGateway4Xml() {
-        ClientResponse restResponse = sendXmlGet(4);
+        ClientResponse restResponse = sendXmlGet(TEST_CASE_4);
         String data = restResponse.getData();
         assertEquals(CONTENT_TYPE_XML, restResponse.getContentType());
 
@@ -274,14 +281,14 @@ public class ConsumerGatewayIT {
      *
      * @param url
      * @param verb
-     * @param urlParams
+     * @param testCaseUrlParams
      * @param headers
      * @param expectedResponse    expected response
      * @param expectedContentType expected response content type
      */
-    private void sendData(String url, String verb, Map<String, List<String>> urlParams, Map<String, String> headers,
+    private void sendData(String url, String verb, Map<String, List<String>> testCaseUrlParams, Map<String, String> headers,
                           String expectedResponse, String expectedContentType) {
-        ClientResponse restResponse = sendData(url, verb, urlParams, headers);
+        ClientResponse restResponse = sendData(url, verb, testCaseUrlParams, headers);
 
         String data = restResponse.getData();
 
@@ -294,16 +301,16 @@ public class ConsumerGatewayIT {
      *
      * @param url
      * @param verb
-     * @param urlParams
+     * @param testCaseUrlParams
      * @param headers
      * @return
      */
-    private ClientResponse sendData(String url, String verb, Map<String, List<String>> urlParams,
+    private ClientResponse sendData(String url, String verb, Map<String, List<String>> testCaseUrlParams,
                                     Map<String, String> headers) {
         RESTClient restClient = RESTClientFactory.createRESTClient(verb);
         // Send request to the service endpoint
         System.out.println("sending request from test to: " + url);
-        ClientResponse restResponse = restClient.send(url, "", urlParams, headers);
+        ClientResponse restResponse = restClient.send(url, "", testCaseUrlParams, headers);
         return restResponse;
     }
 

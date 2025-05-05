@@ -28,13 +28,13 @@ import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xroad.restadapterservice.endpoint.ProviderEndpoint;
 
-import java.util.Map;
-import java.util.Properties;
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Map;
+import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -194,7 +194,8 @@ public class ProviderGatewayUtilTest {
         ProducerMember producer = new ProducerMember("FI_PILOT", "GOV", "1019125-0", "Demo2Service", "getOrganizationList", "v1");
         ServiceRequest request = new ServiceRequest(consumer, producer, "12345");
         request.setUserId("test-user");
-        Map<String, String> headers = ProviderGatewayUtil.generateHttpHeaders(request, this.map.get("FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1"));
+        Map<String, String> headers = ProviderGatewayUtil.generateHttpHeaders(
+                request, this.map.get("FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1"));
         assertEquals("FI_PILOT.GOV.0245437-2.ConsumerService", headers.get(Constants.XRD_HEADER_CLIENT));
         assertEquals("FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1", headers.get(Constants.XRD_HEADER_SERVICE));
         assertEquals("12345", headers.get(Constants.XRD_HEADER_MESSAGE_ID));

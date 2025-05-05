@@ -22,17 +22,18 @@
  */
 package org.niis.xroad.restadapterservice;
 
+import org.niis.xroad.restadapterservice.util.Constants;
+
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.matching.RequestPattern;
 import com.github.tomakehurst.wiremock.verification.FindRequestsResult;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.niis.xroad.restadapterservice.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,13 +42,14 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -114,7 +116,7 @@ public class ConsumerGatewayWireMockTest {
         // 1
         String requestBodyFromWireMock = findOneRequestFromWireMock();
         String expectedRequestXml = readFile("consumer-gw-test-request-expected.xml");
-        ;
+
         log.debug("request received by wiremock: {}", requestBodyFromWireMock);
         log.debug("expected result xml: {}", expectedRequestXml);
         XMLUnit.setIgnoreWhitespace(true);
@@ -126,7 +128,7 @@ public class ConsumerGatewayWireMockTest {
 
         // 2
         String expectedResponseJson = readFile("consumer-gw-test-response-expected.json");
-        ;
+
         String actualResponseJson = response.getContentAsString();
         log.debug("json response: {}", actualResponseJson);
         log.debug("expected json response: {}", expectedResponseJson);
@@ -155,7 +157,7 @@ public class ConsumerGatewayWireMockTest {
         }
     }
 
-    private class TestConsumerGateway extends ConsumerGateway {
+    private final class TestConsumerGateway extends ConsumerGateway {
         private GatewayProperties testGatewayProperties;
 
         public void setTestGatewayProperties(GatewayProperties testGatewayProperties) {

@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
  */
 public final class ConsumerGatewayUtil {
 
-    private static final Logger log = LoggerFactory.getLogger(ConsumerGatewayUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConsumerGatewayUtil.class);
 
     /**
      * This a utility class providing only static methods which is why it should not
@@ -66,9 +66,9 @@ public final class ConsumerGatewayUtil {
      */
     public static Map<String, ConsumerEndpoint> extractConsumers(Properties endpoints, Properties gatewayProperties) {
         Map<String, ConsumerEndpoint> results = new TreeMap<>();
-        log.info("Start extracting consumer endpoints from properties.");
+        LOGGER.info("Start extracting consumer endpoints from properties.");
         if (endpoints == null || endpoints.isEmpty()) {
-            log.warn("No endpoints were founds. The list was null or empty.");
+            LOGGER.warn("No endpoints were founds. The list was null or empty.");
             return results;
         }
 
@@ -83,7 +83,7 @@ public final class ConsumerGatewayUtil {
             String path = endpoints.getProperty(key + "." + Constants.CONSUMER_PROPS_PATH);
 
             if (RESTGatewayUtil.isNullOrEmpty(serviceId) || RESTGatewayUtil.isNullOrEmpty(path)) {
-                log.warn("ID or path is null or empty. Consumer endpoint skipped.");
+                LOGGER.warn("ID or path is null or empty. Consumer endpoint skipped.");
                 key = Integer.toString(++i);
                 continue;
             }
@@ -92,7 +92,7 @@ public final class ConsumerGatewayUtil {
                 path += "/";
             }
 
-            log.info("New consumer endpoint found. ID : \"{}\", path : \"{}\".", serviceId, path);
+            LOGGER.info("New consumer endpoint found. ID : \"{}\", path : \"{}\".", serviceId, path);
 
             // Create a new ConsumerEndpoint and set default values
             ConsumerEndpoint endpoint = new ConsumerEndpoint(serviceId, clientId, path);
@@ -115,7 +115,7 @@ public final class ConsumerGatewayUtil {
             key = Integer.toString(++i);
         }
 
-        log.info("{} consumer endpoints extracted from properties.", results.size());
+        LOGGER.info("{} consumer endpoints extracted from properties.", results.size());
         return ((TreeMap) results).descendingMap();
     }
 
@@ -132,7 +132,7 @@ public final class ConsumerGatewayUtil {
         if (endpoints.containsKey(key + "." + Constants.CONSUMER_PROPS_ID_CLIENT)) {
             String value = endpoints.getProperty(key + "." + Constants.CONSUMER_PROPS_ID_CLIENT);
             endpoint.setClientId(value);
-            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.CONSUMER_PROPS_ID_CLIENT, value);
+            LOGGER.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.CONSUMER_PROPS_ID_CLIENT, value);
         }
         // HTTP verb
         if (endpoints.containsKey(key + "." + Constants.ENDPOINT_PROPS_VERB)) {
@@ -141,19 +141,19 @@ public final class ConsumerGatewayUtil {
                 value = value.toUpperCase();
             }
             endpoint.setHttpVerb(value);
-            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_VERB, value);
+            LOGGER.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_VERB, value);
         }
         // Modify URLs
         if (endpoints.containsKey(key + "." + Constants.CONSUMER_PROPS_MOD_URL)) {
             String value = endpoints.getProperty(key + "." + Constants.CONSUMER_PROPS_MOD_URL);
             endpoint.setModifyUrl(MessageHelper.strToBool(value));
-            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.CONSUMER_PROPS_MOD_URL, value);
+            LOGGER.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.CONSUMER_PROPS_MOD_URL, value);
         }
         // Convert POST JSON messages
         if (endpoints.containsKey(key + "." + Constants.CONSUMER_PROPS_CONVERT_POST)) {
             String value = endpoints.getProperty(key + "." + Constants.CONSUMER_PROPS_CONVERT_POST);
             endpoint.setConvertPost(MessageHelper.strToBool(value));
-            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.CONSUMER_PROPS_CONVERT_POST, value);
+            LOGGER.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.CONSUMER_PROPS_CONVERT_POST, value);
         }
 
     }
@@ -172,11 +172,11 @@ public final class ConsumerGatewayUtil {
     protected static boolean setConsumerAndProducer(ConsumerEndpoint endpoint) {
         // Create ProducerMember object
         if (!ConsumerGatewayUtil.setProducerMember(endpoint)) {
-            log.warn("Creating producer member failed. Consumer endpoint skipped.");
+            LOGGER.warn("Creating producer member failed. Consumer endpoint skipped.");
             return false;
         } // Create ConsumerMember object
         if (!ConsumerGatewayUtil.setConsumerMember(endpoint)) {
-            log.warn("Creating consumer member failed. Consumer endpoint skipped.");
+            LOGGER.warn("Creating consumer member failed. Consumer endpoint skipped.");
             return false;
         }
         return true;
@@ -219,15 +219,15 @@ public final class ConsumerGatewayUtil {
      */
     public static ConsumerEndpoint findMatch(String serviceId, Map<String, ConsumerEndpoint> endpoints) {
         if (endpoints.containsKey(serviceId)) {
-            log.debug("Found match by service id : \"{}\".", serviceId);
+            LOGGER.debug("Found match by service id : \"{}\".", serviceId);
             return endpoints.get(serviceId);
         }
         for (Map.Entry<String, ConsumerEndpoint> entry : endpoints.entrySet()) {
             String key = entry.getKey();
             String keyMod = key.replaceAll("\\{" + Constants.PARAM_RESOURCE_ID + "\\}", "([\\\\w\\\\-]+?)");
-            log.trace("Modified key used for comparison : \"{}\".", keyMod);
+            LOGGER.trace("Modified key used for comparison : \"{}\".", keyMod);
             if (serviceId.matches(keyMod)) {
-                log.debug("Found partial match by service id. Request value : \"{}\", matching value : \"{}\".",
+                LOGGER.debug("Found partial match by service id. Request value : \"{}\", matching value : \"{}\".",
                         serviceId, key);
                 ConsumerEndpoint endpoint = entry.getValue();
                 // Parse resource id and set it to endpoint
@@ -235,7 +235,7 @@ public final class ConsumerGatewayUtil {
                 return endpoint;
             }
         }
-        log.debug("No match by service id was found. Service id : \"{}\".", serviceId);
+        LOGGER.debug("No match by service id was found. Service id : \"{}\".", serviceId);
         return null;
     }
 
@@ -260,7 +260,7 @@ public final class ConsumerGatewayUtil {
                 resourceId = resourceId.substring(0, resourceId.length() - 1);
             }
             endpoint.setResourceId(resourceId);
-            log.trace("Set resource id : \"{}\"", resourceId);
+            LOGGER.trace("Set resource id : \"{}\"", resourceId);
         }
     }
 
@@ -274,20 +274,20 @@ public final class ConsumerGatewayUtil {
      * @return modified response
      */
     public static String rewriteUrl(String servletUrl, String pathToResource, String responseStr) {
-        log.debug("Rewrite URLs in the response to point Consumer Gateway.");
-        log.debug("Consumer Gateway URL : \"{}\".", servletUrl);
+        LOGGER.debug("Rewrite URLs in the response to point Consumer Gateway.");
+        LOGGER.debug("Consumer Gateway URL : \"{}\".", servletUrl);
         try {
             // Remove "/{resourceId}" from resource path, and omit
             // first and last slash ('/') character
             String resourcePath = pathToResource.substring(1, pathToResource.length() - 1)
                     .replaceAll("/\\{" + Constants.PARAM_RESOURCE_ID + "\\}", "");
-            log.debug("Resourse URL that's replaced with Consumer Gateway URL : \"http(s)://{}\".", resourcePath);
-            log.debug("New resource URL : \"{}{}\".", servletUrl, resourcePath);
+            LOGGER.debug("Resourse URL that's replaced with Consumer Gateway URL : \"http(s)://{}\".", resourcePath);
+            LOGGER.debug("New resource URL : \"{}{}\".", servletUrl, resourcePath);
             // Modify the response
             return responseStr.replaceAll("http(s|):\\/\\/" + resourcePath, servletUrl + resourcePath);
         } catch (Exception ex) {
-            log.error("Rewriting the URLs failed!");
-            log.error(ex.getMessage(), ex);
+            LOGGER.error("Rewriting the URLs failed!");
+            LOGGER.error(ex.getMessage(), ex);
             return responseStr;
         }
     }
@@ -304,11 +304,11 @@ public final class ConsumerGatewayUtil {
     protected static boolean setConsumerMember(ConsumerEndpoint endpoint) {
         ConsumerMember consumer = ConfigurationHelper.parseConsumerMember(endpoint.getClientId());
         if (consumer == null) {
-            log.warn("ConsumerMember not found.");
+            LOGGER.warn("ConsumerMember not found.");
             return false;
         }
         endpoint.setConsumer(consumer);
-        log.debug("ConsumerMember id : \"{}\".", consumer.toString());
+        LOGGER.debug("ConsumerMember id : \"{}\".", consumer.toString());
         return true;
     }
 
@@ -324,11 +324,11 @@ public final class ConsumerGatewayUtil {
     protected static boolean setProducerMember(ConsumerEndpoint endpoint) {
         ProducerMember producer = ConfigurationHelper.parseProducerMember(endpoint.getServiceId());
         if (producer == null) {
-            log.warn("ProducerMember not found.");
+            LOGGER.warn("ProducerMember not found.");
             return false;
         }
         endpoint.setProducer(producer);
-        log.debug("ProducerMember id : \"{}\".", producer.toString());
+        LOGGER.debug("ProducerMember id : \"{}\".", producer.toString());
         return true;
     }
 
@@ -343,7 +343,7 @@ public final class ConsumerGatewayUtil {
      * @return ConsumerEndpoint object
      */
     public static ConsumerEndpoint createUnconfiguredEndpoint(Properties props, String pathToResource) {
-        log.debug("Create a consumer endpoint that points to a service defined by resource path.");
+        LOGGER.debug("Create a consumer endpoint that points to a service defined by resource path.");
         String resourceId = null;
         String resourcePath;
         // Check if a resource id is present in the resource path.
@@ -355,7 +355,7 @@ public final class ConsumerGatewayUtil {
         if (m.find()) {
             resourcePath = m.group(1);
             resourceId = m.group(2).substring(0, m.group(2).length() - 1);
-            log.info("Resource id detected. Resource path : \"{}\". Resource id : \"{}\".", resourcePath, resourceId);
+            LOGGER.info("Resource id detected. Resource path : \"{}\". Resource id : \"{}\".", resourcePath, resourceId);
         } else {
             // Remove slashes, they're not part of service id
             resourcePath = pathToResource.replaceAll("/", "");
@@ -399,9 +399,9 @@ public final class ConsumerGatewayUtil {
         if (matcher.find()) {
             if (matcher.group(1) != null) {
                 responsePrefix = matcher.group(1);
-                log.debug("Response tag's prefix is \"{}\".", responsePrefix);
+                LOGGER.debug("Response tag's prefix is \"{}\".", responsePrefix);
             } else {
-                log.debug("No namespace prefix was found for response tag.");
+                LOGGER.debug("No namespace prefix was found for response tag.");
             }
         }
         // If content type is XML the message doesn't have to
@@ -433,7 +433,7 @@ public final class ConsumerGatewayUtil {
      */
     public static boolean checkEncryptionProperties(Properties props, Map<String, ConsumerEndpoint> endpoints,
                                                     Map<String, Encrypter> asymmetricEncrypterCache) {
-        log.info("Check encryption properties.");
+        LOGGER.info("Check encryption properties.");
         boolean result = true;
         boolean mustCheckPrivateKey = false;
         // Loop through all the endpoints
@@ -445,12 +445,12 @@ public final class ConsumerGatewayUtil {
                 String producerId = endpoint.getProducer().toString();
                 Encrypter encrypter = RESTGatewayUtil.checkPublicKey(props, producerId);
                 if (encrypter == null) {
-                    log.error("The endpoint \"{}\" does not support encryption of request messages.", producerId);
+                    LOGGER.error("The endpoint \"{}\" does not support encryption of request messages.", producerId);
                     result = false;
                 } else {
                     // Add encrypter to cache
                     asymmetricEncrypterCache.put(endpoint.getProducer().toString(), encrypter);
-                    log.trace("Asymmetric encrypter for producer \"{}\" was added to cache.", producerId);
+                    LOGGER.trace("Asymmetric encrypter for producer \"{}\" was added to cache.", producerId);
                 }
             }
             // If response is encrypted, decryption is done using the private
@@ -462,10 +462,10 @@ public final class ConsumerGatewayUtil {
         }
         // If access to private key is required, check it
         if (mustCheckPrivateKey && RESTGatewayUtil.checkPrivateKey(props) == null) {
-            log.error("None of the endpoints support deccryption of response messages.");
+            LOGGER.error("None of the endpoints support deccryption of response messages.");
             result = false;
         }
-        log.info("Encryption properties checked.");
+        LOGGER.info("Encryption properties checked.");
         return result && mustCheckPrivateKey;
     }
 }
