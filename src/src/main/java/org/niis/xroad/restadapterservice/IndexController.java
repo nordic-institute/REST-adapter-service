@@ -22,7 +22,9 @@
  */
 package org.niis.xroad.restadapterservice;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,14 +35,16 @@ import java.util.Map;
  * Index controller
  */
 @Controller
+@RequestMapping("/")
 public class IndexController {
 
     /**
      * return the index page
      */
-    @RequestMapping("/")
+    @GetMapping
     public String indexPage(Map<String, Object> model, HttpServletRequest request) {
         model.put("requestURL", request.getRequestURL());
+
         return "index";
     }
 }

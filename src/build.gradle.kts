@@ -82,28 +82,27 @@ dependencies {
     implementation("org.niis.xrd4j:server:0.6.0")
     implementation("org.niis.xrd4j:rest:0.6.0")
 
-    implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
-    implementation("jakarta.xml.soap:jakarta.xml.soap-api:3.0.2")
-    implementation("com.sun.xml.messaging.saaj:saaj-impl:3.0.4")
-    implementation("org.apache.httpcomponents.client5:httpclient5:5.4.1")
-
-
     // Lombok
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     testImplementation("org.projectlombok:lombok:1.18.30")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
 
+
+    // other
+    implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
+    implementation("jakarta.xml.soap:jakarta.xml.soap-api:3.0.2")
+    implementation("com.sun.xml.messaging.saaj:saaj-impl:3.0.4")
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.4.1")
+    implementation("org.apache.tomcat.embed:tomcat-embed-jasper:10.1.39")
+
+
     //Test Implementation
     testImplementation(libs.org.xmlunit.xmlunit.assertj)
-    testImplementation("org.apache.tomcat.embed:tomcat-embed-jasper:10.1.39")
-
     testImplementation("org.wiremock.integrations:wiremock-spring-boot:3.6.0")
     testAnnotationProcessor("org.wiremock.integrations:wiremock-spring-boot:3.6.0")
-
     testImplementation(libs.commons.io.commons.io)
     testImplementation(libs.com.github.stefanbirkner.system.rules)
-
     testImplementation(libs.org.xmlunit.xmlunit.core)
     testImplementation(libs.org.xmlunit.xmlunit.matchers)
     testImplementation(libs.com.jayway.jsonpath.json.path.assert)
