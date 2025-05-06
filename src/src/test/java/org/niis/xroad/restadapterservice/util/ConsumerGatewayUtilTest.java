@@ -50,7 +50,6 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Petteri Kivimäki
  */
-@SuppressWarnings("checkstyle:lineLength")
 @SpringBootTest
 public class ConsumerGatewayUtilTest {
 

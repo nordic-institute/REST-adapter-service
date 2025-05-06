@@ -15,26 +15,21 @@ checkstyle {
     toolVersion = "10.23.1"
     group = "verification"
     configFile = file("${project.projectDir}/config/checkstyle/checkstyle-config.xml")
-//    configProperties["checkstyleSuppressionsPath"] = file("${project.projectDir}/dependency-check-suppressions.xml").absolutePath
 }
 
-//sourceSets {
-//    create("integrationTest") {
-//        java.srcDirs("src/test/java/")
-//        resources.srcDir("src/test/resources")
-//        compileClasspath += sourceSets.main.get().output + sourceSets.test.get().output + configurations["testRuntimeClasspath"]
-//        runtimeClasspath += output + compileClasspath
-//        configurations {
-//            named("integrationTestImplementation") {
-//                extendsFrom(configurations["testImplementation"])
-//            }
-//            named("integrationTestRuntimeOnly") {
-//                extendsFrom(configurations["testRuntimeOnly"])
-//            }
-//        }
+dependencyCheck {
+//    cveValidForHours = 12
+//    assemblyAnalyzerEnabled = false
+//    enableExperimental = false
+    //TODO Do we need an apiKey? Otherwise: One or more exceptions occurred during analysis:
+    //	UpdateException: Error updating the NVD Data; the NVD returned a 403 or 404 error
+//    nvd {
+//        apiKey=
 //    }
-//
-//}
+    outputDirectory = "${project.projectDir}/build/reports/dependency-check-report"
+    suppressionFile = "${project.projectDir}/src/dependency-check-suppressions.xml"
+    formats = listOf("HTML", "XML")
+}
 
 repositories {
     mavenLocal()
@@ -55,8 +50,6 @@ repositories {
     }
     mavenCentral()
 }
-
-
 
 ext {
     set("xrd4j.version", "0.6.0")
@@ -160,10 +153,6 @@ publishing {
     }
 }
 
-dependencyCheck {
-    outputDirectory = "${project.projectDir}/build/reports/dependency-check-report"
-    suppressionFile = "${project.projectDir}/src/dependency-check-suppressions.xml"
-}
 tasks.withType<JavaCompile>() {
     options.encoding = "UTF-8"
     options.annotationProcessorPath = configurations.annotationProcessor.get()
@@ -258,16 +247,5 @@ tasks.register<Test>("iTest") {
     systemProperty("propertiesDirectory", "${project.projectDir}/build/resources/integration-test-profile")
 }
 
-tasks.bootJar {
-    archiveBaseName.set("rest-adapter-service")
-    manifest {
-        attributes["main-class"] = "org.niis.xroad.restadapterservice.Application"
-    }
-    // mainClass.set("org.niis.xroad.restadapterservice.Application")
 
-    // archiveBaseName.set("my-kotlin-app")
-    // archiveVersion.set(project.version.toString())
 
-    // // Include compiled classes and resources
-    // from(sourceSets.main.get().output)
-}
