@@ -4,10 +4,8 @@ import java.util.*
 plugins {
     java
     checkstyle
-    `maven-publish`
     alias(libs.plugins.springBoot)
     alias(libs.plugins.dependencyManagement)
-    id("org.owasp.dependencycheck") version ("12.1.1")
     jacoco
 }
 
@@ -20,19 +18,6 @@ checkstyle {
     toolVersion = "10.23.1"
     group = "verification"
     configFile = file("${project.projectDir}/config/checkstyle/checkstyle-config.xml")
-}
-
-dependencyCheck {
-
-    outputDirectory = "${project.projectDir}/build/reports/dependency-check-report"
-    suppressionFile = "${project.projectDir}/src/dependency-check-suppressions.xml"
-    formats = listOf("HTML", "XML")
-    nvd.validForHours = 24
-    skipConfigurations = listOf("checkstyle")
-
-//    if (project.hasProperty("nvdApiKey")) {
-//        nvd.apiKey = project.property("nvdApiKey") as String
-//    }
 }
 
 repositories {
@@ -114,48 +99,6 @@ version = "1.1.0-SNAPSHOT"
 description = "REST Adapter Service"
 java.sourceCompatibility = JavaVersion.VERSION_21
 
-publishing {
-    publications {
-        create<MavenPublication>("rest-adaper-service-extension") {
-            from(components["java"])
-
-            pom {
-                licenses {
-                    license {
-                        name.set("MIT License")
-                        url.set("http://www.opensource.org/licenses/mit-license.php")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:git@github.com:nordic-institute/REST-adapter-service.git")
-                    developerConnection.set("scm:git:git@github.com:nordic-institute/REST-adapter-service.git")
-                    url.set("https://github.com/nordic-institute/REST-adapter-service.git")
-                }
-                developers {
-                    developer {
-                        id.set("niis")
-                        name.set("Nordic Institute for Interoperability Solutions (NIIS)")
-                        roles.set(listOf("architect", "developer"))
-                        timezone.set("+2")
-                    }
-                    developer {
-                        id.set("vrk")
-                        name.set("Population Register Centre (VRK)")
-                        roles.set(listOf("architect", "developer"))
-                        timezone.set("+2")
-                    }
-                    developer {
-                        id.set("petkivim")
-                        name.set("Petteri Kivimäki")
-                        roles.set(listOf("architect", "developer"))
-                        timezone.set("+2")
-                    }
-                }
-            }
-        }
-    }
-}
-
 
 tasks.processResources {
     println(if (isEncrypted) "Running with encrypted profile" else "Running with plaintext profile");
@@ -201,11 +144,10 @@ tasks.test {
 
 
 tasks.register("processIntTestResources") {
-    group = "test"
     description = "Processes integration test resources"
 
     val filterFile = file("src/main/filters/default.properties")
-    val filterFile2 = file("src/main/filters/integration-test.properties")
+    val filterFile2 = file("src/test/filters/integration-test.properties")
     val props = Properties().apply {
         load(filterFile.reader())
         load(filterFile2.reader())
