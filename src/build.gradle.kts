@@ -1,15 +1,17 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 import java.util.*
 
+
 plugins {
     java
     checkstyle
     `maven-publish`
-    id("org.springframework.boot") version "3.4.4"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("org.owasp.dependencycheck") version "12.1.1"
+    alias(libs.plugins.springBoot)
+    alias(libs.plugins.dependencyManagement)
+    id("org.owasp.dependencycheck")
     jacoco
 }
+
 
 checkstyle {
     toolVersion = "10.23.1"
@@ -18,17 +20,16 @@ checkstyle {
 }
 
 dependencyCheck {
-//    cveValidForHours = 12
-//    assemblyAnalyzerEnabled = false
-//    enableExperimental = false
-    //TODO Do we need an apiKey? Otherwise: One or more exceptions occurred during analysis:
-    //	UpdateException: Error updating the NVD Data; the NVD returned a 403 or 404 error
-//    nvd {
-//        apiKey=
-//    }
+
     outputDirectory = "${project.projectDir}/build/reports/dependency-check-report"
     suppressionFile = "${project.projectDir}/src/dependency-check-suppressions.xml"
     formats = listOf("HTML", "XML")
+    nvd.validForHours = 24
+    skipConfigurations = listOf("checkstyle")
+
+//    if (project.hasProperty("nvdApiKey")) {
+//        nvd.apiKey = project.property("nvdApiKey") as String
+//    }
 }
 
 repositories {
@@ -52,7 +53,6 @@ repositories {
 }
 
 ext {
-    set("xrd4j.version", "0.6.0")
     set("java.version", "21")
     set("jdk.version", "21")
     set("project.build.sourceEncoding", "UTF-8")
@@ -64,24 +64,24 @@ ext {
 
 dependencies {
     // SpringBoot
-    implementation("org.springframework.boot:spring-boot-starter-web:3.4.4")
-    implementation("org.springframework.boot:spring-boot-starter-aop:3.4.4")
-    implementation("org.springframework.boot:spring-boot-starter-tomcat:3.4.4")
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.4") {
+    implementation(libs.org.springframework.boot.spring.boot.starter.web)
+    implementation(libs.org.springframework.boot.spring.boot.starter.aop)
+    implementation(libs.org.springframework.boot.spring.boot.starter.tomcat)
+    testImplementation(libs.org.springframework.boot.spring.boot.starter.test) {
         exclude(group = "com.vaadin.external.google", module = "android-json")
     }
 
     // xrd4j
-    implementation("org.niis.xrd4j:common:0.6.0")
-    implementation("org.niis.xrd4j:client:0.6.0")
-    implementation("org.niis.xrd4j:server:0.6.0")
-    implementation("org.niis.xrd4j:rest:0.6.0")
+    implementation(libs.org.niis.xrd4j.common)
+    implementation(libs.org.niis.xrd4j.client)
+    implementation(libs.org.niis.xrd4j.server)
+    implementation(libs.org.niis.xrd4j.rest)
 
     // Lombok
-    compileOnly("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
-    testImplementation("org.projectlombok:lombok:1.18.30")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
+    compileOnly(libs.org.projectlombok.lombok)
+    annotationProcessor(libs.org.projectlombok.lombok)
+    testImplementation(libs.org.projectlombok.lombok)
+    testAnnotationProcessor(libs.org.projectlombok.lombok)
 
     // other
     implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
@@ -208,7 +208,7 @@ tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
 }
 
-tasks.register("processIntegrationTestResources") {
+tasks.register("processIntTestResources") {
     group = "test"
     description = "Processes integration test resources"
 
@@ -231,7 +231,7 @@ tasks.register("processIntegrationTestResources") {
     }
 }
 
-tasks.register<Test>("iTest") {
+tasks.register<Test>("intTest") {
     useJUnitPlatform()
     dependsOn("processIntegrationTestResources")
     description = "Runs integration tests"

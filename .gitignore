@@ -73,10 +73,6 @@ src/rest-gateway.iml
 build/
 src/bin
 
-# these lines dont work :(
-#   --> files are ignored but not the whole folder and no files in subfolders...
 src/.gradle
 src/gradle
-src/.gradle/buildOutputCleanup
-src/.gradle/configuration-cache
 
