@@ -46,8 +46,7 @@ import org.niis.xroad.restadapterservice.util.ConsumerGatewayUtil;
 import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
 
 import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -86,9 +85,9 @@ import static org.w3c.dom.Node.ELEMENT_NODE;
  *
  * @author Petteri Kivimäki
  */
+@Slf4j
 public class ConsumerGateway extends HttpServlet {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConsumerGateway.class);
 
     public static final String JSON_CONVERSION_WRAPPER_ELEMENT = "jsonWrapperProperty";
     private Properties props;
@@ -106,7 +105,7 @@ public class ConsumerGateway extends HttpServlet {
      * @return
      */
     protected GatewayProperties readGatewayProperties() {
-        LOGGER.debug("Reading Consumer and ConsumerGateway properties");
+        log.debug("Reading Consumer and ConsumerGateway properties");
         String propertiesDirectory = RESTGatewayUtil.getPropertiesDirectory();
         Properties readEndpointProps;
         Properties readConsumerGatewayProps;
@@ -125,30 +124,30 @@ public class ConsumerGateway extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        LOGGER.debug("Starting to initialize Consumer REST Gateway.");
+        log.debug("Starting to initialize Consumer REST Gateway.");
         GatewayProperties gatewayProperties = readGatewayProperties();
         this.props = gatewayProperties.getConsumerGatewayProps();
         Properties endpointProps = gatewayProperties.getEndpointProps();
 
-        LOGGER.debug("Setting Consumer and ConsumerGateway properties");
+        log.debug("Setting Consumer and ConsumerGateway properties");
         String serviceCallsByXRdServiceIdStr = this.props
                 .getProperty(Constants.CONSUMER_PROPS_SVC_CALLS_BY_XRD_SVC_ID_ENABLED);
         this.serviceCallsByXRdServiceId = serviceCallsByXRdServiceIdStr == null ? false
                 : "true".equalsIgnoreCase(serviceCallsByXRdServiceIdStr);
-        LOGGER.debug("Security server URL : \"{}\".", getSecurityServerUrl());
-        LOGGER.debug("Default client id : \"{}\".", this.props.getProperty(Constants.CONSUMER_PROPS_ID_CLIENT));
-        LOGGER.debug("Default namespace for incoming ServiceResponses : \"{}\".",
+        log.debug("Security server URL : \"{}\".", getSecurityServerUrl());
+        log.debug("Default client id : \"{}\".", this.props.getProperty(Constants.CONSUMER_PROPS_ID_CLIENT));
+        log.debug("Default namespace for incoming ServiceResponses : \"{}\".",
                 this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE));
-        LOGGER.debug("Default namespace for outgoing ServiceRequests : \"{}\".",
+        log.debug("Default namespace for outgoing ServiceRequests : \"{}\".",
                 this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE));
-        LOGGER.debug("Default namespace prefix for outgoing ServiceRequests : \"{}\".",
+        log.debug("Default namespace prefix for outgoing ServiceRequests : \"{}\".",
                 this.props.getProperty(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE));
-        LOGGER.debug("Service calls by X-Road service id are enabled : {}.", this.serviceCallsByXRdServiceId);
+        log.debug("Service calls by X-Road service id are enabled : {}.", this.serviceCallsByXRdServiceId);
         this.publicKeyFile = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE);
         this.publicKeyFilePassword = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE_PASSWORD);
         this.keyLength = RESTGatewayUtil.getKeyLength(props);
-        LOGGER.debug("Symmetric key length : \"{}\".", this.keyLength);
-        LOGGER.debug("Extracting individual consumers from properties");
+        log.debug("Symmetric key length : \"{}\".", this.keyLength);
+        log.debug("Extracting individual consumers from properties");
         this.endpoints = ConsumerGatewayUtil.extractConsumers(endpointProps, this.props);
         // Check encryption properties. The method also sets the values of
         // asymmetricEncrypterCache.
@@ -180,7 +179,7 @@ public class ConsumerGateway extends HttpServlet {
         String contentType = request.getHeader(Constants.HTTP_HEADER_CONTENT_TYPE);
         String acceptHeader = getXRdHeader(request, Constants.HTTP_HEADER_ACCEPT) == null ? Constants.TEXT_XML
                 : getXRdHeader(request, Constants.HTTP_HEADER_ACCEPT);
-        LOGGER.info("Request received. Method : \"{}\". Resource path : \"{}\".", request.getMethod(), resourcePath);
+        log.info("Request received. Method : \"{}\". Resource path : \"{}\".", request.getMethod(), resourcePath);
 
         // Check accept header
         String accept = processAcceptHeader(acceptHeader);
@@ -202,7 +201,7 @@ public class ConsumerGateway extends HttpServlet {
 
         // Build the service id for the incoming request
         String serviceId = request.getMethod() + " " + resourcePath;
-        LOGGER.debug("Incoming service id to be looked for : \"{}\"", serviceId);
+        log.debug("Incoming service id to be looked for : \"{}\"", serviceId);
         // Try to find a configured endpoint matching the request's
         // service id
         ConsumerEndpoint endpoint = ConsumerGatewayUtil.findMatch(serviceId, endpoints);
@@ -210,10 +209,10 @@ public class ConsumerGateway extends HttpServlet {
         // If endpoint is null, try to use resourcePath as service id
         if (endpoint == null) {
             if (this.serviceCallsByXRdServiceId) {
-                LOGGER.info("Endpoint is null, use resource path as service id. Resource path : \"{}\"", resourcePath);
+                log.info("Endpoint is null, use resource path as service id. Resource path : \"{}\"", resourcePath);
                 endpoint = ConsumerGatewayUtil.createUnconfiguredEndpoint(this.props, resourcePath);
             } else {
-                LOGGER.info("Endpoint is null and service calls by X-Road service id are disabled. Nothing to do here.");
+                log.info("Endpoint is null and service calls by X-Road service id are disabled. Nothing to do here.");
             }
         }
         // If endpoint is still null, return error message
@@ -227,7 +226,7 @@ public class ConsumerGateway extends HttpServlet {
         // Set namespace and prefix received from header, if not null or empty
         processNamespaceAndPrefix(endpoint, namespace, prefix);
 
-        LOGGER.info("Starting to process \"{}\" service. X-Road id : \"{}\". Message id : \"{}\".", serviceId,
+        log.info("Starting to process \"{}\" service. X-Road id : \"{}\". Message id : \"{}\".", serviceId,
                 endpoint.getServiceId(), messageId);
         try {
             // Create ServiceRequest object
@@ -246,7 +245,7 @@ public class ConsumerGateway extends HttpServlet {
             for (Map.Entry<String, String[]> entry : params.entrySet()) {
                 final String key = entry.getKey();
                 for (String value : entry.getValue()) {
-                    LOGGER.debug("Add parameter : \"{}\" -> \"{}\".", key, value);
+                    log.debug("Add parameter : \"{}\" -> \"{}\".", key, value);
                     containerElement.addChildElement(key).addTextNode(value);
                 }
             }
@@ -270,11 +269,11 @@ public class ConsumerGateway extends HttpServlet {
             ServiceResponseDeserializer deserializer = getResponseDeserializer(endpoint, omitNamespace);
             // SOAP client that makes the service call
             SOAPClient client = new SOAPClientImpl();
-            LOGGER.info("Send request ({}) to the security server. URL : \"{}\".", messageId, getSecurityServerUrl());
+            log.info("Send request ({}) to the security server. URL : \"{}\".", messageId, getSecurityServerUrl());
             // Make the service call that returns the service response
             ServiceResponse serviceResponse = client.send(serviceRequest, getSecurityServerUrl(), serializer,
                     deserializer);
-            LOGGER.info("Received response ({}) from the security server.", messageId);
+            log.info("Received response ({}) from the security server.", messageId);
             // Set response wrapper processing
             if (endpoint.isProcessingWrappers() != null) {
                 serviceResponse.setProcessingWrappers(endpoint.isProcessingWrappers());
@@ -290,11 +289,11 @@ public class ConsumerGateway extends HttpServlet {
                 // Modify the response
                 responseStr = ConsumerGatewayUtil.rewriteUrl(servletUrl, resourcePath, responseStr);
             }
-            LOGGER.info("Processing \"{}\" service successfully completed. X-Road id : \"{}\". Message id : \"{}\".",
+            log.info("Processing \"{}\" service successfully completed. X-Road id : \"{}\". Message id : \"{}\".",
                     serviceId, endpoint.getServiceId(), messageId);
         } catch (Exception ex) {
-            LOGGER.error(ex.getMessage(), ex);
-            LOGGER.error("Processing \"{}\" service failed. X-Road id : \"{}\". Message id : \"{}\".", serviceId,
+            log.error(ex.getMessage(), ex);
+            log.error("Processing \"{}\" service failed. X-Road id : \"{}\". Message id : \"{}\".", serviceId,
                     endpoint.getServiceId(), messageId);
             // Internal server error -> return 500
             responseStr = generateError(Constants.ERROR_500, accept);
@@ -333,7 +332,7 @@ public class ConsumerGateway extends HttpServlet {
                                                           String contentType) throws XRd4JException {
         // Type of the serializer depends on the encryption
         if (endpoint.isRequestEncrypted()) {
-            LOGGER.debug("Endpoint requires that request is encrypted.");
+            log.debug("Endpoint requires that request is encrypted.");
             String providerId = endpoint.getProducer().toString();
             Encrypter asymmetricEncrypter;
             // Check if encrypter already exists in cache - it should as all
@@ -341,14 +340,14 @@ public class ConsumerGateway extends HttpServlet {
             if (this.asymmetricEncrypterCache.containsKey(providerId)) {
                 asymmetricEncrypter = RESTGatewayUtil.getEncrypter(this.publicKeyFile, this.publicKeyFilePassword,
                         providerId);
-                LOGGER.trace("Asymmetric encrypter for provider \"{}\" loaded from cache.", providerId);
+                log.trace("Asymmetric encrypter for provider \"{}\" loaded from cache.", providerId);
             } else {
                 // Create new encrypter if it does not exist already for some reason
                 asymmetricEncrypter = RESTGatewayUtil.getEncrypter(this.publicKeyFile, this.publicKeyFilePassword,
                         providerId);
                 // Add new encrypter to the cache
                 this.asymmetricEncrypterCache.put(providerId, asymmetricEncrypter);
-                LOGGER.trace("Asymmetric encrypter for provider \"{}\" not found from cache. New ecrypter created.",
+                log.trace("Asymmetric encrypter for provider \"{}\" not found from cache. New ecrypter created.",
                         providerId);
             }
             if (asymmetricEncrypter == null) {
@@ -397,7 +396,7 @@ public class ConsumerGateway extends HttpServlet {
     private String processUserId(String userId) {
         // Set userId if null
         if (userId == null) {
-            LOGGER.debug("\"{}\" header is null. Use \"anonymous\" as userId.", Constants.XRD_HEADER_USER_ID);
+            log.debug("\"{}\" header is null. Use \"anonymous\" as userId.", Constants.XRD_HEADER_USER_ID);
             return "anonymous";
         }
         return userId;
@@ -415,7 +414,7 @@ public class ConsumerGateway extends HttpServlet {
         // Set messageId if null
         if (messageId == null) {
             String id = MessageHelper.generateId();
-            LOGGER.debug("\"{}\" header is null. Use auto-generated id \"{}\" instead.", Constants.XRD_HEADER_MESSAGE_ID,
+            log.debug("\"{}\" header is null. Use auto-generated id \"{}\" instead.", Constants.XRD_HEADER_MESSAGE_ID,
                     id);
             return id;
         }
@@ -435,12 +434,12 @@ public class ConsumerGateway extends HttpServlet {
         // Set namespace received from header, if not null or empty
         if (!RESTGatewayUtil.isNullOrEmpty(namespace)) {
             endpoint.getProducer().setNamespaceUrl(namespace);
-            LOGGER.debug("\"{}\" HTTP header found. Value : \"{}\".", Constants.XRD_HEADER_NAMESPACE_SERIALIZE, namespace);
+            log.debug("\"{}\" HTTP header found. Value : \"{}\".", Constants.XRD_HEADER_NAMESPACE_SERIALIZE, namespace);
         }
         // Set prefix received from header, if not null or empty
         if (!RESTGatewayUtil.isNullOrEmpty(prefix)) {
             endpoint.getProducer().setNamespacePrefix(prefix);
-            LOGGER.debug("\"{}\" HTTP header found. Value : \"{}\".", Constants.XRD_HEADER_NAMESPACE_PREFIX_SERIALIZE,
+            log.debug("\"{}\" HTTP header found. Value : \"{}\".", Constants.XRD_HEADER_NAMESPACE_PREFIX_SERIALIZE,
                     prefix);
         }
     }
@@ -454,9 +453,9 @@ public class ConsumerGateway extends HttpServlet {
      */
     private String processAcceptHeader(String accept) {
         // Accept header must be "text/xml" or "application/json"
-        LOGGER.debug("Incoming accept header value : \"{}\"", accept);
+        log.debug("Incoming accept header value : \"{}\"", accept);
         if (!accept.startsWith(Constants.TEXT_XML) && !accept.startsWith(Constants.APPLICATION_JSON)) {
-            LOGGER.trace("Accept header value set to \"{}\".", Constants.TEXT_XML);
+            log.trace("Accept header value set to \"{}\".", Constants.TEXT_XML);
             return Constants.TEXT_XML + "; " + Constants.CHARSET_UTF8;
         }
         // Character set must be added to the accept header, if it's missing
@@ -485,7 +484,7 @@ public class ConsumerGateway extends HttpServlet {
             responseStr = (String) serviceResponse.getResponseData();
         } else {
             // Error message detected
-            LOGGER.debug("Received response contains SOAP fault.");
+            log.debug("Received response contains SOAP fault.");
             responseStr = generateFault(serviceResponse.getErrorMessage());
         }
         // SOAP message doesn't have attachments
@@ -498,7 +497,7 @@ public class ConsumerGateway extends HttpServlet {
             // content type.
             String attContentType = SOAPHelper.getAttachmentContentType(serviceResponse.getSoapMessage());
             response.setContentType(attContentType);
-            LOGGER.debug("Use SOAP attachment as response message.");
+            log.debug("Use SOAP attachment as response message.");
         }
         return responseStr;
     }
@@ -516,7 +515,7 @@ public class ConsumerGateway extends HttpServlet {
         // If content type is JSON and the SOAP message doesn't have
         // attachments, the response must be converted
         if (response.getContentType().startsWith(Constants.APPLICATION_JSON)) {
-            LOGGER.debug("Convert response from XML to JSON.");
+            log.debug("Convert response from XML to JSON.");
             // Remove response tag and its namespace prefixes
             String tmp = ConsumerGatewayUtil.removeResponseTag(responseStr);
             return new XMLToJSONConverter().convert(tmp);
@@ -525,12 +524,12 @@ public class ConsumerGateway extends HttpServlet {
             String responseStrTemp = ConsumerGatewayUtil.removeResponseTag(responseStr);
             // Try to convert modified response to SOAP element
             if (SOAPHelper.xmlStrToSOAPElement(responseStrTemp) != null) {
-                LOGGER.debug("Response tag was removed from the response string.");
+                log.debug("Response tag was removed from the response string.");
                 // If conversion succeeded response tag was only
                 // a wrapper that can be removed
                 return responseStrTemp;
             } else {
-                LOGGER.debug("Response tag is the root element and cannot be removed.");
+                log.debug("Response tag is the root element and cannot be removed.");
             }
         }
         return responseStr;
@@ -545,21 +544,21 @@ public class ConsumerGateway extends HttpServlet {
     private static void writeResponse(HttpServletResponse response, String responseStr) {
         PrintWriter out = null;
         try {
-            LOGGER.debug("Send response.");
+            log.debug("Send response.");
 
-            LOGGER.debug("Response content type : \"{}\".", response.getContentType());
+            log.debug("Response content type : \"{}\".", response.getContentType());
             // Get writer
             out = response.getWriter();
             // Send response
             out.println(responseStr);
-            LOGGER.trace("Consumer Gateway response : \"{}\"", responseStr);
+            log.trace("Consumer Gateway response : \"{}\"", responseStr);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         } finally {
             if (out != null) {
                 out.close();
             }
-            LOGGER.debug("Request was successfully processed.");
+            log.debug("Request was successfully processed.");
         }
     }
 
@@ -721,7 +720,7 @@ public class ConsumerGateway extends HttpServlet {
 
             return buffer.toString();
         } catch (Exception e) {
-            LOGGER.error("Failed to read the request body from the request.", e);
+            log.error("Failed to read the request body from the request.", e);
         }
         return null;
     }
@@ -741,7 +740,7 @@ public class ConsumerGateway extends HttpServlet {
             this.requestBody = requestBody;
             this.contentType = contentType;
             this.convertPost = convertPost;
-            LOGGER.debug("New RequestSerializer created.");
+            log.debug("New RequestSerializer created.");
         }
 
         @Override
@@ -770,7 +769,7 @@ public class ConsumerGateway extends HttpServlet {
          */
         protected void writeBodyContents(ServiceRequest request, SOAPElement soapRequest) throws SOAPException {
             if (this.resourceId != null && !this.resourceId.isEmpty()) {
-                LOGGER.debug("Add resourceId : \"{}\".", this.resourceId);
+                log.debug("Add resourceId : \"{}\".", this.resourceId);
                 soapRequest.addChildElement("resourceId").addTextNode(this.resourceId);
             }
             // requestData contains request parameters and possible converted JSON
@@ -843,7 +842,7 @@ public class ConsumerGateway extends HttpServlet {
 
         protected void handleAttachment(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope,
                                         String attachmentData) throws SOAPException {
-            LOGGER.debug("Request body was found from the request. Add request body as SOAP attachment."
+            log.debug("Request body was found from the request. Add request body as SOAP attachment."
                     + " Content type is \"{}\".", this.contentType);
             SOAPElement data = soapRequest.addChildElement(envelope.createName(Constants.PARAM_REQUEST_BODY));
             data.addAttribute(envelope.createName("href"), Constants.PARAM_REQUEST_BODY);
@@ -863,7 +862,7 @@ public class ConsumerGateway extends HttpServlet {
      * @throws SOAPException
      */
     private static String convertJsonToXml(String json) throws SOAPException {
-        LOGGER.debug("converting json: {}", json);
+        log.debug("converting json: {}", json);
         // create a json wrapper root property
         final StringBuilder wrapped = new StringBuilder();
         wrapped.append("{ \"").append(JSON_CONVERSION_WRAPPER_ELEMENT).append("\": ").append(json).append("}");
@@ -884,7 +883,7 @@ public class ConsumerGateway extends HttpServlet {
             super(resourceId, requestBody, contentType, convertPost);
             this.asymmetricEncrypter = asymmetricEncrypter;
             this.keyLength = keyLength;
-            LOGGER.debug("New EncryptingRequestSerializer created.");
+            log.debug("New EncryptingRequestSerializer created.");
         }
 
         @Override
@@ -912,7 +911,7 @@ public class ConsumerGateway extends HttpServlet {
                 // encrypted session key and IV
                 RESTGatewayUtil.buildEncryptedBody(symmetricEncrypter, asymmetricEncrypter, soapRequest, encryptedData);
             } catch (NoSuchAlgorithmException ex) {
-                LOGGER.error(ex.getMessage(), ex);
+                log.error(ex.getMessage(), ex);
                 throw new SOAPException("Encrypting SOAP request failed.", ex);
             }
         }
@@ -941,7 +940,7 @@ public class ConsumerGateway extends HttpServlet {
 
             // If message has attachments, return the first attachment
             if (message.countAttachments() > 0) {
-                LOGGER.debug("SOAP attachment detected. Use attachment as response data.");
+                log.debug("SOAP attachment detected. Use attachment as response data.");
                 return SOAPHelper.toString((AttachmentPart) message.getAttachments().next());
             }
             // Convert response to string
@@ -979,7 +978,7 @@ public class ConsumerGateway extends HttpServlet {
         EncryptingResponseDeserializer(boolean omitNamespace, Decrypter asymmetricDecrypter) {
             super(omitNamespace);
             this.asymmetricDecrypter = asymmetricDecrypter;
-            LOGGER.debug("New EncryptingResponseDeserializer created.");
+            log.debug("New EncryptingResponseDeserializer created.");
         }
 
         @Override
@@ -1003,7 +1002,7 @@ public class ConsumerGateway extends HttpServlet {
 
             // If message has attachments, return the first attachment
             if (message.countAttachments() > 0) {
-                LOGGER.debug("SOAP attachment detected. Use attachment as response data.");
+                log.debug("SOAP attachment detected. Use attachment as response data.");
                 // Return decrypted data
                 return symmetricDecrypter
                         .decrypt(SOAPHelper.toString((AttachmentPart) message.getAttachments().next()));

@@ -12,7 +12,7 @@ plugins {
 }
 
 // Profile
-val isEncrypted = project.property("encrypted") == "true"
+val isEncrypted = project.hasProperty("encrypted")
 val adapterProfileDir = if (isEncrypted) "encrypted" else "plaintext"
 
 
@@ -158,17 +158,14 @@ publishing {
 
 
 tasks.processResources {
+    println(if (isEncrypted) "Running with encrypted profile" else "Running with plaintext profile");
     val filterFile = file("src/main/filters/default.properties")
     val props = Properties().apply {
         load(filterFile.reader())
     }
     val replacements = props.entries.associate { it.key.toString() to it.value.toString() }
 
-    filesMatching("**/*.properties") {
-        filter { line ->
-            line.replace("@projectDir@", project.projectDir.toString())
-        }
-    }
+
     from("src/main/profiles/$adapterProfileDir/") {
         filesMatching("**/*.properties") {
             filter<ReplaceTokens>("tokens" to replacements)
@@ -202,9 +199,6 @@ tasks.test {
     finalizedBy(tasks.jacocoTestReport)
 }
 
-tasks.jacocoTestReport {
-    dependsOn(tasks.test) // tests are required to run before generating the report
-}
 
 tasks.register("processIntTestResources") {
     group = "test"
