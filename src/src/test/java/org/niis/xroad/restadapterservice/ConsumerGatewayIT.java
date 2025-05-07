@@ -50,10 +50,7 @@ import java.util.Map;
 
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -133,7 +130,6 @@ public class ConsumerGatewayIT {
     @Test
     public void testConsumerGateway1Json() throws Exception {
         String json = readFile("consumer-IT-expected-response.json");
-//        String result = "{\"data_source_url\":\"www.liikuntapaikat.fi\",\"name_fi\":\"Jyväskylän yliopisto, LIPAS Liikuntapaikat.fi\",\"name_sv\":\"Jyväskylä universitet, LIPAS Liikuntapaikat.fi\",\"id\":1010,\"name_en\":\"University of Jyväskylä, LIPAS Liikuntapaikat.fi\"}";
         Map<String, String> headers = new HashMap<>();
         headers.put(Constants.HTTP_HEADER_ACCEPT, Constants.APPLICATION_JSON);
         sendData(this.urls.get(TEST_CASE_1), "get", this.urlParams.get(TEST_CASE_1), headers, json, CONTENT_TYPE_JSON);

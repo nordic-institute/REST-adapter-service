@@ -1,16 +1,19 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 import java.util.*
 
-
 plugins {
     java
     checkstyle
     `maven-publish`
     alias(libs.plugins.springBoot)
     alias(libs.plugins.dependencyManagement)
-    id("org.owasp.dependencycheck")
+    id("org.owasp.dependencycheck") version ("12.1.1")
     jacoco
 }
+
+// Profile
+val isEncrypted = project.property("encrypted") == "true"
+val adapterProfileDir = if (isEncrypted) "encrypted" else "plaintext"
 
 
 checkstyle {
@@ -153,20 +156,8 @@ publishing {
     }
 }
 
-tasks.withType<JavaCompile>() {
-    options.encoding = "UTF-8"
-    options.annotationProcessorPath = configurations.annotationProcessor.get()
-}
-
-tasks.withType<Javadoc>() {
-    options.encoding = "UTF-8"
-}
-
-val isEncrypted = project.hasProperty("encrypted")
-val adapterProfileDir = if (isEncrypted) "encrypted" else "plaintext"
 
 tasks.processResources {
-
     val filterFile = file("src/main/filters/default.properties")
     val props = Properties().apply {
         load(filterFile.reader())
@@ -185,8 +176,15 @@ tasks.processResources {
     }
     filesMatching("src/main/resources") {
         expand(project.properties)
-
         expand(props.entries.associate { it.key.toString() to it.value })
+    }
+    if (isEncrypted) {
+        copy {
+            from("src/main/resources-bin/") {
+                include("**/*.jks")
+            }
+            into("build/resources/main/resources-bin")
+        }
     }
 }
 
@@ -224,6 +222,9 @@ tasks.register("processIntTestResources") {
             from("src/main/profiles/$adapterProfileDir/") {
                 filesMatching("**/*.properties") {
                     filter<ReplaceTokens>("tokens" to replacements)
+                    filter { line ->
+                        line.replace("@projectDir@", project.projectDir.toString())
+                    }
                 }
             }
             into("${project.projectDir}/build/resources/integration-test-profile")
@@ -233,7 +234,7 @@ tasks.register("processIntTestResources") {
 
 tasks.register<Test>("intTest") {
     useJUnitPlatform()
-    dependsOn("processIntegrationTestResources")
+    dependsOn("processIntTestResources")
     description = "Runs integration tests"
     group = "verification"
     testClassesDirs = sourceSets["test"].output.classesDirs

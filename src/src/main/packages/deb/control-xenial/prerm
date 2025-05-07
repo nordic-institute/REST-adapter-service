@@ -1,7 +1,0 @@
-#!/bin/sh
-
-if [ -z "$2" ]; then
-  # Package removal, not upgrade
-  systemctl --no-reload disable rest-adapter-service.service > /dev/null 2>&1 || :
-  systemctl stop rest-adapter-service.service > /dev/null 2>&1 || :
-fi

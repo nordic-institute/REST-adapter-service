@@ -1,8 +1,0 @@
-#!/bin/sh
-
-systemctl daemon-reload >/dev/null 2>&1 || :
-if [ "$2" ]; then
-  # Package upgrade, not uninstall
-  echo upgrading package
-  systemctl try-restart rest-adapter-service.service >/dev/null 2>&1 || :
-fi

@@ -800,7 +800,7 @@ public class ConsumerGateway extends HttpServlet {
          * @param namespace target namespace
          * @param prefix    target prefix
          */
-        public static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) {
+        protected static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) {
             for (int i = 0; i < list.getLength(); i++) {
                 Node node = (Node) list.item(i);
                 if (node.getNodeType() == ELEMENT_NODE) {
@@ -825,7 +825,7 @@ public class ConsumerGateway extends HttpServlet {
          * @param prefix    target prefix
          * @return updated Node
          */
-        public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) {
+        protected static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) {
             if (node.getNodeType() == ELEMENT_NODE) {
                 Node newNode = node;
                 ElementImpl elementImpl = (ElementImpl) node;
@@ -1026,10 +1026,24 @@ public class ConsumerGateway extends HttpServlet {
             SOAPElement encryptionWrapper = SOAPHelper.xmlStrToSOAPElement(decryptedResponse);
             // Remove all the children under response node
             SOAPHelper.removeAllChildren(responseNode);
+
             // Remove the extra <encryptionWrapper> element between response node
             // and the actual response. After the modification all the response
             // elements are directly under response.
-            SOAPHelper.moveChildren(encryptionWrapper, (SOAPElement) responseNode, !this.omitNamespace);
+            ElementImpl encryptionWrapperImpl = (ElementImpl) encryptionWrapper;
+            NodeList children = encryptionWrapperImpl.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                Node child = (Node) children.item(i);
+                ElementImpl childElementImpl = (ElementImpl) child;
+                if (!this.omitNamespace && (child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
+                    String namespace = responseNode.getNamespaceURI();
+                    String prefix = responseNode.getPrefix();
+                    child = RequestSerializer.updateNamespaceAndPrefix(childElementImpl, namespace, prefix);
+                    RequestSerializer.updateNamespaceAndPrefix(child.getChildNodes(), responseNode.getNamespaceURI(), responseNode.getPrefix());
+                }
+                child.setParentElement((SOAPElement) responseNode);
+            }
+
             // Clone response node because removing namespace from the original
             // node causes null pointer exception in AbstractResponseDeserializer
             // when wrappers are not used. Cloning the original node, removing
@@ -1041,6 +1055,7 @@ public class ConsumerGateway extends HttpServlet {
             // Return the response
             return SOAPHelper.toString(modifiedResponseNode);
         }
+
     }
 
     protected static class GatewayProperties {
