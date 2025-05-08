@@ -72,24 +72,19 @@ dependencies {
     testAnnotationProcessor(libs.org.projectlombok.lombok)
 
     // other
-    implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
-    implementation("jakarta.xml.soap:jakarta.xml.soap-api:3.0.2")
-    implementation("com.sun.xml.messaging.saaj:saaj-impl:3.0.4")
-    implementation("org.apache.httpcomponents.client5:httpclient5:5.4.1")
-    implementation("org.apache.tomcat.embed:tomcat-embed-jasper:10.1.39")
-    checkstyle("com.puppycrawl.tools:checkstyle:10.23.1")
+    implementation(libs.org.apache.tomcat.embed.tomcat.embed.jasper)
+    checkstyle(libs.com.puppycrawl.tools.checkstyle)
 
     //Test Implementation
-    testImplementation(libs.org.xmlunit.xmlunit.assertj)
-    testImplementation("org.wiremock.integrations:wiremock-spring-boot:3.6.0")
-    testAnnotationProcessor("org.wiremock.integrations:wiremock-spring-boot:3.6.0")
-    testImplementation(libs.commons.io.commons.io)
     testImplementation(libs.com.github.stefanbirkner.system.rules)
+    testImplementation(libs.com.jayway.jsonpath.json.path)
+    testImplementation(libs.com.jayway.jsonpath.json.path.assert)
+    testImplementation(libs.org.xmlunit.xmlunit.assertj)
+    testImplementation(libs.commons.io.commons.io)
     testImplementation(libs.org.xmlunit.xmlunit.core)
     testImplementation(libs.org.xmlunit.xmlunit.matchers)
-    testImplementation(libs.com.jayway.jsonpath.json.path.assert)
-    testImplementation(libs.com.jayway.jsonpath.json.path)
-
+    testImplementation(libs.org.wiremock.integrations.wiremock.spring.boot)
+    testAnnotationProcessor(libs.org.wiremock.integrations.wiremock.spring.boot)
 }
 
 
