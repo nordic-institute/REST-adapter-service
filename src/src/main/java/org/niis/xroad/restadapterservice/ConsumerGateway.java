@@ -273,6 +273,7 @@ public class ConsumerGateway extends HttpServlet {
             // Make the service call that returns the service response
             ServiceResponse serviceResponse = client.send(serviceRequest, getSecurityServerUrl(), serializer,
                     deserializer);
+
             log.info("Received response ({}) from the security server.", messageId);
             // Set response wrapper processing
             if (endpoint.isProcessingWrappers() != null) {
@@ -787,6 +788,7 @@ public class ConsumerGateway extends HttpServlet {
                     updateNamespaceAndPrefix(child.getChildNodes(), soapRequest.getNamespaceURI(), soapRequest.getPrefix());
                 }
                 child.setParentElement(soapRequest);
+                String childString = SOAPHelper.toString(child);
             }
         }
 
@@ -803,9 +805,9 @@ public class ConsumerGateway extends HttpServlet {
             for (int i = 0; i < list.getLength(); i++) {
                 Node node = (Node) list.item(i);
                 if (node.getNodeType() == ELEMENT_NODE) {
-                    ElementImpl childElementImpl = (ElementImpl) node;
                     if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
                         node = updateNamespaceAndPrefix(node, namespace, prefix);
+                        updateNamespaceAndPrefix(node.getChildNodes(), namespace, prefix);
                     }
                 }
                 if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
@@ -1026,20 +1028,28 @@ public class ConsumerGateway extends HttpServlet {
             // Remove all the children under response node
             SOAPHelper.removeAllChildren(responseNode);
 
+            String encryptionWrapperSTring = SOAPHelper.toString(encryptionWrapper);
             // Remove the extra <encryptionWrapper> element between response node
             // and the actual response. After the modification all the response
             // elements are directly under response.
-            ElementImpl encryptionWrapperImpl = (ElementImpl) encryptionWrapper;
 
-            NodeList children = encryptionWrapperImpl.getChildNodes();
+            NodeList children = encryptionWrapper.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 Node child = (Node) children.item(i);
                 ElementImpl childElementImpl = (ElementImpl) child;
                 if (!this.omitNamespace && (child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
+                    String childString = SOAPHelper.toString(child);
                     child = RequestSerializer.updateNamespaceAndPrefix(childElementImpl, responseNode.getNamespaceURI(), responseNode.getPrefix());
+                    childString = SOAPHelper.toString(child);
                     RequestSerializer.updateNamespaceAndPrefix(child.getChildNodes(), responseNode.getNamespaceURI(), responseNode.getPrefix());
                 }
+                String childString2 = SOAPHelper.toString(child);
+                String responseString = SOAPHelper.toString(responseNode);
+
                 child.setParentElement((SOAPElement) responseNode);
+                responseString = SOAPHelper.toString(responseNode);
+                responseString = "PD:::: test";
+
             }
 
             // Clone response node because removing namespace from the original
@@ -1048,11 +1058,13 @@ public class ConsumerGateway extends HttpServlet {
             // namespace from the clone and returning the clone prevents the
             // problem to occur.
 
+            String responseString = SOAPHelper.toString(responseNode);
             Node modifiedResponseNode = (Node) responseNode.cloneNode(true);
             // Remove namespace if it's required
             handleNamespace((ElementImpl) modifiedResponseNode);
+            String modifiedResponseString = SOAPHelper.toString(modifiedResponseNode);
             // Return the response
-            return SOAPHelper.toString(modifiedResponseNode);
+            return modifiedResponseString;
         }
 
     }
