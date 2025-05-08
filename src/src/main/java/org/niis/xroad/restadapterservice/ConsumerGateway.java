@@ -1030,14 +1030,13 @@ public class ConsumerGateway extends HttpServlet {
             // and the actual response. After the modification all the response
             // elements are directly under response.
             ElementImpl encryptionWrapperImpl = (ElementImpl) encryptionWrapper;
+
             NodeList children = encryptionWrapperImpl.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 Node child = (Node) children.item(i);
                 ElementImpl childElementImpl = (ElementImpl) child;
                 if (!this.omitNamespace && (child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
-                    String namespace = responseNode.getNamespaceURI();
-                    String prefix = responseNode.getPrefix();
-                    child = RequestSerializer.updateNamespaceAndPrefix(childElementImpl, namespace, prefix);
+                    child = RequestSerializer.updateNamespaceAndPrefix(childElementImpl, responseNode.getNamespaceURI(), responseNode.getPrefix());
                     RequestSerializer.updateNamespaceAndPrefix(child.getChildNodes(), responseNode.getNamespaceURI(), responseNode.getPrefix());
                 }
                 child.setParentElement((SOAPElement) responseNode);
@@ -1048,6 +1047,7 @@ public class ConsumerGateway extends HttpServlet {
             // when wrappers are not used. Cloning the original node, removing
             // namespace from the clone and returning the clone prevents the
             // problem to occur.
+
             Node modifiedResponseNode = (Node) responseNode.cloneNode(true);
             // Remove namespace if it's required
             handleNamespace((ElementImpl) modifiedResponseNode);
