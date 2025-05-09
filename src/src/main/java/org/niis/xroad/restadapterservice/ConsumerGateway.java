@@ -1028,7 +1028,6 @@ public class ConsumerGateway extends HttpServlet {
             // Remove all the children under response node
             SOAPHelper.removeAllChildren(responseNode);
 
-            String encryptionWrapperSTring = SOAPHelper.toString(encryptionWrapper);
             // Remove the extra <encryptionWrapper> element between response node
             // and the actual response. After the modification all the response
             // elements are directly under response.
@@ -1036,25 +1035,10 @@ public class ConsumerGateway extends HttpServlet {
             NodeList children = encryptionWrapper.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 Node child = (Node) children.item(i);
-                ElementImpl childElementImpl = (ElementImpl) child;
                 child.setParentElement((SOAPElement) responseNode);
-                if (!this.omitNamespace && (child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
-                    String childString = SOAPHelper.toString(child);
-                    child = RequestSerializer.updateNamespaceAndPrefix(childElementImpl, responseNode.getNamespaceURI(), responseNode.getPrefix());
-                    childString = SOAPHelper.toString(child);
-                    RequestSerializer.updateNamespaceAndPrefix(child.getChildNodes(), responseNode.getNamespaceURI(), responseNode.getPrefix());
-                }
-                String childString2 = SOAPHelper.toString(child);
-                String responseString = SOAPHelper.toString(responseNode);
-
-                ElementImpl importedChild = (ElementImpl) responseNode.getOwnerDocument().importNode(child, true);
-                responseString = SOAPHelper.toString(responseNode);
-//                importedChild.setAttribute("xmlns:" + responseNode.getPrefix(), responseNode.getNamespaceURI());
-//                responseNode.getOwnerDocument().renameNode(importedChild.getDomElement(), parentElement., responseNode.getPrefix() + ":" + child.getLocalName());
+            }
+            if (!this.omitNamespace) {
                 RequestSerializer.updateNamespaceAndPrefix(responseNode.getChildNodes(), responseNode.getNamespaceURI(), responseNode.getPrefix());
-                responseString = SOAPHelper.toString(responseNode);
-                responseString = "PD:::: test";
-
             }
 
             // Clone response node because removing namespace from the original
@@ -1063,13 +1047,11 @@ public class ConsumerGateway extends HttpServlet {
             // namespace from the clone and returning the clone prevents the
             // problem to occur.
 
-            String responseString = SOAPHelper.toString(responseNode);
             Node modifiedResponseNode = (Node) responseNode.cloneNode(true);
             // Remove namespace if it's required
             handleNamespace((ElementImpl) modifiedResponseNode);
-            String modifiedResponseString = SOAPHelper.toString(modifiedResponseNode);
             // Return the response
-            return modifiedResponseString;
+            return SOAPHelper.toString(modifiedResponseNode);
         }
 
     }
