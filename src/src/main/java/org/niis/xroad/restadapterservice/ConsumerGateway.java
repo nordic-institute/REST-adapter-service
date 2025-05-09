@@ -1037,6 +1037,7 @@ public class ConsumerGateway extends HttpServlet {
             for (int i = 0; i < children.getLength(); i++) {
                 Node child = (Node) children.item(i);
                 ElementImpl childElementImpl = (ElementImpl) child;
+                child.setParentElement((SOAPElement) responseNode);
                 if (!this.omitNamespace && (child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
                     String childString = SOAPHelper.toString(child);
                     child = RequestSerializer.updateNamespaceAndPrefix(childElementImpl, responseNode.getNamespaceURI(), responseNode.getPrefix());
@@ -1046,7 +1047,11 @@ public class ConsumerGateway extends HttpServlet {
                 String childString2 = SOAPHelper.toString(child);
                 String responseString = SOAPHelper.toString(responseNode);
 
-                child.setParentElement((SOAPElement) responseNode);
+                ElementImpl importedChild = (ElementImpl) responseNode.getOwnerDocument().importNode(child, true);
+                responseString = SOAPHelper.toString(responseNode);
+//                importedChild.setAttribute("xmlns:" + responseNode.getPrefix(), responseNode.getNamespaceURI());
+//                responseNode.getOwnerDocument().renameNode(importedChild.getDomElement(), parentElement., responseNode.getPrefix() + ":" + child.getLocalName());
+                RequestSerializer.updateNamespaceAndPrefix(responseNode.getChildNodes(), responseNode.getNamespaceURI(), responseNode.getPrefix());
                 responseString = SOAPHelper.toString(responseNode);
                 responseString = "PD:::: test";
 
