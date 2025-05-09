@@ -59,20 +59,20 @@ $RECYCLE.BIN/
 *.msp
 
 # REST Gateway target dir
-src/target/
-src/.extract/
+adapter/target/
+adapter/.extract/
 
 # Test
-src/tomcat
+adapter/tomcat
 
 .idea
-src/rest-gateway.iml
+adapter/rest-gateway.iml
 *.iml
 
 # build
 build/
-src/bin
+adapter/bin
 
-src/.gradle
-src/gradle
+adapter/.gradle
+adapter/gradle
 
