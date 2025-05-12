@@ -75,4 +75,6 @@ adapter/bin
 
 adapter/.gradle
 adapter/gradle
+src/gradle
+
 
