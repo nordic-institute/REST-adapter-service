@@ -695,14 +695,14 @@ The preconfigured Consumer Gateway services must be called using HTTP GET and Ac
 
 #### REST API for City of Helsinki Service Map - List of Organizations
 
-API documentation: http://www.hel.fi/palvelukarttaws/rest/ver2_en.html
+API documentation: www.hel.fi/palvelukarttaws/restpages/ver4.html
 
-#### Consumer Gateway
+##### Consumer Gateway
 
 Configuration:
 ```
 0.id=FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1
-0.path=/www.hel.fi/palvelukarttaws/rest/v2/organization/
+0.path=/www.hel.fi/palvelukarttaws/rest/v4/organization/
 0.verb=get
 ```
 
@@ -716,7 +716,7 @@ Service request:
 URL:
 
 ```
-http://localhost:8080/rest-adapter-service/Consumer/www.hel.fi/palvelukarttaws/rest/v2/organization/
+http://localhost:8080/rest-adapter-service/Consumer/www.hel.fi/palvelukarttaws/rest/v4/organization/
 ```
 
 Browser-based access:
@@ -729,112 +729,119 @@ Consumer Gateway response:
 
 ```
 [
-    {
-        "id": 49,
-        "name_en": "City of Espoo",
-        "name_sv": "Esbo stad",
-        "data_source_url": "www.espoo.fi",
-        "name_fi": "Espoon kaupunki"
-    },
-    {
-        "id": 91,
-        "name_en": "City of Helsinki",
-        "name_sv": "Helsingfors stad",
-        "data_source_url": "www.hel.fi",
-        "name_fi": "Helsingin kaupunki"
-    },
-    {
-        "id": 92,
-        "name_en": "City of Vantaa",
-        "name_sv": "Vanda stad",
-        "data_source_url": "www.vantaa.fi",
-        "name_fi": "Vantaan kaupunki"
-    },
-    {
-        "id": 235,
-        "name_en": "City of Kauniainen",
-        "name_sv": "Grankulla stad",
-        "data_source_url": "www.kauniainen.fi",
-        "name_fi": "Kauniaisten kaupunki"
-    },
-    {
-        "id": 1000,
-        "name_en": "State IT Service Centre, Suomi.fi editorial team",
-        "name_sv": "Statens IT-servicecentral, Suomi.fi-redaktionen",
-        "data_source_url": "www.suomi.fi",
-        "name_fi": "Valtion IT-palvelukeskus, Suomi.fi-toimitus"
-    },
-    {
-        "id": 1001,
-        "name_en": "HUS Hospital District",
-        "name_sv": "Samkommunen HNS",
-        "data_source_url": "www.hus.fi",
-        "name_fi": "HUS-kuntayhtymä"
-    },
-    {
-        "id": 1002,
-        "name_en": "Helsinki Marketing Ltd",
-        "name_sv": "Helsinki Marketing Ltd",
-        "data_source_url": "www.visithelsinki.fi",
-        "name_fi": "Helsingin markkinointi Oy"
-    },
-    {
-        "id": 1003,
-        "name_en": "Ministry of Justice, Election Unit",
-        "name_sv": "Justitieministeriet, den högsta valmyndigheten",
-        "data_source_url": "www.vaalit.fi",
-        "name_fi": "Oikeusministeriö, ylin vaaliviranomainen"
-    },
-    {
-        "id": 1004,
-        "name_en": "Helsinki Region Environmental Services Authority HSY",
-        "name_sv": "Helsingforsregionens miljötjänster HRM",
-        "data_source_url": "www.hsy.fi",
-        "name_fi": "Helsingin seudun ympäristöpalvelut HSY"
-    },
-    {
-        "id": 1005,
-        "name_en": "Service Map editorial team",
-        "name_sv": "Servicekartans redaktion",
-        "data_source_url": "www.hel.fi/palvelukartta",
-        "name_fi": "Palvelukartan toimitus"
-    },
-    {
-        "id": 1007,
-        "name_en": "JLY - Finnish Solid Waste Association",
-        "name_sv": "JLY - Avfallsverksföreningen rf",
-        "data_source_url": "www.jly.fi",
-        "name_fi": "JLY Jätelaitosyhdistys ry"
-    },
-    {
-        "id": 1008,
-        "name_en": "The Norwegian Electric Vehicle Association",
-        "name_sv": "Norsk Elbilforening",
-        "data_source_url": "NOBIL.no",
-        "name_fi": "Norsk Elbilforening, sähköautojen latauspisteet"
-    },
-    {
-        "id": 1009,
-        "name_en": "External service point register user society",
-        "name_sv": "Gemenskapen bakom externa serviceregister",
-        "data_source_url": "asiointi.hel.fi/tprulkoinen",
-        "name_fi": "Ulkoisen toimipisterekisterin käyttäjäyhteisö"
-    },
-    {
-        "id": 1010,
-        "name_en": "University of Jyväskylä, LIPAS Liikuntapaikat.fi",
-        "name_sv": "Jyväskylä universitet, LIPAS Liikuntapaikat.fi",
-        "data_source_url": "www.liikuntapaikat.fi",
-        "name_fi": "Jyväskylän yliopisto, LIPAS Liikuntapaikat.fi"
-    }
+  {
+    "name_fi": "Senioriliikunta - PKS",
+    "organization_type": "UNKNOWN",
+    "id": "0154f8e4-443c-4d0c-821a-c3271a47a455",
+    "oid": "",
+    "business_id": "0000004-3"
+  },
+  {
+    "www_en": "https://www.visitkirkkonummi.fi/en/visitkirkkonummi/",
+    "municipality_code": 257,
+    "address_postal_full_fi": "PL 20, 02401 Kirkkonummi",
+    "address_postal_full_sv": "PB 20, 02401 Kyrkslätt",
+    "street_address_en": "Ervastintie 2",
+    "address_city_fi": "Kirkkonummi",
+    "address_city_sv": "Kyrkslätt",
+    "oid": "",
+    "street_address_fi": "Ervastintie 2",
+    "street_address_sv": "Ervastvägen 2",
+    "data_source_url": "www.kirkkonummi.fi",
+    "address_postal_full_en": "P.O.Box 20, 02401 Kirkkonummi",
+    "address_city_en": "Kirkkonummi",
+    "name_fi": "Kirkkonummi",
+    "name_sv": "Kyrkslätt",
+    "phone": "+358 40 836 7769",
+    "organization_type": "MUNICIPALITY",
+    "id": "015fd5cd-b280-4d24-a5b4-0ba6ecb4c8a4",
+    "business_id": "0203107-0",
+    "email": "kirjaamo@kirkkonummi.fi",
+    "www_sv": "https://www.kyrkslatt.fi/",
+    "name_en": "Kirkkonummi"
+  },
+  {
+    "name_fi": "Suomen Kosmetologien Yhdistyksen Opiston Säätiö sr",
+    "organization_type": "FOUNDATION",
+    "id": "063c6150-ccc7-4886-b44b-ecee7670d064",
+    "oid": "1013-SKY",
+    "business_id": "2070757-2"
+  },
+  {
+    "address_postal_full_fi": "PL 65, 00531 HELSINKI",
+    "street_address_en": "Siltasaarenkatu 3-5",
+    "address_city_fi": "HELSINKI",
+    "address_city_sv": "HELSINGFORS",
+    "oid": "xxxx",
+    "street_address_fi": "Siltasaarenkatu 3-5",
+    "street_address_sv": "Broholmsgatan 3-5",
+    "data_source_url": "www.akt.fi",
+    "address_city_en": "HELSINKI",
+    "name_fi": "Auto- ja Kuljetusalan Työntekijäliitto AKT ry",
+    "name_sv": "Bil- och Transportbranschens Arbetarförbund AKT",
+    "phone": "+358 9 613 111",
+    "organization_type": "FOUNDATION",
+    "id": "085f3a8d-c811-4d69-bbbf-a83f9661d756",
+    "business_id": "0571068-5",
+    "www_sv": "https://www.akt.fi/pa-svenska/"
+  },
+  {
+    "abbr_fi": "luvn",
+    "abbr_sv": "luvn",
+    "www_en": "https://www.luvn.fi/en",
+    "abbr_en": "luvn",
+    "oid": "",
+    "data_source_url": "www.luvn.fi",
+    "name_fi": "Länsi-Uudenmaan hyvinvointialue",
+    "name_sv": "Västra Nylands välfärdsområde",
+    "organization_type": "WELLBEING_AREA",
+    "id": "0c8e4f99-3d52-47b9-84df-395716bd8b11",
+    "business_id": "3221347-3",
+    "email": "kirjaamo@luvn.fi",
+    "www_sv": "https://www.luvn.fi/sv",
+    "name_en": "Western Uusimaa Wellbeing Services County"
+  },
+  {
+    "data_source_url": "www.vihti.fi",
+    "name_fi": "Vihti",
+    "municipality_code": 927,
+    "organization_type": "MUNICIPALITY",
+    "id": "12378db7-a57e-400a-a6e4-5e99f70c0eb8",
+    "oid": "",
+    "business_id": "0131905-6"
+  },
+  {
+    "street_address_fi": "Hallituskatu 1",
+    "data_source_url": "www.finlit.fi",
+    "www_en": "https://www.finlit.fi/en",
+    "name_fi": "Suomalaisen Kirjallisuuden Seura ry",
+    "phone": "+358 20 113 1231",
+    "organization_type": "ASSOCIATION",
+    "address_city_fi": "Helsinki",
+    "id": "251d1de6-6183-4aae-92e3-773829cb0c04",
+    "oid": "",
+    "business_id": "0200103-1",
+    "email": "sks@finlit.fi",
+    "www_sv": "https://www.finlit.fi/sv"
+  },
+  
+ <--many more organizations-->
+ 
+  {
+    "name_fi": "Teatteri Kultsa ry",
+    "organization_type": "ASSOCIATION",
+    "id": "f6566775-7492-4437-b24b-9f715ab31838",
+    "oid": "1026-KULTS",
+    "business_id": "0762383-3"
+  }
 ]
 ```
 
-#### Provider Gateway
+##### Provider Gateway
 Configuration:
 ```
 0.id=FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1
-0.url=http://www.hel.fi/palvelukarttaws/rest/v2/organization/
+0.url=http://www.hel.fi/palvelukarttaws/rest/v4/organization/
 ```
 
 Service request:
@@ -876,7 +883,7 @@ http://localhost:8080/rest-adapter-service/Provider
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ```
-API response URL: http://www.hel.fi/palvelukarttaws/rest/v2/organization/
+API response URL: http://www.hel.fi/palvelukarttaws/rest/v4/organization/
 
 Rest Adapter Service response:
 ```
@@ -886,7 +893,7 @@ Rest Adapter Service response:
             <id:xRoadInstance>FI_PILOT</id:xRoadInstance>
             <id:memberClass>GOV</id:memberClass>
             <id:memberCode>0245437-2</id:memberCode>
-			<id:subsystemCode>ConsumerService</id:subsystemCode>
+            <id:subsystemCode>ConsumerService</id:subsystemCode>
         </xrd:client>
         <xrd:service id:objectType="SERVICE">
             <id:xRoadInstance>FI_PILOT</id:xRoadInstance>
@@ -898,126 +905,130 @@ Rest Adapter Service response:
         </xrd:service>
         <xrd:userId>test</xrd:userId>
         <xrd:id>0ba036ea-d612-4e74-bf73-59a6f15627c8</xrd:id>
-		<xrd:protocolVersion>4.0</xrd:protocolVersion>
+        <xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
         <ts1:getOrganizationListResponse xmlns:ts1="http://x-road.global/producer">
-            <ts1:request/>
-            <ts1:response>
-                <ts1:array>
-                    <ts1:id>49</ts1:id>
-                    <ts1:name_en>City of Espoo</ts1:name_en>
-                    <ts1:name_sv>Esbo stad</ts1:name_sv>
-                    <ts1:data_source_url>www.espoo.fi</ts1:data_source_url>
-                    <ts1:name_fi>Espoon kaupunki</ts1:name_fi>
-                </ts1:array>
-                <ts1:array>
-                    <ts1:id>91</ts1:id>
-                    <ts1:name_en>City of Helsinki</ts1:name_en>
-                    <ts1:name_sv>Helsingfors stad</ts1:name_sv>
-                    <ts1:data_source_url>www.hel.fi</ts1:data_source_url>
-                    <ts1:name_fi>Helsingin kaupunki</ts1:name_fi>
-                </ts1:array>
-                <ts1:array>
-                    <ts1:id>92</ts1:id>
-                    <ts1:name_en>City of Vantaa</ts1:name_en>
-                    <ts1:name_sv>Vanda stad</ts1:name_sv>
-                    <ts1:data_source_url>www.vantaa.fi</ts1:data_source_url>
-                    <ts1:name_fi>Vantaan kaupunki</ts1:name_fi>
-                </ts1:array>
-                <ts1:array>
-                    <ts1:id>235</ts1:id>
-                    <ts1:name_en>City of Kauniainen</ts1:name_en>
-                    <ts1:name_sv>Grankulla stad</ts1:name_sv>
-                    <ts1:data_source_url>www.kauniainen.fi</ts1:data_source_url>
-                    <ts1:name_fi>Kauniaisten kaupunki</ts1:name_fi>
-                </ts1:array>
-                <ts1:array>
-                    <ts1:id>1000</ts1:id>
-                    <ts1:name_en>State IT Service Centre, Suomi.fi editorial team</ts1:name_en>
-                    <ts1:name_sv>Statens IT-servicecentral, Suomi.fi-redaktionen</ts1:name_sv>
-                    <ts1:data_source_url>www.suomi.fi</ts1:data_source_url>
-                    <ts1:name_fi>Valtion IT-palvelukeskus, Suomi.fi-toimitus</ts1:name_fi>
-                </ts1:array>
-                <ts1:array>
-                    <ts1:id>1001</ts1:id>
-                    <ts1:name_en>HUS Hospital District</ts1:name_en>
-                    <ts1:name_sv>Samkommunen HNS</ts1:name_sv>
-                    <ts1:data_source_url>www.hus.fi</ts1:data_source_url>
-                    <ts1:name_fi>HUS-kuntayhtymä</ts1:name_fi>
-                </ts1:array>
-                <ts1:array>
-                    <ts1:id>1002</ts1:id>
-                    <ts1:name_en>Helsinki Marketing Ltd</ts1:name_en>
-                    <ts1:name_sv>Helsinki Marketing Ltd</ts1:name_sv>
-                    <ts1:data_source_url>www.visithelsinki.fi</ts1:data_source_url>
-                    <ts1:name_fi>Helsingin markkinointi Oy</ts1:name_fi>
-                </ts1:array>
-                <ts1:array>
-                    <ts1:id>1003</ts1:id>
-                    <ts1:name_en>Ministry of Justice, Election Unit</ts1:name_en>
-                    <ts1:name_sv>Justitieministeriet, den högsta valmyndigheten</ts1:name_sv>
-                    <ts1:data_source_url>www.vaalit.fi</ts1:data_source_url>
-                    <ts1:name_fi>Oikeusministeriö, ylin vaaliviranomainen</ts1:name_fi>
-                </ts1:array>
-                <ts1:array>
-                    <ts1:id>1004</ts1:id>
-                    <ts1:name_en>Helsinki Region Environmental Services Authority HSY</ts1:name_en>
-                    <ts1:name_sv>Helsingforsregionens miljötjänster HRM</ts1:name_sv>
-                    <ts1:data_source_url>www.hsy.fi</ts1:data_source_url>
-                    <ts1:name_fi>Helsingin seudun ympäristöpalvelut HSY</ts1:name_fi>
-                </ts1:array>
-                <ts1:array>
-                    <ts1:id>1005</ts1:id>
-                    <ts1:name_en>Service Map editorial team</ts1:name_en>
-                    <ts1:name_sv>Servicekartans redaktion</ts1:name_sv>
-                    <ts1:data_source_url>www.hel.fi/palvelukartta</ts1:data_source_url>
-                    <ts1:name_fi>Palvelukartan toimitus</ts1:name_fi>
-                </ts1:array>
-                <ts1:array>
-                    <ts1:id>1007</ts1:id>
-                    <ts1:name_en>JLY - Finnish Solid Waste Association</ts1:name_en>
-                    <ts1:name_sv>JLY - Avfallsverksföreningen rf</ts1:name_sv>
-                    <ts1:data_source_url>www.jly.fi</ts1:data_source_url>
-                    <ts1:name_fi>JLY Jätelaitosyhdistys ry</ts1:name_fi>
-                </ts1:array>
-                <ts1:array>
-                    <ts1:id>1008</ts1:id>
-                    <ts1:name_en>The Norwegian Electric Vehicle Association</ts1:name_en>
-                    <ts1:name_sv>Norsk Elbilforening</ts1:name_sv>
-                    <ts1:data_source_url>NOBIL.no</ts1:data_source_url>
-                    <ts1:name_fi>Norsk Elbilforening, sähköautojen latauspisteet</ts1:name_fi>
-                </ts1:array>
-                <ts1:array>
-                    <ts1:id>1009</ts1:id>
-                    <ts1:name_en>External service point register user society</ts1:name_en>
-                    <ts1:name_sv>Gemenskapen bakom externa serviceregister</ts1:name_sv>
-                    <ts1:data_source_url>asiointi.hel.fi/tprulkoinen</ts1:data_source_url>
-                    <ts1:name_fi>Ulkoisen toimipisterekisterin käyttäjäyhteisö</ts1:name_fi>
-                </ts1:array>
-                <ts1:array>
-                    <ts1:id>1010</ts1:id>
-                    <ts1:name_en>University of Jyväskylä, LIPAS Liikuntapaikat.fi</ts1:name_en>
-                    <ts1:name_sv>Jyväskylä universitet, LIPAS Liikuntapaikat.fi</ts1:name_sv>
-                    <ts1:data_source_url>www.liikuntapaikat.fi</ts1:data_source_url>
-                    <ts1:name_fi>Jyväskylän yliopisto, LIPAS Liikuntapaikat.fi</ts1:name_fi>
-                </ts1:array>
-            </ts1:response>
+            <ts1:array>
+                <ts1:name_fi>Senioriliikunta - PKS</ts1:name_fi>
+                <ts1:organization_type>UNKNOWN</ts1:organization_type>
+                <ts1:id>0154f8e4-443c-4d0c-821a-c3271a47a455</ts1:id>
+                <ts1:oid/>
+                <ts1:business_id>0000004-3</ts1:business_id>
+            </ts1:array>
+            <ts1:array>
+                <ts1:www_en>https://www.visitkirkkonummi.fi/en/visitkirkkonummi/</ts1:www_en>
+                <ts1:municipality_code>257</ts1:municipality_code>
+                <ts1:address_postal_full_fi>PL 20, 02401 Kirkkonummi</ts1:address_postal_full_fi>
+                <ts1:address_postal_full_sv>PB 20, 02401 Kyrkslätt</ts1:address_postal_full_sv>
+                <ts1:street_address_en>Ervastintie 2</ts1:street_address_en>
+                <ts1:address_city_fi>Kirkkonummi</ts1:address_city_fi>
+                <ts1:address_city_sv>Kyrkslätt</ts1:address_city_sv>
+                <ts1:oid/>
+                <ts1:street_address_fi>Ervastintie 2</ts1:street_address_fi>
+                <ts1:street_address_sv>Ervastvägen 2</ts1:street_address_sv>
+                <ts1:data_source_url>www.kirkkonummi.fi</ts1:data_source_url>
+                <ts1:address_postal_full_en>P.O.Box 20, 02401 Kirkkonummi</ts1:address_postal_full_en>
+                <ts1:address_city_en>Kirkkonummi</ts1:address_city_en>
+                <ts1:name_fi>Kirkkonummi</ts1:name_fi>
+                <ts1:name_sv>Kyrkslätt</ts1:name_sv>
+                <ts1:phone>+358 40 836 7769</ts1:phone>
+                <ts1:organization_type>MUNICIPALITY</ts1:organization_type>
+                <ts1:id>015fd5cd-b280-4d24-a5b4-0ba6ecb4c8a4</ts1:id>
+                <ts1:business_id>0203107-0</ts1:business_id>
+                <ts1:email>kirjaamo@kirkkonummi.fi</ts1:email>
+                <ts1:www_sv>https://www.kyrkslatt.fi/</ts1:www_sv>
+                <ts1:name_en>Kirkkonummi</ts1:name_en>
+            </ts1:array>
+            <ts1:array>
+                <ts1:name_fi>Suomen Kosmetologien Yhdistyksen Opiston Säätiö sr</ts1:name_fi>
+                <ts1:organization_type>FOUNDATION</ts1:organization_type>
+                <ts1:id>063c6150-ccc7-4886-b44b-ecee7670d064</ts1:id>
+                <ts1:oid>1013-SKY</ts1:oid>
+                <ts1:business_id>2070757-2</ts1:business_id>
+            </ts1:array>
+            <ts1:array>
+                <ts1:address_postal_full_fi>PL 65, 00531 HELSINKI</ts1:address_postal_full_fi>
+                <ts1:street_address_en>Siltasaarenkatu 3-5</ts1:street_address_en>
+                <ts1:address_city_fi>HELSINKI</ts1:address_city_fi>
+                <ts1:address_city_sv>HELSINGFORS</ts1:address_city_sv>
+                <ts1:oid>xxxx</ts1:oid>
+                <ts1:street_address_fi>Siltasaarenkatu 3-5</ts1:street_address_fi>
+                <ts1:street_address_sv>Broholmsgatan 3-5</ts1:street_address_sv>
+                <ts1:data_source_url>www.akt.fi</ts1:data_source_url>
+                <ts1:address_city_en>HELSINKI</ts1:address_city_en>
+                <ts1:name_fi>Auto- ja Kuljetusalan Työntekijäliitto AKT ry</ts1:name_fi>
+                <ts1:name_sv>Bil- och Transportbranschens Arbetarförbund AKT</ts1:name_sv>
+                <ts1:phone>+358 9 613 111</ts1:phone>
+                <ts1:organization_type>FOUNDATION</ts1:organization_type>
+                <ts1:id>085f3a8d-c811-4d69-bbbf-a83f9661d756</ts1:id>
+                <ts1:business_id>0571068-5</ts1:business_id>
+                <ts1:www_sv>https://www.akt.fi/pa-svenska/</ts1:www_sv>
+            </ts1:array>
+            <ts1:array>
+                <ts1:abbr_fi>luvn</ts1:abbr_fi>
+                <ts1:abbr_sv>luvn</ts1:abbr_sv>
+                <ts1:www_en>https://www.luvn.fi/en</ts1:www_en>
+                <ts1:abbr_en>luvn</ts1:abbr_en>
+                <ts1:oid/>
+                <ts1:data_source_url>www.luvn.fi</ts1:data_source_url>
+                <ts1:name_fi>Länsi-Uudenmaan hyvinvointialue</ts1:name_fi>
+                <ts1:name_sv>Västra Nylands välfärdsområde</ts1:name_sv>
+                <ts1:organization_type>WELLBEING_AREA</ts1:organization_type>
+                <ts1:id>0c8e4f99-3d52-47b9-84df-395716bd8b11</ts1:id>
+                <ts1:business_id>3221347-3</ts1:business_id>
+                <ts1:email>kirjaamo@luvn.fi</ts1:email>
+                <ts1:www_sv>https://www.luvn.fi/sv</ts1:www_sv>
+                <ts1:name_en>Western Uusimaa Wellbeing Services County</ts1:name_en>
+            </ts1:array>
+            <ts1:array>
+                <ts1:data_source_url>www.vihti.fi</ts1:data_source_url>
+                <ts1:name_fi>Vihti</ts1:name_fi>
+                <ts1:municipality_code>927</ts1:municipality_code>
+                <ts1:organization_type>MUNICIPALITY</ts1:organization_type>
+                <ts1:id>12378db7-a57e-400a-a6e4-5e99f70c0eb8</ts1:id>
+                <ts1:oid/>
+                <ts1:business_id>0131905-6</ts1:business_id>
+            </ts1:array>
+            <ts1:array>
+                <ts1:street_address_fi>Hallituskatu 1</ts1:street_address_fi>
+                <ts1:data_source_url>www.finlit.fi</ts1:data_source_url>
+                <ts1:www_en>https://www.finlit.fi/en</ts1:www_en>
+                <ts1:name_fi>Suomalaisen Kirjallisuuden Seura ry</ts1:name_fi>
+                <ts1:phone>+358 20 113 1231</ts1:phone>
+                <ts1:organization_type>ASSOCIATION</ts1:organization_type>
+                <ts1:address_city_fi>Helsinki</ts1:address_city_fi>
+                <ts1:id>251d1de6-6183-4aae-92e3-773829cb0c04</ts1:id>
+                <ts1:oid/>
+                <ts1:business_id>0200103-1</ts1:business_id>
+                <ts1:email>sks@finlit.fi</ts1:email>
+                <ts1:www_sv>https://www.finlit.fi/sv</ts1:www_sv>
+            </ts1:array>
+            
+            <---many more organizations-->
+            
+            <ts1:array>
+                <ts1:name_fi>Teatteri Kultsa ry</ts1:name_fi>
+                <ts1:organization_type>ASSOCIATION</ts1:organization_type>
+                <ts1:id>f6566775-7492-4437-b24b-9f715ab31838</ts1:id>
+                <ts1:oid>1026-KULTS</ts1:oid>
+                <ts1:business_id>0762383-3</ts1:business_id>
+            </ts1:array>
         </ts1:getOrganizationListResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ```
 
-#### REST API for City of Helsinki Service Map - Single Organization
+#### REST API for City of Helsinki Service Map - Department
 
-API documentation: http://www.hel.fi/palvelukarttaws/rest/ver2_en.html
+API documentation: https://www.hel.fi/palvelukarttaws/restpages/ver4.html
 
-#### Consumer Gateway
+##### Consumer Gateway
 
 Configuration:
 ```
 1.id=FI_PILOT.GOV.1019125-0.Demo2Service.getOrganization.v1
-1.path=/www.hel.fi/palvelukarttaws/rest/v2/organization/{resourceId}
+1.path=/www.hel.fi/palvelukarttaws/rest/v4/department/{resourceId}
 1.verb=get
 ```
 
@@ -1031,32 +1042,44 @@ Service request:
 URL:
 
 ```
-http://localhost:8080/rest-adapter-service/Consumer/www.hel.fi/palvelukarttaws/rest/v2/organization/49
+https://www.hel.fi/palvelukarttaws/rest/v4/department/cc70d1d8-3ca7-416a-9ea7-27e6b7ce58a8
 ```
 
 Browser-based access:
 
 ```
-http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1/49?X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://x-road.global/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
+http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.getDepartment.v1/cc70d1d8-3ca7-416a-9ea7-27e6b7ce58a8?X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://x-road.global/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
 ```
 
 Consumer Gateway response:
 
 ```
 {
-    "id": 49,
-    "name_en": "City of Espoo",
-    "name_sv": "Esbo stad",
-    "data_source_url": "www.espoo.fi",
-    "name_fi": "Espoon kaupunki"
+  "abbr_fi": "Kasko",
+  "www_en": "https://www.hel.fi/en/decision-making/city-organization/divisions/education-division",
+  "municipality_code": 91,
+  "oid": "",
+  "name_fi": "Kasvatuksen ja koulutuksen toimiala",
+  "name_sv": "Fostrans- och utbildningssektorn",
+  "phone": "+358 9 310 8600",
+  "parent_id": "83e74666-0836-4c1d-948a-4b34a8b90301",
+  "org_id": "83e74666-0836-4c1d-948a-4b34a8b90301",
+  "organization_type": "MUNICIPALITY",
+  "id": "cc70d1d8-3ca7-416a-9ea7-27e6b7ce58a8",
+  "business_id": "0201256-6",
+  "email": "neuvonta.opetusvirasto@hel.fi",
+  "www_fi": "https://www.hel.fi/fi/paatoksenteko-ja-hallinto/kaupungin-organisaatio/toimialat/kasvatuksen-ja-koulutuksen-toimiala",
+  "www_sv": "https://www.hel.fi/sv/beslutsfattande-och-forvaltning/stadens-organisation/sektorer/fostrans-och-utbildningssektorn",
+  "hierarchy_level": 1,
+  "name_en": "Education Division"
 }
 ```
 
-#### Provider Gateway
+##### Provider Gateway
 Configuration:
 ```
-1.id=FI_PILOT.GOV.1019125-0.Demo2Service.getOrganization.v1
-1.url=http://www.hel.fi/palvelukarttaws/rest/v2/organization/
+1.id=FI_PILOT.GOV.1019125-0.Demo2Service.getDepartment.v1
+1.url=https://www.hel.fi/palvelukarttaws/rest/v4/department/
 ```
 Service request:
 
@@ -1083,7 +1106,7 @@ http://localhost:8080/rest-adapter-service/Provider
             <id:memberClass>GOV</id:memberClass>
             <id:memberCode>1019125-0</id:memberCode>
             <id:subsystemCode>Demo2Service</id:subsystemCode>
-            <id:serviceCode>getOrganization</id:serviceCode>
+            <id:serviceCode>getDepartment</id:serviceCode>
             <id:serviceVersion>v1</id:serviceVersion>
         </xrd:service>
         <xrd:userId>test</xrd:userId>
@@ -1091,16 +1114,16 @@ http://localhost:8080/rest-adapter-service/Provider
 		<xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <test:getOrganization xmlns:test="http://x-road.global/producer">
+        <test:getDepartment xmlns:test="http://x-road.global/producer">
             <test:request>
-                <resourceId>49</resourceId>
+                <resourceId>cc70d1d8-3ca7-416a-9ea7-27e6b7ce58a8</resourceId>
             </test:request>
-        </test:getOrganization>
+        </test:getDepartment>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ```
 
-API response URL: http://www.hel.fi/palvelukarttaws/rest/v2/organization/49
+API response URL: https://www.hel.fi/palvelukarttaws/rest/v4/department/cc70d1d8-3ca7-416a-9ea7-27e6b7ce58a8
 
 Rest Adapter Service response:
 ```
@@ -1110,33 +1133,40 @@ Rest Adapter Service response:
             <id:xRoadInstance>FI_PILOT</id:xRoadInstance>
             <id:memberClass>GOV</id:memberClass>
             <id:memberCode>0245437-2</id:memberCode>
-			<id:subsystemCode>ConsumerService</id:subsystemCode>
+            <id:subsystemCode>ConsumerService</id:subsystemCode>
         </xrd:client>
         <xrd:service id:objectType="SERVICE">
             <id:xRoadInstance>FI_PILOT</id:xRoadInstance>
             <id:memberClass>GOV</id:memberClass>
             <id:memberCode>1019125-0</id:memberCode>
             <id:subsystemCode>Demo2Service</id:subsystemCode>
-            <id:serviceCode>getOrganization</id:serviceCode>
+            <id:serviceCode>getDepartment</id:serviceCode>
             <id:serviceVersion>v1</id:serviceVersion>
         </xrd:service>
         <xrd:userId>test</xrd:userId>
         <xrd:id>0ba036ea-d612-4e74-bf73-59a6f15627c8</xrd:id>
-		<xrd:protocolVersion>4.0</xrd:protocolVersion>
+        <xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <ts1:getOrganizationResponse xmlns:ts1="http://x-road.global/producer">
-            <ts1:request>
-                <ts1:resourceId>49</ts1:resourceId>
-            </ts1:request>
-            <ts1:response>
-                <ts1:id>49</ts1:id>
-                <ts1:name_en>City of Espoo</ts1:name_en>
-                <ts1:name_sv>Esbo stad</ts1:name_sv>
-                <ts1:data_source_url>www.espoo.fi</ts1:data_source_url>
-                <ts1:name_fi>Espoon kaupunki</ts1:name_fi>
-            </ts1:response>
-        </ts1:getOrganizationResponse>
+        <ts1:getDepartmentResponse xmlns:ts1="http://x-road.global/producer">
+            <ts1:abbr_fi>Kasko</ts1:abbr_fi>
+            <ts1:www_en>https://www.hel.fi/en/decision-making/city-organization/divisions/education-division</ts1:www_en>
+            <ts1:municipality_code>91</ts1:municipality_code>
+            <ts1:oid/>
+            <ts1:name_fi>Kasvatuksen ja koulutuksen toimiala</ts1:name_fi>
+            <ts1:name_sv>Fostrans- och utbildningssektorn</ts1:name_sv>
+            <ts1:phone>+358 9 310 8600</ts1:phone>
+            <ts1:parent_id>83e74666-0836-4c1d-948a-4b34a8b90301</ts1:parent_id>
+            <ts1:org_id>83e74666-0836-4c1d-948a-4b34a8b90301</ts1:org_id>
+            <ts1:organization_type>MUNICIPALITY</ts1:organization_type>
+            <ts1:id>cc70d1d8-3ca7-416a-9ea7-27e6b7ce58a8</ts1:id>
+            <ts1:business_id>0201256-6</ts1:business_id>
+            <ts1:email>neuvonta.opetusvirasto@hel.fi</ts1:email>
+            <ts1:www_fi>https://www.hel.fi/fi/paatoksenteko-ja-hallinto/kaupungin-organisaatio/toimialat/kasvatuksen-ja-koulutuksen-toimiala</ts1:www_fi>
+            <ts1:www_sv>https://www.hel.fi/sv/beslutsfattande-och-forvaltning/stadens-organisation/sektorer/fostrans-och-utbildningssektorn</ts1:www_sv>
+            <ts1:hierarchy_level>1</ts1:hierarchy_level>
+            <ts1:name_en>Education Division</ts1:name_en>
+        </ts1:getDepartmentResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ```
@@ -1145,7 +1175,7 @@ Rest Adapter Service response:
 
 API documentation (in Finnish): https://api.kirjastot.fi/
 
-#### Consumer Gateway
+##### Consumer Gateway
 
 Configuration:
 ```
@@ -1175,226 +1205,252 @@ Consumer Gateway response:
 
 ```
 {
-   "result":{
-      "total":1,
-      "count":1,
-      "items":{
-         "organisation":{
-            "parent":84846,
-            "web_library":"",
-            "address":{
-               "area":{
-                  "multilang":true,
-                  "value":[
-                     {
-                        "lang":"fi",
-                        "content":"Kallio"
-                     },
-                     {
-                        "lang":"sv"
-                     },
-                     {
-                        "lang":"en"
-                     },
-                     {
-                        "lang":"se"
-                     },
-                     {
-                        "lang":"ru",
-                        "content":"Kallio"
-                     }
-                  ]
-               },
-               "zipcode":"00530",
-               "box_number":"",
-               "city":{
-                  "multilang":true,
-                  "value":[
-                     {
-                        "lang":"fi",
-                        "content":"Helsinki"
-                     },
-                     {
-                        "lang":"sv",
-                        "content":"Helsingfors"
-                     },
-                     {
-                        "lang":"en",
-                        "content":"Helsinki"
-                     },
-                     {
-                        "lang":"se",
-                        "content":"Helsinki"
-                     },
-                     {
-                        "lang":"ru",
-                        "content":"Helsinki"
-                     }
-                  ]
-               },
-               "street":{
-                  "multilang":true,
-                  "value":[
-                     {
-                        "lang":"fi",
-                        "content":"Viides linja 11"
-                     },
-                     {
-                        "lang":"sv",
-                        "content":"Femte linjen 11"
-                     },
-                     {
-                        "lang":"en",
-                        "content":"Viides linja 11"
-                     },
-                     {
-                        "lang":"se"
-                     },
-                     {
-                        "lang":"ru",
-                        "content":"Viides linja 11"
-                     }
-                  ]
-               },
-               "coordinates":{
-                  "lon":24.95355311,
-                  "lat":60.18372258
-               }
+  "result": {
+    "total": 1,
+    "count": 1,
+    "items": {
+      "organisation": {
+        "parent": 84846,
+        "web_library": "",
+        "address": {
+          "area": {
+            "multilang": true,
+            "value": [
+              {
+                "lang": "se"
+              },
+              {
+                "lang": "sv"
+              },
+              {
+                "lang": "fi"
+              },
+              {
+                "lang": "ru",
+                "content": "Kallio"
+              },
+              {
+                "lang": "en"
+              }
+            ]
+          },
+          "zipcode": "00530",
+          "box_number": "",
+          "city": {
+            "multilang": true,
+            "value": [
+              {
+                "lang": "se",
+                "content": "Helsinki"
+              },
+              {
+                "lang": "sv",
+                "content": "Helsingfors"
+              },
+              {
+                "lang": "fi",
+                "content": "Helsinki"
+              },
+              {
+                "lang": "ru",
+                "content": "Helsinki"
+              },
+              {
+                "lang": "en",
+                "content": "Helsinki"
+              }
+            ]
+          },
+          "street": {
+            "multilang": true,
+            "value": [
+              {
+                "lang": "se",
+                "content": "Viides linja 11"
+              },
+              {
+                "lang": "sv",
+                "content": "Femte linjen 11"
+              },
+              {
+                "lang": "fi",
+                "content": "Viides linja 11"
+              },
+              {
+                "lang": "ru",
+                "content": "Viides linja 11"
+              },
+              {
+                "lang": "en",
+                "content": "Viides linja 11"
+              }
+            ]
+          },
+          "coordinates": {
+            "lon": 24.95355311,
+            "lat": 60.18372258
+          },
+          "info": {
+            "multilang": true,
+            "value": [
+              {
+                "lang": "se"
+              },
+              {
+                "lang": "sv"
+              },
+              {
+                "lang": "fi"
+              },
+              {
+                "lang": "ru"
+              },
+              {
+                "lang": "en"
+              }
+            ]
+          }
+        },
+        "city": 15885,
+        "consortium": 2093,
+        "type": "library",
+        "provincial_library": 396,
+        "branch_type": "library",
+        "name": {
+          "multilang": true,
+          "value": [
+            {
+              "lang": "se",
+              "content": "Kallion kirjasto"
             },
-            "city":15885,
-            "consortium":2093,
-            "type":"library",
-            "provincial_library":396,
-            "branch_type":"library",
-            "name":{
-               "multilang":true,
-               "value":[
-                  {
-                     "lang":"fi",
-                     "content":"Kallion kirjasto"
-                  },
-                  {
-                     "lang":"sv",
-                     "content":"Berghälls bibliotek"
-                  },
-                  {
-                     "lang":"en",
-                     "content":"Kallio Library"
-                  },
-                  {
-                     "lang":"se"
-                  },
-                  {
-                     "lang":"ru",
-                     "content":"Библиотека Каллио"
-                  }
-               ]
+            {
+              "lang": "sv",
+              "content": "Berghälls bibliotek"
             },
-            "short_name":{
-               "multilang":true,
-               "value":[
-                  {
-                     "lang":"fi",
-                     "content":"Kallio"
-                  },
-                  {
-                     "lang":"sv",
-                     "content":"Berghäll"
-                  },
-                  {
-                     "lang":"en",
-                     "content":"Kallio"
-                  },
-                  {
-                     "lang":"se"
-                  },
-                  {
-                     "lang":"ru",
-                     "content":"Каллио"
-                  }
-               ]
+            {
+              "lang": "fi",
+              "content": "Kallion kirjasto"
             },
-            "id":84860,
-            "region":1001,
-            "email":{
-               "multilang":true,
-               "value":[
-                  {
-                     "lang":"fi",
-                     "content":"kallion_kirjasto@hel.fi"
-                  },
-                  {
-                     "lang":"sv",
-                     "content":"kallion_kirjasto@hel.fi"
-                  },
-                  {
-                     "lang":"en",
-                     "content":"kallion_kirjasto@hel.fi"
-                  },
-                  {
-                     "lang":"se"
-                  },
-                  {
-                     "lang":"ru"
-                  }
-               ]
+            {
+              "lang": "ru",
+              "content": "Библиотека Каллио"
             },
-            "slug":{
-               "multilang":true,
-               "value":[
-                  {
-                     "lang":"fi",
-                     "content":"kallio"
-                  },
-                  {
-                     "lang":"sv",
-                     "content":"kallio"
-                  },
-                  {
-                     "lang":"en",
-                     "content":"kallio"
-                  },
-                  {
-                     "lang":"se",
-                     "content":"kallio"
-                  },
-                  {
-                     "lang":"ru",
-                     "content":"kallio"
-                  }
-               ]
-            },
-            "homepage":{
-               "multilang":true,
-               "value":[
-                  {
-                     "lang":"fi",
-                     "content":"http://www.helmet.fi/kallionkirjasto"
-                  },
-                  {
-                     "lang":"sv",
-                     "content":"http://www.helmet.fi/berghallsbibliotek"
-                  },
-                  {
-                     "lang":"en",
-                     "content":"http://www.helmet.fi/kalliolibrary"
-                  },
-                  {
-                     "lang":"se"
-                  },
-                  {
-                     "lang":"ru",
-                     "content":"http://www.helmet.fi/kallionkirjasto"
-                  }
-               ]
+            {
+              "lang": "en",
+              "content": "Kallio Library"
             }
-         }
+          ]
+        },
+        "short_name": {
+          "multilang": true,
+          "value": [
+            {
+              "lang": "se",
+              "content": "Kallio"
+            },
+            {
+              "lang": "sv",
+              "content": "Berghäll"
+            },
+            {
+              "lang": "fi",
+              "content": "Kallio"
+            },
+            {
+              "lang": "ru",
+              "content": "Каллио"
+            },
+            {
+              "lang": "en",
+              "content": "Kallio"
+            }
+          ]
+        },
+        "id": 84860,
+        "region": 1003,
+        "email": {
+          "multilang": true,
+          "value": [
+            {
+              "lang": "se",
+              "content": "kallion_kirjasto@hel.fi"
+            },
+            {
+              "lang": "sv",
+              "content": "kallion_kirjasto@hel.fi"
+            },
+            {
+              "lang": "fi",
+              "content": "kallion_kirjasto@hel.fi"
+            },
+            {
+              "lang": "ru",
+              "content": "kallion_kirjasto@hel.fi"
+            },
+            {
+              "lang": "en",
+              "content": "kallion_kirjasto@hel.fi"
+            }
+          ]
+        },
+        "slug": {
+          "multilang": true,
+          "value": [
+            {
+              "lang": "se",
+              "content": "kallio"
+            },
+            {
+              "lang": "sv",
+              "content": "berghalls-bibliotek"
+            },
+            {
+              "lang": "fi",
+              "content": "kallio"
+            },
+            {
+              "lang": "ru",
+              "content": "biblioteka-kallio"
+            },
+            {
+              "lang": "en",
+              "content": "kallio-library"
+            }
+          ]
+        },
+        "homepage": {
+          "multilang": true,
+          "value": [
+            {
+              "lang": "se",
+              "content": "http://www.helmet.fi/kallionkirjasto"
+            },
+            {
+              "lang": "sv",
+              "content": "http://www.helmet.fi/berghallsbibliotek"
+            },
+            {
+              "lang": "fi",
+              "content": "http://www.helmet.fi/kallionkirjasto"
+            },
+            {
+              "lang": "ru",
+              "content": "http://www.facebook.com/kirjastokallio"
+            },
+            {
+              "lang": "en",
+              "content": "http://www.helmet.fi/kalliolibrary"
+            }
+          ]
+        },
+        "status": 1
       }
-   }
+    }
+  }
 }
 ```
 
-#### Provider Gateway
+##### Provider Gateway
 
 Configuration:
 ```
@@ -1403,8 +1459,8 @@ Configuration:
 ```
 Service request:
 
-Method: ```POST```
-Content-Type: ```text/xml```
+* Method: ```POST```
+* Content-Type: ```text/xml```
 
 URL:
 
@@ -1448,7 +1504,7 @@ API response URL: https://api.kirjastot.fi/v3/organisation?name=pasila&city.name
 
 Rest Adapter Service response:
 ```
-<SOAP-ENV:Envelope>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:id="http://x-road.eu/xsd/identifiers" xmlns:xrd="http://x-road.eu/xsd/xroad.xsd">
     <SOAP-ENV:Header>
         <xrd:client id:objectType="SUBSYSTEM">
             <id:xRoadInstance>FI_PILOT</id:xRoadInstance>
@@ -1469,92 +1525,94 @@ Rest Adapter Service response:
         <xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <ts1:getLibraryResponse>
-            <ts1:request>
-                <ts1:name>Kallio</ts1:name>
-                <ts1:city.name>Helsinki</ts1:city.name>
-            </ts1:request>
-            <ts1:response>
-                <result count="1" total="1">
-                    <items>
-                        <organisation>
-                            <web_library/>
-                            <parent>84846</parent>
-                            <branch_type>library</branch_type>
-                            <short_name multilang="true">
-                                <value lang="fi">Kallio</value>
-                                <value lang="sv">BerghÃ¤ll</value>
-                                <value lang="en">Kallio</value>
+        <ts1:getLibraryResponse xmlns:ts1="http://x-road.global/producer">
+            <result count="1" total="1">
+                <items>
+                    <organisation>
+                        <parent>84846</parent>
+                        <web_library/>
+                        <address>
+                            <area multilang="true">
                                 <value lang="se"/>
-                                <value lang="ru">ÐšÐ°Ð»Ð»Ð¸Ð¾</value>
-                            </short_name>
-                            <type>library</type>
-                            <homepage multilang="true">
-                                <value lang="fi">http://www.helmet.fi/kallionkirjasto</value>
-                                <value lang="sv">http://www.helmet.fi/berghallsbibliotek</value>
-                                <value lang="en">http://www.helmet.fi/kalliolibrary</value>
+                                <value lang="sv"/>
+                                <value lang="fi"/>
+                                <value lang="ru">Kallio</value>
+                                <value lang="en"/>
+                            </area>
+                            <zipcode>00530</zipcode>
+                            <box_number/>
+                            <city multilang="true">
+                                <value lang="se">Helsinki</value>
+                                <value lang="sv">Helsingfors</value>
+                                <value lang="fi">Helsinki</value>
+                                <value lang="ru">Helsinki</value>
+                                <value lang="en">Helsinki</value>
+                            </city>
+                            <street multilang="true">
+                                <value lang="se">Viides linja 11</value>
+                                <value lang="sv">Femte linjen 11</value>
+                                <value lang="fi">Viides linja 11</value>
+                                <value lang="ru">Viides linja 11</value>
+                                <value lang="en">Viides linja 11</value>
+                            </street>
+                            <coordinates>
+                                <lon>24.95355311</lon>
+                                <lat>60.18372258</lat>
+                            </coordinates>
+                            <info multilang="true">
                                 <value lang="se"/>
-                                <value lang="ru">http://www.helmet.fi/kallionkirjasto</value>
-                            </homepage>
-                            <city>15885</city>
-                            <id>84860</id>
-                            <consortium>2093</consortium>
-                            <address>
-                                <area multilang="true">
-                                    <value lang="fi">Kallio</value>
-                                    <value lang="sv"/>
-                                    <value lang="en"/>
-                                    <value lang="se"/>
-                                    <value lang="ru">Kallio</value>
-                                </area>
-                                <street multilang="true">
-                                    <value lang="fi">Viides linja 11</value>
-                                    <value lang="sv">Femte linjen 11</value>
-                                    <value lang="en">Viides linja 11</value>
-                                    <value lang="se"/>
-                                    <value lang="ru">Viides linja 11</value>
-                                </street>
-                                <zipcode>00530</zipcode>
-                                <box_number/>
-                                <coordinates>
-                                    <lon>24.95355311</lon>
-                                    <lat>60.18372258</lat>
-                                </coordinates>
-                                <city multilang="true">
-                                    <value lang="fi">Helsinki</value>
-                                    <value lang="sv">Helsingfors</value>
-                                    <value lang="en">Helsinki</value>
-                                    <value lang="se">Helsinki</value>
-                                    <value lang="ru">Helsinki</value>
-                                </city>
-                            </address>
-                            <email multilang="true">
-                                <value lang="fi">kallion_kirjasto@hel.fi</value>
-                                <value lang="sv">kallion_kirjasto@hel.fi</value>
-                                <value lang="en">kallion_kirjasto@hel.fi</value>
-                                <value lang="se"/>
+                                <value lang="sv"/>
+                                <value lang="fi"/>
                                 <value lang="ru"/>
-                            </email>
-                            <name multilang="true">
-                                <value lang="fi">Kallion kirjasto</value>
-                                <value lang="sv">BerghÃ¤lls bibliotek</value>
-                                <value lang="en">Kallio Library</value>
-                                <value lang="se"/>
-                                <value lang="ru">Ð‘Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÐ° ÐšÐ°Ð»Ð»Ð¸Ð¾</value>
-                            </name>
-                            <slug multilang="true">
-                                <value lang="fi">kallio</value>
-                                <value lang="sv">kallio</value>
-                                <value lang="en">kallio</value>
-                                <value lang="se">kallio</value>
-                                <value lang="ru">kallio</value>
-                            </slug>
-                            <region>1001</region>
-                            <provincial_library>396</provincial_library>
-                        </organisation>
-                    </items>
-                </result>
-            </ts1:response>
+                                <value lang="en"/>
+                            </info>
+                        </address>
+                        <city>15885</city>
+                        <consortium>2093</consortium>
+                        <type>library</type>
+                        <branch_type>library</branch_type>
+                        <name multilang="true">
+                            <value lang="se">Kallion kirjasto</value>
+                            <value lang="sv">Berghälls bibliotek</value>
+                            <value lang="fi">Kallion kirjasto</value>
+                            <value lang="ru">Библиотека Каллио</value>
+                            <value lang="en">Kallio Library</value>
+                        </name>
+                        <short_name multilang="true">
+                            <value lang="se">Kallio</value>
+                            <value lang="sv">Berghäll</value>
+                            <value lang="fi">Kallio</value>
+                            <value lang="ru">Каллио</value>
+                            <value lang="en">Kallio</value>
+                        </short_name>
+                        <id>84860</id>
+                        <email multilang="true">
+                            <value lang="se">kallion_kirjasto@hel.fi</value>
+                            <value lang="sv">kallion_kirjasto@hel.fi</value>
+                            <value lang="fi">kallion_kirjasto@hel.fi</value>
+                            <value lang="ru">kallion_kirjasto@hel.fi</value>
+                            <value lang="en">kallion_kirjasto@hel.fi</value>
+                        </email>
+                        <slug multilang="true">
+                            <value lang="se">kallio</value>
+                            <value lang="sv">berghalls-bibliotek</value>
+                            <value lang="fi">kallio</value>
+                            <value lang="ru">biblioteka-kallio</value>
+                            <value lang="en">kallio-library</value>
+                        </slug>
+                        <homepage multilang="true">
+                            <value lang="se">http://www.helmet.fi/kallionkirjasto</value>
+                            <value lang="sv">http://www.helmet.fi/berghallsbibliotek</value>
+                            <value lang="fi">http://www.helmet.fi/kallionkirjasto</value>
+                            <value lang="ru">http://www.facebook.com/kirjastokallio</value>
+                            <value lang="en">http://www.helmet.fi/kalliolibrary</value>
+                        </homepage>
+                        <status>1</status>
+                        <region>1003</region>
+                        <provincial_library>396</provincial_library>
+                    </organisation>
+                </items>
+            </result>
         </ts1:getLibraryResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
@@ -1563,12 +1621,12 @@ Rest Adapter Service response:
 
 API documentation: http://avoindata.prh.fi/ytj_en.html
 
-#### Consumer Gateway
+##### Consumer Gateway
 
 Configuration:
 ```
 3.id=FI_PILOT.GOV.1019125-0.Demo2Service.searchCompany.v1
-3.path=/avoindata.prh.fi/opendata/bis/v1/
+3.path=/avoindata.prh.fi/opendata-ytj-api/v3/companies
 3.verb=get
 3.response.modurl=true
 ```
@@ -1582,107 +1640,378 @@ Service request:
 
 URL:
 ```
-http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bis/v1/?totalResults=false&resultsFrom=0&name=asunto&companyRegistrationFrom=2016-02-28
+http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata-ytj-api/v3/companies?name=asunto&location=Turku&registrationDateStart=2015-02-28&registrationDateEnd=2016-02-28&totalResults=false&resultsFrom=0&Accept=application/json
 ```
 
 Browser-based access:
 
 ```
-http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.searchCompany.v1/?totalResults=false&resultsFrom=0&name=asunto&companyRegistrationFrom=2015-02-28&X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://x-road.global/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
+http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.searchCompany.v1/?name=asunto&location=Turku&registrationDateStart=2015-02-28&registrationDateEnd=2016-02-28&totalResults=false&resultsFrom=0&Accept=application/json
 ```
 
 Consumer Gateway response:
 
 ```
 {
-   "resultsFrom":0,
-   "totalResults":-1,
-   "nextResultsUri":"http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bis/v1?resultsFrom=10&totalResults=false&companyRegistrationFrom=2016-02-28&name=asunto",
-   "exceptionNoticeUri":null,
-   "previousResultsUri":null,
-   "type":"fi.prh.opendata.bis",
-   "version":1,
-   "results":[
-      {
-         "detailsUri":"http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bis/v1/2786724-5",
-         "businessId":"2786724-5",
-         "name":"Asunto Oy Kuusamon Tetra 2",
-         "registrationDate":"2016-10-06",
-         "companyForm":"AOY"
+  "totalResults": 33,
+  "companies": [
+    {
+      "addresses": [
+        {
+          "postOffices": [
+            {
+              "city": "LIETO",
+              "languageCode": 1,
+              "municipalityCode": 423
+            },
+            {
+              "city": "LIETO",
+              "languageCode": 2,
+              "municipalityCode": 423
+            }
+          ],
+          "apartmentIdSuffix": "",
+          "street": "Ajurintie",
+          "registrationDate": "2024-07-12",
+          "buildingNumber": 3,
+          "postCode": 21420,
+          "source": 0,
+          "type": 1,
+          "entrance": "",
+          "co": "",
+          "apartmentNumber": ""
+        },
+        {
+          "postOffices": [
+            {
+              "city": "TURKU",
+              "languageCode": 1,
+              "municipalityCode": 853
+            },
+            {
+              "city": "ÅBO",
+              "languageCode": 2,
+              "municipalityCode": 853
+            }
+          ],
+          "postOfficeBox": "",
+          "apartmentIdSuffix": "",
+          "street": "Rauhankatu",
+          "registrationDate": "2024-07-12",
+          "buildingNumber": "9b",
+          "postCode": 20100,
+          "source": 0,
+          "type": 2,
+          "entrance": "",
+          "co": "c/o Aboa Isännöintipalvelut Oy",
+          "apartmentNumber": ""
+        }
+      ],
+      "names": {
+        "name": "Asunto Oy Liedon Graniitti",
+        "registrationDate": "2015-03-06",
+        "source": 1,
+        "type": 1,
+        "version": 1
       },
-      {
-         "detailsUri":"http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bis/v1/2786552-2",
-         "businessId":"2786552-2",
-         "name":"Asunto Oy Auran Jokihovi",
-         "registrationDate":"2016-10-06",
-         "companyForm":"AOY"
+      "registeredEntries": [
+        {
+          "endDate": "2015-03-05",
+          "authority": 2,
+          "registrationDate": "2015-02-24",
+          "type": 0,
+          "descriptions": [
+            {
+              "description": "Oregistrerad",
+              "languageCode": 2
+            },
+            {
+              "description": "Rekisteröimätön",
+              "languageCode": 1
+            },
+            {
+              "description": "Unregistered",
+              "languageCode": 3
+            }
+          ],
+          "register": 1
+        },
+        {
+          "authority": 2,
+          "registrationDate": "2015-03-06",
+          "type": 1,
+          "descriptions": [
+            {
+              "description": "Registered",
+              "languageCode": 3
+            },
+            {
+              "description": "Registrerad",
+              "languageCode": 2
+            },
+            {
+              "description": "Rekisterissä",
+              "languageCode": 1
+            }
+          ],
+          "register": 1
+        },
+        {
+          "authority": 1,
+          "registrationDate": "2015-03-09",
+          "type": 1,
+          "descriptions": [
+            {
+              "description": "Registered",
+              "languageCode": 3
+            },
+            {
+              "description": "Registrerad",
+              "languageCode": 2
+            },
+            {
+              "description": "Rekisterissä",
+              "languageCode": 1
+            }
+          ],
+          "register": 4
+        }
+      ],
+      "businessId": {
+        "registrationDate": "2015-02-24",
+        "source": 3,
+        "value": "2678126-3"
       },
-      {
-         "detailsUri":"http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bis/v1/2786587-2",
-         "businessId":"2786587-2",
-         "name":"Asunto Oy Espoon Lintukartano",
-         "registrationDate":"2016-10-06",
-         "companyForm":"AOY"
+      "companyForms": {
+        "registrationDate": "2015-03-06",
+        "source": 1,
+        "type": 2,
+        "descriptions": [
+          {
+            "description": "Asunto-osakeyhtiö",
+            "languageCode": 1
+          },
+          {
+            "description": "Bostadsaktiebolag",
+            "languageCode": 2
+          },
+          {
+            "description": "Housing corporation",
+            "languageCode": 3
+          }
+        ],
+        "version": 1
       },
-      {
-         "detailsUri":"http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bis/v1/2786499-2",
-         "businessId":"2786499-2",
-         "name":"Asunto Oy Casa Ora, Espoo",
-         "registrationDate":"2016-10-06",
-         "companyForm":"AOY"
+      "registrationDate": "2015-03-06",
+      "lastModified": "2025-05-05 15:39:54",
+      "mainBusinessLine": {
+        "typeCodeSet": "TOIMI3",
+        "registrationDate": "2015-02-17",
+        "source": 2,
+        "type": 68202,
+        "descriptions": [
+          {
+            "description": "Asuntojen ja asuinkiinteistöjen hallinta",
+            "languageCode": 1
+          },
+          {
+            "description": "Förvaltning av bostäder och bostadsfastigheter",
+            "languageCode": 2
+          },
+          {
+            "description": "Operation of dwellings and residential real estate",
+            "languageCode": 3
+          }
+        ]
       },
-      {
-         "detailsUri":"http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bis/v1/2786082-8",
-         "businessId":"2786082-8",
-         "name":"Asunto Oy Vantaan Neidonkenkä",
-         "registrationDate":"2016-10-05",
-         "companyForm":"AOY"
+      "tradeRegisterStatus": 1,
+      "status": 2
+    },
+    
+    <-- many more companies --> 
+    
+    {
+      "addresses": [
+        {
+          "postOffices": [
+            {
+              "city": "TURKU",
+              "languageCode": 1,
+              "municipalityCode": 853
+            },
+            {
+              "city": "ÅBO",
+              "languageCode": 2,
+              "municipalityCode": 853
+            }
+          ],
+          "apartmentIdSuffix": "",
+          "street": "Valerinkuja",
+          "registrationDate": "2024-07-09",
+          "buildingNumber": 7,
+          "postCode": 20900,
+          "source": 0,
+          "type": 1,
+          "entrance": "B",
+          "co": "c/o Satu nSalonen",
+          "apartmentNumber": 3
+        },
+        {
+          "postOffices": [
+            {
+              "city": "TURKU",
+              "languageCode": 1,
+              "municipalityCode": 853
+            },
+            {
+              "city": "ÅBO",
+              "languageCode": 2,
+              "municipalityCode": 853
+            }
+          ],
+          "postOfficeBox": "",
+          "apartmentIdSuffix": "",
+          "street": "Valerinkuja",
+          "registrationDate": "2024-07-09",
+          "buildingNumber": 7,
+          "postCode": 20900,
+          "source": 0,
+          "type": 2,
+          "entrance": "B",
+          "co": "c/o Satu Salonen",
+          "apartmentNumber": 3
+        }
+      ],
+      "names": {
+        "name": "Asunto Oy Turun Kesätuuli",
+        "registrationDate": "2016-01-25",
+        "source": 1,
+        "type": 1,
+        "version": 1
       },
-      {
-         "detailsUri":"http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bis/v1/2786320-1",
-         "businessId":"2786320-1",
-         "name":"Asunto Oy Leppäveden Kytölä",
-         "registrationDate":"2016-10-05",
-         "companyForm":"AOY"
+      "registeredEntries": [
+        {
+          "endDate": "2016-01-24",
+          "authority": 2,
+          "registrationDate": "2016-01-20",
+          "type": 0,
+          "descriptions": [
+            {
+              "description": "Oregistrerad",
+              "languageCode": 2
+            },
+            {
+              "description": "Rekisteröimätön",
+              "languageCode": 1
+            },
+            {
+              "description": "Unregistered",
+              "languageCode": 3
+            }
+          ],
+          "register": 1
+        },
+        {
+          "authority": 2,
+          "registrationDate": "2016-01-25",
+          "type": 1,
+          "descriptions": [
+            {
+              "description": "Registered",
+              "languageCode": 3
+            },
+            {
+              "description": "Registrerad",
+              "languageCode": 2
+            },
+            {
+              "description": "Rekisterissä",
+              "languageCode": 1
+            }
+          ],
+          "register": 1
+        },
+        {
+          "authority": 1,
+          "registrationDate": "2016-01-26",
+          "type": 1,
+          "descriptions": [
+            {
+              "description": "Registered",
+              "languageCode": 3
+            },
+            {
+              "description": "Registrerad",
+              "languageCode": 2
+            },
+            {
+              "description": "Rekisterissä",
+              "languageCode": 1
+            }
+          ],
+          "register": 4
+        }
+      ],
+      "businessId": {
+        "registrationDate": "2016-01-20",
+        "source": 3,
+        "value": "2738710-2"
       },
-      {
-         "detailsUri":"http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bis/v1/2786421-2",
-         "businessId":"2786421-2",
-         "name":"Asunto Oy Espoon Jaakobinsauva",
-         "registrationDate":"2016-10-05",
-         "companyForm":"AOY"
+      "companyForms": {
+        "registrationDate": "2016-01-25",
+        "source": 1,
+        "type": 2,
+        "descriptions": [
+          {
+            "description": "Asunto-osakeyhtiö",
+            "languageCode": 1
+          },
+          {
+            "description": "Bostadsaktiebolag",
+            "languageCode": 2
+          },
+          {
+            "description": "Housing corporation",
+            "languageCode": 3
+          }
+        ],
+        "version": 1
       },
-      {
-         "detailsUri":"http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bis/v1/2786191-9",
-         "businessId":"2786191-9",
-         "name":"Asunto Oy Harjavallan Pistokuja",
-         "registrationDate":"2016-10-05",
-         "companyForm":"AOY"
+      "registrationDate": "2016-01-25",
+      "lastModified": "2025-01-25 00:17:38",
+      "mainBusinessLine": {
+        "typeCodeSet": "TOIMI3",
+        "registrationDate": "2015-12-14",
+        "source": 2,
+        "type": 68202,
+        "descriptions": [
+          {
+            "description": "Asuntojen ja asuinkiinteistöjen hallinta",
+            "languageCode": 1
+          },
+          {
+            "description": "Förvaltning av bostäder och bostadsfastigheter",
+            "languageCode": 2
+          },
+          {
+            "description": "Operation of dwellings and residential real estate",
+            "languageCode": 3
+          }
+        ]
       },
-      {
-         "detailsUri":"http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bis/v1/2786087-9",
-         "businessId":"2786087-9",
-         "name":"Asunto Oy Vantaan Pikkulehdokki",
-         "registrationDate":"2016-10-05",
-         "companyForm":"AOY"
-      },
-      {
-         "detailsUri":"http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bis/v1/2785923-7",
-         "businessId":"2785923-7",
-         "name":"Asunto Oy Espoon Tapiolan Taika",
-         "registrationDate":"2016-10-04",
-         "companyForm":"AOY"
-      }
-   ]
+      "tradeRegisterStatus": 1,
+      "status": 2
+    }
+  ]
 }
 ```
 
-#### Provider Gateway
+##### Provider Gateway
 
 Configuration:
 ```
 3.id=FI_PILOT.GOV.1019125-0.Demo2Service.searchCompany.v1
-3.url=http://avoindata.prh.fi/bis/v1
+3.url=https://avoindata.prh.fi/opendata-ytj-api/v3/companies
 ```
 Service request:
 
@@ -1723,18 +2052,20 @@ http://localhost:8080/rest-adapter-service/Provider
                 <maxResults>10</maxResults>
                 <resultsFrom>0</resultsFrom>
                 <name>asunto</name>
-                <companyRegistrationFrom>2016-02-28</companyRegistrationFrom>
+                <location>Turku</location>
+                <registrationDateStart>2015-02-28</registrationDateStart>
+                 <registrationDateEnd>2016-02-28</registrationDateEnd>
             </test:request>
         </test:searchCompany>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ```
 
-API results URL: http://avoindata.prh.fi/bis/v1?totalResults=false&maxResults=10&resultsFrom=0&name=asunto&companyRegistrationFrom=2015-02-28
+API results URL: https://avoindata.prh.fi/opendata-ytj-api/v3/companies?name=asunto&location=Turku&registrationDateStart=2015-02-28&registrationDateEnd=2016-02-28
 
 Rest Adapter Service response:
 ```
-<SOAP-ENV:Envelope>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:id="http://x-road.eu/xsd/identifiers" xmlns:xrd="http://x-road.eu/xsd/xroad.xsd">
     <SOAP-ENV:Header>
         <xrd:client id:objectType="SUBSYSTEM">
             <id:xRoadInstance>FI_PILOT</id:xRoadInstance>
@@ -1755,446 +2086,320 @@ Rest Adapter Service response:
         <xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <ts1:searchCompanyResponse>
-            <ts1:request>
-                <ts1:totalResults>false</ts1:totalResults>
-                <ts1:maxResults>10</ts1:maxResults>
-                <ts1:resultsFrom>0</ts1:resultsFrom>
-                <ts1:name>asunto</ts1:name>
-                <ts1:companyRegistrationFrom>2016-02-28</ts1:companyRegistrationFrom>
-            </ts1:request>
-            <ts1:response>
-                <ts1:resultsFrom>0</ts1:resultsFrom>
-                <ts1:totalResults>-1</ts1:totalResults>
-                <ts1:nextResultsUri>
-                    http://avoindata.prh.fi/opendata/bis/v1?resultsFrom=10&totalResults=false&companyRegistrationFrom=2016-02-28&maxResults=10&name=asunto
-                </ts1:nextResultsUri>
-                <ts1:exceptionNoticeUri>null</ts1:exceptionNoticeUri>
-                <ts1:previousResultsUri>null</ts1:previousResultsUri>
-                <ts1:type>fi.prh.opendata.bis</ts1:type>
-                <ts1:version>1</ts1:version>
-                <ts1:results>
-                    <ts1:detailsUri>http://avoindata.prh.fi/opendata/bis/v1/2786724-5</ts1:detailsUri>
-                    <ts1:businessId>2786724-5</ts1:businessId>
-                    <ts1:name>Asunto Oy Kuusamon Tetra 2</ts1:name>
-                    <ts1:registrationDate>2016-10-06</ts1:registrationDate>
-                    <ts1:companyForm>AOY</ts1:companyForm>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:detailsUri>http://avoindata.prh.fi/opendata/bis/v1/2786552-2</ts1:detailsUri>
-                    <ts1:businessId>2786552-2</ts1:businessId>
-                    <ts1:name>Asunto Oy Auran Jokihovi</ts1:name>
-                    <ts1:registrationDate>2016-10-06</ts1:registrationDate>
-                    <ts1:companyForm>AOY</ts1:companyForm>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:detailsUri>http://avoindata.prh.fi/opendata/bis/v1/2786587-2</ts1:detailsUri>
-                    <ts1:businessId>2786587-2</ts1:businessId>
-                    <ts1:name>Asunto Oy Espoon Lintukartano</ts1:name>
-                    <ts1:registrationDate>2016-10-06</ts1:registrationDate>
-                    <ts1:companyForm>AOY</ts1:companyForm>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:detailsUri>http://avoindata.prh.fi/opendata/bis/v1/2786499-2</ts1:detailsUri>
-                    <ts1:businessId>2786499-2</ts1:businessId>
-                    <ts1:name>Asunto Oy Casa Ora, Espoo</ts1:name>
-                    <ts1:registrationDate>2016-10-06</ts1:registrationDate>
-                    <ts1:companyForm>AOY</ts1:companyForm>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:detailsUri>http://avoindata.prh.fi/opendata/bis/v1/2786082-8</ts1:detailsUri>
-                    <ts1:businessId>2786082-8</ts1:businessId>
-                    <ts1:name>Asunto Oy Vantaan Neidonkenkä</ts1:name>
-                    <ts1:registrationDate>2016-10-05</ts1:registrationDate>
-                    <ts1:companyForm>AOY</ts1:companyForm>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:detailsUri>http://avoindata.prh.fi/opendata/bis/v1/2786320-1</ts1:detailsUri>
-                    <ts1:businessId>2786320-1</ts1:businessId>
-                    <ts1:name>Asunto Oy Leppäveden Kytölä</ts1:name>
-                    <ts1:registrationDate>2016-10-05</ts1:registrationDate>
-                    <ts1:companyForm>AOY</ts1:companyForm>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:detailsUri>http://avoindata.prh.fi/opendata/bis/v1/2786421-2</ts1:detailsUri>
-                    <ts1:businessId>2786421-2</ts1:businessId>
-                    <ts1:name>Asunto Oy Espoon Jaakobinsauva</ts1:name>
-                    <ts1:registrationDate>2016-10-05</ts1:registrationDate>
-                    <ts1:companyForm>AOY</ts1:companyForm>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:detailsUri>http://avoindata.prh.fi/opendata/bis/v1/2786191-9</ts1:detailsUri>
-                    <ts1:businessId>2786191-9</ts1:businessId>
-                    <ts1:name>Asunto Oy Harjavallan Pistokuja</ts1:name>
-                    <ts1:registrationDate>2016-10-05</ts1:registrationDate>
-                    <ts1:companyForm>AOY</ts1:companyForm>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:detailsUri>http://avoindata.prh.fi/opendata/bis/v1/2786087-9</ts1:detailsUri>
-                    <ts1:businessId>2786087-9</ts1:businessId>
-                    <ts1:name>Asunto Oy Vantaan Pikkulehdokki</ts1:name>
-                    <ts1:registrationDate>2016-10-05</ts1:registrationDate>
-                    <ts1:companyForm>AOY</ts1:companyForm>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:detailsUri>http://avoindata.prh.fi/opendata/bis/v1/2785923-7</ts1:detailsUri>
-                    <ts1:businessId>2785923-7</ts1:businessId>
-                    <ts1:name>Asunto Oy Espoon Tapiolan Taika</ts1:name>
-                    <ts1:registrationDate>2016-10-04</ts1:registrationDate>
-                    <ts1:companyForm>AOY</ts1:companyForm>
-                </ts1:results>
-            </ts1:response>
-        </ts1:searchCompanyResponse>
-    </SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-```
-
-#### Finnish Patent and Registration Office - Get Company
-
-API documentation: http://avoindata.prh.fi/ytj_en.html
-
-#### Consumer Gateway
-
-Configuration:
-```
-4.id=FI_PILOT.GOV.1019125-0.Demo2Service.getCompany.v1
-4.path=/avoindata.prh.fi/opendata/bis/v1/{resourceId}
-4.verb=get
-4.response.modurl=true
-```
-
-Service request:
-
-* Method: ```GET```
-* Accept: ```text/xml``` or ```application/json```
-* X-XRd-MessageId: ```1```
-* X-XRd-UserId: ```test```
-
-URL:
-```
-http://localhost:8080/rest-adapter-service/Consumer/avoindata.prh.fi/opendata/bis/v1/2663307-6
-```
-
-Browser-based access:
-
-```
-http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.getCompany.v1/2663307-6/?X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://x-road.global/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
-```
-
-Consumer Gateway response:
-
-```
-{
-   "resultsFrom":0,
-   "totalResults":-1,
-   "nextResultsUri":null,
-   "exceptionNoticeUri":null,
-   "previousResultsUri":null,
-   "type":"fi.prh.opendata.bis",
-   "version":1,
-   "results":{
-      "detailsUri":null,
-      "registeredEntries":[
-         {
-            "statusDate":"2015-04-09",
-            "endDate":null,
-            "authority":2,
-            "registrationDate":"2015-04-09",
-            "description":"Ei rekisteröity perustaminen",
-            "language":"FI",
-            "register":1,
-            "status":1
-         },
-         {
-            "statusDate":"2015-04-09",
-            "endDate":null,
-            "authority":2,
-            "registrationDate":"2015-04-09",
-            "description":"Oregistrerat grundande",
-            "language":"SE",
-            "register":1,
-            "status":1
-         },
-         {
-            "statusDate":"2015-04-09",
-            "endDate":null,
-            "authority":2,
-            "registrationDate":"2015-04-09",
-            "description":"Start-up not registered",
-            "language":"EN",
-            "register":1,
-            "status":1
-         },
-         {
-            "statusDate":"2014-12-30",
-            "endDate":"2015-04-08",
-            "authority":2,
-            "registrationDate":"2014-12-30",
-            "description":"Rekisteröimätön",
-            "language":"FI",
-            "register":1,
-            "status":2
-         },
-         {
-            "statusDate":"2014-12-30",
-            "endDate":"2015-04-08",
-            "authority":2,
-            "registrationDate":"2014-12-30",
-            "description":"Oregistrerad",
-            "language":"SE",
-            "register":1,
-            "status":2
-         },
-         {
-            "statusDate":"2014-12-30",
-            "endDate":"2015-04-08",
-            "authority":2,
-            "registrationDate":"2014-12-30",
-            "description":"Unregistered",
-            "language":"EN",
-            "register":1,
-            "status":2
-         }
-      ],
-      "businessId":"2663307-6",
-      "companyForms":[
-         {
-            "endDate":null,
-            "name":"Osakeyhtiö",
-            "registrationDate":"2014-12-30",
-            "language":"FI",
-            "source":3,
-            "type":"OY",
-            "version":1
-         },
-         {
-            "endDate":null,
-            "name":"Aktiebolag",
-            "registrationDate":"2014-12-30",
-            "language":"SE",
-            "source":3,
-            "type":"AB",
-            "version":1
-         },
-         {
-            "endDate":null,
-            "name":"Limited company",
-            "registrationDate":"2014-12-30",
-            "language":"EN",
-            "source":3,
-            "type":null,
-            "version":1
-         }
-      ],
-      "name":null,
-      "registrationDate":"2014-12-30",
-      "businessIdChanges":{
-         "reason":0,
-         "change":0,
-         "changeDate":"2015-05-07",
-         "description":null,
-         "language":null,
-         "source":3,
-         "newBusinessId":null,
-         "oldBusinessId":"2663307-6"
-      },
-      "companyForm":"OY"
-   }
-}
-```
-
-#### Provider Gateway
-
-Configuration:
-```
-4.id=FI_PILOT.GOV.1019125-0.Demo2Service.getCompany.v1
-4.url=http://avoindata.prh.fi/bis/v1
-```
-Service request:
-
-* Method: ```POST```
-* Content-Type: ```text/xml```
-
-URL:
-
-```
-http://localhost:8080/rest-adapter-service/Provider
-```
-
-```
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:id="http://x-road.eu/xsd/identifiers" xmlns:xrd="http://x-road.eu/xsd/xroad.xsd">
-    <SOAP-ENV:Header>
-        <xrd:client id:objectType="SUBSYSTEM">
-            <id:xRoadInstance>FI_PILOT</id:xRoadInstance>
-            <id:memberClass>GOV</id:memberClass>
-            <id:memberCode>0245437-2</id:memberCode>
-            <id:subsystemCode>ConsumerService</id:subsystemCode>
-        </xrd:client>
-        <xrd:service id:objectType="SERVICE">
-            <id:xRoadInstance>FI_PILOT</id:xRoadInstance>
-            <id:memberClass>GOV</id:memberClass>
-            <id:memberCode>1019125-0</id:memberCode>
-            <id:subsystemCode>Demo2Service</id:subsystemCode>
-            <id:serviceCode>getCompany</id:serviceCode>
-            <id:serviceVersion>v1</id:serviceVersion>
-        </xrd:service>
-        <xrd:userId>test</xrd:userId>
-        <xrd:id>0ba036ea-d612-4e74-bf73-59a6f15627c8</xrd:id>
-		<xrd:protocolVersion>4.0</xrd:protocolVersion>
-    </SOAP-ENV:Header>
-    <SOAP-ENV:Body>
-        <test:getCompany xmlns:test="http://x-road.global/producer">
-            <test:request>
-                <resourceId>2663307-6</resourceId>
-            </test:request>
-        </test:getCompany>
-    </SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-```
-
-API response URL: http://avoindata.prh.fi/bis/v1/2663307-6
-
-Rest Adapter Service response:
-```
-<SOAP-ENV:Envelope>
-    <SOAP-ENV:Header>
-        <xrd:client id:objectType="SUBSYSTEM">
-            <id:xRoadInstance>FI_PILOT</id:xRoadInstance>
-            <id:memberClass>GOV</id:memberClass>
-            <id:memberCode>0245437-2</id:memberCode>
-            <id:subsystemCode>ConsumerService</id:subsystemCode>
-        </xrd:client>
-        <xrd:service id:objectType="SERVICE">
-            <id:xRoadInstance>FI_PILOT</id:xRoadInstance>
-            <id:memberClass>GOV</id:memberClass>
-            <id:memberCode>1019125-0</id:memberCode>
-            <id:subsystemCode>Demo2Service</id:subsystemCode>
-            <id:serviceCode>getCompany</id:serviceCode>
-            <id:serviceVersion>v1</id:serviceVersion>
-        </xrd:service>
-        <xrd:userId>test</xrd:userId>
-        <xrd:id>0ba036ea-d612-4e74-bf73-59a6f15627c8</xrd:id>
-        <xrd:protocolVersion>4.0</xrd:protocolVersion>
-    </SOAP-ENV:Header>
-    <SOAP-ENV:Body>
-        <ts1:getCompanyResponse>
-            <ts1:request>
-                <ts1:resourceId>2663307-6</ts1:resourceId>
-            </ts1:request>
-            <ts1:response>
-                <ts1:resultsFrom>0</ts1:resultsFrom>
-                <ts1:totalResults>-1</ts1:totalResults>
-                <ts1:nextResultsUri>null</ts1:nextResultsUri>
-                <ts1:exceptionNoticeUri>null</ts1:exceptionNoticeUri>
-                <ts1:previousResultsUri>null</ts1:previousResultsUri>
-                <ts1:type>fi.prh.opendata.bis</ts1:type>
-                <ts1:version>1</ts1:version>
-                <ts1:results>
-                    <ts1:detailsUri>null</ts1:detailsUri>
-                    <ts1:registeredEntries>
-                        <ts1:statusDate>2015-04-09</ts1:statusDate>
-                        <ts1:endDate>null</ts1:endDate>
-                        <ts1:authority>2</ts1:authority>
-                        <ts1:registrationDate>2015-04-09</ts1:registrationDate>
-                        <ts1:description>Ei rekisteröity perustaminen</ts1:description>
-                        <ts1:language>FI</ts1:language>
-                        <ts1:register>1</ts1:register>
-                        <ts1:status>1</ts1:status>
-                    </ts1:registeredEntries>
-                    <ts1:registeredEntries>
-                        <ts1:statusDate>2015-04-09</ts1:statusDate>
-                        <ts1:endDate>null</ts1:endDate>
-                        <ts1:authority>2</ts1:authority>
-                        <ts1:registrationDate>2015-04-09</ts1:registrationDate>
-                        <ts1:description>Oregistrerat grundande</ts1:description>
-                        <ts1:language>SE</ts1:language>
-                        <ts1:register>1</ts1:register>
-                        <ts1:status>1</ts1:status>
-                    </ts1:registeredEntries>
-                    <ts1:registeredEntries>
-                        <ts1:statusDate>2015-04-09</ts1:statusDate>
-                        <ts1:endDate>null</ts1:endDate>
-                        <ts1:authority>2</ts1:authority>
-                        <ts1:registrationDate>2015-04-09</ts1:registrationDate>
-                        <ts1:description>Start-up not registered</ts1:description>
-                        <ts1:language>EN</ts1:language>
-                        <ts1:register>1</ts1:register>
-                        <ts1:status>1</ts1:status>
-                    </ts1:registeredEntries>
-                    <ts1:registeredEntries>
-                        <ts1:statusDate>2014-12-30</ts1:statusDate>
-                        <ts1:endDate>2015-04-08</ts1:endDate>
-                        <ts1:authority>2</ts1:authority>
-                        <ts1:registrationDate>2014-12-30</ts1:registrationDate>
-                        <ts1:description>Rekisteröimätön</ts1:description>
-                        <ts1:language>FI</ts1:language>
-                        <ts1:register>1</ts1:register>
-                        <ts1:status>2</ts1:status>
-                    </ts1:registeredEntries>
-                    <ts1:registeredEntries>
-                        <ts1:statusDate>2014-12-30</ts1:statusDate>
-                        <ts1:endDate>2015-04-08</ts1:endDate>
-                        <ts1:authority>2</ts1:authority>
-                        <ts1:registrationDate>2014-12-30</ts1:registrationDate>
+        <ts1:searchCompanyResponse xmlns:ts1="http://x-road.global/producer">
+            <ts1:totalResults>33</ts1:totalResults>
+            <ts1:companies>
+                <ts1:addresses>
+                    <ts1:postOffices>
+                        <ts1:city>LIETO</ts1:city>
+                        <ts1:languageCode>1</ts1:languageCode>
+                        <ts1:municipalityCode>423</ts1:municipalityCode>
+                    </ts1:postOffices>
+                    <ts1:postOffices>
+                        <ts1:city>LIETO</ts1:city>
+                        <ts1:languageCode>2</ts1:languageCode>
+                        <ts1:municipalityCode>423</ts1:municipalityCode>
+                    </ts1:postOffices>
+                    <ts1:apartmentIdSuffix/>
+                    <ts1:street>Ajurintie</ts1:street>
+                    <ts1:registrationDate>2024-07-12</ts1:registrationDate>
+                    <ts1:buildingNumber>3</ts1:buildingNumber>
+                    <ts1:postCode>21420</ts1:postCode>
+                    <ts1:source>0</ts1:source>
+                    <ts1:type>1</ts1:type>
+                    <ts1:entrance/>
+                    <ts1:co/>
+                    <ts1:apartmentNumber/>
+                </ts1:addresses>
+                <ts1:addresses>
+                    <ts1:postOffices>
+                        <ts1:city>TURKU</ts1:city>
+                        <ts1:languageCode>1</ts1:languageCode>
+                        <ts1:municipalityCode>853</ts1:municipalityCode>
+                    </ts1:postOffices>
+                    <ts1:postOffices>
+                        <ts1:city>ÅBO</ts1:city>
+                        <ts1:languageCode>2</ts1:languageCode>
+                        <ts1:municipalityCode>853</ts1:municipalityCode>
+                    </ts1:postOffices>
+                    <ts1:postOfficeBox/>
+                    <ts1:apartmentIdSuffix/>
+                    <ts1:street>Rauhankatu</ts1:street>
+                    <ts1:registrationDate>2024-07-12</ts1:registrationDate>
+                    <ts1:buildingNumber>9b</ts1:buildingNumber>
+                    <ts1:postCode>20100</ts1:postCode>
+                    <ts1:source>0</ts1:source>
+                    <ts1:type>2</ts1:type>
+                    <ts1:entrance/>
+                    <ts1:co>c/o Aboa Isännöintipalvelut Oy</ts1:co>
+                    <ts1:apartmentNumber/>
+                </ts1:addresses>
+                <ts1:names>
+                    <ts1:name>Asunto Oy Liedon Graniitti</ts1:name>
+                    <ts1:registrationDate>2015-03-06</ts1:registrationDate>
+                    <ts1:source>1</ts1:source>
+                    <ts1:type>1</ts1:type>
+                    <ts1:version>1</ts1:version>
+                </ts1:names>
+                <ts1:registeredEntries>
+                    <ts1:endDate>2015-03-05</ts1:endDate>
+                    <ts1:authority>2</ts1:authority>
+                    <ts1:registrationDate>2015-02-24</ts1:registrationDate>
+                    <ts1:type>0</ts1:type>
+                    <ts1:descriptions>
                         <ts1:description>Oregistrerad</ts1:description>
-                        <ts1:language>SE</ts1:language>
-                        <ts1:register>1</ts1:register>
-                        <ts1:status>2</ts1:status>
-                    </ts1:registeredEntries>
-                    <ts1:registeredEntries>
-                        <ts1:statusDate>2014-12-30</ts1:statusDate>
-                        <ts1:endDate>2015-04-08</ts1:endDate>
-                        <ts1:authority>2</ts1:authority>
-                        <ts1:registrationDate>2014-12-30</ts1:registrationDate>
+                        <ts1:languageCode>2</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Rekisteröimätön</ts1:description>
+                        <ts1:languageCode>1</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
                         <ts1:description>Unregistered</ts1:description>
-                        <ts1:language>EN</ts1:language>
-                        <ts1:register>1</ts1:register>
-                        <ts1:status>2</ts1:status>
-                    </ts1:registeredEntries>
-                    <ts1:businessId>2663307-6</ts1:businessId>
-                    <ts1:companyForms>
-                        <ts1:endDate>null</ts1:endDate>
-                        <ts1:name>Osakeyhtiö</ts1:name>
-                        <ts1:registrationDate>2014-12-30</ts1:registrationDate>
-                        <ts1:language>FI</ts1:language>
-                        <ts1:source>3</ts1:source>
-                        <ts1:type>OY</ts1:type>
-                        <ts1:version>1</ts1:version>
-                    </ts1:companyForms>
-                    <ts1:companyForms>
-                        <ts1:endDate>null</ts1:endDate>
-                        <ts1:name>Aktiebolag</ts1:name>
-                        <ts1:registrationDate>2014-12-30</ts1:registrationDate>
-                        <ts1:language>SE</ts1:language>
-                        <ts1:source>3</ts1:source>
-                        <ts1:type>AB</ts1:type>
-                        <ts1:version>1</ts1:version>
-                    </ts1:companyForms>
-                    <ts1:companyForms>
-                        <ts1:endDate>null</ts1:endDate>
-                        <ts1:name>Limited company</ts1:name>
-                        <ts1:registrationDate>2014-12-30</ts1:registrationDate>
-                        <ts1:language>EN</ts1:language>
-                        <ts1:source>3</ts1:source>
-                        <ts1:type>null</ts1:type>
-                        <ts1:version>1</ts1:version>
-                    </ts1:companyForms>
-                    <ts1:companyForm>OY</ts1:companyForm>
-                    <ts1:name>null</ts1:name>
-                    <ts1:registrationDate>2014-12-30</ts1:registrationDate>
-                    <ts1:businessIdChanges>
-                        <ts1:reason>0</ts1:reason>
-                        <ts1:change>0</ts1:change>
-                        <ts1:changeDate>2015-05-07</ts1:changeDate>
-                        <ts1:description>null</ts1:description>
-                        <ts1:language>null</ts1:language>
-                        <ts1:source>3</ts1:source>
-                        <ts1:newBusinessId>null</ts1:newBusinessId>
-                        <ts1:oldBusinessId>2663307-6</ts1:oldBusinessId>
-                    </ts1:businessIdChanges>
-                </ts1:results>
-            </ts1:response>
-        </ts1:getCompanyResponse>
+                        <ts1:languageCode>3</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:register>1</ts1:register>
+                </ts1:registeredEntries>
+                <ts1:registeredEntries>
+                    <ts1:authority>2</ts1:authority>
+                    <ts1:registrationDate>2015-03-06</ts1:registrationDate>
+                    <ts1:type>1</ts1:type>
+                    <ts1:descriptions>
+                        <ts1:description>Registered</ts1:description>
+                        <ts1:languageCode>3</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Registrerad</ts1:description>
+                        <ts1:languageCode>2</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Rekisterissä</ts1:description>
+                        <ts1:languageCode>1</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:register>1</ts1:register>
+                </ts1:registeredEntries>
+                <ts1:registeredEntries>
+                    <ts1:authority>1</ts1:authority>
+                    <ts1:registrationDate>2015-03-09</ts1:registrationDate>
+                    <ts1:type>1</ts1:type>
+                    <ts1:descriptions>
+                        <ts1:description>Registered</ts1:description>
+                        <ts1:languageCode>3</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Registrerad</ts1:description>
+                        <ts1:languageCode>2</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Rekisterissä</ts1:description>
+                        <ts1:languageCode>1</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:register>4</ts1:register>
+                </ts1:registeredEntries>
+                <ts1:businessId>
+                    <ts1:registrationDate>2015-02-24</ts1:registrationDate>
+                    <ts1:source>3</ts1:source>
+                    <ts1:value>2678126-3</ts1:value>
+                </ts1:businessId>
+                <ts1:companyForms>
+                    <ts1:registrationDate>2015-03-06</ts1:registrationDate>
+                    <ts1:source>1</ts1:source>
+                    <ts1:type>2</ts1:type>
+                    <ts1:descriptions>
+                        <ts1:description>Asunto-osakeyhtiö</ts1:description>
+                        <ts1:languageCode>1</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Bostadsaktiebolag</ts1:description>
+                        <ts1:languageCode>2</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Housing corporation</ts1:description>
+                        <ts1:languageCode>3</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:version>1</ts1:version>
+                </ts1:companyForms>
+                <ts1:registrationDate>2015-03-06</ts1:registrationDate>
+                <ts1:lastModified>2025-05-05 15:39:54</ts1:lastModified>
+                <ts1:mainBusinessLine>
+                    <ts1:typeCodeSet>TOIMI3</ts1:typeCodeSet>
+                    <ts1:registrationDate>2015-02-17</ts1:registrationDate>
+                    <ts1:source>2</ts1:source>
+                    <ts1:type>68202</ts1:type>
+                    <ts1:descriptions>
+                        <ts1:description>Asuntojen ja asuinkiinteistöjen hallinta</ts1:description>
+                        <ts1:languageCode>1</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Förvaltning av bostäder och bostadsfastigheter</ts1:description>
+                        <ts1:languageCode>2</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Operation of dwellings and residential real estate</ts1:description>
+                        <ts1:languageCode>3</ts1:languageCode>
+                    </ts1:descriptions>
+                </ts1:mainBusinessLine>
+                <ts1:tradeRegisterStatus>1</ts1:tradeRegisterStatus>
+                <ts1:status>2</ts1:status>
+            </ts1:companies>
+            
+            <-- many more companies -->
+            
+            <ts1:companies>
+                <ts1:addresses>
+                    <ts1:postOffices>
+                        <ts1:city>TURKU</ts1:city>
+                        <ts1:languageCode>1</ts1:languageCode>
+                        <ts1:municipalityCode>853</ts1:municipalityCode>
+                    </ts1:postOffices>
+                    <ts1:postOffices>
+                        <ts1:city>ÅBO</ts1:city>
+                        <ts1:languageCode>2</ts1:languageCode>
+                        <ts1:municipalityCode>853</ts1:municipalityCode>
+                    </ts1:postOffices>
+                    <ts1:apartmentIdSuffix/>
+                    <ts1:street>Valerinkuja</ts1:street>
+                    <ts1:registrationDate>2024-07-09</ts1:registrationDate>
+                    <ts1:buildingNumber>7</ts1:buildingNumber>
+                    <ts1:postCode>20900</ts1:postCode>
+                    <ts1:source>0</ts1:source>
+                    <ts1:type>1</ts1:type>
+                    <ts1:entrance>B</ts1:entrance>
+                    <ts1:co>c/o Satu nSalonen</ts1:co>
+                    <ts1:apartmentNumber>3</ts1:apartmentNumber>
+                </ts1:addresses>
+                <ts1:addresses>
+                    <ts1:postOffices>
+                        <ts1:city>TURKU</ts1:city>
+                        <ts1:languageCode>1</ts1:languageCode>
+                        <ts1:municipalityCode>853</ts1:municipalityCode>
+                    </ts1:postOffices>
+                    <ts1:postOffices>
+                        <ts1:city>ÅBO</ts1:city>
+                        <ts1:languageCode>2</ts1:languageCode>
+                        <ts1:municipalityCode>853</ts1:municipalityCode>
+                    </ts1:postOffices>
+                    <ts1:postOfficeBox/>
+                    <ts1:apartmentIdSuffix/>
+                    <ts1:street>Valerinkuja</ts1:street>
+                    <ts1:registrationDate>2024-07-09</ts1:registrationDate>
+                    <ts1:buildingNumber>7</ts1:buildingNumber>
+                    <ts1:postCode>20900</ts1:postCode>
+                    <ts1:source>0</ts1:source>
+                    <ts1:type>2</ts1:type>
+                    <ts1:entrance>B</ts1:entrance>
+                    <ts1:co>c/o Satu Salonen</ts1:co>
+                    <ts1:apartmentNumber>3</ts1:apartmentNumber>
+                </ts1:addresses>
+                <ts1:names>
+                    <ts1:name>Asunto Oy Turun Kesätuuli</ts1:name>
+                    <ts1:registrationDate>2016-01-25</ts1:registrationDate>
+                    <ts1:source>1</ts1:source>
+                    <ts1:type>1</ts1:type>
+                    <ts1:version>1</ts1:version>
+                </ts1:names>
+                <ts1:registeredEntries>
+                    <ts1:endDate>2016-01-24</ts1:endDate>
+                    <ts1:authority>2</ts1:authority>
+                    <ts1:registrationDate>2016-01-20</ts1:registrationDate>
+                    <ts1:type>0</ts1:type>
+                    <ts1:descriptions>
+                        <ts1:description>Oregistrerad</ts1:description>
+                        <ts1:languageCode>2</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Rekisteröimätön</ts1:description>
+                        <ts1:languageCode>1</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Unregistered</ts1:description>
+                        <ts1:languageCode>3</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:register>1</ts1:register>
+                </ts1:registeredEntries>
+                <ts1:registeredEntries>
+                    <ts1:authority>2</ts1:authority>
+                    <ts1:registrationDate>2016-01-25</ts1:registrationDate>
+                    <ts1:type>1</ts1:type>
+                    <ts1:descriptions>
+                        <ts1:description>Registered</ts1:description>
+                        <ts1:languageCode>3</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Registrerad</ts1:description>
+                        <ts1:languageCode>2</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Rekisterissä</ts1:description>
+                        <ts1:languageCode>1</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:register>1</ts1:register>
+                </ts1:registeredEntries>
+                <ts1:registeredEntries>
+                    <ts1:authority>1</ts1:authority>
+                    <ts1:registrationDate>2016-01-26</ts1:registrationDate>
+                    <ts1:type>1</ts1:type>
+                    <ts1:descriptions>
+                        <ts1:description>Registered</ts1:description>
+                        <ts1:languageCode>3</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Registrerad</ts1:description>
+                        <ts1:languageCode>2</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Rekisterissä</ts1:description>
+                        <ts1:languageCode>1</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:register>4</ts1:register>
+                </ts1:registeredEntries>
+                <ts1:businessId>
+                    <ts1:registrationDate>2016-01-20</ts1:registrationDate>
+                    <ts1:source>3</ts1:source>
+                    <ts1:value>2738710-2</ts1:value>
+                </ts1:businessId>
+                <ts1:companyForms>
+                    <ts1:registrationDate>2016-01-25</ts1:registrationDate>
+                    <ts1:source>1</ts1:source>
+                    <ts1:type>2</ts1:type>
+                    <ts1:descriptions>
+                        <ts1:description>Asunto-osakeyhtiö</ts1:description>
+                        <ts1:languageCode>1</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Bostadsaktiebolag</ts1:description>
+                        <ts1:languageCode>2</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Housing corporation</ts1:description>
+                        <ts1:languageCode>3</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:version>1</ts1:version>
+                </ts1:companyForms>
+                <ts1:registrationDate>2016-01-25</ts1:registrationDate>
+                <ts1:lastModified>2025-01-25 00:17:38</ts1:lastModified>
+                <ts1:mainBusinessLine>
+                    <ts1:typeCodeSet>TOIMI3</ts1:typeCodeSet>
+                    <ts1:registrationDate>2015-12-14</ts1:registrationDate>
+                    <ts1:source>2</ts1:source>
+                    <ts1:type>68202</ts1:type>
+                    <ts1:descriptions>
+                        <ts1:description>Asuntojen ja asuinkiinteistöjen hallinta</ts1:description>
+                        <ts1:languageCode>1</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Förvaltning av bostäder och bostadsfastigheter</ts1:description>
+                        <ts1:languageCode>2</ts1:languageCode>
+                    </ts1:descriptions>
+                    <ts1:descriptions>
+                        <ts1:description>Operation of dwellings and residential real estate</ts1:description>
+                        <ts1:languageCode>3</ts1:languageCode>
+                    </ts1:descriptions>
+                </ts1:mainBusinessLine>
+                <ts1:tradeRegisterStatus>1</ts1:tradeRegisterStatus>
+                <ts1:status>2</ts1:status>
+            </ts1:companies>
+        </ts1:searchCompanyResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ```
@@ -2202,7 +2407,7 @@ Rest Adapter Service response:
 #### Finto : Finnish Thesaurus and Ontology Service - Search
 
 API documentation: http://api.finto.fi/
-#### Consumer Gateway
+##### Consumer Gateway
 
 Configuration:
 ```
@@ -2226,240 +2431,293 @@ http://localhost:8080/rest-adapter-service/Consumer/api.finto.fi/rest/v1/search/
 Browser-based access:
 
 ```
-http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.fintoService.v1/?query=cat&lang=en&X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://x-road.global/producer&X-XRd-NamespacePrefixSerialize=ks
+http://localhost:8080/rest-adapter-service/Consumer/FI_PILOT.GOV.1019125-0.Demo2Service.fintoService.v1/?query=cat&lang=en&X-XRd-UserId=test&X-XRd-MessageId=1&X-XRd-NamespaceSerialize=http://x-road.global/producer&X-XRd-NamespacePrefixSerialize=ks&Accept=application/json
 ```
 
 Consumer  Gateway response:
 
 ```
 {
-   "@context":{
-      "hiddenLabel":"skos:hiddenLabel",
-      "prefLabel":"skos:prefLabel",
-      "skos":"http://www.w3.org/2004/02/skos/core#",
-      "isothes":"http://purl.org/iso25964/skos-thes#",
-      "onki":"http://schema.onki.fi/onki#",
-      "altLabel":"skos:altLabel",
-      "type":"@type",
-      "@language":"en",
-      "uri":"@id",
-      "results":{
-         "@container":"@list",
-         "@id":"onki:results"
-      }
-   },
-   "uri":"",
-   "results":[
-      {
-         "notation":"cat",
-         "prefLabel":"Catalan language",
-         "vocab":"lexvo",
-         "type":[
-            "skos:Concept",
-            "http://lexvo.org/ontology#Language"
-         ],
-         "lang":"en",
-         "uri":"http://lexvo.org/id/iso639-3/cat"
-      },
-      {
-         "notation":"cat",
-         "prefLabel":"???????",
-         "vocab":"lexvo",
-         "type":[
-            "skos:Concept",
-            "http://lexvo.org/ontology#Language"
-         ],
-         "lang":"en-Dsrt",
-         "uri":"http://lexvo.org/id/iso639-3/cat"
-      },
-      {
-         "notation":"34B12",
-         "prefLabel":"cat",
-         "vocab":"ic",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://iconclass.org/34B12"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"afo",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "prefLabel":"cat",
-         "vocab":"afo",
-         "type":[
-            "skos:Concept",
-            "http://www.yso.fi/onto/afo-meta/Concept"
-         ],
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/afo/p1287"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"juho",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"jupo",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"kauno",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"keko",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"kito",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "prefLabel":"cat",
-         "vocab":"koko",
-         "type":[
-            "skos:Concept",
-            "http://www.yso.fi/onto/afo-meta/Concept",
-            "http://www.yso.fi/onto/kauno-meta/Concept",
-            "http://www.yso.fi/onto/yso-meta/Concept"
-         ],
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/koko/p37252"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"kto",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"kulo",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"liito",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"mero",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "hiddenLabel":"Cat",
-         "prefLabel":"Cats",
-         "vocab":"mesh",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/mesh/D002415"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"muso",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"pto",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"puho",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"maotao",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "prefLabel":"cat",
-         "vocab":"tero",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/tero/p19378"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"tsr",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "exvocab":"yso",
-         "prefLabel":"cat",
-         "vocab":"valo",
-         "type":"skos:Concept",
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      },
-      {
-         "prefLabel":"cat",
-         "vocab":"yso",
-         "type":[
-            "skos:Concept",
-            "http://www.yso.fi/onto/yso-meta/Concept"
-         ],
-         "lang":"en",
-         "uri":"http://www.yso.fi/onto/yso/p19378"
-      }
-   ]
+  "@context": {
+    "hiddenLabel": "skos:hiddenLabel",
+    "prefLabel": "skos:prefLabel",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "isothes": "http://purl.org/iso25964/skos-thes#",
+    "onki": "http://schema.onki.fi/onki#",
+    "altLabel": "skos:altLabel",
+    "type": "@type",
+    "@language": "en",
+    "uri": "@id",
+    "results": {
+      "@container": "@list",
+      "@id": "onki:results"
+    }
+  },
+  "uri": "",
+  "results": [
+    {
+      "notation": "34B12",
+      "prefLabel": "cat",
+      "vocab": "ic",
+      "type": "skos:Concept",
+      "lang": "en",
+      "uri": "http://iconclass.org/34B12"
+    },
+    {
+      "prefLabel": "cat",
+      "vocab": "afo",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/afo-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/afo/p1287"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "afo",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "geo",
+      "type": "skos:Concept",
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "prefLabel": "cat",
+      "vocab": "hero",
+      "type": "skos:Concept",
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/hero/p1227"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "juho",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "jupo",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "kauno",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "keko",
+      "type": "skos:Concept",
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "kito",
+      "type": "skos:Concept",
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "prefLabel": "cat",
+      "vocab": "koko",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept",
+        "http://www.yso.fi/onto/kauno-meta/Concept",
+        "http://www.yso.fi/onto/afo-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/koko/p37252"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "kto",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "kulo",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "liiko",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "muso",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "oiko",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "oma",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "pto",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "puho",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "soto",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "maotao",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "tero",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "tsr",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "exvocab": "yso",
+      "prefLabel": "cat",
+      "vocab": "valo",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    },
+    {
+      "prefLabel": "cat",
+      "vocab": "yso",
+      "type": [
+        "skos:Concept",
+        "http://www.yso.fi/onto/yso-meta/Concept"
+      ],
+      "lang": "en",
+      "uri": "http://www.yso.fi/onto/yso/p19378"
+    }
+  ]
 }
 ```
 
-#### Provider Gateway
+##### Provider Gateway
 
 Configuration:
 ```
@@ -2513,7 +2771,7 @@ API response URL: http://api.finto.fi/rest/v1/search?query=cat&lang=en
 
 Rest Adapter Service response:
 ```
-<SOAP-ENV:Envelope>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:id="http://x-road.eu/xsd/identifiers" xmlns:xrd="http://x-road.eu/xsd/xroad.xsd">
     <SOAP-ENV:Header>
         <xrd:client id:objectType="SUBSYSTEM">
             <id:xRoadInstance>FI_PILOT</id:xRoadInstance>
@@ -2534,224 +2792,241 @@ Rest Adapter Service response:
         <xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <ts1:fintoServiceResponse>
-            <ts1:request>
-                <ts1:query>cat</ts1:query>
+        <ts1:fintoServiceResponse xmlns:ts1="http://x-road.global/producer">
+            <ts1:__at__context>
+                <ts1:hiddenLabel>skos:hiddenLabel</ts1:hiddenLabel>
+                <ts1:__at__language>en</ts1:__at__language>
+                <ts1:prefLabel>skos:prefLabel</ts1:prefLabel>
+                <ts1:skos>http://www.w3.org/2004/02/skos/core#</ts1:skos>
+                <ts1:isothes>http://purl.org/iso25964/skos-thes#</ts1:isothes>
+                <ts1:onki>http://schema.onki.fi/onki#</ts1:onki>
+                <ts1:altLabel>skos:altLabel</ts1:altLabel>
+                <ts1:type>@type</ts1:type>
+                <ts1:uri>@id</ts1:uri>
+                <ts1:results>
+                    <ts1:__at__id>onki:results</ts1:__at__id>
+                    <ts1:__at__container>@list</ts1:__at__container>
+                </ts1:results>
+            </ts1:__at__context>
+            <ts1:uri/>
+            <ts1:results>
+                <ts1:notation>34B12</ts1:notation>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>ic</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
                 <ts1:lang>en</ts1:lang>
-            </ts1:request>
-            <ts1:response>
-                <ts1:__at__context>
-                    <ts1:hiddenLabel>skos:hiddenLabel</ts1:hiddenLabel>
-                    <ts1:__at__language>en</ts1:__at__language>
-                    <ts1:prefLabel>skos:prefLabel</ts1:prefLabel>
-                    <ts1:skos>http://www.w3.org/2004/02/skos/core#</ts1:skos>
-                    <ts1:isothes>http://purl.org/iso25964/skos-thes#</ts1:isothes>
-                    <ts1:onki>http://schema.onki.fi/onki#</ts1:onki>
-                    <ts1:altLabel>skos:altLabel</ts1:altLabel>
-                    <ts1:type>@type</ts1:type>
-                    <ts1:uri>@id</ts1:uri>
-                    <ts1:results>
-                        <ts1:__at__id>onki:results</ts1:__at__id>
-                        <ts1:__at__container>@list</ts1:__at__container>
-                    </ts1:results>
-                </ts1:__at__context>
-                <ts1:uri/>
-                <ts1:results>
-                    <ts1:notation>cat</ts1:notation>
-                    <ts1:prefLabel>Catalan language</ts1:prefLabel>
-                    <ts1:vocab>lexvo</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:type>http://lexvo.org/ontology#Language</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://lexvo.org/id/iso639-3/cat</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:notation>cat</ts1:notation>
-                    <ts1:prefLabel>???????</ts1:prefLabel>
-                    <ts1:vocab>lexvo</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:type>http://lexvo.org/ontology#Language</ts1:type>
-                    <ts1:lang>en-Dsrt</ts1:lang>
-                    <ts1:uri>http://lexvo.org/id/iso639-3/cat</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:notation>34B12</ts1:notation>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>ic</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://iconclass.org/34B12</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>afo</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>afo</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:type>http://www.yso.fi/onto/afo-meta/Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/afo/p1287</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>juho</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>jupo</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>kauno</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>keko</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>kito</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>koko</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:type>http://www.yso.fi/onto/afo-meta/Concept</ts1:type>
-                    <ts1:type>http://www.yso.fi/onto/kauno-meta/Concept</ts1:type>
-                    <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/koko/p37252</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>kto</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>kulo</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>liito</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>mero</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:hiddenLabel>Cat</ts1:hiddenLabel>
-                    <ts1:prefLabel>Cats</ts1:prefLabel>
-                    <ts1:vocab>mesh</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/mesh/D002415</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>muso</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>pto</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>puho</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>maotao</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>tero</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/tero/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>tsr</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:exvocab>yso</ts1:exvocab>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>valo</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-                <ts1:results>
-                    <ts1:prefLabel>cat</ts1:prefLabel>
-                    <ts1:vocab>yso</ts1:vocab>
-                    <ts1:type>skos:Concept</ts1:type>
-                    <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
-                    <ts1:lang>en</ts1:lang>
-                    <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
-                </ts1:results>
-            </ts1:response>
+                <ts1:uri>http://iconclass.org/34B12</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>afo</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/afo-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/afo/p1287</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>afo</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>geo</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>hero</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/hero/p1227</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>juho</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>jupo</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>kauno</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>keko</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>kito</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>koko</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/kauno-meta/Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/afo-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/koko/p37252</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>kto</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>kulo</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>liiko</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>muso</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>oiko</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>oma</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>pto</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>puho</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>soto</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>maotao</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>tero</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>tsr</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:exvocab>yso</ts1:exvocab>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>valo</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
+            <ts1:results>
+                <ts1:prefLabel>cat</ts1:prefLabel>
+                <ts1:vocab>yso</ts1:vocab>
+                <ts1:type>skos:Concept</ts1:type>
+                <ts1:type>http://www.yso.fi/onto/yso-meta/Concept</ts1:type>
+                <ts1:lang>en</ts1:lang>
+                <ts1:uri>http://www.yso.fi/onto/yso/p19378</ts1:uri>
+            </ts1:results>
         </ts1:fintoServiceResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
