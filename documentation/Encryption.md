@@ -41,25 +41,25 @@ Rest Adapter Service supports message level encryption. The use of encryption re
 * Generate RSA key pair for Consumer Gateway.
 
 ```
-keytool -genkey -keyalg RSA -alias consumerpri -keystore consumerkeystore.jks -storepass consumerks -validity 360 -keysize 2048
+keytool -genkeypair -keyalg RSA -alias consumerpri -keystore consumerkeystore.jks -storepass consumerks -validity 360 -keysize 2048 -storetype jks
 ```
 
 * Export the public key.
 
 ```
-keytool -export -alias consumerpri -keystore consumerkeystore.jks -rfc -file consumer.cer
+keytool -exportcert -alias consumerpri -keystore consumerkeystore.jks -rfc -file consumer.cer
 ```
 
 * Generate RSA key pair for Provider Gateway.
 
 ```
-keytool -genkey -keyalg RSA -alias providerpri -keystore providerkeystore.jks -storepass providerks -validity 360 -keysize 2048
+keytool -genkeypair -keyalg RSA -alias providerpri -keystore providerkeystore.jks -storepass providerks -validity 360 -keysize 2048 -storetype jks
 ```
 
 * Export the public key.
 
 ```
-keytool -export -alias providerpri -keystore providerkeystore.jks -rfc -file provider.cer
+keytool -exportcert -alias providerpri -keystore providerkeystore.jks -rfc -file provider.cer
 ```
 
 ### Consumer Gateway
@@ -67,7 +67,7 @@ keytool -export -alias providerpri -keystore providerkeystore.jks -rfc -file pro
 Import Service Provider's certificate to Service Consumer's trust store. Certificate alias must be the complete service identifier of the service (```FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1```) that is going to be called using this certificate. **NB!** If other services of the same service provider are called using the same certificate, the certificate must be imported separately for each service using the full service identifier as an alias.
 
 ```
-keytool -import -file provider.cer -alias FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1 -keystore consumertruststore.jks
+keytool -importcert -file provider.cer -alias FI_PILOT.GOV.1019125-0.Demo2Service.getOrganizationList.v1 -keystore consumertruststore.jks -storetype jks
 ```
 
 ```consumer-gateway.properties``` file must contain the properties below.
@@ -113,7 +113,7 @@ Enabling encryption of sent messages and decryption of received responses for ea
 Import Service Consumer's public key to Service Provider's trust store. Certificate alias must be the complete service identifier of the subsystem (```FI_PILOT.GOV.0245437-2.ConsumerTest```) that has been granted access to one of the services provided by the Provider Gateway instance. Even if the same subsystem is used for accessing multiple services, it's enough to import the certificate once.
 
 ```
-keytool -import -file consumer.cer -alias FI_PILOT.GOV.0245437-2.ConsumerTest -keystore producertruststore.jks
+keytool -importcert -file consumer.cer -alias FI_PILOT.GOV.0245437-2.ConsumerTest -keystore producertruststore.jks -storetype jks
 ```
 
 ```provider-gateway.properties``` file must contain the properties below.
