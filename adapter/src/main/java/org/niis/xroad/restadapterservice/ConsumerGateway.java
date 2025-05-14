@@ -1035,11 +1035,15 @@ public class ConsumerGateway extends HttpServlet {
             NodeList children = encryptionWrapper.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 Node child = (Node) children.item(i);
+                if (!this.omitNamespace && (child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
+                    child = RequestSerializer.updateNamespaceAndPrefix(child, responseNode.getNamespaceURI(), responseNode.getPrefix());
+                    RequestSerializer.updateNamespaceAndPrefix(child.getChildNodes(), responseNode.getNamespaceURI(), responseNode.getPrefix());
+                }
                 child.setParentElement((SOAPElement) responseNode);
+
             }
-            if (!this.omitNamespace) {
-                RequestSerializer.updateNamespaceAndPrefix(responseNode.getChildNodes(), responseNode.getNamespaceURI(), responseNode.getPrefix());
-            }
+            // Remove default namespace of first element for backward compatibility
+            ((SOAPElement) responseNode.getFirstChild()).removeNamespaceDeclaration("");
 
             // Clone response node because removing namespace from the original
             // node causes null pointer exception in AbstractResponseDeserializer

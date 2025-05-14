@@ -144,7 +144,7 @@ public class ConsumerGatewayIT {
     @Test
     public void testConsumerGateway1Xml() throws Exception {
         String expectedResult = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
-                + "<ts1:getOrganizationResponse xmlns:ts1=\"http://x-road.global/producer\">"
+                + "<ts1:getDepartmentResponse xmlns:ts1=\"http://x-road.global/producer\">"
                 + "    <ts1:abbr_fi>Kasko</ts1:abbr_fi>"
                 + "    <ts1:www_en>https://www.hel.fi/en/decision-making/city-organization/divisions/education-division</ts1:www_en>"
                 + "    <ts1:municipality_code>91</ts1:municipality_code>"
@@ -162,7 +162,7 @@ public class ConsumerGatewayIT {
                 + "    <ts1:www_sv>https://www.hel.fi/sv/beslutsfattande-och-forvaltning/stadens-organisation/sektorer/fostrans-och-utbildningssektorn</ts1:www_sv>"
                 + "    <ts1:hierarchy_level>1</ts1:hierarchy_level>"
                 + "    <ts1:name_en>Education Division</ts1:name_en>"
-                + "</ts1:getOrganizationResponse>";
+                + "</ts1:getDepartmentResponse>";
 
         ClientResponse restResponse = sendData(this.urls.get(TEST_CASE_1), "get", this.urlParams.get(1),
                 new HashMap<String, String>());

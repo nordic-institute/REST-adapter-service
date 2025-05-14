@@ -237,12 +237,25 @@ public class ProviderGateway extends AbstractAdapterServlet {
             }
             // Use XML as response data
             response.setResponseData(SOAPHelper.xmlStrToSOAPElement(data));
+
         }
 
         LOGGER.debug("Message prosessing done!");
 
         // Serialize the response
         serializer.serialize(response, request);
+
+        // Remove default namespace of first element for backward compatibility
+        if (endpoint.isProcessingWrappers()) {
+            ((SOAPElement) response
+                .getSoapMessage()
+                .getSOAPPart()
+                .getEnvelope()
+                .getBody()
+                .getFirstChild()
+                .getFirstChild())
+                .removeNamespaceDeclaration("");
+        }
         return response;
 
     }
