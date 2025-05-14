@@ -13,6 +13,8 @@ plugins {
 val isEncrypted = project.hasProperty("encrypted")
 val adapterProfileDir = if (isEncrypted) "encrypted" else "plaintext"
 
+// Project Configuration
+val projectPath = project.projectDir.toString();
 
 checkstyle {
     toolVersion = "10.23.1"
@@ -96,7 +98,7 @@ java.sourceCompatibility = JavaVersion.VERSION_21
 
 
 tasks.processResources {
-    println(if (isEncrypted) "Running with encrypted profile" else "Running with plaintext profile");
+    logger.info(if (isEncrypted) "Running with encrypted profile" else "Running with plaintext profile");
     val filterFile = file("src/main/filters/default.properties")
     val props = Properties().apply {
         load(filterFile.reader())
@@ -107,6 +109,9 @@ tasks.processResources {
     from("src/main/profiles/$adapterProfileDir/") {
         filesMatching("**/*.properties") {
             filter<ReplaceTokens>("tokens" to replacements)
+            filter { line ->
+                line.replace("@projectDir@", projectPath)
+            }
         }
     }
     filesMatching("src/main/resources") {
@@ -126,7 +131,7 @@ tasks.processResources {
 tasks.processTestResources {
     filesMatching("**/*.properties") {
         filter { line ->
-            line.replace("@projectDir@", project.projectDir.toString())
+            line.replace("@projectDir@", projectPath)
         }
     }
 }
@@ -154,7 +159,7 @@ tasks.register("processIntTestResources") {
                 filesMatching("**/*.properties") {
                     filter<ReplaceTokens>("tokens" to replacements)
                     filter { line ->
-                        line.replace("@projectDir@", project.projectDir.toString())
+                        line.replace("@projectDir@", projectPath)
                     }
                 }
             }
