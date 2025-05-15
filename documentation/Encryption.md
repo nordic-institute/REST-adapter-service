@@ -88,6 +88,7 @@ privateKeyFilePassword=consumerks
 # Alias of the private key
 privateKeyAlias=consumerpri
 # Password of the private key
+# N.B. if storetype is PKCS12, key password must be the same as the keystore password
 privateKeyPassword=consumer
 ```
 
@@ -133,7 +134,8 @@ privateKeyFile=/path/to/providerkeystore.jks
 privateKeyFilePassword=providerks
 # Alias of the private key
 privateKeyAlias=providerpri
-# Password of the private key
+# Password of the private key 
+# N.B. if storetype is PKCS12, key password must be the same as the keystore password
 privateKeyPassword=provider
 ```
 
