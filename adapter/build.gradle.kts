@@ -99,9 +99,9 @@ java.sourceCompatibility = JavaVersion.VERSION_21
 
 tasks.processResources {
     logger.info(if (isEncrypted) "Running with encrypted profile" else "Running with plaintext profile");
-    val filterFile = file("src/main/filters/default.properties")
+    val baseFilterFile = file("src/main/filters/default.properties")
     val props = Properties().apply {
-        load(filterFile.reader())
+        load(baseFilterFile.reader())
     }
     val replacements = props.entries.associate { it.key.toString() to it.value.toString() }
 
@@ -135,8 +135,13 @@ tasks.processTestResources {
         }
     }
 }
+tasks.processTestResources {
+    group = "verification"
+}
 
 tasks.test {
+    group = "verification"
+
     useJUnitPlatform()
     exclude("org/niis/xroad/restadapterservice/ConsumerGatewayIT.class")
     finalizedBy(tasks.jacocoTestReport)
@@ -145,12 +150,11 @@ tasks.test {
 
 tasks.register("processIntTestResources") {
     description = "Processes integration test resources"
+    group = "verification"
 
-    val filterFile = file("src/main/filters/default.properties")
-    val filterFile2 = file("src/test/filters/integration-test.properties")
+    val intTestFilterFile = file("src/test/filters/integration-test.properties")
     val props = Properties().apply {
-        load(filterFile.reader())
-        load(filterFile2.reader())
+        load(intTestFilterFile.reader())
     }
     val replacements = props.entries.associate { it.key.toString() to it.value.toString() }
     doLast {
@@ -169,16 +173,16 @@ tasks.register("processIntTestResources") {
 }
 
 tasks.register<Test>("intTest") {
-    useJUnitPlatform()
-    dependsOn("processIntTestResources")
     description = "Runs integration tests"
     group = "verification"
+
+    dependsOn("processIntTestResources")
+    useJUnitPlatform()
     testClassesDirs = sourceSets["test"].output.classesDirs
     classpath = sourceSets["test"].runtimeClasspath
 
     include("org/niis/xroad/restadapterservice/ConsumerGatewayIT.class")
 
-    systemProperty("log4j.configuration", "test-log4j.xml")
     systemProperty("consumerPath", project.projectDir.resolve("libs").resolve("${project.name}-${project.version}.jar"))
     systemProperty("server.port", "9898")
     systemProperty("propertiesDirectory", "${project.projectDir}/build/resources/integration-test-profile")

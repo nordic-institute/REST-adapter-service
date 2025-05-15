@@ -769,26 +769,20 @@ public class ConsumerGateway extends HttpServlet {
          * @throws SOAPException
          */
         protected void writeBodyContents(ServiceRequest request, SOAPElement soapRequest) throws SOAPException {
+
             if (this.resourceId != null && !this.resourceId.isEmpty()) {
                 log.debug("Add resourceId : \"{}\".", this.resourceId);
                 soapRequest.addChildElement("resourceId").addTextNode(this.resourceId);
             }
+
             // requestData contains request parameters and possible converted JSON
             // body, as initialized in ConsumerGateway.processRequest
             ElementImpl containerElement = (ElementImpl) request.getRequestData();
 
             NodeList children = containerElement.getChildNodes();
+            updateNamespaceAndPrefix(children, soapRequest.getNamespaceURI(), soapRequest.getPrefix());
             for (int i = 0; i < children.getLength(); i++) {
-                Node child = (Node) children.item(i);
-                ElementImpl childElementImpl = (ElementImpl) child;
-                if ((child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
-                    String namespace = soapRequest.getNamespaceURI();
-                    String prefix = soapRequest.getPrefix();
-                    child = updateNamespaceAndPrefix(childElementImpl, namespace, prefix);
-                    updateNamespaceAndPrefix(child.getChildNodes(), soapRequest.getNamespaceURI(), soapRequest.getPrefix());
-                }
-                child.setParentElement(soapRequest);
-                String childString = SOAPHelper.toString(child);
+                ((ElementImpl) children.item(i)).setParentElement(soapRequest);
             }
         }
 
@@ -801,19 +795,14 @@ public class ConsumerGateway extends HttpServlet {
          * @param namespace target namespace
          * @param prefix    target prefix
          */
-        protected static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) {
+        protected static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix)
+                throws SOAPException {
             for (int i = 0; i < list.getLength(); i++) {
                 Node node = (Node) list.item(i);
-                if (node.getNodeType() == ELEMENT_NODE) {
                     if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
                         node = updateNamespaceAndPrefix(node, namespace, prefix);
-                        updateNamespaceAndPrefix(node.getChildNodes(), namespace, prefix);
                     }
-                }
-                if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
-                    node = updateNamespaceAndPrefix(node, namespace, prefix);
-                    updateNamespaceAndPrefix(node.getChildNodes(), namespace, prefix);
-                }
+                updateNamespaceAndPrefix(node.getChildNodes(), namespace, prefix);
             }
         }
 
@@ -826,20 +815,21 @@ public class ConsumerGateway extends HttpServlet {
          * @param prefix    target prefix
          * @return updated Node
          */
-        protected static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) {
-            if (node.getNodeType() == ELEMENT_NODE) {
-                Node newNode = node;
+        protected static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) throws SOAPException {
+            try{
+                if (!(node.getNodeType() == ELEMENT_NODE)) {
+                    return node;
+                }
                 ElementImpl elementImpl = (ElementImpl) node;
                 if (prefix != null && !prefix.isEmpty()) {
-                    Document ownerDocument = node.getOwnerDocument();
-                    ownerDocument.importNode(node, true);
-                    newNode = (Node) ownerDocument.renameNode(elementImpl.getDomElement(), namespace, prefix + ":" + node.getLocalName());
+                    node = (Node) node.getOwnerDocument().renameNode(elementImpl.getDomElement(), namespace, prefix + ":" + node.getLocalName());
                 } else if (namespace != null && !namespace.isEmpty()) {
-                    newNode = (Node) node.getOwnerDocument().renameNode(elementImpl.getDomElement(), namespace, node.getLocalName());
+                    node = (Node) node.getOwnerDocument().renameNode(elementImpl.getDomElement(), namespace, node.getLocalName());
                 }
-                return newNode;
+                return node;
+            } catch (DOMException e) {
+                throw new SOAPException("Unable to update namespace and prefix", e);
             }
-            return node;
         }
 
         protected void handleAttachment(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope,
