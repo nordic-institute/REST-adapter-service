@@ -93,11 +93,6 @@ dependencies {
 val isEncrypted = project.hasProperty("encrypted")
 val adapterProfileDir = if (isEncrypted) "encrypted" else "plaintext"
 
-// Filtering
-val baseReplacements = mutableMapOf(
-    "projectDir" to project.projectDir.toString()
-)
-
 val defaultFilterFile = file("src/main/filters/default.properties")
 val defaultProps = Properties().apply {
     load(defaultFilterFile.reader())
@@ -106,10 +101,12 @@ val defaultProps = Properties().apply {
 tasks.named<ProcessResources>("processResources") {
     logger.info(if (isEncrypted) "Running with encrypted profile" else "Running with plaintext profile");
 
-    var replacements = baseReplacements + defaultProps.entries.associate { it.key.toString() to it.value.toString() }
+    var extensions = defaultProps.entries.associate { it.key.toString() to it.value.toString() }
     from("src/main/profiles/$adapterProfileDir/") {
         filesMatching("**/*.properties") {
-            filter<ReplaceTokens>("tokens" to replacements)
+            expand(project.properties + extensions) {
+                escapeBackslash = true
+            }
         }
     }
 
@@ -126,9 +123,9 @@ tasks.named<ProcessResources>("processResources") {
 tasks.named<ProcessResources>("processTestResources") {
     group = "verification"
 
-    var replacements = baseReplacements + defaultProps.entries.associate { it.key.toString() to it.value.toString() }
+    var extensions = defaultProps.entries.associate { it.key.toString() to it.value.toString() }
     filesMatching("**/*.properties") {
-        filter<ReplaceTokens>("tokens" to replacements)
+        expand(project.properties + extensions)
     }
 }
 
@@ -149,13 +146,13 @@ tasks.register("processIntTestResources") {
     val props = Properties().apply {
         load(intTestFilterFile.reader())
     }
-    var replacements = baseReplacements + props.entries.associate { it.key.toString() to it.value.toString() }
+    var extensions = props.entries.associate { it.key.toString() to it.value.toString() }
 
     doLast {
         copy {
             from("src/main/profiles/$adapterProfileDir/") {
                 filesMatching("**/*.properties") {
-                    filter<ReplaceTokens>("tokens" to replacements)
+                    expand(project.properties + extensions)
                 }
             }
             into("${project.projectDir}/build/resources/integration-test-profile")
