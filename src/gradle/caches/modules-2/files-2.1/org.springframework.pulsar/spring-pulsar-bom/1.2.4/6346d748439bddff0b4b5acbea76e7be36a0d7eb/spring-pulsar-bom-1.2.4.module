@@ -1,0 +1,106 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "org.springframework.pulsar",
+    "module": "spring-pulsar-bom",
+    "version": "1.2.4",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "platform",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencyConstraints": [
+        {
+          "group": "org.springframework.pulsar",
+          "module": "spring-pulsar",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "org.springframework.pulsar",
+          "module": "spring-pulsar-cache-provider",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "org.springframework.pulsar",
+          "module": "spring-pulsar-cache-provider-caffeine",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "org.springframework.pulsar",
+          "module": "spring-pulsar-reactive",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "org.springframework.pulsar",
+          "module": "spring-pulsar-test",
+          "version": {
+            "requires": "1.2.4"
+          }
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "platform",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencyConstraints": [
+        {
+          "group": "org.springframework.pulsar",
+          "module": "spring-pulsar",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "org.springframework.pulsar",
+          "module": "spring-pulsar-cache-provider",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "org.springframework.pulsar",
+          "module": "spring-pulsar-cache-provider-caffeine",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "org.springframework.pulsar",
+          "module": "spring-pulsar-reactive",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "org.springframework.pulsar",
+          "module": "spring-pulsar-test",
+          "version": {
+            "requires": "1.2.4"
+          }
+        }
+      ]
+    }
+  ]
+}

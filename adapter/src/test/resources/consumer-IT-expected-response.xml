@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <ts1:getDepartmentResponse xmlns:ts1="http://x-road.global/producer">
+        <ts1:abbr_fi>Kasko</ts1:abbr_fi>
+        <ts1:www_en>https://www.hel.fi/en/decision-making/city-organization/divisions/education-division</ts1:www_en>
+        <ts1:municipality_code>91</ts1:municipality_code>
+        <ts1:oid/>
+        <ts1:name_fi>Kasvatuksen ja koulutuksen toimiala</ts1:name_fi>
+        <ts1:name_sv>Fostrans- och utbildningssektorn</ts1:name_sv>
+        <ts1:phone>+358 9 310 8600</ts1:phone>
+        <ts1:parent_id>83e74666-0836-4c1d-948a-4b34a8b90301</ts1:parent_id>
+        <ts1:org_id>83e74666-0836-4c1d-948a-4b34a8b90301</ts1:org_id>
+        <ts1:organization_type>MUNICIPALITY</ts1:organization_type>
+        <ts1:id>cc70d1d8-3ca7-416a-9ea7-27e6b7ce58a8</ts1:id>
+        <ts1:business_id>0201256-6</ts1:business_id>
+        <ts1:email>neuvonta.opetusvirasto@hel.fi</ts1:email>
+        <ts1:www_fi>https://www.hel.fi/fi/paatoksenteko-ja-hallinto/kaupungin-organisaatio/toimialat/kasvatuksen-ja-koulutuksen-toimiala</ts1:www_fi>
+        <ts1:www_sv>https://www.hel.fi/sv/beslutsfattande-och-forvaltning/stadens-organisation/sektorer/fostrans-och-utbildningssektorn</ts1:www_sv>
+        <ts1:hierarchy_level>1</ts1:hierarchy_level>
+        <ts1:name_en>Education Division</ts1:name_en>
+    </ts1:getDepartmentResponse>

@@ -46,6 +46,10 @@ ehthumbs.db
 # VS Code
 .vscode/
 
+# Intellij IDEA
+**/*.idea
+**/*.iml
+
 # Folder config file
 Desktop.ini
 
@@ -58,21 +62,13 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
-
-# Test
-adapter/tomcat
-
-.idea
-adapter/rest-gateway.iml
-*.iml
-
 # build
 build/
 adapter/bin
 
 #Gradle
 adapter/.gradle
-adapter/gradle
-src
-!adapter/src
-
+adapter/gradle/.tmp
+adapter/gradle/caches
+adapter/gradle/daemon
+adapter/gradle/native

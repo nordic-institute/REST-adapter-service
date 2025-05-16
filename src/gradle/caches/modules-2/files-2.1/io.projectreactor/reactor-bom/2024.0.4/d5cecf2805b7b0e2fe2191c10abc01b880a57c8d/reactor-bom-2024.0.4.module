@@ -1,0 +1,246 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "io.projectreactor",
+    "module": "reactor-bom",
+    "version": "2024.0.4",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.12.1"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "platform",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencyConstraints": [
+        {
+          "group": "org.reactivestreams",
+          "module": "reactive-streams",
+          "version": {
+            "requires": "1.0.4"
+          }
+        },
+        {
+          "group": "io.projectreactor",
+          "module": "reactor-core",
+          "version": {
+            "requires": "3.7.4"
+          }
+        },
+        {
+          "group": "io.projectreactor",
+          "module": "reactor-test",
+          "version": {
+            "requires": "3.7.4"
+          }
+        },
+        {
+          "group": "io.projectreactor",
+          "module": "reactor-tools",
+          "version": {
+            "requires": "3.7.4"
+          }
+        },
+        {
+          "group": "io.projectreactor",
+          "module": "reactor-core-micrometer",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "io.projectreactor.addons",
+          "module": "reactor-extra",
+          "version": {
+            "requires": "3.5.2"
+          }
+        },
+        {
+          "group": "io.projectreactor.addons",
+          "module": "reactor-adapter",
+          "version": {
+            "requires": "3.5.2"
+          }
+        },
+        {
+          "group": "io.projectreactor.netty",
+          "module": "reactor-netty",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "io.projectreactor.netty",
+          "module": "reactor-netty-core",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "io.projectreactor.netty",
+          "module": "reactor-netty-http",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "io.projectreactor.netty",
+          "module": "reactor-netty-http-brave",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "io.projectreactor.addons",
+          "module": "reactor-pool",
+          "version": {
+            "requires": "1.1.2"
+          }
+        },
+        {
+          "group": "io.projectreactor.addons",
+          "module": "reactor-pool-micrometer",
+          "version": {
+            "requires": "0.2.2"
+          }
+        },
+        {
+          "group": "io.projectreactor.kotlin",
+          "module": "reactor-kotlin-extensions",
+          "version": {
+            "requires": "1.2.3"
+          }
+        },
+        {
+          "group": "io.projectreactor.kafka",
+          "module": "reactor-kafka",
+          "version": {
+            "requires": "1.3.23"
+          }
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "platform",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencyConstraints": [
+        {
+          "group": "org.reactivestreams",
+          "module": "reactive-streams",
+          "version": {
+            "requires": "1.0.4"
+          }
+        },
+        {
+          "group": "io.projectreactor",
+          "module": "reactor-core",
+          "version": {
+            "requires": "3.7.4"
+          }
+        },
+        {
+          "group": "io.projectreactor",
+          "module": "reactor-test",
+          "version": {
+            "requires": "3.7.4"
+          }
+        },
+        {
+          "group": "io.projectreactor",
+          "module": "reactor-tools",
+          "version": {
+            "requires": "3.7.4"
+          }
+        },
+        {
+          "group": "io.projectreactor",
+          "module": "reactor-core-micrometer",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "io.projectreactor.addons",
+          "module": "reactor-extra",
+          "version": {
+            "requires": "3.5.2"
+          }
+        },
+        {
+          "group": "io.projectreactor.addons",
+          "module": "reactor-adapter",
+          "version": {
+            "requires": "3.5.2"
+          }
+        },
+        {
+          "group": "io.projectreactor.netty",
+          "module": "reactor-netty",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "io.projectreactor.netty",
+          "module": "reactor-netty-core",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "io.projectreactor.netty",
+          "module": "reactor-netty-http",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "io.projectreactor.netty",
+          "module": "reactor-netty-http-brave",
+          "version": {
+            "requires": "1.2.4"
+          }
+        },
+        {
+          "group": "io.projectreactor.addons",
+          "module": "reactor-pool",
+          "version": {
+            "requires": "1.1.2"
+          }
+        },
+        {
+          "group": "io.projectreactor.addons",
+          "module": "reactor-pool-micrometer",
+          "version": {
+            "requires": "0.2.2"
+          }
+        },
+        {
+          "group": "io.projectreactor.kotlin",
+          "module": "reactor-kotlin-extensions",
+          "version": {
+            "requires": "1.2.3"
+          }
+        },
+        {
+          "group": "io.projectreactor.kafka",
+          "module": "reactor-kafka",
+          "version": {
+            "requires": "1.3.23"
+          }
+        }
+      ]
+    }
+  ]
+}

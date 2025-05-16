@@ -1,0 +1,123 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.jayway.jsonpath",
+    "module": "json-path-assert",
+    "version": "2.9.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.4.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "json-path-assert-2.9.0.jar",
+          "url": "json-path-assert-2.9.0.jar",
+          "size": 16563,
+          "sha512": "41f5aa818383affeaac8b359e00464fd3e8e5042aaaed11f94282135aa1a02dab0d56504ab7711015b718540d52e9888608c76e8623415a473951ae91fc0f958",
+          "sha256": "43009de20b42dc618cab464e6a63da380eab1065d2c2b4847a1971de4cb27bf8",
+          "sha1": "94a0826e6a2e24042e4ad7d43a11d6fcf880056f",
+          "md5": "fa7c748d793b4f04abc43edf9551b72b"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.jayway.jsonpath",
+          "module": "json-path",
+          "version": {
+            "requires": "2.9.0"
+          }
+        },
+        {
+          "group": "org.hamcrest",
+          "module": "hamcrest",
+          "version": {
+            "requires": "2.2"
+          }
+        },
+        {
+          "group": "org.slf4j",
+          "module": "slf4j-api",
+          "version": {
+            "requires": "2.0.11"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "json-path-assert-2.9.0.jar",
+          "url": "json-path-assert-2.9.0.jar",
+          "size": 16563,
+          "sha512": "41f5aa818383affeaac8b359e00464fd3e8e5042aaaed11f94282135aa1a02dab0d56504ab7711015b718540d52e9888608c76e8623415a473951ae91fc0f958",
+          "sha256": "43009de20b42dc618cab464e6a63da380eab1065d2c2b4847a1971de4cb27bf8",
+          "sha1": "94a0826e6a2e24042e4ad7d43a11d6fcf880056f",
+          "md5": "fa7c748d793b4f04abc43edf9551b72b"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "json-path-assert-2.9.0-javadoc.jar",
+          "url": "json-path-assert-2.9.0-javadoc.jar",
+          "size": 360594,
+          "sha512": "a778eafccd75bc5a3b3e93ab857d41761d79e35359abc3f1367511ca25c877b45f7916463660615476000d12640c4b2813d6999e81e6bc19ee402206b7c5c186",
+          "sha256": "aa9b162e01a73abeb0ad52eb9b67704ef65b385dca6b79c8adc3b65f522b9a09",
+          "sha1": "724b44ca38093ed581cc49be88e7bfc0fa8cbd5a",
+          "md5": "34d3ebdb6f960138b8b661671f20cb45"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "json-path-assert-2.9.0-sources.jar",
+          "url": "json-path-assert-2.9.0-sources.jar",
+          "size": 14580,
+          "sha512": "3c35475ee22a2dea28ca6af5c53275c1829d5c6652dde614a55ba352969578a10d4778dd4c1407da16016c679ebe6023a3a10d73d22b0ff50cf81bb9a77048b9",
+          "sha256": "ae972df4b9996a0a95605a2a706895de60d42d09e04ddedf33272671dcfad87d",
+          "sha1": "a7eed33475f3a9a8a7dfc73328319f16003ad12d",
+          "md5": "66e4ebe77cd2a18e35ddb54973deb639"
+        }
+      ]
+    }
+  ]
+}

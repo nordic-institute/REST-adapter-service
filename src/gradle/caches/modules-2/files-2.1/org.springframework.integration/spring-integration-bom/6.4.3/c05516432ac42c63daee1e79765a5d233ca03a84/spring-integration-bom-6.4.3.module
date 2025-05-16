@@ -1,0 +1,610 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "org.springframework.integration",
+    "module": "spring-integration-bom",
+    "version": "6.4.3",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.13"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "platform",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencyConstraints": [
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-amqp",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-camel",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-cassandra",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-core",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-debezium",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-event",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-feed",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-file",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-ftp",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-graphql",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-groovy",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-hazelcast",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-http",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-ip",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-jdbc",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-jms",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-jmx",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-jpa",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-kafka",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-mail",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-mongodb",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-mqtt",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-r2dbc",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-redis",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-rsocket",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-scripting",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-sftp",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-smb",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-stomp",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-stream",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-syslog",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-test",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-test-support",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-webflux",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-websocket",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-ws",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-xml",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-xmpp",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-zeromq",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-zip",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-zookeeper",
+          "version": {
+            "requires": "6.4.3"
+          }
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "platform",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencyConstraints": [
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-amqp",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-camel",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-cassandra",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-core",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-debezium",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-event",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-feed",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-file",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-ftp",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-graphql",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-groovy",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-hazelcast",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-http",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-ip",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-jdbc",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-jms",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-jmx",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-jpa",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-kafka",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-mail",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-mongodb",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-mqtt",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-r2dbc",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-redis",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-rsocket",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-scripting",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-sftp",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-smb",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-stomp",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-stream",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-syslog",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-test",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-test-support",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-webflux",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-websocket",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-ws",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-xml",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-xmpp",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-zeromq",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-zip",
+          "version": {
+            "requires": "6.4.3"
+          }
+        },
+        {
+          "group": "org.springframework.integration",
+          "module": "spring-integration-zookeeper",
+          "version": {
+            "requires": "6.4.3"
+          }
+        }
+      ]
+    }
+  ]
+}
