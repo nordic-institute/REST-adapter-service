@@ -1,6 +1,0 @@
-${fileComment.multilineComment}${packageDecl.statement}
-class MessageUtils {
-    companion object {
-        fun getMessage(): String = "Hello      World!"
-    }
-}

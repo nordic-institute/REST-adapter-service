@@ -1,6 +1,0 @@
-${fileComment.multilineComment}${packageDecl.statement}
-class Library {
-    fun someLibraryMethod(): Boolean {
-        return true
-    }
-}
