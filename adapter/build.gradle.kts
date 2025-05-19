@@ -6,6 +6,7 @@ plugins {
     checkstyle
     alias(libs.plugins.springBoot)
     alias(libs.plugins.dependencyManagement)
+    alias(libs.plugins.licenseGradlePlugin)
     jacoco
 }
 
@@ -87,7 +88,11 @@ dependencies {
     testAnnotationProcessor(libs.org.wiremock.integrations.wiremock.spring.boot)
 }
 
-
+license {
+    header = file("../LICENSE")
+    mapping("java", "SLASHSTAR_STYLE")
+    include("**/*.java")
+}
 
 // Profile
 val isEncrypted = project.hasProperty("encrypted")
