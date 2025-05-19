@@ -48,7 +48,6 @@ import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
 import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import jakarta.servlet.ServletException;
@@ -816,7 +815,7 @@ public class ConsumerGateway extends HttpServlet {
          * @return updated Node
          */
         protected static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) throws SOAPException {
-            try{
+            try {
                 if (!(node.getNodeType() == ELEMENT_NODE)) {
                     return node;
                 }
