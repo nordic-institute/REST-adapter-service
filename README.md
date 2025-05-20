@@ -22,18 +22,23 @@ More information about available features can be found [here](documentation/Rest
 ## Try It Out
 
 The fastest and easiest way to try out the application is by using the Spring Boot Maven plugin.
-To do this, you need to have a working installation of [Maven](https://maven.apache.org/).
+To do this, you need to have a working installation of [Gradle](https://gradle.org/).
 
 
 ```
-cd src
-mvn spring-boot:run
+cd adapter
+./gradlew bootRun
 ```
 After that you can access `http://localhost:8080/rest-adapter-service/` to see the Rest Adapter landing page.
 
-If customized properties are used, use the following syntax to define properties directory.
+If customized properties are used, use the following syntax to define a single property, in this case, activate encryption.
 ```
-mvn spring-boot:run -Drun.jvmArguments="-DpropertiesDirectory=/my/conf"
+./gradlew bootRun -Pencrypted
+```
+
+define properties directory to be used by Spring Boot
+```
+./gradlew bootRun  --args="--spring.config.location=/my/conf"
 ```
 
 ## Configuration files location

@@ -108,6 +108,11 @@ val defaultProps = Properties().apply {
     load(defaultFilterFile.reader())
 }
 
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun"){
+    logger.warn("test " + System.getProperty("test"))
+    logger.warn("Profile: " + adapterProfileDir)
+}
+
 tasks.named<ProcessResources>("processResources") {
     logger.info(if (isEncrypted) "Running with encrypted profile" else "Running with plaintext profile");
 

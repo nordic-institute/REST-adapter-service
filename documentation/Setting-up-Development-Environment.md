@@ -3,8 +3,8 @@ This document describes how a developer's workstation can be setup.
 ### Software Requirements
 
 * Linux or Windows
-* Java 8
-* Maven 3.x
+* Java 21
+* Gradle 8.x
 
 ### Getting the code
 
@@ -18,7 +18,7 @@ The code is located in the ```src``` folder.
 
 ### Building the code
 
-Rest Adapter Service uses Gradle as the build management tool. In order to build the whole project and generate the jar file (rest-adapter-service-xxx.jar), you must run the gradle command below from the ```src``` directory.
+Rest Adapter Service uses Gradle as the build management tool. In order to build the whole project and generate the jar file (rest-adapter-service-x.x.x.jar), you must run the gradle command below from the ```src``` directory.
 
 ```
  ./gradlew build
@@ -27,7 +27,7 @@ Rest Adapter Service uses Gradle as the build management tool. In order to build
 Running the above gradle command generates the jar file under the directory presented below:
 
 ```
-build/libs/rest-adapter-service-1.1.0-xxx.jar
+build/libs/rest-adapter-service-x.x.x.jar
 ```
 
 ### Enabling encryption
