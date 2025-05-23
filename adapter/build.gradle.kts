@@ -13,7 +13,8 @@ plugins {
 group = "org.niis"
 version = "1.1.0-SNAPSHOT"
 description = "REST Adapter Service"
-java.sourceCompatibility = JavaVersion.VERSION_21
+
+
 
 checkstyle {
     toolVersion = "10.23.1"
@@ -61,10 +62,15 @@ dependencies {
     }
 
     // xrd4j
-    implementation(libs.org.niis.xrd4j.common)
-    implementation(libs.org.niis.xrd4j.client)
-    implementation(libs.org.niis.xrd4j.server)
-    implementation(libs.org.niis.xrd4j.rest)
+//    implementation(libs.org.niis.xrd4j.common)
+//    implementation(libs.org.niis.xrd4j.client)
+//    implementation(libs.org.niis.xrd4j.server)
+//    implementation(libs.org.niis.xrd4j.rest)
+
+    implementation("org.niis.xrd4j:common:0.6.0")
+    implementation("org.niis.xrd4j:client:0.6.0")
+    implementation("org.niis.xrd4j:server:0.6.0")
+    implementation("org.niis.xrd4j:rest:0.6.0")
 
     // Lombok
     compileOnly(libs.org.projectlombok.lombok)
@@ -109,8 +115,11 @@ val defaultProps = Properties().apply {
 }
 
 tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun"){
-    logger.warn("test " + System.getProperty("test"))
-    logger.warn("Profile: " + adapterProfileDir)
+    val args = (jvmArgs ?: emptyList()).toMutableList()
+    project.findProperty("propertiesDirectory")?.let { value ->
+        args += "-DpropertiesDirectory=$value"
+    }
+    jvmArgs = args
 }
 
 tasks.named<ProcessResources>("processResources") {

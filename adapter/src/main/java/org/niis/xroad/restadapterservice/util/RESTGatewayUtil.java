@@ -347,7 +347,6 @@ public final class RESTGatewayUtil {
             // exist
             return dir;
         }
-
         Path p = Paths.get(System.getProperty("user.home"), Constants.PROPERTIES_DIR_NAME);
         if (Files.exists(p)) {
             return p.toString();
