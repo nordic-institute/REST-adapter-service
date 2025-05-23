@@ -72,6 +72,3 @@ adapter/gradle/.tmp
 adapter/gradle/caches
 adapter/gradle/daemon
 adapter/gradle/native
-
-# Local Tests with XRd4J
-xrd4j

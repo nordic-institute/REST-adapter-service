@@ -778,9 +778,58 @@ public class ConsumerGateway extends HttpServlet {
             // body, as initialized in ConsumerGateway.processRequest
             ElementImpl containerElement = (ElementImpl) request.getRequestData();
 
-            SOAPHelper.moveChildren(containerElement, soapRequest, true);
+            NodeList children = containerElement.getChildNodes();
+            updateNamespaceAndPrefix(children, soapRequest.getNamespaceURI(), soapRequest.getPrefix());
+            for (int i = 0; i < children.getLength(); i++) {
+                ((ElementImpl) children.item(i)).setParentElement(soapRequest);
+            }
         }
 
+        /**
+         * Updates the namespace URI and prefix of all the nodes in the list, if
+         * node does not have namespace URI yet. The list is updated recursively, so
+         * also the children of children (and so on) will be updated.
+         *
+         * @param list      list of nodes to be updated
+         * @param namespace target namespace
+         * @param prefix    target prefix
+         */
+        protected static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix)
+                throws SOAPException {
+            for (int i = 0; i < list.getLength(); i++) {
+                Node node = (Node) list.item(i);
+                    if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
+                        node = updateNamespaceAndPrefix(node, namespace, prefix);
+                    }
+                updateNamespaceAndPrefix(node.getChildNodes(), namespace, prefix);
+            }
+        }
+
+        /**
+         * Updates the namespace URI and prefix of the given node with the given
+         * values. If prefix is null or empty, only namespace URI is updated.
+         *
+         * @param node      Node to be updated
+         * @param namespace target namespace
+         * @param prefix    target prefix
+         * @return updated Node
+         */
+        protected static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) throws SOAPException {
+            try {
+                if (!(node.getNodeType() == ELEMENT_NODE)) {
+                    return node;
+                }
+                ElementImpl elementImpl = (ElementImpl) node;
+                if (prefix != null && !prefix.isEmpty()) {
+                    node = (Node) node.getOwnerDocument().renameNode(elementImpl.getDomElement(), namespace, prefix + ":" + node.getLocalName());
+                } else if (namespace != null && !namespace.isEmpty()) {
+                    node = (Node) node.getOwnerDocument().renameNode(elementImpl.getDomElement(), namespace, node.getLocalName());
+                }
+                return node;
+            } catch (DOMException e) {
+                throw new SOAPException("Unable to update namespace and prefix", e);
+            }
+        }
 
         protected void handleAttachment(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope,
                                         String attachmentData) throws SOAPException {
@@ -972,8 +1021,18 @@ public class ConsumerGateway extends HttpServlet {
             // and the actual response. After the modification all the response
             // elements are directly under response.
 
-            SOAPHelper.moveChildren(encryptionWrapper, (SOAPElement) responseNode, !this.omitNamespace);
+            NodeList children = encryptionWrapper.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                Node child = (Node) children.item(i);
+                if (!this.omitNamespace && (child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
+                    child = RequestSerializer.updateNamespaceAndPrefix(child, responseNode.getNamespaceURI(), responseNode.getPrefix());
+                    RequestSerializer.updateNamespaceAndPrefix(child.getChildNodes(), responseNode.getNamespaceURI(), responseNode.getPrefix());
+                }
+                child.setParentElement((SOAPElement) responseNode);
 
+            }
+            // Remove default namespace of first element for backward compatibility
+            ((SOAPElement) responseNode.getFirstChild()).removeNamespaceDeclaration("");
 
             // Clone response node because removing namespace from the original
             // node causes null pointer exception in AbstractResponseDeserializer
