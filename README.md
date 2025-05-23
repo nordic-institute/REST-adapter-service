@@ -31,14 +31,16 @@ cd adapter
 ```
 After that you can access `http://localhost:8080/rest-adapter-service/` to see the Rest Adapter landing page.
 
-If customized properties are used, use the following syntax to define a single property, in this case, activate encryption.
+If customized location for ```ConsumerGateway``` and ```ProviderGateway``` properties are used, use the following 
+syntax to define 
 ```
-./gradlew bootRun -Pencrypted
+./gradlew bootRun --PpropertiesDirectory=/my/conf
 ```
 
-define properties directory to be used by Spring Boot
+When using default properties file location (classpath) you can pass ```-Pencrypted``` to use the encrypted-profiles 
+properties file. If that property is not provided, plaintext-profile will be used.
 ```
-./gradlew bootRun  --args="--spring.config.location=/my/conf"
+./gradlew bootRun --Pencryped
 ```
 
 ## Configuration files location
@@ -53,114 +55,18 @@ directory scanning stops once the first matching directory is located.
 Scanned directories:
 1. The directory specified by the system property ```propertiesDirectory```
     ```
-    java -jar -DpropertiesDirectory=/my/custom/path rest-adapter-service.war
+    java -jar -DpropertiesDirectory=/my/custom/path rest-adapter-service-x.x.x.jar
     ```
-2. The directory `rest-adapter-service` in the users home directory (for example `/home/rest-adapter-service/rest-adapter-service`)
-3. The directory `/etc/rest-adapter-service` (Linux only)
-4. As a fallback, the default configuration shipped with the WAR (classpath)
+2. As a fallback, the default configuration shipped with the WAR (classpath)
 
-Alternative configuration locations are mostly relevant only when
-starting the executable war from command line,
-deploying war into a standalone container,
-or running the docker image.
-When Rest Adapter Service is installed from DEB- or RPM-packages,
-it explicitly sets `/etc/rest-adapter-service` as the configuration directory.
 
 More detailed usage examples are available in [documentation](documentation/Rest-Adapter-Service-principles.md#usage).
 
 # Installing Rest Adapter Service
 
-Rest Adapter Service can be installed and run in a number of ways:
-* Using package manager to install DEB- or RPM-packages
-* Deploying `rest-adapter-service.war` into a web container such as Tomcat
-* Using Docker to run Rest Adapter Service
-
-## Using package manager to install Rest Adapter
-
-### Remove Tomcat dependency used by older versions
-
-If you had previously installed Rest Adapter with version 0.0.12 or earlier, it ran on a standalone Tomcat7 installation.
-You may wish to remove the Tomcat installation, as both Tomcat and standalone Rest Adapter run on port 8080 by default and conflict with each other.
-If Tomcat was installed automatically as a dependency package, it will be removed with e.g.
-
+Build or download the jar file. You need to have Java 21 installed. Run 
 ```shell
-apt-get autoremove
-```
-
-Otherwise, use standard `apt` or `yum` commands to remove the `tomcat7` package.
-
-### Ubuntu 14.04 (trusty)
-
-Rest Adapter Service requires `java8-runtime-headless` dependency.
-Configure openjdk package repository, which provides that:
-```shell
-apt-add-repository -y ppa:openjdk-r/ppa
-apt-get update
-```
-Install Java 8:
-```shell
-apt-get install openjdk-8-jre-headless
-```
-Do not install Java 9, as Rest Adapter does not yet support it.
-
-Install Rest Adapter Service package from the official repository with
-```shell
-apt-add-repository "https://artifactory.niis.org/xroad-extensions-release-deb main"
-curl https://artifactory.niis.org/api/gpg/key/public | apt-key add -
-apt-get update
-apt-get install rest-adapter-service
-```
-Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md).
-Service will automatically start during boot.
-
-### Ubuntu 16.04 (xenial)
-
-Rest Adapter Service requires `java8-runtime-headless` dependency.
-Install Java 8:
-```shell
-apt-get install openjdk-8-jre-headless
-```
-Do not install Java 9, as Rest Adapter does not yet support it.
-
-Install Rest Adapter Service package from the official repository with
-```shell
-apt-add-repository "https://artifactory.niis.org/xroad-extensions-release-deb main"
-curl https://artifactory.niis.org/api/gpg/key/public | apt-key add -
-apt-get update
-apt-get install rest-adapter-service
-```
-or from a locally built DEB-package by replacing the package name with the file path in the command above.
-
-Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md).
-Service is enabled or disabled using system presets.
-On a typical Ubuntu 16.04 system it will be *enabled* (and start during boots).
-
-### RHEL 7
-
-Install Rest Adapter Service package from the official repository with
-```shell
-yum-config-manager --add-repo https://artifactory.niis.org/xroad-extensions-release-rpm
-rpm --import https://artifactory.niis.org/api/gpg/key/public/
-yum install rest-adapter-service
-```
-or from a locally built RPM-package by replacing the package name with the file path in the command above.
-
-Configure Rest Adapter Service using property files, see [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md).
-Service is enabled or disabled using system presets.
-On a typical RHEL 7 system it will be *disabled* (and not start during boots).
-Enable the service (to start automatically during boots):
-```shell
-systemctl enable rest-adapter-service
-```
-
-### Starting and stopping the service
-Starting the service:
-```shell
-service rest-adapter-service start
-```
-Stopping the service:
-```shell
-service rest-adapter-service stop
+java -jar rest-adapter-service-x.x.x.jar
 ```
 
 ### Changing the port
@@ -170,128 +76,21 @@ To change the port, modify configuration file `/etc/rest-adapter-service/applica
 server.port=8080
 ```
 
-### Logs
-
-On Ubuntu 16.04 and RHEL, you can follow the logs using e.g. `journalctl`
-
-```shell
-journalctl -fu rest-adapter-service
-```
-
-On Ubuntu 14.04 the same can be done using
-
-```shell
-tail -f /var/log/upstart/rest-adapter-service.log
-```
-
-## Deploying rest-adapter-service web application into a container
-
-If you do not want to install Rest Adapter as a standalone service from package repository, you can obtain the war
-package from package repository, and for example deploy it to a standalone Tomcat installation.
-
-Rest Adapter service (`rest-adapter-service.war`) can be downloaded from [NIIS's Maven repository](https://artifactory.niis.org/xroad-maven-releases/org/niis/rest-adapter-service/):
-
-```shell
-mvn org.apache.maven.plugins:maven-dependency-plugin:2.4:get \
-                                        -DremoteRepositories=https://artifactory.niis.org/xroad-maven-releases \
-                                        -Dartifact=org.niis:rest-adapter-service:1.0.0:war \
-                                        -Ddest=./rest-adapter-service.war
-```
-
-In addition, you can also build `rest-adapter-service.war` yourself (built war appears in `target/` directory)
-
-```shell
-mvn clean install
-...
-ls -la target/rest-adapter-service-1.1.0-SNAPSHOT.war
--rw-rw-r-- 1 janne janne 22459828 marra  3 16:45 target/rest-adapter-service-1.1.0-SNAPSHOT.war
-```
-
-To set configuration files location, you need to specify `propertiesDirectory` system property using a container-specific method.
-
-## Using Docker
-
-You can create a docker image to run Rest Adapter inside a container, using the provided Dockerfile.
-Before building the image, build the war file inside `src` directory
-
-```
-mvn clean install
-```
-If you have not built the war, building the Docker image will fail with message
-```
-Step 2 : ADD src/target/rest-adapter-service-*.war rest-adapter-service.war
-No source files were specified
-```
-
-
-While you are in the project root directory, build the image using the docker build command. The ```-t``` parameter gives your image a tag, so you can run it more easily later. Don’t forget the ```.``` command, which tells the docker build command to look in the current directory for a file called Dockerfile.
-
-```
-docker build -t rest-adapter-service .
-```
-After building the image, you can run Rest Adapter using it.
-
-```
-docker run -p 8080:8080 rest-adapter-service
-```
-
-If customized properties are used, the host directory containing the properties files must be mounted as a data directory.
-In addition, the directory containing the properties files inside the container must be set using JAVA_OPTS and propertiesDirectory property.
-
-```
-docker run -p 8080:8080 -v /host/dir/conf:/my/conf -e "JAVA_OPTS=-DpropertiesDirectory=/my/conf"  rest-adapter-service
-```
-
 # Building and packaging
 
 ## Source code license headers
 
-The build uses [license-maven-plugin](https://github.com/mycila/license-maven-plugin) to generate proper license headers for the source code files.
+The build uses [license-gradle-plugin](https://github.com/hierynomus/license-gradle-plugin) to generate proper license headers for the source code files.
 
-`mvn license:format` generates the license headers where they are missing. More details can be found from the plugin documentation.
+`./gradlew licenseMain` generates the license headers where they are missing. More details can be found from the plugin documentation.
 
-## DEB-packaging
-
-The Rest Adapter Service builds DEB-packages for Ubuntu using the [jdeb Maven plugin](https://github.com/tcurdt/jdeb).
-
-Different profiles exist for building for Ubuntu 14.04 (Upstart) and Ubuntu 16.04 (Systemd).
-
-Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`), the resulting package will contain a timestamp to make upgrading existing packages easy.
-
-## Ubuntu 14.04 – trusty (Upstart)
-
-`mvn -f src/pom.xml clean install -P package-trusty`
-
-The package will be generated in `src/target/trusty`.
-
-## Ubuntu 16.04 – xenial (Systemd)
-
-`mvn -f src/pom.xml clean install -P package-xenial`
-
-The package will be generated in `src/target/xenial`.
-
-
-## RPM-packaging
-
-The Rest Adapter Service can also be packed in an RPM-package for use with RHEL (or derivatives) using the [rpm-maven-plugin](https://github.com/mojohaus/rpm-maven-plugin).
-The RPM-packaging can only be run on a RHEL-platform.
-
-```mvn -f src/pom.xml clean install -P package-rpm```
-
-The package will be generated in `src/target/rpm/rest-adapter-service/RPMS/noarch`.
-
-Note that when building snapshot versions (i.e. `pom.xml` version string contains `SNAPSHOT`) the resulting package will contain a timestamp to make upgrading existing packages easy.
-
-## RPM-packaging on a Non-RedHat Platform
-
-It is possible to build RPM-packages even if running on a non-RedHat platform. A docker container can be used for the build.
-
+## Building docker container
+From ```/adapter``` run
 ```shell
 # (in the directory which contains pom.xml)
-docker build -t rest-adapter-rpm src/main/packages/docker
-./build-rpm-in-docker.sh
+docker build -t rest-adapter-service .
+#./build-rpm-in-docker.sh
 ```
-
 
 ## Encryption of Message Content
 
@@ -302,53 +101,22 @@ This setting only affects the default configuration bundled inside the war file,
 External configuration, in `/etc/rest-adapter-service`
 or elsewhere, is not affected.
 
-```mvn clean install -Dencrypted```
+```./gradlew clean build -Pencrypted```
 
 Running integration tests with plaintext configuration enabled:
 
-```mvn clean install -P itest```
+```./gradlew clean intTest```
 
 Running integration tests with encryption configuration enabled:
 
-```mvn clean install -P itest -Dencrypted```
+```./gradlew clean intTest -Pencrypted```
 
 Integration tests are run on port `9898`
 
 ## Mocking external API's for integration tests
 
-Integration tests execute requests against several external API's, such as `http://www.hel.fi/palvelukarttaws/rest/v2/organization/`.
+Integration tests execute requests against several external API's, such as `http://www.hel.fi/palvelukarttaws/rest/v4/organization/`.
 These external API's may for example suffer from temporary downtime, or have their data changed so that integration tests no longer pass.
-To help with this problem, it is possible to mock external API's by using [Hoverfly](https://hoverfly.readthedocs.io/en/latest/index.html).
-
-```(REST Adapter integration tests) ----> (Hoverfly) --?--> (external API)```
-
-Hoverfly is run in a Docker container. Before using it for integration tests, you need to build the image:
-
-```mvn docker:build -P hoverfly-record```
-
-After that, you can run integration tests so that Hoverfly simulates the external API's. The recorded responses are stored in `src/test/hoverfly/simulation.json`
-
-```
-mvn clean install -P itest -P hoverfly-playback
-or
-mvn clean install -P itest -P hoverfly-playback -Dencrypted
-```
-
-```(REST Adapter integration tests) ----> (Hoverfly)```
-
-To record new versions of responses into `simulation.json`, use profile `hoverfly-record`. This should be done always when integration tests are changed in such a way that
-new or different responses are needed, or when the external API's change.
-
-```
-mvn clean install -P itest -P hoverfly-record
-or
-mvn clean install -P itest -P hoverfly-record -Dencrypted
-```
-
-```(REST Adapter integration tests) ----> (Hoverfly) ----> (External API)```
-
-Hoverfly playback and record tests are run so that Provider Gateway sends requests through
-the Hoverfly proxy. This mode is activated using system property `useHoverflyProducerProxy`.
 
 ### Additional documentation
 
