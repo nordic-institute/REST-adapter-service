@@ -6,11 +6,18 @@ COPY ./build.gradle.kts ./settings.gradle.kts ./gradlew ./
 COPY ./gradle/wrapper/ ./gradle/wrapper/
 COPY ./gradle/libs.versions.toml ./gradle/
 COPY src ./src
-COPY ${PROPS_DIR}/* ./config/
 
 RUN chmod +x ./gradlew
-RUN ./gradlew clean build -PpropertiesDirectory=./config -x test -x checkstyleMain -x checkstyleTest -x licenseMain -x licenseTest
+ENTRYPOINT [ "sh" ]
 
+RUN if [$PROPS_DIR == ""]; then \
+    echo "custom properties directory NOT set"; \
+    ./gradlew clean build -x test -x checkstyleMain -x checkstyleTest -x licenseMain -x licenseTest; \
+    else \
+    echo "custom properties directory set"; \
+     cp ${PROPS_DIR}/* ./config/; \
+    ./gradlew clean build -PpropertiesDirectory=./config -x test -x checkstyleMain -x checkstyleTest -x licenseMain -x licenseTest; \
+    fi
 
 
 FROM eclipse-temurin:21-jre-alpine
