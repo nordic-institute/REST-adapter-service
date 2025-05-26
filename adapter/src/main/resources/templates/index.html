@@ -1,15 +1,14 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title></title>
 </head>
 <body>
 <h3>REST Adapter Service</h3>
-<p>REST Adapter Service on <a href="https://github.com/vrk-kpa/REST-adapter-service" target="new">GitHub</a>.</p>
+<p>REST Adapter Service on <a href="https://github.com/nordic-institute/REST-adapter-service" target="new">GitHub</a>.</p>
 <p><b>Consumer</b></p>
-<p>Consumer endpoint: <a href="${requestURL}Consumer">${requestURL}Consumer</a></p>
+<p>Consumer endpoint: <a th:href="${requestURL} + 'Consumer'" th:text="${requestURL} + 'Consumer'"></a></p>
 <div>
     Properties:
     <ul>
@@ -19,8 +18,9 @@
 </div>
 <p><b>Provider</b></p>
 
-<p>Provider endpoint: <a href="${requestURL}Provider">${requestURL}Provider</a></p>
-<p>Provider WSDL: <a href="${requestURL}Provider?wsdl">${requestURL}Provider?wsdl</a></p>
+<p>Provider endpoint: <a th:href="${requestURL} + 'Provider'" th:text="${requestURL} + 'Provider'"></a></p>
+
+<p>Provider WSDL: <a th:href="${requestURL} + 'Provider?wsdl'" th:text="${requestURL} + 'Provider?wsdl'"></a></p>
 <p>WSDL path: <i>WEB-INF/classes/provider-gateway.wsdl</i></p>
 <div>
     Properties:

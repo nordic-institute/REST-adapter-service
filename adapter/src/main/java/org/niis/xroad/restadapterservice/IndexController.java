@@ -43,7 +43,6 @@ public class IndexController {
     @GetMapping
     public String indexPage(Map<String, Object> model, HttpServletRequest request) {
         model.put("requestURL", request.getRequestURL());
-
         return "index";
     }
 }

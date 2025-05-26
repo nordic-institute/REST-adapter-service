@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.org.springframework.boot.spring.boot.starter.web)
     implementation(libs.org.springframework.boot.spring.boot.starter.aop)
     implementation(libs.org.springframework.boot.spring.boot.starter.tomcat)
+    implementation(libs.org.springframework.boot.spring.boot.starter.thymeleaf)
     testImplementation(libs.org.springframework.boot.spring.boot.starter.test) {
         exclude(group = "com.vaadin.external.google", module = "android-json")
     }
