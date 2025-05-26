@@ -87,9 +87,16 @@ The build uses [license-gradle-plugin](https://github.com/hierynomus/license-gra
 ## Building docker container
 From ```/adapter``` run
 ```shell
-# (in the directory which contains pom.xml)
+# in the directory where the Dockerfile is located
 docker build -t rest-adapter-service .
-#./build-rpm-in-docker.sh
+```
+Optionally you can pass ```--build-arg PROPS_DIR=./customProperties``` to use custom proeprties directory including the configuration for Provider and Consumer Gateways. 
+```shell
+docker build -t rest-adapter-service --build-arg PROPS_DIR=./customProperties .
+```
+Then the container can be run with the command below. The port can be changed by passing the `-p` option.
+```shell
+docker run -d -p 8080:8080 rest-adapter-service
 ```
 
 ## Encryption of Message Content
