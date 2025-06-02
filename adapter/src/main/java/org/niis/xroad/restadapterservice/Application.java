@@ -50,26 +50,25 @@ public class Application extends SpringBootServletInitializer {
 
     @Bean
     public ServletRegistrationBean consumerGatewayBean() {
-        ServletRegistrationBean<ConsumerGateway> bean = new ServletRegistrationBean<ConsumerGateway>(
-                new ConsumerGateway(), "/Consumer/*");
+        ServletRegistrationBean bean = new ServletRegistrationBean(new ConsumerGateway(), "/Consumer/*");
         bean.setLoadOnStartup(1);
         return bean;
     }
 
     @Bean
     public ServletRegistrationBean providerGatewayBean() {
-        ServletRegistrationBean<ProviderGateway> bean = new ServletRegistrationBean<ProviderGateway>(
-                new ProviderGateway(), "/Provider");
+        ServletRegistrationBean bean = new ServletRegistrationBean(new ProviderGateway(), "/Provider");
         bean.setLoadOnStartup(1);
         return bean;
     }
 
     @Bean
     public FilterRegistrationBean consumerURIFilterBean() {
-        FilterRegistrationBean<ConsumerURIFilter> bean = new FilterRegistrationBean();
+        FilterRegistrationBean bean = new FilterRegistrationBean();
         bean.setFilter(new ConsumerURIFilter());
         bean.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST));
         bean.setUrlPatterns(Arrays.asList("/Consumer/*"));
         return bean;
     }
+
 }

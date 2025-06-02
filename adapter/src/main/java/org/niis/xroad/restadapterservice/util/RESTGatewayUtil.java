@@ -67,21 +67,21 @@ public final class RESTGatewayUtil {
     }
 
     /**
-     * Checks the given content type and returns true if and only if it begins with
-     * "text/xml" or "application/xml". Otherwise returns false.
+     * Checks the given content type and returns true if and only if it begins
+     * with "text/xml" or "application/xml". Otherwise returns false.
      *
      * @param contentType content type to be checked
      * @return returns true if and only if the given content type begins with
      * "text/xml" or "application/xml"; otherwise returns false
      */
     public static boolean isXml(String contentType) {
-        return contentType != null
-                && (contentType.startsWith(Constants.TEXT_XML) || contentType.startsWith(Constants.APPLICATION_XML));
+        return contentType != null && (contentType.startsWith(Constants.TEXT_XML) || contentType.startsWith(Constants.APPLICATION_XML));
     }
 
     /**
-     * Checks the given content type and returns true if and only if it begins with
-     * "text/xml", "application/xml" or "application/json". Otherwise returns false.
+     * Checks the given content type and returns true if and only if it begins
+     * with "text/xml", "application/xml" or "application/json". Otherwise
+     * returns false.
      *
      * @param contentType content type to be checked
      * @return returns true if and only if the given content type begins with
@@ -89,14 +89,13 @@ public final class RESTGatewayUtil {
      * false
      */
     public static boolean isValidContentType(String contentType) {
-        return contentType != null
-                && (contentType.startsWith(Constants.TEXT_XML) || contentType.startsWith(Constants.APPLICATION_XML)
-                || contentType.startsWith(Constants.APPLICATION_JSON));
+        return contentType != null && (contentType.startsWith(Constants.TEXT_XML) || contentType.startsWith(Constants.APPLICATION_XML) || contentType
+                .startsWith(Constants.APPLICATION_JSON));
     }
 
     /**
-     * Extracts properties common for both consumer and provider endpoints from the
-     * given properties.
+     * Extracts properties common for both consumer and provider endpoints from
+     * the given properties.
      *
      * @param key       property key
      * @param endpoints list of configured endpoints read from properties
@@ -123,11 +122,9 @@ public final class RESTGatewayUtil {
         }
         // ServiceResponse namespace prefix
         if (endpoints.containsKey(key + "." + Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE)) {
-            String value = endpoints
-                    .getProperty(key + "." + Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE);
+            String value = endpoints.getProperty(key + "." + Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE);
             endpoint.setPrefix(value);
-            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE,
-                    value);
+            log.info(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE, value);
         }
         // Is request encrypted
         if (endpoints.containsKey(key + "." + Constants.ENDPOINT_PROPS_REQUEST_ENCRYPTED)) {
@@ -144,8 +141,8 @@ public final class RESTGatewayUtil {
     }
 
     /**
-     * Checks the given String for null and empty. Returns true if and only if the
-     * string is null or empty.
+     * Checks the given String for null and empty. Returns true if and only if
+     * the string is null or empty.
      *
      * @param value String to be checked
      * @return rue if and only if the string is null or empty; otherwise false
@@ -155,9 +152,10 @@ public final class RESTGatewayUtil {
     }
 
     /**
-     * Checks that accessing the private key is possible using the configuration.
-     * The method tries to create a new Decrypter object which is returned if
-     * everything is OK. If creating the object fails, null is returned.
+     * Checks that accessing the private key is possible using the
+     * configuration. The method tries to create a new Decrypter object which is
+     * returned if everything is OK. If creating the object fails, null is
+     * returned.
      *
      * @param props general properties
      * @return new Decrypter object on success; otherwise false
@@ -179,23 +177,18 @@ public final class RESTGatewayUtil {
      * @param privateKeyPassword     private key password
      * @return public key matching the given service id
      */
-    public static Decrypter getDecrypter(String privateKeyFile, String privateKeyFilePassword, String privateKeyAlias,
-                                         String privateKeyPassword) {
+    public static Decrypter getDecrypter(String privateKeyFile, String privateKeyFilePassword, String privateKeyAlias, String privateKeyPassword) {
         try {
             log.debug("Read private key \"{}\" from keystore.", privateKeyAlias);
-            Decrypter decrypter = new AsymmetricDecrypter(privateKeyFile, privateKeyFilePassword, privateKeyAlias,
-                    privateKeyPassword);
+            Decrypter decrypter = new AsymmetricDecrypter(privateKeyFile, privateKeyFilePassword, privateKeyAlias, privateKeyPassword);
             log.info("Access to private key \"{}\" checked.", privateKeyAlias);
             return decrypter;
-        } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException
-                 | UnrecoverableEntryException ex) {
+        } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException | UnrecoverableEntryException ex) {
             log.error(ex.getMessage(), ex);
             log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_FILE, privateKeyFile);
-            log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_FILE_PASSWORD,
-                    privateKeyFilePassword.replaceAll(".*", "*"));
+            log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_FILE_PASSWORD, privateKeyFilePassword.replaceAll(".*", "*"));
             log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_ALIAS, privateKeyAlias);
-            log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_PASSWORD,
-                    privateKeyPassword.replaceAll(".*", "*"));
+            log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PRIVATE_KEY_PASSWORD, privateKeyPassword.replaceAll(".*", "*"));
             return null;
         } catch (java.lang.NullPointerException ex) {
             log.error(ex.getMessage(), ex);
@@ -207,19 +200,18 @@ public final class RESTGatewayUtil {
 
     /**
      * Checks that accessing the public key matching the given service id is
-     * possible using the configuration. The method tries to create a new Encrypter
-     * object which is returned if everything is OK. If creating the object fails,
-     * null is returned.
+     * possible using the configuration. The method tries to create a new
+     * Encrypter object which is returned if everything is OK. If creating the
+     * object fails, null is returned.
      *
      * @param props     general properties
-     * @param serviceId unique string that identifies the service which is used as
-     *                  public key alias
+     * @param serviceId unique string that identifies the service which is used
+     *                  as public key alias
      * @return new Encrypter object on success; otherwise false
      */
     public static Encrypter checkPublicKey(Properties props, String serviceId) {
         String publicKeyFile = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE);
         String publicKeyFilePassword = props.getProperty(Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE_PASSWORD);
-
         return getEncrypter(publicKeyFile, publicKeyFilePassword, serviceId);
     }
 
@@ -239,8 +231,7 @@ public final class RESTGatewayUtil {
         } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException ex) {
             log.error(ex.getMessage(), ex);
             log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE, publicKeyFile);
-            log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE_PASSWORD,
-                    publicKeyFilePassword.replaceAll(".*", "*"));
+            log.debug(Constants.LOG_STRING_FOR_SETTINGS, Constants.ENCRYPTION_PROPS_PUBLIC_KEY_FILE_PASSWORD, publicKeyFilePassword.replaceAll(".*", "*"));
             log.debug("Service ID is used as public key alias: \"{}\"", serviceId);
             return null;
         } catch (java.lang.NullPointerException ex) {
@@ -254,7 +245,8 @@ public final class RESTGatewayUtil {
      * Gets the value of symmetric key length from the properties.
      *
      * @param props general properties
-     * @return key length. Returns 128 if property is missing, empty or not a number
+     * @return key length. Returns 128 if property is missing, empty or not a
+     * number
      */
     public static int getKeyLength(Properties props) {
         String keyLengthStr = props.getProperty(Constants.ENCRYPTION_PROPS_KEY_LENGTH);
@@ -290,16 +282,15 @@ public final class RESTGatewayUtil {
 
     /**
      * Decrypts symmetric session key using private key of message recipient and
-     * asymmetric decrypter. The session key has been encrypted using the public key
-     * of the message recipient.
+     * asymmetric decrypter. The session key has been encrypted using the public
+     * key of the message recipient.
      *
      * @param asymmetricDecrypter asymmetric RSA decrypter
      * @param encryptedKey        encrypted symmetric AES key
      * @param encodedIV           base 64 encoded initialization vector (VI)
      * @return Decrypter created using encrypted AES key and VI
      */
-    public static Decrypter getSymmetricDecrypter(Decrypter asymmetricDecrypter, String encryptedKey,
-                                                  String encodedIV) {
+    public static Decrypter getSymmetricDecrypter(Decrypter asymmetricDecrypter, String encryptedKey, String encodedIV) {
         log.debug("Decrypt symmetric session key.");
         // Decrypt session key using the private key
         String decryptedSessionKey = asymmetricDecrypter.decrypt(encryptedKey);
@@ -312,9 +303,9 @@ public final class RESTGatewayUtil {
     }
 
     /**
-     * Build message body with three elements that include encrypted data, encrypted
-     * session key and IV. The three elements are added as child elements of the
-     * given SOAP message.
+     * Build message body with three elements that include encrypted data,
+     * encrypted session key and IV. The three elements are added as child
+     * elements of the given SOAP message.
      *
      * @param symmetricEncrypter  symmetric AES encrypter
      * @param asymmetricEncrypter asymmetric RSA encrypter
@@ -322,8 +313,8 @@ public final class RESTGatewayUtil {
      * @param encryptedData       encrypted data
      * @throws SOAPException
      */
-    public static void buildEncryptedBody(Encrypter symmetricEncrypter, Encrypter asymmetricEncrypter, SOAPElement msg,
-                                          String encryptedData) throws SOAPException {
+    public static void buildEncryptedBody(Encrypter symmetricEncrypter, Encrypter asymmetricEncrypter, SOAPElement msg, String encryptedData)
+            throws SOAPException {
         log.debug("Build message body with encrypted data, encrypted session key and encoded IV.");
         // Get base 64 encoded version of the key
         String sessionKey = CryptoHelper.encodeBase64(((SymmetricEncrypter) symmetricEncrypter).getKey().getEncoded());
@@ -332,8 +323,7 @@ public final class RESTGatewayUtil {
         // Encrypt symmetric key with receivers public RSA key and add it to the message
         msg.addChildElement(Constants.PARAM_KEY).addTextNode(asymmetricEncrypter.encrypt(sessionKey));
         // Add base 64 IV to the message
-        msg.addChildElement(Constants.PARAM_IV)
-                .addTextNode(CryptoHelper.encodeBase64(((SymmetricEncrypter) symmetricEncrypter).getIv()));
+        msg.addChildElement(Constants.PARAM_IV).addTextNode(CryptoHelper.encodeBase64(((SymmetricEncrypter) symmetricEncrypter).getIv()));
     }
 
     /**
@@ -343,8 +333,7 @@ public final class RESTGatewayUtil {
         final String os = System.getProperty("os.name", "generic").toLowerCase();
         String dir = System.getProperty(Constants.PROPERTIES_DIR_PARAM_NAME);
         if (dir != null) {
-            // if defined by the property, it will be an error if the directory does not
-            // exist
+            //if defined by the property, it will be an error if the directory does not exist
             return dir;
         }
 
