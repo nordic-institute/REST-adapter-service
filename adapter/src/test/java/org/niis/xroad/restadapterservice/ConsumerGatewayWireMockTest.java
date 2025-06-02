@@ -58,6 +58,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ConsumerGatewayWireMockTest {
 
     private WireMockServer wireMockServer;
+
     private int wireMockPort = findAvailableTcpPort();
 
     @BeforeEach
@@ -95,12 +96,13 @@ public class ConsumerGatewayWireMockTest {
                 new ConsumerGateway.GatewayProperties(endpointProperties, consumerGatewayProperties));
         testConsumerGateway.init();
 
-        // build a request that represents a call to rest-adapter which results in JSON
-        // -> XML
+        // build a request that represents a call to rest-adapter which results in JSON -> XML
         // conversion
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setMethod("POST");
-        request.setRequestURI("http://localhost:" + wireMockPort + "/rest-adapter-service-0.0.12-SNAPSHOT/Consumer");
+        request.setRequestURI("http://localhost:"
+                + wireMockPort
+                + "/rest-adapter-service-0.0.12-SNAPSHOT/Consumer");
         request.setContextPath("rest-adapter-service-0.0.12-SNAPSHOT");
         request.addHeader("Accept", "application/json");
         request.addHeader(Constants.XRD_HEADER_MESSAGE_ID, "predefined-message-id");
@@ -122,13 +124,11 @@ public class ConsumerGatewayWireMockTest {
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = new Diff(requestBodyFromWireMock, expectedRequestXml);
         log.debug("diff: {}", diff);
-        // diff is "similar" (not identical) even if namespace prefixes and element
-        // ordering differ
+        // diff is "similar" (not identical) even if namespace prefixes and element ordering differ
         assertTrue(diff.similar());
 
         // 2
         String expectedResponseJson = readFile("consumer-gw-test-response-expected.json");
-
         String actualResponseJson = response.getContentAsString();
         log.debug("json response: {}", actualResponseJson);
         log.debug("expected json response: {}", expectedResponseJson);
@@ -159,6 +159,7 @@ public class ConsumerGatewayWireMockTest {
 
     private final class TestConsumerGateway extends ConsumerGateway {
         private GatewayProperties testGatewayProperties;
+
 
         public void setTestGatewayProperties(GatewayProperties testGatewayProperties) {
             this.testGatewayProperties = testGatewayProperties;
@@ -244,5 +245,4 @@ public class ConsumerGatewayWireMockTest {
             return (Properties) properties.clone();
         }
     }
-
 }

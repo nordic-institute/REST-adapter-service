@@ -41,10 +41,10 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Test cases for ConsumerGatewayUtil class.
- * <p>
+ *
  * Running these tests cause the below error message to appear on the screen.
  * The error message is expected and can be ignored. The error message:
- * <p>
+ *
  * "[Fatal Error] :1:xx: The markup in the document following the root element
  * must be well-formed."
  *

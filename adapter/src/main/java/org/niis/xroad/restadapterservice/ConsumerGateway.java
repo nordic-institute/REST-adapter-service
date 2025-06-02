@@ -22,7 +22,6 @@
  */
 package org.niis.xroad.restadapterservice;
 
-import jakarta.xml.soap.*;
 import org.niis.xrd4j.client.SOAPClient;
 import org.niis.xrd4j.client.SOAPClientImpl;
 import org.niis.xrd4j.client.deserializer.AbstractResponseDeserializer;
@@ -45,15 +44,19 @@ import org.niis.xroad.restadapterservice.util.Constants;
 import org.niis.xroad.restadapterservice.util.ConsumerGatewayUtil;
 import org.niis.xroad.restadapterservice.util.RESTGatewayUtil;
 
-import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.NodeList;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.xml.soap.AttachmentPart;
+import jakarta.xml.soap.Node;
+import jakarta.xml.soap.SOAPElement;
+import jakarta.xml.soap.SOAPEnvelope;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPFactory;
+import jakarta.xml.soap.SOAPMessage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -847,13 +850,11 @@ public class ConsumerGateway extends HttpServlet {
                 log.debug("SOAP attachment detected. Use attachment as response data.");
                 return SOAPHelper.toString((AttachmentPart) message.getAttachments().next());
             }
-
-
             // Convert response to string
             return SOAPHelper.toString(updatedNode);
         }
 
-        protected Node handleNamespace(Node responseNode) throws SOAPException{
+        protected Node handleNamespace(Node responseNode) throws SOAPException {
             if (this.omitNamespace) {
                 log.debug("Remove namespaces from response.");
                 return SOAPHelper.removeNamespace(responseNode);
@@ -922,21 +923,14 @@ public class ConsumerGateway extends HttpServlet {
             // and the actual response. After the modification all the response
             // elements are directly under response.
             SOAPHelper.moveChildren(encryptionWrapper, (SOAPElement) responseNode, !this.omitNamespace);
-
-            // Remove namespace declaration from the response
-            ((SOAPElement) responseNode
-                    .getFirstChild())
-                    .removeNamespaceDeclaration("");
-
             // Clone response node because removing namespace from the original
             // node causes null pointer exception in AbstractResponseDeserializer
             // when wrappers are not used. Cloning the original node, removing
             // namespace from the clone and returning the clone prevents the
             // problem to occur.
             Node modifiedResponseNode = (Node) responseNode.cloneNode(true);
-            Node updatedNode = modifiedResponseNode;
             // Remove namespace if it's required
-            updatedNode = handleNamespace(modifiedResponseNode);
+            Node updatedNode = handleNamespace(modifiedResponseNode);
             // Return the response
             return SOAPHelper.toString(updatedNode);
         }

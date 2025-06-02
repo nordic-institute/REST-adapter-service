@@ -304,7 +304,6 @@ public class ConsumerGatewayIT {
 
     /**
      * Execute json get request with parameters from given index
-     *
      * @param index
      * @return
      */

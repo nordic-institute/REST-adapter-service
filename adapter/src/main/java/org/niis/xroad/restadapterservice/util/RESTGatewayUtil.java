@@ -56,7 +56,6 @@ import java.util.Properties;
 @Slf4j
 public final class RESTGatewayUtil {
 
-
     public static final int DEFAULT_KEY_LENGTH = 128;
 
     /**

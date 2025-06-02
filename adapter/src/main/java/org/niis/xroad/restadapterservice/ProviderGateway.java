@@ -187,8 +187,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
         // Get request body
         String requestBody = ProviderGatewayUtil.getRequestBody((Map<String, List<String>>) request.getRequestData());
         // Send request to the service endpoint
-        ClientResponse restResponse = restClient.send(endpoint.getUrl(), requestBody,
-                (Map<String, List<String>>) request.getRequestData(), headers);
+        ClientResponse restResponse = restClient.send(endpoint.getUrl(), requestBody, (Map<String, List<String>>) request.getRequestData(), headers);
         log.debug("...done!");
 
         String data = restResponse.getData();
@@ -197,16 +196,13 @@ public class ProviderGateway extends AbstractAdapterServlet {
         // Content-type must be "text/xml", "application/xml" or
         // "application/json"
         if (!RESTGatewayUtil.isValidContentType(contentType)) {
-            log.warn("Response's content type is not \"{}\", \"{}\" or \"{}\".", Constants.TEXT_XML,
-                    Constants.APPLICATION_XML, Constants.APPLICATION_JSON);
+            log.warn("Response's content type is not \"{}\", \"{}\" or \"{}\".", Constants.TEXT_XML, Constants.APPLICATION_XML, Constants.APPLICATION_JSON);
             if (restResponse.getStatusCode() == Constants.HTTP_OK) {
                 log.warn("Response's status code is 200. Return generic 404 error.");
                 response.setErrorMessage(new ErrorMessage("404", Constants.ERROR_404));
             } else {
-                log.warn("Response's status code is {}. Reason phrase is : \"{}\".", restResponse.getStatusCode(),
-                        restResponse.getReasonPhrase());
-                response.setErrorMessage(new ErrorMessage(Integer.toString(restResponse.getStatusCode()),
-                        restResponse.getReasonPhrase()));
+                log.warn("Response's status code is {}. Reason phrase is : \"{}\".", restResponse.getStatusCode(), restResponse.getReasonPhrase());
+                response.setErrorMessage(new ErrorMessage(Integer.toString(restResponse.getStatusCode()), restResponse.getReasonPhrase()));
             }
             serializer.serialize(response, request);
             return response;
@@ -232,25 +228,12 @@ public class ProviderGateway extends AbstractAdapterServlet {
             }
             // Use XML as response data
             response.setResponseData(SOAPHelper.xmlStrToSOAPElement(data));
-
         }
 
         log.debug("Message prosessing done!");
 
         // Serialize the response
         serializer.serialize(response, request);
-
-        // Remove default namespace of first element for backward compatibility
-        if (endpoint.isProcessingWrappers()) {
-            ((SOAPElement) response
-                .getSoapMessage()
-                .getSOAPPart()
-                .getEnvelope()
-                .getBody()
-                .getFirstChild()
-                .getFirstChild())
-                .removeNamespaceDeclaration("");
-        }
         return response;
 
     }
@@ -422,8 +405,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
         protected String contentType;
 
         @Override
-        public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope)
-                throws SOAPException {
+        public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
             if (this.contentType == null) {
                 handleBody(response, soapResponse, envelope);
             } else {
