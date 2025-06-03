@@ -841,9 +841,7 @@ public class ConsumerGateway extends HttpServlet {
         @Override
         protected String deserializeResponseData(Node responseNode, SOAPMessage message) throws SOAPException {
             // Remove namespace if it's required
-            // Use a clone of the response node to prevent changes to the original object
-            Node updatedNode = (Node) responseNode.cloneNode(true);
-            updatedNode = handleNamespace(updatedNode);
+            Node updatedNode = handleNamespace(responseNode);
 
             // If message has attachments, return the first attachment
             if (message.countAttachments() > 0) {
@@ -857,7 +855,14 @@ public class ConsumerGateway extends HttpServlet {
         protected Node handleNamespace(Node responseNode) throws SOAPException {
             if (this.omitNamespace) {
                 log.debug("Remove namespaces from response.");
-                return SOAPHelper.removeNamespace(responseNode);
+                if (responseNode instanceof SOAPElement) {
+                    // Use a clone of the response node to prevent changes to the original object
+                    SOAPElement updatedNode = (SOAPElement) responseNode.cloneNode(true);
+                    return SOAPHelper.removeNamespace(updatedNode);
+                } else {
+                    // If responseNode is not a SOAPElement, we cannot remove namespaces
+                    log.warn("Response node is not a SOAPElement. Cannot remove namespaces.");
+                }
             }
             return responseNode;
         }
