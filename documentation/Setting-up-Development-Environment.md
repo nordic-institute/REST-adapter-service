@@ -14,11 +14,11 @@ There are several of ways to get code, e.g. download it as a [zip](https://githu
 git clone https://github.com/nordic-institute/REST-adapter-service.git
 ```
 
-The code is located in the ```src``` folder.
+The code is located in the ```adapter``` folder.
 
 ### Building the code
 
-Rest Adapter Service uses Gradle as the build management tool. In order to build the whole project and generate the jar file (rest-adapter-service-x.x.x.jar), you must run the gradle command below from the ```src``` directory.
+Rest Adapter Service uses Gradle as the build management tool. In order to build the whole project and generate the jar file (rest-adapter-service-x.x.x.jar), you must run the gradle command below from the ```adapter``` directory.
 
 ```
  ./gradlew build
@@ -27,7 +27,7 @@ Rest Adapter Service uses Gradle as the build management tool. In order to build
 Running the above gradle command generates the jar file under the directory presented below:
 
 ```
-build/libs/rest-adapter-service-x.x.x.jar
+adapter/build/libs/rest-adapter-service-x.x.x.jar
 ```
 
 ### Enabling encryption

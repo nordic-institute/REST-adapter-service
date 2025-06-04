@@ -110,8 +110,7 @@ val defaultProps = Properties().apply {
 }
 
 tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun"){
-    logger.warn("test " + System.getProperty("test"))
-    logger.warn("Profile: " + adapterProfileDir)
+    logger.info("Used profile: " + adapterProfileDir)
 }
 
 tasks.named<ProcessResources>("processResources") {
@@ -191,5 +190,9 @@ tasks.register<Test>("intTest") {
     systemProperty("propertiesDirectory", "${project.projectDir}/build/resources/integration-test-profile")
 }
 
+// disable the default jar task of the Java plugin so only springboot's jar is created
+tasks.jar {
+    isEnabled = false
+}
 
 

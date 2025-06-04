@@ -21,7 +21,7 @@ More information about available features can be found [here](documentation/Rest
 
 ## Try It Out
 
-The fastest and easiest way to try out the application is by using the Spring Boot Maven plugin.
+The fastest and easiest way to try out the application is by using the Spring Boot Gradle plugin.
 To do this, you need to have a working installation of [Gradle](https://gradle.org/).
 
 
@@ -90,7 +90,7 @@ From ```/adapter``` run
 # in the directory where the Dockerfile is located
 docker build -t rest-adapter-service .
 ```
-Optionally you can pass ```--build-arg PROPS_DIR=./customProperties``` to use custom proeprties directory including the configuration for Provider and Consumer Gateways. 
+Optionally you can pass ```--build-arg PROPS_DIR=./customProperties``` to use custom properties directory including the configuration for Provider and Consumer Gateways. 
 ```shell
 docker build -t rest-adapter-service --build-arg PROPS_DIR=./customProperties .
 ```
