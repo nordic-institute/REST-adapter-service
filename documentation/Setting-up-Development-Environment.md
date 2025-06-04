@@ -3,8 +3,8 @@ This document describes how a developer's workstation can be setup.
 ### Software Requirements
 
 * Linux or Windows
-* Java 8
-* Maven 3.x
+* Java 21
+* Gradle 8.x
 
 ### Getting the code
 
@@ -14,41 +14,28 @@ There are several of ways to get code, e.g. download it as a [zip](https://githu
 git clone https://github.com/nordic-institute/REST-adapter-service.git
 ```
 
-The code is located in the ```src``` folder.
+The code is located in the ```adapter``` folder.
 
 ### Building the code
 
-Rest Adapter Service uses Maven as the build management tool. In order to build the whole project and generate the war file (rest-adapter-service-xxx.war), you must run the maven command below from the ```src``` directory.
+Rest Adapter Service uses Gradle as the build management tool. In order to build the whole project and generate the jar file (rest-adapter-service-x.x.x.jar), you must run the gradle command below from the ```adapter``` directory.
 
 ```
-mvn clean install
+ ./gradlew build
 ```
 
-Running the above maven command generates the war file under the directory presented below:
+Running the above gradle command generates the jar file under the directory presented below:
 
 ```
-src/target/rest-adapter-service-xxx.war
+adapter/build/libs/rest-adapter-service-x.x.x.jar
 ```
 
-#### Error on building the code
+### Enabling encryption
 
-If running ```mvn clean install``` generates the error presented below, there are two possible solutions.
+The project has two profiles: encrypted and plaintext. The default profile is plaintext. To switch to the encrypted profile, you need to add the property ```encrypted```. This can be done using ```-Pencrypted``` when running the gradle command.  
 
-```
-[ERROR] Failed to execute goal on project rest-adapter-service: Could not resolve dependencies for project org.niis:rest-adapter-service:war:1.1.0-SNAPSHOT: Failed to collect dependencies at org.niis.xrd4j:common:jar:0.3.0: Failed to read artifact descriptor for org.niis.xrd4j:common:jar:0.3.0: Could not transfer artifact org.niis.xrd4j:common:pom:0.3.0 from/to niis-repo (https://artifactory.niis.org/xroad-maven-releases): sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target -> [Help 1]
-```
+By doing this, the adapter uses ```main/profiles/encrypted``` as the configuration directory otherwise the directory ```main/profiles/plaintext``` is used.
 
-##### Solution 1
-
-Skip certificate validation:
-
-```
-mvn install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true
-```
-
-##### Solution 2
-
-Import NIIS's Maven repository's certificate as a trusted certificate into ```cacerts``` keystore. See full [instructions](Import-a-Certificate-as-a-Trusted-Certificate.md). NIIS's Maven release repository's URL is ```https://artifactory.niis.org/xroad-maven-releases```.
 
 ### IDE Setup
 
@@ -60,10 +47,10 @@ Simple quick start is described for IntelliJ IDEA.
 
 Opening the project in IDEA.
 
-* Install Lombok plugin and Maven integration plugin, if you have not done it yet
-* File -> New project from existing sources -> Choose pom.xml
+* Install Lombok plugin and Gradle integration plugin, if you have not done it yet
+* File -> New project from existing sources -> Choose gradle.build.kts
 * Rest of the options can be left at defaults
-* Run maven task spring-boot:run to start up Rest Adapter
+* Run gradle task ./gradlew bootRun to start up Rest Adapter
 
 Once started up, Rest Adapter landing page can be found at
 `http://localhost:8080/rest-adapter-service/`

@@ -1,7 +1,0 @@
-#!/bin/sh
-
-if ! id rest-adapter-service > /dev/null 2>&1 ; then
-    adduser --system --no-create-home \
-                --group --disabled-password --shell /bin/false \
-                rest-adapter-service
-fi

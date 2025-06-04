@@ -43,6 +43,13 @@ Icon
 Thumbs.db
 ehthumbs.db
 
+# VS Code
+.vscode/
+
+# Intellij IDEA
+**/*.idea
+**/*.iml
+
 # Folder config file
 Desktop.ini
 
@@ -55,10 +62,13 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
-# REST Gateway target dir
-src/target/
-src/.extract/
+# build
+build/
+adapter/bin
 
-.idea
-src/rest-gateway.iml
-*.iml
+#Gradle
+adapter/.gradle
+adapter/gradle/.tmp
+adapter/gradle/caches
+adapter/gradle/daemon
+adapter/gradle/native

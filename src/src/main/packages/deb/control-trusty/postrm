@@ -1,9 +1,0 @@
-#!/bin/sh
-if [ "$2" ]; then
-  # Package upgrade, not uninstall
-  echo upgrading package
-  if ( initctl status rest-adapter-service | grep start ); then
-    initctl restart rest-adapter-service
-  fi
-fi
-
