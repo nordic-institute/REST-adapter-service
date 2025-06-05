@@ -22,6 +22,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -30,8 +31,6 @@ jobs:
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-versions: 8.13
           #cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
           #gradle-home-cache-cleanup: true
           #dependency-graph: generate-and-submit
@@ -39,7 +38,8 @@ jobs:
 
       - name: Build and test source
         working-directory: ./adapter
-        run: ./gradlew build
+        run: |
+          ./gradlew build
 
       # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
       # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
