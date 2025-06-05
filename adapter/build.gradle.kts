@@ -96,7 +96,7 @@ license {
 }
 
 // Profile
-val isEncrypted = project.hasProperty("encrypted")
+val isEncrypted = project.hasProperty("encrypted") || (System.getenv("ENCRYPTED")?.toBoolean() == true)
 val adapterProfileDir = if (isEncrypted) "encrypted" else "plaintext"
 
 // Filtering
@@ -117,9 +117,20 @@ tasks.named<ProcessResources>("processResources") {
     logger.info(if (isEncrypted) "Running with encrypted profile" else "Running with plaintext profile");
 
     var replacements = baseReplacements + defaultProps.entries.associate { it.key.toString() to it.value.toString() }
-    from("src/main/profiles/$adapterProfileDir/") {
-        filesMatching("**/*.properties") {
-            filter<ReplaceTokens>("tokens" to replacements)
+
+    // copying properties files for consumer and provider endpoints
+    val customProperties = System.getenv("CUSTOM_PROPERTIES_DIR")?.toString() ?: project.findProperty("customProperties")?.toString() ?: ""
+    if (!customProperties.equals("")) {
+        from(customProperties) {
+            filesMatching("**/*.properties") {
+                filter<ReplaceTokens>("tokens" to replacements)
+            }
+        }
+    } else {
+        from("src/main/profiles/$adapterProfileDir/") {
+            filesMatching("**/*.properties") {
+                filter<ReplaceTokens>("tokens" to replacements)
+            }
         }
     }
 
