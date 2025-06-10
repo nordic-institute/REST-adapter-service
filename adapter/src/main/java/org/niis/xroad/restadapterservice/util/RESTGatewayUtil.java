@@ -328,24 +328,10 @@ public final class RESTGatewayUtil {
     /**
      * Find the properties directory:
      */
-    public static String getPropertiesDirectory() {
-        final String os = System.getProperty("os.name", "generic").toLowerCase();
-        String dir = System.getProperty(Constants.PROPERTIES_DIR_PARAM_NAME);
-        if (dir != null) {
-            //if defined by the property, it will be an error if the directory does not exist
-            return dir;
-        }
-
-        Path p = Paths.get(System.getProperty("user.home"), Constants.PROPERTIES_DIR_NAME);
+    public static String getPropertiesDirectory(String customPropertiesDir) {
+        Path p = Paths.get(customPropertiesDir);
         if (Files.exists(p)) {
             return p.toString();
-        }
-
-        if (os.startsWith("linux")) {
-            p = Paths.get("/etc", Constants.PROPERTIES_DIR_NAME);
-            if (Files.exists(p)) {
-                return p.toString();
-            }
         }
 
         return null;

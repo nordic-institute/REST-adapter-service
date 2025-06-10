@@ -89,7 +89,7 @@ public class ProviderGateway extends AbstractAdapterServlet {
         super.init();
         log.debug("Starting to initialize Provider REST Gateway.");
         log.debug("Reading Provider and ProviderGateway properties");
-        String propertiesDirectory = RESTGatewayUtil.getPropertiesDirectory();
+        String propertiesDirectory = RESTGatewayUtil.getPropertiesDirectory(Application.getPropertiesDirectory());
         Properties endpointProps;
         if (propertiesDirectory != null) {
             this.props = PropertiesUtil.getInstance().load(propertiesDirectory + Constants.PROPERTIES_FILE_PROVIDER_GATEWAY, false);

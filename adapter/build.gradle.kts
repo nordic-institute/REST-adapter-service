@@ -95,55 +95,11 @@ license {
     include("**/*.java")
 }
 
-// Profile
-val isEncrypted = project.hasProperty("encrypted") 
-val adapterProfileDir = if (isEncrypted) "encrypted" else "plaintext"
-
-// Filtering
-val baseReplacements = mutableMapOf(
-    "projectDir" to project.projectDir.toString()
-)
-
-val defaultFilterFile = file("src/main/filters/default.properties")
-val defaultProps = Properties().apply {
-    load(defaultFilterFile.reader())
-}
-
-tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun"){
-    logger.info("Used profile: " + adapterProfileDir)
-}
-
-tasks.named<ProcessResources>("processResources") {
-    logger.info(if (isEncrypted) "Running with encrypted profile" else "Running with plaintext profile");
-
-    var replacements = baseReplacements + defaultProps.entries.associate { it.key.toString() to it.value.toString() }
-    from("src/main/profiles/$adapterProfileDir/") {
-        filesMatching("**/*.properties") {
-            filter<ReplaceTokens>("tokens" to replacements)
-        }
-    }
-
-    if (isEncrypted) {
-        doLast {
-            copy {
-                from("src/main/resources-bin/") {
-                    include("**/*.jks")
-                }
-                into("build/resources/main/resources-bin")
-            }
-        }
+tasks.bootRun() {
+    if (project.hasProperty("customPropertiesDir")) {
+        systemProperty("customPropertiesDir", project.property("customPropertiesDir") as String)
     }
 }
-
-tasks.named<ProcessResources>("processTestResources") {
-    group = "verification"
-
-    var replacements = baseReplacements + defaultProps.entries.associate { it.key.toString() to it.value.toString() }
-    filesMatching("**/*.properties") {
-        filter<ReplaceTokens>("tokens" to replacements)
-    }
-}
-
 tasks.test {
     group = "verification"
 
@@ -152,27 +108,32 @@ tasks.test {
     finalizedBy(tasks.jacocoTestReport)
 }
 
+// disable the default jar task of the Java plugin so only springboot's jar is created
+tasks.jar {
+    isEnabled = false
+}
 
-tasks.register("processIntTestResources") {
-    description = "Processes integration test resources"
+tasks.register<ProcessResources>("processIntTestResources") {
+    description = "Processes resources for integration tests"
     group = "verification"
 
     val intTestFilterFile = file("src/test/filters/integration-test.properties")
     val props = Properties().apply {
         load(intTestFilterFile.reader())
     }
-    var replacements = baseReplacements + props.entries.associate { it.key.toString() to it.value.toString() }
 
-    doLast {
-        copy {
-            from("src/main/profiles/$adapterProfileDir/") {
-                filesMatching("**/*.properties") {
-                    filter<ReplaceTokens>("tokens" to replacements)
-                }
-            }
-            into("${project.projectDir}/build/resources/integration-test-profile")
+    val baseReplacements = mutableMapOf(
+        "projectDir" to project.projectDir.toString()
+    )
+
+    var replacements =  baseReplacements + props.entries.associate { it.key.toString() to it.value.toString() }
+
+    from(project.findProperty("customPropertiesDir") ?: "${project.projectDir}/exampleProperties/plaintext") {
+        filesMatching("**/*.properties") {
+            filter<ReplaceTokens>("tokens" to replacements)
         }
     }
+    into("${project.projectDir}/build/resources/integration-test-profile")
 }
 
 tasks.register<Test>("intTest") {
@@ -186,14 +147,10 @@ tasks.register<Test>("intTest") {
 
     include("org/niis/xroad/restadapterservice/ConsumerGatewayIT.class")
 
+    systemProperty("customPropertiesDir", "${project.projectDir}/build/resources/integration-test-profile")
     systemProperty("consumerPath", project.projectDir.resolve("libs").resolve("${project.name}-${project.version}.jar"))
     systemProperty("server.port", "9898")
-    systemProperty("propertiesDirectory", "${project.projectDir}/build/resources/integration-test-profile")
 }
 
-// disable the default jar task of the Java plugin so only springboot's jar is created
-tasks.jar {
-    isEnabled = false
-}
 
 

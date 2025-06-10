@@ -81,7 +81,7 @@ jobs:
 
       - name: Integration tests
         working-directory: ./adapter
-        run: ./gradlew intTest jacocoTestReport -Pencrypted
+        run: ./gradlew intTest jacocoTestReport -PcustomPropertiesDir=exampleProperties/encrypted/
 
       - name: Test report
         env:

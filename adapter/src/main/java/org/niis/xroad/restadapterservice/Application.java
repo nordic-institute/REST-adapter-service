@@ -24,6 +24,9 @@ package org.niis.xroad.restadapterservice;
 
 import org.niis.xroad.restadapterservice.filter.ConsumerURIFilter;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -40,12 +43,19 @@ import java.util.EnumSet;
 /**
  * Rest adapter service application entry point
  */
+@Slf4j
 @Configuration
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 
+    @Setter
+    @Getter
+    private static String propertiesDirectory;
+
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication app = new SpringApplication(Application.class);
+        app.addInitializers(new CustomInit());
+        app.run(args);
     }
 
     @Bean
@@ -70,5 +80,5 @@ public class Application extends SpringBootServletInitializer {
         bean.setUrlPatterns(Arrays.asList("/Consumer/*"));
         return bean;
     }
-
 }
+
