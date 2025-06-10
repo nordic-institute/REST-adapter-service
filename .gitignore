@@ -70,4 +70,5 @@ adapter/bin
 adapter/.gradle
 adapter/gradle/*
 !adapter/gradle/wrapper
+!adapter/gradle/wrapper/gradle-wrapper.jar
 !adapter/gradle/libs.versions.toml

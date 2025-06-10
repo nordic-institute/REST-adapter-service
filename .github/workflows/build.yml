@@ -9,9 +9,9 @@ name: Build and Test
 
 on:
   push:
-    branches: [ "master", "develop", "XRDDEV-2907" ]
+    branches: [ "master", "develop"]
   pull_request:
-#    branches: [ "master", "develop" ]
+    branches: [ "master", "develop" ]
 
 jobs:
   BuildWithUnitTests:
@@ -39,11 +39,7 @@ jobs:
 
       - name: Build and test source
         working-directory: ./adapter
-        run: |
-          gradle wrapper --gradle-version 8.13
-          ./gradlew build intTest jacocoTestReport -Pencrypted
-          cd build/resources/main/resources-bin
-          ls -lah
+        run: ./gradlew build intTest jacocoTestReport -Pencrypted
 
       - name: Test report
         env:
