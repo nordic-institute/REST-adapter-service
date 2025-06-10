@@ -51,8 +51,6 @@ updates:
           - "patch"
         patterns:
           - "com.puppycrawl.tools.checkstyle*"
-  #    reviewers:
-  #      - "nordic-institute/xrd-developers"
   - package-ecosystem: "github-actions"
     directory: "/.github/workflows"
     schedule:
@@ -63,5 +61,3 @@ updates:
         update-types:
           - "minor"
           - "patch"
-#    reviewers:
-#      - "nordic-institute/xrd-developers"

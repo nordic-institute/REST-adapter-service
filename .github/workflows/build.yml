@@ -8,10 +8,23 @@
 name: Build and Test
 
 on:
+  # Capture this event so that gradle caches are updated when a PR is merged to develop
+  # More information on why: https://github.com/gradle/gradle-build-action#using-the-caches-read-only
   push:
-    branches: [ "master", "develop"]
+    branches:
+      - develop
+    paths:
+      - 'src/**'
+      - '.github/**'
+      - 'ansible/**'
+      - 'Docker/**'
   pull_request:
-    branches: [ "master", "develop" ]
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'src/**'
+      - '.github/**'
+      - 'ansible/**'
+      - 'Docker/**'
 
 jobs:
   BuildWithUnitTests:
@@ -39,7 +52,7 @@ jobs:
 
       - name: Build and test source
         working-directory: ./adapter
-        run: ./gradlew build intTest jacocoTestReport -Pencrypted
+        run: ./gradlew build jacocoTestReport
 
       - name: Test report
         env:
@@ -53,14 +66,80 @@ jobs:
           list-suites: 'failed'
           list-tests: 'failed'
 
-      # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
-      # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
-      #
-      # - name: Setup Gradle
-      #   uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-      #   with:
-      #     gradle-version: '8.9'
-      #
-      # - name: Build with Gradle 8.9
-      #   run: gradle build
+  IntTestsEncrypted:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    needs: BuildWithUnitTests
+    name: Encrypted integration tests
+    steps:
+      - uses: actions/checkout@v4
 
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+          gradle-home-cache-cleanup: true
+          dependency-graph: generate-and-submit
+          add-job-summary-as-pr-comment: always
+          
+      - name: Integration tests
+        working-directory: ./adapter
+        run: ./gradlew intTest jacocoTestReport -Pencrypted
+
+      - name: Test report
+        env:
+          NODE_OPTIONS: '--max-old-space-size=6144'
+        uses: dorny/test-reporter@v2
+        if: success() || failure()
+        with:
+          name: Integration tests
+          path: adapter/**/build/test-results/**/TEST-*.xml
+          reporter: java-junit
+          list-suites: 'failed'
+          list-tests: 'failed'
+
+  IntTestsPlaintext:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    needs: BuildWithUnitTests
+    name: Plaintext integration tests
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+          gradle-home-cache-cleanup: true
+          dependency-graph: generate-and-submit
+          add-job-summary-as-pr-comment: always
+
+      - name: Integration Tests
+        working-directory: ./adapter
+        run: ./gradlew intTest jacocoTestReport
+
+      - name: Test report
+        env:
+          NODE_OPTIONS: '--max-old-space-size=6144'
+        uses: dorny/test-reporter@v2
+        if: success() || failure()
+        with:
+          name: Integration tests
+          path: adapter/**/build/test-results/**/TEST-*.xml
+          reporter: java-junit
+          list-suites: 'failed'
+          list-tests: 'failed'
