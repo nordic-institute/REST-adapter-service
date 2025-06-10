@@ -96,7 +96,7 @@ license {
 }
 
 // Profile
-val isEncrypted = project.hasProperty("encrypted")
+val isEncrypted = project.hasProperty("encrypted") || (System.getenv("ENCRYPTED")?.toBoolean() == true)
 val adapterProfileDir = if (isEncrypted) "encrypted" else "plaintext"
 
 // Filtering
@@ -111,24 +111,42 @@ val defaultProps = Properties().apply {
 
 tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun"){
     logger.info("Used profile: " + adapterProfileDir)
+    systemProperty(
+        "spring.config.location",
+        "file:${project.projectDir}/customProperties/"
+    )
+    logger.info("using custom properties directory:  ${project.projectDir}/customProperties/")
 }
 
 tasks.named<ProcessResources>("processResources") {
     logger.info(if (isEncrypted) "Running with encrypted profile" else "Running with plaintext profile");
 
     var replacements = baseReplacements + defaultProps.entries.associate { it.key.toString() to it.value.toString() }
-    from("src/main/profiles/$adapterProfileDir/") {
-        filesMatching("**/*.properties") {
-            filter<ReplaceTokens>("tokens" to replacements)
+
+    // copying properties files for consumer and provider endpoints
+    val customProperties = System.getenv("CUSTOM_PROPERTIES_DIR")?.toString() ?: project.findProperty("customProperties")?.toString() ?: ""
+    if (!customProperties.equals("")) {
+        from(customProperties) {
+            filesMatching("**/*.properties") {
+                filter<ReplaceTokens>("tokens" to replacements)
+            }
+        }
+    } else {
+        from("src/main/profiles/$adapterProfileDir/") {
+            filesMatching("**/*.properties") {
+                filter<ReplaceTokens>("tokens" to replacements)
+            }
         }
     }
 
     if (isEncrypted) {
-        copy {
-            from("src/main/resources-bin/") {
-                include("**/*.jks")
+        doLast {
+            copy {
+                from("src/main/resources-bin/") {
+                    include("**/*.jks")
+                }
+                into("build/resources/main/resources-bin")
             }
-            into("build/resources/main/resources-bin")
         }
     }
 }
@@ -170,7 +188,6 @@ tasks.register("processIntTestResources") {
             }
             into("${project.projectDir}/build/resources/integration-test-profile")
         }
-
     }
 }
 
