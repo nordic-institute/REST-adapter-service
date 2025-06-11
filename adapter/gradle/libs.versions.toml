@@ -10,7 +10,7 @@ licenseGradlePlugin = "0.16.1"
 org-niis-xrd4j = "0.8.0"
 
 #Other
-org-apache-tomcat-embed-tomcat-embed-jasper = "10.1.39"
+org-apache-tomcat-embed-tomcat-embed-jasper = "11.0.8"
 org-projectlombok-lombok = "1.18.30"
 com-puppycrawl-tools-checkstyle = "10.23.1"
 
