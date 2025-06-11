@@ -68,7 +68,7 @@ adapter/bin
 
 #Gradle
 adapter/.gradle
-adapter/gradle/.tmp
-adapter/gradle/caches
-adapter/gradle/daemon
-adapter/gradle/native
+adapter/gradle/*
+!adapter/gradle/wrapper
+!adapter/gradle/wrapper/gradle-wrapper.jar
+!adapter/gradle/libs.versions.toml

@@ -96,7 +96,7 @@ license {
 }
 
 // Profile
-val isEncrypted = project.hasProperty("encrypted")
+val isEncrypted = project.hasProperty("encrypted") 
 val adapterProfileDir = if (isEncrypted) "encrypted" else "plaintext"
 
 // Filtering
@@ -124,11 +124,13 @@ tasks.named<ProcessResources>("processResources") {
     }
 
     if (isEncrypted) {
-        copy {
-            from("src/main/resources-bin/") {
-                include("**/*.jks")
+        doLast {
+            copy {
+                from("src/main/resources-bin/") {
+                    include("**/*.jks")
+                }
+                into("build/resources/main/resources-bin")
             }
-            into("build/resources/main/resources-bin")
         }
     }
 }
@@ -170,7 +172,6 @@ tasks.register("processIntTestResources") {
             }
             into("${project.projectDir}/build/resources/integration-test-profile")
         }
-
     }
 }
 
