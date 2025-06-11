@@ -53,15 +53,26 @@ In order for REST Adapter Service to work, the configuration must be provided at
 
 ## Setup example configuration
 
-#### Running REST-adapter-service with example configuration
+### Running REST-adapter-service with example configuration
 To test run the application with example configuration, you can copy either the configuration in `adapter/exampleProperties/encrypted` or in `adapter/exampleProperties/plaintext` **to your own directory** and manually replace the placeholders `@projectDir@` and `@rest.adapter.profile.port@` with the actual values.
 
-#### Integration Tests
+### Integration Tests
 Running integration tests, you can either provide the commandline argument `-PcustomPropertiesDir=<path to properties dir>` or set the environment variable `CUSTOM_PROPERTIES_DIR` to the desired path. By default, the application will try to load properties files from `exampleProperties/plaintext` directory, automatically replacing `@projectDir@` and `@rest.adapter.profile.port@` placeholders with the actual values. 
 To run the integration tests with encrypted example configuration, you can use the following command at `./adapter`:
 ```
 ./gradlew intTest -PcustomPropertiesDir=exampleProperties/encrypted/
 ```
+
+### Running REST-adapter-service using Docker 
+To run the REST Adapter Service using Docker with example configuration, please follow these steps:
+1. please copy the example configuration files from `adapter/exampleProperties/encrypted` or `adapter/exampleProperties/plaintext` to your own directory and manually replace the placeholders `@projectDir@` and `@rest.adapter.profile.port@` with the actual values into `<YOUR_OWN_PROPERTIES_DIR>`.
+2. replace `<path to properties dir>` in `docker-compose.yml` with the actual path to your properties directory, e.g. `<YOUR_OWN_PROPERTIES_DIR>`.
+3. you can build the Docker image with the command below
+    ```
+    docker compose up 
+    ```
+   This will mount your properties directory into the container `/app/config` and start the REST Adapter Service with the provided configuration.
+
 
 ## FAQs
 - What happens if a file is missing?

@@ -4,8 +4,8 @@ services:
     build:
       context: .
       args:
-        - PROPS_DIR_HOST=./adapter/customProperties
-        - CUSTOM_PROPERTIES_DIR=./config
         - ENCRYPTION_KEYS_DIR=./build/resources/main/resources-bin/
     ports:
       - "8080:8080"
+    volumes:
+      - <path to properties dir>:/app/config:ro
