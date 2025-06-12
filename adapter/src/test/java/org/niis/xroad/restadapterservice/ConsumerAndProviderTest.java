@@ -96,17 +96,7 @@ public class ConsumerAndProviderTest {
     public static void setPropertiesDirectory() {
         File apptestConfigFolder = new File(
                 ConsumerAndProviderTest.class.getClassLoader().getResource("application-test-properties").getFile());
-        originalPropertiesDir = System.getProperty(Constants.PROPERTIES_DIR_PARAM_NAME);
-        System.setProperty(Constants.PROPERTIES_DIR_PARAM_NAME, apptestConfigFolder.getAbsolutePath());
         Application.setPropertiesDirectory(apptestConfigFolder.getAbsolutePath());
-//        System.setProperty("customPropertiesDir", apptestConfigFolder.getAbsolutePath());
-    }
-
-    @AfterAll
-    public static void restorePropertiesDirectory() {
-        if (originalPropertiesDir != null) {
-            System.setProperty(Constants.PROPERTIES_DIR_PARAM_NAME, originalPropertiesDir);
-        }
     }
 
     private static final String REST_ADAPTER_HAETOIMIJA_JSON_REQUEST = "{ \"Tunniste\": \"12345\" }";

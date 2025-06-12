@@ -74,10 +74,4 @@ To run the REST Adapter Service using Docker with example configuration, please 
    This will mount your properties directory into the container `/app/config` and start the REST Adapter Service with the provided configuration.
 
 
-## FAQs
-- What happens if a file is missing?
-
-   Startup will fail with an error indicating the missing file.
-
-- How to debug encryption issues?
    
