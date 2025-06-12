@@ -100,8 +100,20 @@ tasks.bootRun() {
         systemProperty("customPropertiesDir", project.property("customPropertiesDir") as String)
     }
 }
+
+tasks.named<ProcessResources>("processTestResources") {
+    group = "verification"
+    val replacements = mutableMapOf(
+        "projectDir" to project.projectDir.toString()
+    )
+    filesMatching("**/*.properties") {
+        filter<ReplaceTokens>("tokens" to replacements)
+    }
+}
+
 tasks.test {
     group = "verification"
+    dependsOn("processTestResources")
 
     useJUnitPlatform()
     exclude("org/niis/xroad/restadapterservice/ConsumerGatewayIT.class")
