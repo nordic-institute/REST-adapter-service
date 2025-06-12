@@ -24,8 +24,6 @@ package org.niis.xroad.restadapterservice;
 
 import org.niis.xroad.restadapterservice.filter.ConsumerURIFilter;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -48,14 +46,8 @@ import java.util.EnumSet;
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 
-    @Setter
-    @Getter
-    private static String propertiesDirectory;
-
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(Application.class);
-        app.addInitializers(new CustomInit());
-        app.run(args);
+        SpringApplication.run(Application.class, args);
     }
 
     @Bean

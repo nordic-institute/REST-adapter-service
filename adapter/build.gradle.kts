@@ -140,7 +140,9 @@ tasks.register<ProcessResources>("processIntTestResources") {
 
     var replacements =  baseReplacements + props.entries.associate { it.key.toString() to it.value.toString() }
 
-    from(project.findProperty("customPropertiesDir") ?: "${project.projectDir}/exampleProperties/plaintext") {
+    var customPropertiesDir = project.findProperty("customPropertiesDir")?.toString() ?: "${project.projectDir}/src/test/resources/application-intTest-properties/plaintext"
+    from(customPropertiesDir) {
+        logger.info("Using properties from: $customPropertiesDir")
         filesMatching("**/*.properties") {
             filter<ReplaceTokens>("tokens" to replacements)
         }

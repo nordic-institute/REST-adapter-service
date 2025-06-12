@@ -95,7 +95,8 @@ public class ConsumerAndProviderTest {
     public static void setPropertiesDirectory() {
         File apptestConfigFolder = new File(
                 ConsumerAndProviderTest.class.getClassLoader().getResource("application-test-properties").getFile());
-        Application.setPropertiesDirectory(apptestConfigFolder.getAbsolutePath());
+        System.setProperty(Constants.PROPERTIES_DIR,
+                apptestConfigFolder.getAbsolutePath());
     }
 
     private static final String REST_ADAPTER_HAETOIMIJA_JSON_REQUEST = "{ \"Tunniste\": \"12345\" }";
