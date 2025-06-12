@@ -45,13 +45,12 @@ To run the integration tests with encrypted example configuration, you can use t
 
 ### Running REST-adapter-service using Docker 
 To run the REST Adapter Service using Docker with example configuration, please follow these steps:
-1. please copy the example configuration files from `adapter/exampleProperties/encrypted` or `adapter/exampleProperties/plaintext` to your own directory and manually replace the placeholders `@projectDir@` and `@rest.adapter.profile.port@` with the actual values into `<YOUR_OWN_PROPERTIES_DIR>`.
-2. replace `<path to properties dir>` in `docker-compose.yml` with the actual path to your properties directory, e.g. `<YOUR_OWN_PROPERTIES_DIR>`.
-3. if you need to build the Docker image, you can use this command
+1. please copy the example configuration files from `adapter/exampleProperties` as `.properties` files to `<path to properties dir>`.
+2. if you need to build the Docker image, you can use this command
    ```bash
    docker build -t rest_adapter_service .
    ```
-4. run the Docker container with the following command, replacing `<path to properties dir>` and `<path to keystores dir>`:
+3. run the Docker container with the following command, replacing `<path to properties dir>`, `<path to keystores dir>` and `<docker path to keystores>` with the actual paths:
    ```bash
    docker run --name rest_adapter_service \
       -p 8080:8080 \
@@ -60,6 +59,5 @@ To run the REST Adapter Service using Docker with example configuration, please 
       rest_adapter_service
     ```
    This will mount your properties directory into the container `/app/config` and start the REST Adapter Service with the provided configuration.
-
 
    
