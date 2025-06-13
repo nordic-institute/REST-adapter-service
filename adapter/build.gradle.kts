@@ -106,6 +106,10 @@ tasks.named<ProcessResources>("processTestResources") {
     val replacements = mutableMapOf(
         "projectDir" to project.projectDir.toString()
     )
+
+    exclude("**/application-intTest-properties/")
+    exclude("**/application-intTest-keys/")
+
     filesMatching("**/*.properties") {
         filter<ReplaceTokens>("tokens" to replacements)
     }
@@ -140,14 +144,22 @@ tasks.register<ProcessResources>("processIntTestResources") {
 
     var replacements =  baseReplacements + props.entries.associate { it.key.toString() to it.value.toString() }
 
-    var customPropertiesDir = project.findProperty("customPropertiesDir")?.toString() ?: "${project.projectDir}/src/test/resources/application-intTest-properties/plaintext"
-    from(customPropertiesDir) {
-        logger.info("Using properties from: $customPropertiesDir")
-        filesMatching("**/*.properties") {
-            filter<ReplaceTokens>("tokens" to replacements)
+    var customPropertiesDir = project.findProperty("customPropertiesDir")?.toString() ?:
+        "${project.projectDir}/src/test/resources/application-intTest-properties/plaintext"
+    copy {
+        from(customPropertiesDir) {
+            logger.info("Using properties from: $customPropertiesDir")
+            filesMatching("**/*.properties") {
+                filter<ReplaceTokens>("tokens" to replacements)
+            }
         }
+        into("${project.projectDir}/build/resources/integration-test/application-intTest-properties")
     }
-    into("${project.projectDir}/build/resources/integration-test-profile")
+    copy {
+        from("src/test/resources/application-intTest-keys")
+        into("${project.projectDir}/build/resources/integration-test/application-intTest-keys")
+    }
+
 }
 
 tasks.register<Test>("intTest") {
@@ -161,7 +173,7 @@ tasks.register<Test>("intTest") {
 
     include("org/niis/xroad/restadapterservice/ConsumerGatewayIT.class")
 
-    systemProperty("customPropertiesDir", "${project.projectDir}/build/resources/integration-test-profile")
+    systemProperty("customPropertiesDir", "${project.projectDir}/build/resources/integration-test/application-intTest-properties")
     systemProperty("consumerPath", project.projectDir.resolve("libs").resolve("${project.name}-${project.version}.jar"))
     systemProperty("server.port", "9898")
 }

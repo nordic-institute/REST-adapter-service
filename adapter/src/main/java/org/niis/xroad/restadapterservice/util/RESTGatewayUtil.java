@@ -336,7 +336,7 @@ public final class RESTGatewayUtil {
 
         // 2. If not found, check environment variable
         if (propertiesDirectory == null || propertiesDirectory.isEmpty()) {
-            propertiesDirectory = System.getenv("REST_ADAPTER_PROPERTIES_DIR");
+            propertiesDirectory = System.getenv(Constants.PROPERTIES_DIR_ENV);
         }
 
         // 3. If still not found, set default value

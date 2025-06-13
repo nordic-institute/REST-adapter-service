@@ -59,7 +59,6 @@ public class ProviderGatewayUtilTest {
         Properties props = new Properties();
         Properties endpoints = new Properties();
         // Set up default properties
-        props.put("wsdl.path", "exampleProperties/provider-gateway.wsdl");
         props.put(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_SERIALIZE, "http://serialize.com");
         props.put(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_PREFIX_SERIALIZE, "ts1");
         props.put(Constants.ENDPOINT_PROPS_SERVICE_NAMESPACE_DESERIALIZE, "http://deserialize.com");

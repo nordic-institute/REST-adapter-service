@@ -1,9 +1,0 @@
-services:
-  rest_adapter_service:
-    container_name: rest_adapter_service
-    build: .
-    ports:
-      - "8080:8080"
-    volumes:
-      - /home/pauline/Documents/work/X-ROAD/REST-adapter-service/adapter/examplePropertiesCOPY/encrypted:/app/config:ro
-      - /home/pauline/Documents/work/X-ROAD/REST-adapter-service/adapter/src/main/resources-bin:/app/resources-bin:ro

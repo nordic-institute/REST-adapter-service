@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jdk-alpine AS build
+FROM ubuntu:24.04 AS build
 WORKDIR /app
 
 COPY ./adapter/build.gradle.kts ./adapter/settings.gradle.kts ./adapter/gradlew ./
@@ -8,11 +8,19 @@ COPY ./adapter/src ./src
 
 RUN chmod +x ./gradlew
 
+RUN apt-get update \
+    && apt-get install -y openjdk-21-jdk \
+    && apt-get clean
+
 RUN ./gradlew clean build -x test -x checkstyleMain -x checkstyleTest -x licenseMain -x licenseTest
 RUN cd ./build/libs && ls -lah
 
-FROM eclipse-temurin:21-jre-alpine
+FROM ubuntu:24.04
 WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install -y openjdk-21-jre \
+    && apt-get clean
 
 COPY --from=build /app/build/libs/*.jar app.jar
 

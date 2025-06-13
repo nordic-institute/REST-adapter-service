@@ -45,12 +45,12 @@ To run the integration tests with encrypted example configuration, you can use t
 
 ### Running REST-adapter-service using Docker 
 To run the REST Adapter Service using Docker with example configuration, please follow these steps:
-1. please copy the example configuration files from `adapter/exampleProperties` as `.properties` files to `<path to properties dir>`.
-2. if you need to build the Docker image, you can use this command
+1. Please copy the example configuration files from `adapter/exampleProperties` as `.properties` files to `<path to properties dir>` (can be the same folder) and replace all placeholders. 
+2. If you need to build the Docker image, you can use this command
    ```bash
    docker build -t rest_adapter_service .
    ```
-3. run the Docker container with the following command, replacing `<path to properties dir>`, `<path to keystores dir>` and `<docker path to keystores>` with the actual paths:
+3. Run the Docker container with the following command, replacing `<path to properties dir>`, `<path to keystores dir>` and `<docker path to keystores>` with the actual paths. The mounted path in Docker container `<docker path to keystores>` needs to match the path that is referenced from the properties files, e.g. `publicKeyFile` in `provider-gateway.properties`:
    ```bash
    docker run --name rest_adapter_service \
       -p 8080:8080 \
@@ -59,5 +59,7 @@ To run the REST Adapter Service using Docker with example configuration, please 
       rest_adapter_service
     ```
    This will mount your properties directory into the container `/app/config` and start the REST Adapter Service with the provided configuration.
+      
+   **N.B.!** If you want to add a wsdl file to the container, please add this volume `-v <path to wsdl file>:<docker path to wsdl file>:ro \` to the command and replace the placeholders. `<docker path to wsdl file>` needs to be the same path that is referenced in `provider-gateway.properties` file in `wsdl.path`.
 
    
