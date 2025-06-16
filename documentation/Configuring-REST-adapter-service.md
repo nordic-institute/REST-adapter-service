@@ -37,8 +37,9 @@ In order for REST Adapter Service to work, the configuration must be provided at
 To test run the application with example configuration, you can copy the `./adapter/exampleProperties/*.properties.example` as `.properties` files into `<path to properties dir>` and replace the placeholders. 
 
 ### Integration Tests
-Running integration tests, you can either provide the commandline argument `-PcustomPropertiesDir=<path to properties dir>` or set the environment variable `REST_ADAPTER_PROPERTIES_DIR` to the desired path. By default, the application will try to load properties files from `./adapter/src/test/resources/application-intTest-properties/plaintext` directory, automatically replacing `@projectDir@` and `@rest.adapter.profile.port@` placeholders with the actual values. 
-To run the integration tests with encrypted example configuration, you can use the following command from `./adapter` directory:
+Integration tests can be run plaintext or encrypted. Plaintext is run by default, if you do not provide a commandline argument like `-PcustomPropertiesDir=<path to properties dir>` or set the environment variable `REST_ADAPTER_PROPERTIES_DIR` to the desired path. 
+Resourec processing will automatically replace `@projectDir@` and `@rest.adapter.profile.port@` placeholders in the properties files with the actual values. 
+To run the integration tests with encrypted configuration, you can use the following command from `./adapter` directory:
 ```bash
 ./gradlew intTest -PcustomPropertiesDir=src/test/resources/application-intTest-properties/encrypted
 ```
