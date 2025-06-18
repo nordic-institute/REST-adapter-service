@@ -74,4 +74,5 @@ adapter/gradle/*
 !adapter/gradle/libs.versions.toml
 
 # Local Example configuration
-adapter/exampleProperties/*.properties
+adapter/exampleProperties/
+!adapter/exampleProperties/*.properties.example
