@@ -32,6 +32,9 @@ public final class Constants {
     /**
      * Properties files
      */
+
+    public static final String PROPERTIES_DIR = "customPropertiesDir";
+    public static final String PROPERTIES_DIR_ENV = "REST_ADAPTER_PROPERTIES_DIR";
     public static final String PROPERTIES_FILE_PROVIDER_GATEWAY = "/provider-gateway.properties";
     public static final String PROPERTIES_FILE_CONSUMER_GATEWAY = "/consumer-gateway.properties";
     public static final String PROPERTIES_FILE_PROVIDERS = "/providers.properties";

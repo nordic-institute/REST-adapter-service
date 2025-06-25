@@ -43,24 +43,9 @@ properties file. If that property is not provided, plaintext-profile will be use
 ./gradlew bootRun --Pencryped
 ```
 
-## Configuration files location
+## Configuring REST Adapter Service
 
-Rest Adapter Service tries to load configuration files from the following locations,
-in the following order.
-
-If a matching directory exists, all the configuration files
-need to exist in that directory, otherwise an error occurs. Configuration
-directory scanning stops once the first matching directory is located.
-
-Scanned directories:
-1. The directory specified by the system property ```propertiesDirectory```
-    ```
-    java -jar -DpropertiesDirectory=/my/custom/path rest-adapter-service-x.x.x.jar
-    ```
-2. As a fallback, the default configuration shipped with the WAR (classpath)
-
-
-More detailed usage examples are available in [documentation](documentation/Rest-Adapter-Service-principles.md#usage).
+Please refert to the [Configuring REST Adapter Service](Configuring-REST-adapter-service.md) documentation for more information on how to configure the service.
 
 # Installing Rest Adapter Service
 

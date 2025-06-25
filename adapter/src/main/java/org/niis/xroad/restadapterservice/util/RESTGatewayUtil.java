@@ -329,23 +329,24 @@ public final class RESTGatewayUtil {
      * Find the properties directory:
      */
     public static String getPropertiesDirectory() {
-        final String os = System.getProperty("os.name", "generic").toLowerCase();
-        String dir = System.getProperty(Constants.PROPERTIES_DIR_PARAM_NAME);
-        if (dir != null) {
-            //if defined by the property, it will be an error if the directory does not exist
-            return dir;
+
+        String propertiesDirectory;
+        // 1. Check system property (command line -D option for jar file or -P option for gradle task)
+        propertiesDirectory = System.getProperty(Constants.PROPERTIES_DIR);
+
+        // 2. If not found, check environment variable
+        if (propertiesDirectory == null || propertiesDirectory.isEmpty()) {
+            propertiesDirectory = System.getenv(Constants.PROPERTIES_DIR_ENV);
         }
 
-        Path p = Paths.get(System.getProperty("user.home"), Constants.PROPERTIES_DIR_NAME);
+        // 3. If still not found, set default value
+        if (propertiesDirectory == null || propertiesDirectory.isEmpty()) {
+            propertiesDirectory = System.getProperty("user.dir");
+        } // or however you store it
+
+        Path p = Paths.get(propertiesDirectory);
         if (Files.exists(p)) {
             return p.toString();
-        }
-
-        if (os.startsWith("linux")) {
-            p = Paths.get("/etc", Constants.PROPERTIES_DIR_NAME);
-            if (Files.exists(p)) {
-                return p.toString();
-            }
         }
 
         return null;

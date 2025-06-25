@@ -244,5 +244,6 @@ public class ConsumerGatewayWireMockTest {
         public Properties build() {
             return (Properties) properties.clone();
         }
+
     }
 }

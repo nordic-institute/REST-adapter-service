@@ -1,11 +1,28 @@
-# Base java:8
-FROM java:8
+FROM ubuntu:24.04 AS build
+WORKDIR /app
 
-# Add Rest Gateway war to container
-ADD src/target/rest-adapter-service-*.war rest-adapter-service.war
+COPY ./adapter/build.gradle.kts ./adapter/settings.gradle.kts ./adapter/gradlew ./
+COPY ./adapter/gradle/wrapper/ ./gradle/wrapper/
+COPY ./adapter/gradle/libs.versions.toml ./gradle/
+COPY ./adapter/src ./src
 
-# Entry with exec
-ENTRYPOINT exec java $JAVA_OPTS -jar /rest-adapter-service.war
+RUN chmod +x ./gradlew
 
-# Expose default port
-EXPOSE 8080
+RUN apt-get update \
+    && apt-get install -y openjdk-21-jdk \
+    && apt-get clean
+
+RUN ./gradlew clean build -x test -x checkstyleMain -x checkstyleTest -x licenseMain -x licenseTest
+RUN cd ./build/libs && ls -lah
+
+FROM ubuntu:24.04
+WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install -y openjdk-21-jre \
+    && apt-get clean && apt-get autoremove \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /app/build/libs/*.jar app.jar
+
+ENTRYPOINT ["java", "-DcustomPropertiesDir=config", "-jar", "/app/app.jar"]
