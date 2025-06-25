@@ -2,7 +2,7 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-springBoot = "3.4.4"
+springBoot = "3.5.3"
 dependencyManagement = "1.0.11.RELEASE"
 licenseGradlePlugin = "0.16.1"
 
@@ -18,7 +18,7 @@ com-puppycrawl-tools-checkstyle = "10.23.1"
 com-github-stefanbirkner-system-rules = "1.16.0"
 com-jayway-jsonpath-json = "2.2.0"
 commons-io-commons-io = "2.6"
-org-springframework-boot-spring-boot = "3.4.4"
+org-springframework-boot-spring-boot = "3.5.3"
 org-xmlunit-xmlunit = "2.7.0"
 org-wiremock-integrations-wiremock-spring-boot = "3.6.0"
 
