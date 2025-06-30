@@ -15,12 +15,12 @@ org-projectlombok-lombok = "1.18.30"
 com-puppycrawl-tools-checkstyle = "10.23.1"
 
 #Testing
-com-github-stefanbirkner-system-rules = "1.16.0"
-com-jayway-jsonpath-json = "2.2.0"
+com-github-stefanbirkner-system-rules = "1.19.0"
+com-jayway-jsonpath-json = "2.9.0"
 commons-io-commons-io = "2.6"
 org-springframework-boot-spring-boot = "3.4.4"
-org-xmlunit-xmlunit = "2.7.0"
-org-wiremock-integrations-wiremock-spring-boot = "3.6.0"
+org-xmlunit-xmlunit = "2.10.3"
+org-wiremock-integrations-wiremock-spring-boot = "3.10.0"
 
 [libraries]
 # Springboot
