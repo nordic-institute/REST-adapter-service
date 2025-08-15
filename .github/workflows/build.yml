@@ -145,5 +145,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run end-to-end tests
         run: |
-          docker build -q --no-cache -t niis/rest_adapter_service ./adapter
+          docker build --build-arg ADAPTER_UID=(id -u) --build-arg ADAPTER_GID=(id -g) -q --no-cache -t niis/rest_adapter_service ./adapter
           cd ./adapter/docker/test-restService && env RELEASE_VERSION=latest ./conversion-test.sh
