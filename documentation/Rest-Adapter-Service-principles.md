@@ -179,6 +179,8 @@ JSON -> XML conversion has some limitations
 * Gateway can't produce XML attributes from the JSON source. 
 * It's not possible to produce XML with mixed content or elements.
 * Gateway produces XML with unspecified child element ordering. 
+* Using the keyword `content` as a json key can cause conversion issues as it is used by internal libraries.
+* JSON Arrays must contain more than one element.
 
 In this example, subject, attachment, messageId and text elements could appear in any order.
 In short, current implementation can convert only relatively simple messages.
