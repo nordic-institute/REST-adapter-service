@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/format1"
+  },
+  "response": {
+    "status": 200,
+    "body": "[{\"content\":\"Hello,WireMock!\"},{\"next\":\"Hello,WireMock!\",\"last\":\"Hello,WireMock!\"}]",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

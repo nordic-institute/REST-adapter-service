@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/format6"
+  },
+  "response": {
+    "status": 200,
+    "body": "[{\"key1\":\"content1\",\"key2\":\"content2\",\"key3\":\"content3\"},{\"key4\":\"content4\",\"key5\":[{\"key6\":\"content6\"}]}]",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

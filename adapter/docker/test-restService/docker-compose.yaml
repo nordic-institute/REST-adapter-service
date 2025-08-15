@@ -1,0 +1,74 @@
+services:
+  rest-adapter-service:
+    image: niis/rest_adapter_service:${RELEASE_VERSION}
+    container_name: adapter
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./test-properties:/app/config:ro
+      - ./test-keys:/app/test-keys:ro
+    networks:
+      - rest-adapter-network
+
+  wiremock:
+    image: wiremock/wiremock
+    container_name: wiremock
+    ports:
+      - "8082:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://wiremock:8080/__admin" ]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+    networks:
+      - rest-adapter-network
+
+  wiremock-init:
+    image: curlimages/curl:latest
+    depends_on:
+      - wiremock
+    volumes:
+        - ./wiremock-init:/tmp/wiremock-init:ro
+    entrypoint: >
+      sh -c '
+          sleep 3 && \
+          curl -X POST http://wiremock:8080/__admin/mappings \
+                      -H "Content-Type: application/json" \
+                      --data-binary @/tmp/wiremock-init/format1.json 
+          curl -X POST http://wiremock:8080/__admin/mappings \
+                      -H "Content-Type: application/json" \
+                      --data-binary @/tmp/wiremock-init/format2.json 
+          curl -X POST http://wiremock:8080/__admin/mappings \
+                      -H "Content-Type: application/json" \
+                      --data-binary @/tmp/wiremock-init/format3.json 
+          curl -X POST http://wiremock:8080/__admin/mappings \
+                      -H "Content-Type: application/json" \
+                      --data-binary @/tmp/wiremock-init/format4.json 
+          curl -X POST http://wiremock:8080/__admin/mappings \
+                      -H "Content-Type: application/json" \
+                      --data-binary @/tmp/wiremock-init/format5.json
+          curl -X POST http://wiremock:8080/__admin/mappings \
+                      -H "Content-Type: application/json" \
+                      --data-binary @/tmp/wiremock-init/format6.json
+        '
+    networks:
+      - rest-adapter-network
+
+  hurl:
+    image: ghcr.io/orange-opensource/hurl:4.2.0
+    entrypoint: /bin/sh
+    init: true
+    volumes:
+      - type: bind
+        source: .
+        target: /tmp/test
+    command:
+      - "-ec"
+      - "while true; do sleep 5; done"
+    networks:
+      - rest-adapter-network
+
+networks:
+  rest-adapter-network:
+    name: rest-adapter-network
+    driver: bridge

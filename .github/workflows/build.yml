@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - develop
+      - XRDDEV-2957
     paths:
       - 'adapter/**'
       - '.github/**'
@@ -133,3 +134,18 @@ jobs:
           reporter: java-junit
           list-suites: 'failed'
           list-tests: 'failed'
+  
+  EndToEndTests:
+    runs-on: 
+      runs-on: ubuntu-24.04
+      permissions:
+        contents: read
+      needs: IntTestsEncrypted
+      name: End to End tests
+      steps: 
+        - uses: actions/checkoutv4
+        - name: Show Docker versions
+          run: |
+          docker --version
+          docker compose version 
+        - run: ls -lah
