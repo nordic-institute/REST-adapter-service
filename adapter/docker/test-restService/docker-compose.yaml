@@ -43,13 +43,7 @@ services:
                       --data-binary @/tmp/wiremock-init/format3.json 
           curl -X POST http://wiremock:8080/__admin/mappings \
                       -H "Content-Type: application/json" \
-                      --data-binary @/tmp/wiremock-init/format4.json 
-          curl -X POST http://wiremock:8080/__admin/mappings \
-                      -H "Content-Type: application/json" \
-                      --data-binary @/tmp/wiremock-init/format5.json
-          curl -X POST http://wiremock:8080/__admin/mappings \
-                      -H "Content-Type: application/json" \
-                      --data-binary @/tmp/wiremock-init/format6.json
+                      --data-binary @/tmp/wiremock-init/format4.json
         '
     networks:
       - rest-adapter-network

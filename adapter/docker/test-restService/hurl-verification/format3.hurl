@@ -13,8 +13,8 @@ HTTP 200
 [Asserts]
 status == 200
 
-```json
-[{"key": "content1","key2": "content2", "key3": "content3"}]
-```
-
-# ERROR: org.json.JSONException: JSONObject["array"] is not a JSONArray (class org.json.JSONObject).
+jsonpath "$[0].key1" == "content1"
+jsonpath "$[0].key2" == "content2"
+jsonpath "$[0].key3" == "content3"
+jsonpath "$[1].key4" == "content4"
+jsonpath "$[1].key5" == "content5"

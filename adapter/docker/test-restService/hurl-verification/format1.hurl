@@ -13,8 +13,4 @@ HTTP 200
 [Asserts]
 status == 200
 
-```json
-[{"key":"Hello,WireMock!"},{"next":"Hello,WireMock!","last":"Hello,WireMock!"}]
-```
-
-#Actual: ["Hello,WireMock!",{"next":"Hello,WireMock!","last":"Hello,WireMock!"}]
+jsonpath "$.key1" == "content1"

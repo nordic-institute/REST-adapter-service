@@ -1,16 +1,16 @@
 FROM ubuntu:24.04 AS build
 WORKDIR /app
 
-COPY ../src ./src
+COPY src ./src
 
 ARG ADAPTER_UID=1000
 ARG ADAPTER_GID=1000
 
 # copy gradle
-COPY ../build.gradle.kts ./adapter/settings.gradle.kts ./adapter/gradlew ./
-COPY ../gradle/wrapper/gradle-wrapper.jar ./gradle/wrapper/gradle-wrapper.jar
-COPY ../gradle/wrapper/gradle-wrapper.properties ./gradle/wrapper/gradle-wrapper.properties
-COPY ../gradle/libs.versions.toml ./gradle/libs.versions.toml
+COPY build.gradle.kts settings.gradle.kts gradlew ./
+COPY gradle/wrapper/gradle-wrapper.jar ./gradle/wrapper/gradle-wrapper.jar
+COPY gradle/wrapper/gradle-wrapper.properties ./gradle/wrapper/gradle-wrapper.properties
+COPY gradle/libs.versions.toml ./gradle/libs.versions.toml
 
 RUN chmod +x ./gradlew
 

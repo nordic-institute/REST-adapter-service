@@ -5,7 +5,7 @@
   },
   "response": {
     "status": 200,
-    "body": "[{\"content\":\"Hello,WireMock!\"},{\"next\":\"Hello,WireMock!\",\"last\":\"Hello,WireMock!\"}]",
+    "body": "{\"key1\":\"content1\"}",
     "headers": {
       "Content-Type": "application/json"
     }

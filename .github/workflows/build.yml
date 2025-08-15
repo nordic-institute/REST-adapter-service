@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - develop
-      - XRDDEV-2957
     paths:
       - "adapter/**"
       - ".github/**"
@@ -138,12 +137,13 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: read
-    needs: IntTestsEncrypted
-    name: End to End tests
+    needs:
+      - IntTestsEncrypted
+      - IntTestsPlaintext
+    name: End-to-End tests
     steps:
       - uses: actions/checkout@v4
-      - name: Show Docker versions
+      - name: Run end-to-end tests
         run: |
-          docker --version
-          docker compose version
-      - run: ls -lah
+          docker build -q --no-cache -t niis/rest_adapter_service ./adapter
+          cd ./adapter/docker/test-restService && env RELEASE_VERSION=latest ./conversion-test.sh

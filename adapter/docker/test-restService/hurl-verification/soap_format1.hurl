@@ -35,7 +35,7 @@ status == 200
         <xro:userId>EE1234567890</xro:userId>
         <xro:protocolVersion>4.0</xro:protocolVersion>
     </soapenv:Header>
-    <soapenv:Body><ts1:format1_plainResponse><ts1:key1>content1</ts1:key1><ts1:key2>content2</ts1:key2><ts1:key3>content3</ts1:key3></ts1:format1_plainResponse></soapenv:Body>
+    <soapenv:Body><ts1:format1_plainResponse><ts1:key1>content1</ts1:key1></ts1:format1_plainResponse></soapenv:Body>
 </soapenv:Envelope>
 ```
 

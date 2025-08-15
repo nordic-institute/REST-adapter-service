@@ -13,8 +13,6 @@ HTTP 200
 [Asserts]
 status == 200
 
-```json
-{"key1":"content1","key2":{"key3":"content3","key4":"content4"}}
-```
-
-# works
+jsonpath "$.key1" == "content1"
+jsonpath "$.key2.key3" =="content3"
+jsonpath "$.key2.key4" == "content4"

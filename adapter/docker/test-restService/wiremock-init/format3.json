@@ -5,7 +5,7 @@
   },
   "response": {
     "status": 200,
-    "body": "[{\"key\": \"content1\",\"key2\": \"content2\", \"key3\": \"content3\"}]",
+    "body": "[{\"key1\":\"content1\",\"key2\":\"content2\",\"key3\":\"content3\"},{\"key4\":\"content4\",\"key5\":\"content5\"}]",
     "headers": {
       "Content-Type": "application/json"
     }
