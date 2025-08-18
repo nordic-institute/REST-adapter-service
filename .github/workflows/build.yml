@@ -143,8 +143,11 @@ jobs:
     name: End-to-End tests
     steps:
       - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build --build-arg ADAPTER_UID=$(id -u) --build-arg ADAPTER_GID=$(id -g) -q --no-cache -t niis/rest_adapter_service ./adapter
       - name: Run end-to-end tests
-        shell: bash
-        run: |
-          docker build --build-arg ADAPTER_UID=$(id -u) --build-arg ADAPTER_GID=$(id -g) -q --no-cache -t niis/rest_adapter_service ./adapter
-          cd ./adapter/docker/test-restService && env RELEASE_VERSION=latest ./conversion-test.sh
+        working-directory: ./adapter/docker/test-restService
+        run: env RELEASE_VERSION=latest ./conversion-test.sh
+      - name: Run end-to-end tests for SOAP
+        working-directory: ./adapter/docker/test-soapService
+        run: env RELEASE_VERSION=latest ./conversion-test.sh

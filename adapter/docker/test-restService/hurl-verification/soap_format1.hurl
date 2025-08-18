@@ -1,4 +1,3 @@
-# Test .... endpoint
 POST http://adapter:8080/rest-adapter-service/Provider
 Content-Type: text/xml;charset=utf-8
 Accept: text/xml

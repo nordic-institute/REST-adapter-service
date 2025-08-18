@@ -1,4 +1,3 @@
-# Test .... endpoint
 GET http://adapter:8080/rest-adapter-service/Consumer/FI_TEST/GOV/9876543-1/Wiremock/format1.v1
 Accept: application/json
 
