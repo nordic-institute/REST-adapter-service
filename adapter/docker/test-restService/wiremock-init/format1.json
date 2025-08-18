@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/format1"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"key1\":\"content1\"}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

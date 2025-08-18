@@ -1,0 +1,27 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xro="http://x-road.eu/xsd/xroad.xsd" xmlns:iden="http://x-road.eu/xsd/identifiers" >
+    <soapenv:Header>
+        <xro:protocolVersion>4.0</xro:protocolVersion>
+        <xro:id>ccddc3c00618d5e1ce85f74fe1280d5cadb09876</xro:id>
+        <xro:userId>GBmisp</xro:userId>
+        <xro:issue/>
+        <xro:service iden:objectType="SERVICE">
+            <iden:xRoadInstance>PLAYGROUND</iden:xRoadInstance>
+            <iden:memberClass>GOV</iden:memberClass>
+            <iden:memberCode>8765432-1</iden:memberCode>
+            <iden:subsystemCode>TestService</iden:subsystemCode>
+            <iden:serviceCode>personDetails</iden:serviceCode>
+            <iden:serviceVersion>v1</iden:serviceVersion>
+        </xro:service>
+        <xro:client iden:objectType="SUBSYSTEM">
+            <iden:xRoadInstance>PLAYGROUND</iden:xRoadInstance>
+            <iden:memberClass>COM</iden:memberClass>
+            <iden:memberCode>1234567-8</iden:memberCode>
+            <iden:subsystemCode>TestClient</iden:subsystemCode>
+        </xro:client>
+    </soapenv:Header>
+    <soapenv:Body>
+        <prod:personDetails xmlns:prod="http://test.x-road.global/producer">
+            <prod:ssn>1235</prod:ssn>
+        </prod:personDetails>
+    </soapenv:Body>
+</soapenv:Envelope>

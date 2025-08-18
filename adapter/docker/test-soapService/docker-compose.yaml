@@ -1,0 +1,33 @@
+services:
+  rest-adapter-service:
+    image: niis/rest_adapter_service:${RELEASE_VERSION}
+    container_name: adapter
+    volumes:
+      - ./test-properties:/app/config:ro
+    networks:
+      - rest-adapter-network
+
+  example-adapter:
+    image: niis/example-adapter:latest
+    container_name: example-adapter
+    networks:
+      - rest-adapter-network
+
+  hurl:
+    image: ghcr.io/orange-opensource/hurl:4.2.0
+    entrypoint: /bin/sh
+    init: true
+    volumes:
+      - type: bind
+        source: .
+        target: /tmp/test
+    command:
+      - "-ec"
+      - "while true; do sleep 5; done"
+    networks:
+      - rest-adapter-network
+
+networks:
+  rest-adapter-network:
+    name: rest-adapter-network
+    driver: bridge
