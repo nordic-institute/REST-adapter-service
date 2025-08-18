@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "org.niis"
-version = "1.1.0-SNAPSHOT"
+version = "2.1.0-SNAPSHOT"
 description = "REST Adapter Service"
 java.sourceCompatibility = JavaVersion.VERSION_21
 
