@@ -27,7 +27,6 @@ import org.niis.xroad.restadapterservice.util.Constants;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,7 +84,6 @@ public class ConsumerAndProviderTest {
     @Value("${wiremock.server.port}")
     private int wireMockPort;
 
-
     @BeforeEach
     public void setUp() throws Exception {
         // set up mock http server for ss
@@ -97,15 +95,8 @@ public class ConsumerAndProviderTest {
     public static void setPropertiesDirectory() {
         File apptestConfigFolder = new File(
                 ConsumerAndProviderTest.class.getClassLoader().getResource("application-test-properties").getFile());
-        originalPropertiesDir = System.getProperty(Constants.PROPERTIES_DIR_PARAM_NAME);
-        System.setProperty(Constants.PROPERTIES_DIR_PARAM_NAME, apptestConfigFolder.getAbsolutePath());
-    }
-
-    @AfterAll
-    public static void restorePropertiesDirectory() {
-        if (originalPropertiesDir != null) {
-            System.setProperty(Constants.PROPERTIES_DIR_PARAM_NAME, originalPropertiesDir);
-        }
+        System.setProperty(Constants.PROPERTIES_DIR,
+                apptestConfigFolder.getAbsolutePath());
     }
 
     private static final String REST_ADAPTER_HAETOIMIJA_JSON_REQUEST = "{ \"Tunniste\": \"12345\" }";
@@ -180,6 +171,7 @@ public class ConsumerAndProviderTest {
 
         @Autowired
         RequestRecordingTestProviderGateway testProviderGateway;
+
 
         @Bean
         public ServletRegistrationBean consumerGatewayBean() {

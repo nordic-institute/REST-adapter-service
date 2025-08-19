@@ -1,0 +1,26 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:id="http://x-road.eu/xsd/identifiers" xmlns:xrd="http://x-road.eu/xsd/xroad.xsd">
+    <SOAP-ENV:Header>
+        <xrd:client id:objectType="SUBSYSTEM">
+            <id:xRoadInstance>FI_TEST</id:xRoadInstance>
+            <id:memberClass>GOV</id:memberClass>
+            <id:memberCode>1234567-8</id:memberCode>
+            <id:subsystemCode>TestClient</id:subsystemCode>
+        </xrd:client>
+        <xrd:service id:objectType="SERVICE">
+            <id:xRoadInstance>FI_TEST</id:xRoadInstance>
+            <id:memberClass>GOV</id:memberClass>
+            <id:memberCode>9876543-1</id:memberCode>
+            <id:subsystemCode>DemoService</id:subsystemCode>
+            <id:serviceCode>helloService</id:serviceCode>
+            <id:serviceVersion>v1</id:serviceVersion>
+        </xrd:service>
+        <xrd:userId>EE1234567890</xrd:userId>
+        <xrd:id>ID11234</xrd:id>
+        <xrd:protocolVersion>4.0</xrd:protocolVersion>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body>
+        <ts1:helloServiceResponse xmlns:ts1="http://test.x-road.global/producer">
+            <ts1:message>Hello Test! Greetings from adapter server!</ts1:message>
+        </ts1:helloServiceResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

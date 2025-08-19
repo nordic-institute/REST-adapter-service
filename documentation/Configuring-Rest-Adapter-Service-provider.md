@@ -11,115 +11,27 @@ Before configuring Rest Adapter Service Provider for X-Road the following condit
 
 General settings are configured through ```provider-gateway.properties``` configuration file. All the general properties are mandatory.
 
-<table>
-          <tbody>
-            <tr>
-              <th>Property</th>
-              <th>Required</th>
-              <th>Default</th>
-              <th>Description</th>
-            </tr>
-            <tr>
-              <td>wsdl.path</td>
-              <td>&#42;</td>
-              <td>-</td>
-              <td>File reading is first attempted from WEB-INF/classes directory 
-                                (either inside packaged war, or in exploded war directory),
-                                and then from filesystem using the provided filename or path.</td>
-            </tr>
-            <tr>
-              <td>namespace.deserialize</td>
-              <td>&#42;</td>
-              <td>-</td>
-              <td>Namespace that's used for deserializing incoming SOAP requests. Can be overridden for each service. **N.B.** Must match the namespace used in the WSDL description.</td>
-            </tr>
-            <tr>
-              <td>namespace.serialize</td>
-              <td>&#42;</td>
-              <td>-</td>
-              <td>Namespace that's used for serializing outgoing SOAP responses. Can be overridden for each service. **N.B.** Must match the namespace used in the WSDL description.</td>
-            </tr>
-            <tr>
-              <td>namespace.prefix.serialize</td>
-              <td>&#42;</td>
-              <td>-</td>
-              <td>Namespace prefix that's used for serializing outgoing SOAP responses. Can be overridden for each service.</td>
-            </tr>
-</tbody>
-</table>
+| Property                  | Required | Default | Description                                                                                     |
+|---------------------------|----------|---------|-------------------------------------------------------------------------------------------------|
+| wsdl.path                | &#42;    | -       | File reading is first attempted from WEB-INF/classes directory (either inside packaged war, or in exploded war directory), and then from filesystem using the provided filename or path. |
+| namespace.deserialize    | &#42;    | -       | Namespace that's used for deserializing incoming SOAP requests. Can be overridden for each service. **N.B.** Must match the namespace used in the WSDL description. |
+| namespace.serialize      | &#42;    | -       | Namespace that's used for serializing outgoing SOAP responses. Can be overridden for each service. **N.B.** Must match the namespace used in the WSDL description. |
+| namespace.prefix.serialize| &#42;    | -       | Namespace prefix that's used for serializing outgoing SOAP responses. Can be overridden for each service. |
 
 REST services to be published are configured through ```providers.properties``` configuration file. Each service has 10 properties of which 2 are mandatory. Each property must be prefixed with the number of the service, e.g. ```0.id```, ```0.url```. The numbering starts from zero.
 
-<table>
-          <tbody>
-            <tr>
-              <th>Property</th>
-              <th>Required</th>
-              <th>Default</th>
-              <th>Description</th>
-            </tr>
-            <tr>
-              <td>id</td>
-              <td>&#42;</td>
-              <td>-</td>
-              <td>Identifier of the X-Road service : instance.memberClass.memberId.subsystem.service.version</td>
-            </tr>
-            <tr>
-              <td>url</td>
-              <td>&#42;</td>
-              <td>-</td>
-              <td>URL of the REST service.</td>
-            </tr>
-            <tr>
-              <td>verb</td>
-              <td></td>
-              <td>GET</td>
-              <td>HTTP verb that's used in the service call. Supported values: GET, POST, PUT and DELETE.</td>
-            </tr>
-            <tr>
-              <td>contenttype</td>
-              <td></td>
-              <td>-</td>
-              <td>Content-type HTTP header that's used in the service call. Required if HTTP verb is POST, PUT or DELETE and HTTP request contains a request body.</td>
-            </tr>
-            <tr>
-              <td>accept</td>
-              <td></td>
-              <td>-</td>
-              <td>Accept HTTP header that's used in the service call.</td>
-            </tr>
-            <tr>
-              <td>response.attachment</td>
-              <td></td>
-              <td>false</td>
-              <td>Return REST response as SOAP attachment. If response is returned as SOAP attachment, Consumer Gateway ignores the value of HTTP Accept header and returns the response in the original format.</td>
-            </tr>
-            <tr>
-              <td>request.xrdheaders</td>
-              <td></td>
-              <td>true</td>
-              <td>Pass X-Road SOAP headers to REST service via HTTP headers.</td>
-            </tr>
-            <tr>
-              <td>namespace.deserialize</td>
-              <td></td>
-              <td>-</td>
-              <td>Namespace that's used for deserializing incoming SOAP requests. If not defined, default value from provider-gateway.properties is used.</td>
-            </tr>
-            <tr>
-              <td>namespace.serialize</td>
-              <td></td>
-              <td>-</td>
-              <td>Namespace that's used for serializing outgoing SOAP responses. If not defined, default value from provider-gateway.properties is used.</td>
-            </tr>
-            <tr>
-              <td>namespace.prefix.serialize</td>
-              <td></td>
-              <td>-</td>
-              <td>Namespace prefix that's used for serializing outgoing SOAP responses. If not defined, default value from provider-gateway.properties is used.</td>
-            </tr>
-</tbody>
-</table>
+| Property                  | Required | Default | Description                                                                                                                                                                                    |
+|---------------------------|----------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| id                       | &#42;    | -       | Identifier of the X-Road service : instance.memberClass.memberId.subsystem.service.version                                                                                                     |
+| url                      | &#42;    | -       | URL of the REST service.                                                                                                                                                                       |
+| verb                     |          | GET     | HTTP verb that's used in the service call. Supported values: GET, POST, PUT and DELETE.                                                                                                        |
+| contenttype              |          | -       | Content-type HTTP header that's used in the service call. Required if HTTP verb is POST, PUT or DELETE and HTTP request contains a request body.                                               |
+| accept                   |          | -       | Accept HTTP header that's used in the service call.                                                                                                                                            |
+| response.attachment      |          | false   | Return REST response as SOAP attachment. If response is returned as SOAP attachment, Consumer Gateway ignores the value of HTTP Accept header and returns the response in the original format. |
+| request.xrdheaders       |          | true    | Pass X-Road SOAP headers to REST service via HTTP headers.                                                                                                                                     |
+| namespace.deserialize    |          | -       | Namespace that's used for deserializing incoming SOAP requests. If not defined, default value from provider-gateway.properties is used.                                                        |
+| namespace.serialize      |          | -       | Namespace that's used for serializing outgoing SOAP responses. If not defined, default value from provider-gateway.properties is used.                                                         |
+| namespace.prefix.serialize|          | -       | Namespace prefix that's used for serializing outgoing SOAP responses. If not defined, default value from provider-gateway.properties is used.                                                  |
 
 ### Publishing to X-Road
 

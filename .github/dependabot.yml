@@ -1,0 +1,63 @@
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/adapter"
+    schedule:
+      interval: "weekly"
+    groups:
+      spring-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+        patterns:
+          - "org.springframework.boot*"
+      xrd4j-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+        patterns:
+          - "org.niis.xrd4j*"
+      lombok-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+        patterns:
+          - "org.projectlombok*"
+      tomcat-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+        patterns:
+          - "org.apache.tomcat.embed*"
+      testing-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+        patterns:
+          - "com.github.stefanbirkner*"
+          - "com.jayway.jsonpath*"
+          - "org.xmlunit*"
+          - "commons.io*"
+          - "org.wiremock.integrations*"
+      checkstyle-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+        patterns:
+          - "com.puppycrawl.tools.checkstyle*"
+  - package-ecosystem: "github-actions"
+    directory: "/.github/workflows"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions-minor-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
