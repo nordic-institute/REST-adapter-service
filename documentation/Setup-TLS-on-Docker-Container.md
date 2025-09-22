@@ -34,6 +34,8 @@ You can do so by adding the following lines to your `docker run` command:
  -e JAVA_TOOL_OPTIONS="-Djavax.net.ssl.keyStore=<path to keystore on container> -Djavax.net.ssl.keyStorePassword=<password> -Djavax.net.ssl.trustStore=<path to truststore on container> -Djavax.net.ssl.trustStorePassword=<password>" 
 ```
 
+N.B.: There is no system property to pick a specific key alias from the keystore, as you can see [here](https://docs.oracle.com/en/java/javase/21/security/java-secure-socket-extension-jsse-reference-guide.html#GUID-0ACD9274-607C-49BE-AED9-BEE2B4F2BEF2), instead if your keystore contains multiple keys, a suitable key is dynamically chosen based on the server's requested certificate types. The default implementation for this is described [here](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/javax/net/ssl/X509KeyManager.html)
+
 ### Adapter acting as a server for TLS
 When you want to access the adapter itself over HTTPS, e.g. running it as provider-side adapter, accessing it by Security Server, you need to provide a keystore containing the TLS certificate and private key. 
 You can mount the volume to a keystore containing a suitable key and provide the necessary environment variables into your Docker container to configure using the keystore. 
