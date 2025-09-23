@@ -114,11 +114,10 @@ These external API's may for example suffer from temporary downtime, or have the
 
 * [Requirements](documentation/Requirements.md)
 * [Setting up development environment](documentation/Setting-up-Development-Environment.md)
-* [Setting up SSL on Tomcat](documentation/Setting-up-SSL-on-Tomcat.md)
-* [Import a certificate as a trusted certificate](documentation/Import-a-Certificate-as-a-Trusted-Certificate.md)
 * [Encryption](documentation/Encryption.md)
 * [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md)
 * [Obtaining WAR file from package repository](documentation/Downloading-WAR-from-repository.md)
+* [Setup-TLS-on-Docker-Container](documentation/Setup-TLS-on-Docker-Container.md)
 * Examples
   * [Configuring Rest Adapter Service provider](documentation/Configuring-Rest-Adapter-Service-provider.md)
   * [CRUD API configuration](documentation/CRUD-API-Configuration.md)
