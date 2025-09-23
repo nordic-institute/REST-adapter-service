@@ -23,7 +23,7 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up JDK 21
         uses: actions/setup-java@v5
@@ -62,7 +62,7 @@ jobs:
     needs: BuildWithUnitTests
     name: Encrypted integration tests
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up JDK 21
         uses: actions/setup-java@v5
@@ -101,7 +101,7 @@ jobs:
     needs: BuildWithUnitTests
     name: Plaintext integration tests
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up JDK 21
         uses: actions/setup-java@v5
@@ -142,7 +142,7 @@ jobs:
       - IntTestsPlaintext
     name: End-to-End tests
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Build Docker image
         run: docker build --build-arg ADAPTER_UID=$(id -u) --build-arg ADAPTER_GID=$(id -g) -q --no-cache -t niis/rest_adapter_service ./adapter
       - name: Run end-to-end tests
