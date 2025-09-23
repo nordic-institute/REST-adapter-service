@@ -2,8 +2,8 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-springBoot = "3.4.4"
-dependencyManagement = "1.0.11.RELEASE"
+springBoot = "3.5.5"
+dependencyManagement = "1.1.7"
 licenseGradlePlugin = "0.16.1"
 
 # NIIS
@@ -11,16 +11,16 @@ org-niis-xrd4j = "0.8.0"
 
 #Other
 org-apache-tomcat-embed-tomcat-embed-jasper = "11.0.11"
-org-projectlombok-lombok = "1.18.30"
+org-projectlombok-lombok = "1.18.38"
 com-puppycrawl-tools-checkstyle = "10.23.1"
 
 #Testing
-com-github-stefanbirkner-system-rules = "1.16.0"
-com-jayway-jsonpath-json = "2.2.0"
+com-github-stefanbirkner-system-rules = "1.19.0"
+com-jayway-jsonpath-json = "2.9.0"
 commons-io-commons-io = "2.6"
-org-springframework-boot-spring-boot = "3.4.4"
-org-xmlunit-xmlunit = "2.7.0"
-org-wiremock-integrations-wiremock-spring-boot = "3.6.0"
+org-springframework-boot-spring-boot = "3.5.5"
+org-xmlunit-xmlunit = "2.10.4"
+org-wiremock-integrations-wiremock-spring-boot = "3.10.6"
 
 [libraries]
 # Springboot
