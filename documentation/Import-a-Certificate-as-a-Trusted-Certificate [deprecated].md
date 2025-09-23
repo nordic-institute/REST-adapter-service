@@ -12,4 +12,4 @@ Now that you have the certificate saved in a file, you need to add it to your JV
 keytool -importcert -alias <some meaningful name> -file <the cert file> -cacerts
 ```
 
-The password is "changeit".
+The default password is "changeit".
