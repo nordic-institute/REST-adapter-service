@@ -30,18 +30,11 @@ Running the above gradle command generates the jar file under the directory pres
 adapter/build/libs/rest-adapter-service-x.x.x.jar
 ```
 
-### Enabling encryption
-
-The project has two profiles: encrypted and plaintext. The default profile is plaintext. To switch to the encrypted profile, you need to add the property ```encrypted```. This can be done using ```-Pencrypted``` when running the gradle command.  
-
-By doing this, the adapter uses ```main/profiles/encrypted``` as the configuration directory otherwise the directory ```main/profiles/plaintext``` is used.
-
-
 ### IDE Setup
 
-The project can be imported into different IDEs. 
-Required steps vary depending on the chosen IDE. 
-Simple quick start is described for IntelliJ IDEA. 
+The project can be imported into different IDEs.
+Required steps vary depending on the chosen IDE.
+Simple quick start is described for IntelliJ IDEA.
 
 #### IntelliJ IDEA
 
@@ -50,8 +43,9 @@ Opening the project in IDEA.
 * Install Lombok plugin and Gradle integration plugin, if you have not done it yet
 * File -> New project from existing sources -> Choose gradle.build.kts
 * Rest of the options can be left at defaults
-* Run gradle task ./gradlew bootRun to start up Rest Adapter
+* Run the project according to the instructions at project's [README](../README.md)
 
-Once started up, Rest Adapter landing page can be found at
-`http://localhost:8080/rest-adapter-service/`
-and will contain links to Consumer and Provider endpoints in addition to the Provider wsdl.
+**N.B.**: Running a gradle task using IntelliJ IDEA GUI, you can modify gradle tasks to set the properties directory. In order to do that, open the menu and chose the task that you want to modify. Right click the task and choose "Modify Run Configuration". In the "Environment variables" field, insert the following:
+```REST_ADAPTER_PROPERTIES_DIR=<path to properties dir>```
+
+![IntelliJ modifing gradle task.png](attachment/IntelliJ%20modifing%20gradle%20task.png)
