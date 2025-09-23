@@ -49,8 +49,14 @@ For more information on the configuration files, refer to
 ### Configuration Files Locations
 In order for REST Adapter Service to work, the configuration must be provided at application startup. This can either be done by placing the configuration files in the default directory or by specifying a custom directory.
 
-1. With the highest priority, REST-adapter-service will check for a system property `customPropertiesDir` and uses this directory, if set.
-   To set the System property, you can use the following command to run the `jar` file:
+Ordered from highest to lowest priority, the configuration options are:
+1. Setting a system property
+2. Setting an environment variable
+3. Placing the files in the default directory
+
+Configuration options explained in detail:
+1. For the first option, REST-adapter-service will check for a system property `customPropertiesDir` and uses this directory, if set.
+   To set the system property, you can use the following command to run the `jar` file:
     ```shell
      java -DcustomPropertiesDir=<path to properties dir> -jar <path to application>/rest-adapter-service-x.x.x.jar
     ```
@@ -58,8 +64,8 @@ In order for REST Adapter Service to work, the configuration must be provided at
     ```shell
      ./gradlew bootRun -PcustomPropertiesDir=<path to properties dir>
     ```
-2. Otherwise, set the environment variable `REST_ADAPTER_PROPERTIES_DIR` to the directory where the properties files are placed in.
-3. By default, the application will try to find the properties files in the directory where the application is started from.
+2. Otherwise, you can set the environment variable `REST_ADAPTER_PROPERTIES_DIR` to the directory where the properties files are placed in.
+3. By default, the application will try to find the properties files in the directory where the application is started from. 
 
 After that you can access `http://localhost:8080/rest-adapter-service/` to see the Rest Adapter landing page.
 
@@ -68,7 +74,7 @@ After that you can access `http://localhost:8080/rest-adapter-service/` to see t
 To change the port running the jar file, add `--server.port=<port number>` to the command line, e.g.
 ```shell
 # change this to customize port
-java -DcustomPropertiesDir=<path to properties dir> -jar <path to application>/rest-adapter-service-x.x.x.jar server.port=<port number>
+java -DcustomPropertiesDir=<path to properties dir> -jar <path to application>/rest-adapter-service-x.x.x.jar --server.port=<port number>
 ```
 To change the port running the `bootRun` task in Gradle, you can add this command line argument `--args='--server.port=<port number>'`, e.g.
 ```shell
@@ -107,29 +113,22 @@ To test run the application with example configuration, you can copy the `./adap
 
 ### Running REST-adapter-service using Docker
 
-For running REST-adapter-service using Docker, you can either build the Docker image yourself, or download the image on [artifactory]()
+For running REST-adapter-service using Docker, you can either build the Docker image yourself, or download the image on [artifactory](https://artifactory.niis.org/xroad-extensions-snapshot-docker/niis/rest_adapter_service:2.1.0-SNAPSHOT)
 
-1. Run the Docker container with the following command, replacing `<path to properties dir>`, `<path to keystores dir>` and `<docker path to keystores>` with the actual paths and use the correct image tag. The mounted path in Docker container `<docker path to keystores>` needs to match the path that is referenced from the properties files, e.g. `publicKeyFile` in `provider-gateway.properties`:
-    ```shell
-    docker run --name rest_adapter_service \
-      -p 8080:8080 \
-      -v <path to properties dir>:/app/config:ro \
-      -v <path to keystores dir>:<docker path to keystores>:ro \
-      rest_adapter_service
-    ```
-   This will mount your properties directory into the container `/app/config` and start the REST Adapter Service with the provided configuration.
+Please replace `rest_adapter_service` in the command below with the correct image tag that you chose for building locally or something like `artifactory.niis.org/xroad-extensions-snapshot-docker/niis/rest_adapter_service:x.x.x-SNAPSHOT` if you are using the image from Artifactory.
+Additionally, replace `<path to properties dir>`, `<path to keystores dir>` and `<docker path to keystores>` with the actual paths. The mounted path in Docker container `<docker path to keystores>` needs to match the path that is referenced from the properties files, e.g. `publicKeyFile` in `provider-gateway.properties`.
+Then you can run the Docker image with the following command:
+```shell
+docker run --name rest_adapter_service \
+  -p 8080:8080 \
+  -v <path to properties dir>:/app/config:ro \
+  -v <path to keystores dir>:<docker path to keystores>:ro \
+  rest_adapter_service
+```
 
-   **N.B.!** If you want to add a wsdl file to the container, please add this volume `-v <path to wsdl file>:<docker path to wsdl file>:ro \` to the command and replace the placeholders. `<docker path to wsdl file>` needs to be the same path that is referenced in `provider-gateway.properties` file in `wsdl.path`.
+This will mount your properties directory into the container `/app/config` and start the REST Adapter Service with the provided configuration.
 
-
-2. The command using the image from [artifactory](https://artifactory.niis.org/xroad-extensions-snapshot-docker/niis/rest_adapter_service:2.1.0-SNAPSHOT) would look like this:
-    ```shell
-    docker run --name rest_adapter_service \
-      -p 8080:8080 \
-      -v <path to properties dir>:/app/config:ro \
-      -v <path to keystores dir>:<docker path to keystores>:ro \
-      artifactory.niis.org/xroad-extensions-snapshot-docker/niis/rest_adapter_service:x.x.x-SNAPSHOT
-    ```
+**N.B.!** If you want to add a wsdl file to the container, please add this volume `-v <path to wsdl file>:<docker path to wsdl file>:ro \` to the command and replace the placeholders. `<docker path to wsdl file>` needs to be the same path that is referenced in `provider-gateway.properties` file in `wsdl.path`.
 
 ### Running REST-adapter-service using Gradle
 
