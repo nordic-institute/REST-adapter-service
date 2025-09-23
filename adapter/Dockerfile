@@ -1,30 +1,38 @@
-FROM eclipse-temurin:21-jdk-alpine AS build
+FROM ubuntu:24.04 AS build
 WORKDIR /app
-ARG PROPS_DIR
 
-COPY ./build.gradle.kts ./settings.gradle.kts ./gradlew ./
-COPY ./gradle/wrapper/ ./gradle/wrapper/
-COPY ./gradle/libs.versions.toml ./gradle/
 COPY src ./src
 
+ARG ADAPTER_UID=1000
+ARG ADAPTER_GID=1000
+
+# copy gradle
+COPY build.gradle.kts settings.gradle.kts gradlew ./
+COPY gradle/wrapper/gradle-wrapper.jar ./gradle/wrapper/gradle-wrapper.jar
+COPY gradle/wrapper/gradle-wrapper.properties ./gradle/wrapper/gradle-wrapper.properties
+COPY gradle/libs.versions.toml ./gradle/libs.versions.toml
+
 RUN chmod +x ./gradlew
-ENTRYPOINT [ "sh" ]
 
-RUN if [$PROPS_DIR == ""]; then \
-    echo "custom properties directory NOT set"; \
-    ./gradlew clean build -x test -x checkstyleMain -x checkstyleTest -x licenseMain -x licenseTest; \
-    else \
-    echo "custom properties directory set"; \
-     cp ${PROPS_DIR}/* ./config/; \
-    ./gradlew clean build -PpropertiesDirectory=./config -x test -x checkstyleMain -x checkstyleTest -x licenseMain -x licenseTest; \
-    fi
+RUN apt-get update \
+    && apt-get install -y openjdk-21-jdk-headless --no-install-recommends \
+    && apt-get clean
 
+RUN ./gradlew clean build -x test -x checkstyleMain -x checkstyleTest -x licenseMain -x licenseTest
 
-FROM eclipse-temurin:21-jre-alpine
+FROM alpine:3.22.1 AS runtime
+
+ARG ADAPTER_UID=1000
+ARG ADAPTER_GID=1000
+
+RUN addgroup -g ${ADAPTER_GID} adapter && \
+    adduser -G adapter -u ${ADAPTER_UID} -D adapter && \
+    apk add --no-cache openjdk21-jre-headless
+
 WORKDIR /app
 
-# Copy the built JAR from the previous stage
 COPY --from=build /app/build/libs/*.jar app.jar
 
-# Set the entry point
-ENTRYPOINT ["java", "-jar", "app.jar"]
+USER adapter
+
+ENTRYPOINT ["java", "-DcustomPropertiesDir=config", "-jar", "/app/app.jar"]

@@ -1,0 +1,33 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:id="http://x-road.eu/xsd/identifiers" xmlns:xrd="http://x-road.eu/xsd/xroad.xsd">
+    <SOAP-ENV:Header>
+        <xrd:client id:objectType="SUBSYSTEM">
+            <id:xRoadInstance>FI_TEST</id:xRoadInstance>
+            <id:memberClass>GOV</id:memberClass>
+            <id:memberCode>1234567-8</id:memberCode>
+            <id:subsystemCode>TestClient</id:subsystemCode>
+        </xrd:client>
+        <xrd:service id:objectType="SERVICE">
+            <id:xRoadInstance>FI_TEST</id:xRoadInstance>
+            <id:memberClass>GOV</id:memberClass>
+            <id:memberCode>9876543-1</id:memberCode>
+            <id:subsystemCode>DemoService</id:subsystemCode>
+            <id:serviceCode>storeAttachments</id:serviceCode>
+            <id:serviceVersion>v1</id:serviceVersion>
+        </xrd:service>
+        <xrd:id>ID11234</xrd:id>
+        <xrd:userId>EE1234567890</xrd:userId>
+        <xrd:protocolVersion>4.0</xrd:protocolVersion>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body>
+        <ts1:storeAttachmentsResponse xmlns:ts1="http://test.x-road.global/producer">
+            <ts1:attachment>
+                <ts1:name>attachment-1</ts1:name>
+                <ts1:size>21</ts1:size>
+            </ts1:attachment>
+            <ts1:attachment>
+                <ts1:name>attachment-2</ts1:name>
+                <ts1:size>13</ts1:size>
+            </ts1:attachment>
+        </ts1:storeAttachmentsResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

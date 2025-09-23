@@ -69,6 +69,10 @@ adapter/bin
 #Gradle
 adapter/.gradle
 adapter/gradle/*
-!adapter/gradle/wrapper
+!adapter/gradle/wrapper/gradle-wrapper.properties
 !adapter/gradle/wrapper/gradle-wrapper.jar
 !adapter/gradle/libs.versions.toml
+
+# Local Example configuration
+adapter/exampleProperties/
+!adapter/exampleProperties/*.properties.example
