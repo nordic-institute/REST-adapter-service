@@ -116,8 +116,7 @@ To test run the application with example configuration, you can copy the `./adap
 For running REST-adapter-service using Docker, you can either build the Docker image yourself, or use the release image `niis/rest-adapter-service:x.x.x` on [artifactory](https://artifactory.niis.org/ui/repos/tree/General/xroad-extensions-docker) or [dockerhub](https://hub.docker.com/r/niis/rest-adapter-service)
 
 Please replace `rest-adapter-service` in the command below with the correct image tag that you chose for building locally or use `niis/rest-adapter-service:x.x.x`.
-Additionally, replace `<path to properties dir>`, `<path to keystores dir>` and `<docker path to keystores>` with the actual paths. The mounted path in Docker container `<docker path to keystores>` needs to match the path that is referenced from the properties files, e.g. `publicKeyFile` in `provider-gateway.properties`.
-Then you can run the Docker image with the following command:
+Additionally, replace `<path to properties dir>` with the actual path. Then you can run the Docker image with the following command:
 
 ```shell
 docker run --name rest-adapter-service \
