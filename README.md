@@ -27,7 +27,7 @@ More information about available features can be found [here](documentation/Rest
 ## Configuration Reference
 
 For running the REST-adapter-service, you have 3 different options:
-- Run the docker container using the provided Docker image at [Artifactory](https://artifactory.niis.org/ui/repos/tree/General/xroad-extensions-snapshot-docker/niis/rest_adapter_service) or build the Docker image yourself
+- Run the docker container using the provided Docker image `niis/rest-adapter-service:x.x.x` at [artifactory](https://artifactory.niis.org/ui/repos/tree/General/xroad-extensions-docker) or [dockerhub](https://hub.docker.com/r/niis/rest-adapter-service) or build the Docker image yourself
 - Run the application as gradle bootRun task
 - Build the jar file using the gradle buildJar task and run the jar file
 
@@ -96,7 +96,7 @@ After that, the `jar` file will be created in `./adapter/build/libs/` directory.
 If you want to build the Docker image yourself, run from ```/adapter```:
 ```shell
 # in the directory where the Dockerfile is located
-docker build -t rest_adapter_service .
+docker build -t rest-adapter-service .
 ```
 
 ### Source code license headers
@@ -113,22 +113,34 @@ To test run the application with example configuration, you can copy the `./adap
 
 ### Running REST-adapter-service using Docker
 
-For running REST-adapter-service using Docker, you can either build the Docker image yourself, or download the image on [artifactory](https://artifactory.niis.org/xroad-extensions-snapshot-docker/niis/rest_adapter_service:2.1.0-SNAPSHOT)
+For running REST-adapter-service using Docker, you can either build the Docker image yourself, or use the release image `niis/rest-adapter-service:x.x.x` on [artifactory](https://artifactory.niis.org/ui/repos/tree/General/xroad-extensions-docker) or [dockerhub](https://hub.docker.com/r/niis/rest-adapter-service)
 
-Please replace `rest_adapter_service` in the command below with the correct image tag that you chose for building locally or something like `artifactory.niis.org/xroad-extensions-snapshot-docker/niis/rest_adapter_service:x.x.x-SNAPSHOT` if you are using the image from Artifactory.
+Please replace `rest-adapter-service` in the command below with the correct image tag that you chose for building locally or use `niis/rest-adapter-service:x.x.x`.
 Additionally, replace `<path to properties dir>`, `<path to keystores dir>` and `<docker path to keystores>` with the actual paths. The mounted path in Docker container `<docker path to keystores>` needs to match the path that is referenced from the properties files, e.g. `publicKeyFile` in `provider-gateway.properties`.
 Then you can run the Docker image with the following command:
+
 ```shell
-docker run --name rest_adapter_service \
+docker run --name rest-adapter-service \
   -p 8080:8080 \
   -v <path to properties dir>:/app/config:ro \
-  -v <path to keystores dir>:<docker path to keystores>:ro \
-  rest_adapter_service
+  rest-adapter-service
 ```
 
 This will mount your properties directory into the container `/app/config` and start the REST Adapter Service with the provided configuration.
 
-**N.B.!** If you want to add a wsdl file to the container, please add this volume `-v <path to wsdl file>:<docker path to wsdl file>:ro \` to the command and replace the placeholders. `<docker path to wsdl file>` needs to be the same path that is referenced in `provider-gateway.properties` file in `wsdl.path`.
+**N.B.!** If you want to **add a wsdl description** for the SOAP converted services, please mount the wsdl directory into the container and replace the placeholders. `<docker path to wsdl file>` needs to be the same path that is referenced in `provider-gateway.properties` file in `wsdl.path`.
+
+```shell
+-v <path to wsdl file>:<docker path to wsdl file>:ro \
+```
+
+
+**N.B.!** If you want to **encrypt the communication between adapter consumer and adapter provider**, you first need to set the encrypted property to true in the consumer and provider properties files, more details can be found at [Rest-Adapter-Service-principles](documentation/Rest-Adapter-Service-principles.md). Additionally, you need to mount the keystore files into the container and replace the placeholders. `<docker path to keystores>` needs to match the paths that are referenced in the properties files, e.g. `publicKeyFile` in `provider-gateway.properties`.
+
+```shell 
+-v <path to keystores dir>:<docker path to keystores>:ro \
+```
+
 
 ### Running REST-adapter-service using Gradle
 
@@ -162,7 +174,6 @@ To run the integration tests with encrypted configuration, you can use the follo
 
 * [Requirements](documentation/Requirements.md)
 * [Setting up Development Environment](documentation/Setting-up-Development-Environment.md)
-* [Import a certificate as a trusted certificate](documentation/Import-a-Certificate-as-a-Trusted-Certificate.md)
 * [Encryption](documentation/Encryption.md)
 * [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md)
 * [Setup-TLS-on-Docker-Container](documentation/Setup-TLS-on-Docker-Container.md)
