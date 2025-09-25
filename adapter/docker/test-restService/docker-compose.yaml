@@ -1,6 +1,6 @@
 services:
   rest-adapter-service:
-    image: niis/rest_adapter_service:${RELEASE_VERSION}
+    image: niis/rest-adapter-service:${RELEASE_VERSION}
     container_name: adapter
     volumes:
       - ./test-properties:/app/config:ro

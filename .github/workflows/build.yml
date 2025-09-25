@@ -144,7 +144,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Build Docker image
-        run: docker build --build-arg ADAPTER_UID=$(id -u) --build-arg ADAPTER_GID=$(id -g) -q --no-cache -t niis/rest_adapter_service ./adapter
+        run: docker build --build-arg ADAPTER_UID=$(id -u) --build-arg ADAPTER_GID=$(id -g) -q --no-cache -t niis/rest-adapter-service ./adapter
       - name: Run end-to-end tests
         working-directory: ./adapter/docker/test-restService
         run: env RELEASE_VERSION=latest ./conversion-test.sh
