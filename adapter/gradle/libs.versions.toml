@@ -17,7 +17,7 @@ com-puppycrawl-tools-checkstyle = "10.23.1"
 #Testing
 com-github-stefanbirkner-system-rules = "1.19.0"
 com-jayway-jsonpath-json = "2.9.0"
-commons-io-commons-io = "2.6"
+commons-io-commons-io = "2.20.0"
 org-springframework-boot-spring-boot = "3.5.5"
 org-xmlunit-xmlunit = "2.10.4"
 org-wiremock-integrations-wiremock-spring-boot = "3.10.6"
