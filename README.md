@@ -19,106 +19,163 @@ REST Adapter Service has two parts: _Consumer Gateway_ and _Provider Gateway._ I
 
 More information about available features can be found [here](documentation/Rest-Adapter-Service-principles.md).
 
-## Try It Out
+## Prerequisites
 
-The fastest and easiest way to try out the application is by using the Spring Boot Gradle plugin.
-To do this, you need to have a working installation of [Gradle](https://gradle.org/).
+- Java 21
+- [Docker](https://www.docker.com/) or [Gradle](https://gradle.org/)
 
+## Configuration Reference
 
-```
-cd adapter
-./gradlew bootRun
-```
+For running the REST-adapter-service, you have 3 different options:
+- Run the docker container using the provided Docker image `niis/rest-adapter-service:x.x.x` at [artifactory](https://artifactory.niis.org/ui/repos/tree/General/xroad-extensions-docker) or [dockerhub](https://hub.docker.com/r/niis/rest-adapter-service) or build the Docker image yourself
+- Run the application as gradle bootRun task
+- Build the jar file using the gradle buildJar task and run the jar file
+
+To enable communication between service providers and consumers, the REST Adapter Service requires specific configuration files. These files define endpoints, encryption settings, namespaces and further configuration for the service.
+
+### Configuration Files Overview
+| File Name                  | Description                                |
+|----------------------------|--------------------------------------------|
+| providers.properties       | Defines provider endpoints and their settings. |
+| provider-gateway.properties| General gateway settings for provider.     |
+| consumers.properties       | Defines consumer endpoints and their settings. |
+| consumer-gateway.properties| General gateway settings for consumer.     |
+
+For more information on the configuration files, refer to
+- [Rest-Adapter-Service-principles](documentation/Rest-Adapter-Service-principles.md)
+- [Configuring-REST-adapter-service-provider](Configuring-REST-adapter-service-provider.md)
+- [CRUD-API-Configuration](CRUD-API-Configuration.md)
+
+### Configuration Files Locations
+In order for REST Adapter Service to work, the configuration must be provided at application startup. This can either be done by placing the configuration files in the default directory or by specifying a custom directory.
+
+Ordered from highest to lowest priority, the configuration options are:
+1. Setting a system property
+2. Setting an environment variable
+3. Placing the files in the default directory
+
+Configuration options explained in detail:
+1. For the first option, REST-adapter-service will check for a system property `customPropertiesDir` and uses this directory, if set.
+   To set the system property, you can use the following command to run the `jar` file:
+    ```shell
+     java -DcustomPropertiesDir=<path to properties dir> -jar <path to application>/rest-adapter-service-x.x.x.jar
+    ```
+   or this command to run the `bootRun` task in Gradle:
+    ```shell
+     ./gradlew bootRun -PcustomPropertiesDir=<path to properties dir>
+    ```
+2. Otherwise, you can set the environment variable `REST_ADAPTER_PROPERTIES_DIR` to the directory where the properties files are placed in.
+3. By default, the application will try to find the properties files in the directory where the application is started from. 
+
 After that you can access `http://localhost:8080/rest-adapter-service/` to see the Rest Adapter landing page.
 
-If customized location for ```ConsumerGateway``` and ```ProviderGateway``` properties are used, use the following 
-syntax to define 
-```
-./gradlew bootRun --PpropertiesDirectory=/my/conf
-```
-
-When using default properties file location (classpath) you can pass ```-Pencrypted``` to use the encrypted-profiles 
-properties file. If that property is not provided, plaintext-profile will be used.
-```
-./gradlew bootRun --Pencryped
-```
-
-## Configuring REST Adapter Service
-
-Please refert to the [Configuring REST Adapter Service](Configuring-REST-adapter-service.md) documentation for more information on how to configure the service.
-
-# Installing Rest Adapter Service
-
-Build or download the jar file. You need to have Java 21 installed. Run 
-```shell
-java -jar rest-adapter-service-x.x.x.jar
-```
-
 ### Changing the port
-To change the port, modify configuration file `/etc/rest-adapter-service/application.properties`
+
+To change the port running the jar file, add `--server.port=<port number>` to the command line, e.g.
 ```shell
 # change this to customize port
-server.port=8080
+java -DcustomPropertiesDir=<path to properties dir> -jar <path to application>/rest-adapter-service-x.x.x.jar --server.port=<port number>
+```
+To change the port running the `bootRun` task in Gradle, you can add this command line argument `--args='--server.port=<port number>'`, e.g.
+```shell
+./gradlew bootRun -PcustomPropertiesDir=<path to properties dir> --args='--server.port=9090'
 ```
 
-# Building and packaging
+## Building and packaging
 
-## Source code license headers
+### Gradle
+
+In order to create the `jar` file, you can use the `bootJar` task to build it. From `/adapter` run
+```shell
+./gradlew bootJar
+```
+After that, the `jar` file will be created in `./adapter/build/libs/` directory.
+
+### Docker
+
+If you want to build the Docker image yourself, run from ```/adapter```:
+```shell
+# in the directory where the Dockerfile is located
+docker build -t rest-adapter-service .
+```
+
+### Source code license headers
 
 The build uses [license-gradle-plugin](https://github.com/hierynomus/license-gradle-plugin) to generate proper license headers for the source code files.
 
 `./gradlew licenseMain` generates the license headers where they are missing. More details can be found from the plugin documentation.
 
-## Building docker container
-From ```/adapter``` run
+## Quick start
+
+### Example configuration
+
+To test run the application with example configuration, you can copy the `./adapter/exampleProperties/*.properties.example` as `.properties` files into `<path to properties dir>` and replace the placeholders.
+
+### Running REST-adapter-service using Docker
+
+For running REST-adapter-service using Docker, you can either build the Docker image yourself, or use the release image `niis/rest-adapter-service:x.x.x` on [artifactory](https://artifactory.niis.org/ui/repos/tree/General/xroad-extensions-docker) or [dockerhub](https://hub.docker.com/r/niis/rest-adapter-service)
+
+Please replace `rest-adapter-service` in the command below with the correct image tag that you chose for building locally or use `niis/rest-adapter-service:x.x.x`.
+Additionally, replace `<path to properties dir>` with the actual path. Then you can run the Docker image with the following command:
+
 ```shell
-# in the directory where the Dockerfile is located
-docker build -t rest-adapter-service .
+docker run --name rest-adapter-service \
+  -p 8080:8080 \
+  -v <path to properties dir>:/app/config:ro \
+  rest-adapter-service
 ```
-Optionally you can pass ```--build-arg PROPS_DIR=./customProperties``` to use custom properties directory including the configuration for Provider and Consumer Gateways. 
+
+This will mount your properties directory into the container `/app/config` and start the REST Adapter Service with the provided configuration.
+
+**N.B.!** If you want to **add a wsdl description** for the SOAP converted services, please mount the wsdl directory into the container and replace the placeholders. `<docker path to wsdl file>` needs to be the same path that is referenced in `provider-gateway.properties` file in `wsdl.path`.
+
 ```shell
-docker build -t rest-adapter-service --build-arg PROPS_DIR=./customProperties .
+-v <path to wsdl file>:<docker path to wsdl file>:ro \
 ```
-Then the container can be run with the command below. The port can be changed by passing the `-p` option.
+
+
+**N.B.!** If you want to **encrypt the communication between adapter consumer and adapter provider**, you first need to set the encrypted property to true in the consumer and provider properties files, more details can be found at [Rest-Adapter-Service-principles](documentation/Rest-Adapter-Service-principles.md). Additionally, you need to mount the keystore files into the container and replace the placeholders. `<docker path to keystores>` needs to match the paths that are referenced in the properties files, e.g. `publicKeyFile` in `provider-gateway.properties`.
+
+```shell 
+-v <path to keystores dir>:<docker path to keystores>:ro \
+```
+
+
+### Running REST-adapter-service using Gradle
+
+From `./adapter` directory, run the following command, replacing `<path to properties dir>` with the actual path:
+
 ```shell
-docker run -d -p 8080:8080 rest-adapter-service
+./gradlew bootRun -PcustomPropertiesDir=<path to properties dir>
+```
+**N.B.!** Instead of using the command line argument `-PcustomPropertiesDir`, you can also pass the configuration differently, see [Configuration Files Locations](#configuration-files-locations).
+
+### Running REST-adapter-service using `jar` file
+
+After building the jar file, you can start the application using the following command, replacing `<path to properties dir>` and `<path to application>` with the actual paths:
+```shell
+java -DcustomPropertiesDir=<path to properties dir> -jar <path to application>/rest-adapter-service-x.x.x.jar
 ```
 
-## Encryption of Message Content
-
-Starting from version 0.0.10 Rest Adapter Service supports encryption/decryption of message content. More information and instructions for configuration can be found in the [documentation](documentation/Encryption.md).
-
-By default plaintext configuration is enabled. The software can be built with encryption configuration enabled using the command below.
-This setting only affects the default configuration bundled inside the war file, and the integration tests.
-External configuration, in `/etc/rest-adapter-service`
-or elsewhere, is not affected.
-
-```./gradlew clean build -Pencrypted```
-
-Running integration tests with plaintext configuration enabled:
-
-```./gradlew clean intTest```
-
-Running integration tests with encryption configuration enabled:
-
-```./gradlew clean intTest -Pencrypted```
-
-Integration tests are run on port `9898`
-
-## Mocking external API's for integration tests
+### Running Integration Tests
 
 Integration tests execute requests against several external API's, such as `http://www.hel.fi/palvelukarttaws/rest/v4/organization/`.
 These external API's may for example suffer from temporary downtime, or have their data changed so that integration tests no longer pass.
 
-### Additional documentation
+Integration tests can be run plaintext or encrypted. Plaintext is run by default, if you do not provide a commandline argument like `-PcustomPropertiesDir=<path to properties dir>` or set the environment variable `REST_ADAPTER_PROPERTIES_DIR` to the desired path.
+Resourec processing will automatically replace `@projectDir@` and `@rest.adapter.profile.port@` placeholders in the properties files with the actual values.
+To run the integration tests with encrypted configuration, you can use the following command from `./adapter` directory:
+```shell
+./gradlew intTest -PcustomPropertiesDir=src/test/resources/application-intTest-properties/encrypted
+```
+
+## Additional documentation
 
 * [Requirements](documentation/Requirements.md)
-* [Setting up development environment](documentation/Setting-up-Development-Environment.md)
-* [Setting up SSL on Tomcat](documentation/Setting-up-SSL-on-Tomcat.md)
-* [Import a certificate as a trusted certificate](documentation/Import-a-Certificate-as-a-Trusted-Certificate.md)
+* [Setting up Development Environment](documentation/Setting-up-Development-Environment.md)
 * [Encryption](documentation/Encryption.md)
 * [Rest Adapter Service principles](documentation/Rest-Adapter-Service-principles.md)
-* [Obtaining WAR file from package repository](documentation/Downloading-WAR-from-repository.md)
+* [Setup-TLS-on-Docker-Container](documentation/Setup-TLS-on-Docker-Container.md)
 * Examples
   * [Configuring Rest Adapter Service provider](documentation/Configuring-Rest-Adapter-Service-provider.md)
   * [CRUD API configuration](documentation/CRUD-API-Configuration.md)
